@@ -5,6 +5,11 @@ import { ref } from 'vue';
 const beforeDate = ref(moment().format('YYYY-MM-01'));
 const now = ref(moment().format('YYYY-MM-DD'));
 const dates = ref([moment(beforeDate.value).toDate(), moment(now.value).toDate()]);
+const selectedRegion = ref('pmg1');
+const region = ref([
+    { name: 'PMG 1', code: 'pmg1' },
+    { name: 'PMG 2', code: 'pmg2' }
+]);
 
 const changeDate = () => {
     const list = dates.value;
@@ -37,15 +42,23 @@ const convertDate = (dateString) => {
     <div class="bg-black text-white p-6 pb-10">
         <div class="flex justify-between items-center mb-6">
             <div class="flex flex-col gap-2 w-full">
-                <span class="text-2xl uppercase font-bold">INL Edge</span>
-                <span class="font-bold uppercase text-gray-400 text-sm">Empowering Decisions & Growth Excellence</span>
+                <span class="text-2xl uppercase font-bold">Executive Dashboard</span>
+                <!-- <span class="font-bold uppercase text-gray-400 text-sm">Empowering Decisions & Growth Excellence</span> -->
             </div>
-            <div class="flex gap-3">
-                <select class="p-2 bg-gray-800 border border-gray-600 rounded text-white">
+            <div class="flex items-center gap-3">
+                <div class="flex p-2 bg-gray-800 border rounded border-gray-600">
+                    <Select v-model="selectedRegion" :options="region" optionLabel="name" optionValue="code" placeholder="Select a Region" class="bg-gray-800 w-30" />
+                </div>
+                <!-- <select class="p-2 bg-gray-800 border border-gray-600 rounded text-white cursor-pointer">
                     <option>PMG 1</option>
                     <option>PMG 2</option>
-                </select>
-                <DatePicker v-model="dates" selectionMode="range" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :manualInput="false" placeholder="Select Date Range" class="p-2 bg-gray-800 border border-gray-600 rounded text-white w-96" />
+                </select> -->
+                <div class="flex items-center gap-3 p-2 bg-gray-800 border border-gray-600 rounded text-white w-96">
+                    <DatePicker v-model="dates" selectionMode="range" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :manualInput="false" placeholder="Select Date Range" class="w-full" />
+                    <button class="w-[30px] h-[30px] p-3 rounded-lg bg-white shadow-none hover:shadow-white hover:shadow transition-all duration-700 text-black flex items-center justify-center" @click="changeDate">
+                        <i class="pi pi-search text-2xl"></i>
+                    </button>
+                </div>
             </div>
         </div>
 

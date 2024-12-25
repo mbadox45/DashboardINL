@@ -30,7 +30,7 @@ const { toggleMenu, toggleDarkMode, isDarkTheme } = useLayout();
                     </g>
                 </svg>
 
-                <span>SAKAI</span>
+                <span class="uppercase">INL Edge</span>
             </router-link>
         </div>
 
