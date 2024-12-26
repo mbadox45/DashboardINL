@@ -1,5 +1,6 @@
 <script setup>
 import AppSidebar from '@/layout/AppSidebar.vue';
+// import AppTopbar from '@/layout/AppTopbar.vue';
 import AppFooter from '@/views/dashboard/layout/components/AppFooter.vue';
 import AppTopbar from '@/views/dashboard/layout/components/AppTopbar.vue';
 import { useLayout } from '@/views/dashboard/layout/components/layout';
