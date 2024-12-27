@@ -2,46 +2,64 @@
 import { onMounted, ref } from 'vue';
 
 // Controller
-import financialHomeDash from '@/controller/home/financialHomeDash';
+import HomeDash from '@/controller/home/homeDash';
 
 // Components
 import CardValues from '@/views/dashboard/report/home/components/CardValues.vue';
 import ImagesHome from '@/views/dashboard/report/home/components/ImagesHome.vue';
+import CardOperationValues from '@/views/dashboard/report/home/components/operation/CardOperationValues.vue';
 
 const listCardFinancial = ref([]);
+const listCardOperation = ref([]);
 
 onMounted(() => {
     loadData();
 });
 
 const loadData = async () => {
+    await loadDataFinance();
+    await loadDataOperation();
+};
+
+const loadDataFinance = async () => {
     const list = [];
-    const data = await financialHomeDash.cardFinancial();
-    for (let i = 0; i < data.length; i++) {
+    const dataFinance = await HomeDash.cardFinancial();
+    for (let i = 0; i < dataFinance.length; i++) {
         list.push({
-            name: data[i].name,
-            color: data[i].color,
-            icon: data[i].icon,
-            value: data[i].value,
-            persentase: data[i].persentase,
-            versus: data[i].versus,
-            link: data[i].link
+            name: dataFinance[i].name,
+            color: dataFinance[i].color,
+            icon: dataFinance[i].icon,
+            value: dataFinance[i].value,
+            persentase: dataFinance[i].persentase,
+            versus: dataFinance[i].versus,
+            link: dataFinance[i].link
         });
     }
     listCardFinancial.value = list;
 };
+
+const loadDataOperation = async () => {
+    const list = [];
+    const dataOperation = await HomeDash.cardOperational();
+    for (let i = 0; i < dataOperation.length; i++) {
+        list.push({
+            name: dataOperation[i].name,
+            color: dataOperation[i].color,
+            icon: dataOperation[i].icon,
+            value: dataOperation[i].value,
+            persentase: dataOperation[i].persentase,
+            versus: dataOperation[i].versus,
+            link: dataOperation[i].link
+        });
+    }
+    listCardOperation.value = list;
+};
 </script>
 
 <template>
-    <div class="bg-black text-white p-6 pb-10 mt-3 rounded-2xl">
-        <!-- <div class="flex justify-between items-center mb-6">
-            <div class="flex flex-col gap-2 w-full">
-                <span class="text-2xl uppercase font-bold">Executive Dashboard</span>
-            </div>
-        </div> -->
-
+    <div class="bg-black text-white p-6 pb-10 mt-2 rounded-2xl">
         <div class="grid grid-cols-3 gap-4">
-            <div class="col-span-1">
+            <div class="col-span-1 min-h-[650px]">
                 <images-home />
             </div>
             <div class="col-span-2">
@@ -53,51 +71,10 @@ const loadData = async () => {
                 </div>
                 <div class="grid grid-cols-4 gap-4 mb-2"></div>
                 <div class="mb-2">
-                    <h3 class="text-xl font-bold text-white">Operational</h3>
+                    <h3 class="text-xl font-bold text-white">Production</h3>
                 </div>
-                <div class="grid grid-cols-4 gap-4 mb-2">
-                    <div class="bg-gray-800 p-2 rounded-xl shadow-xl min-h-[120px]">
-                        <span class="text-l font-bold">CPO Olah vs Utility</span>
-                        <h2 class="text-2xl font-bold mt-1">37,328</h2>
-                        <span class="text-sm text-red-500">73.57% VS RKAP</span>
-                    </div>
-                    <div class="bg-gray-800 p-2 rounded-xl shadow-xl min-h-[120px]">
-                        <span class="text-l font-bold">CPO Olah vs RKAP</span>
-                        <h2 class="text-2xl font-bold mt-1">8,343</h2>
-                        <span class="text-sm text-green-500">102.34% VS 2023</span>
-                    </div>
-                    <div class="bg-gray-800 p-2 rounded-xl shadow-xl min-h-[120px]">
-                        <span class="text-l font-bold">CPO KPBN</span>
-                        <h2 class="text-2xl font-bold mt-1">1,554</h2>
-                        <span class="text-sm text-yellow-500">95.96% VS 2023</span>
-                    </div>
-                    <div class="bg-gray-800 p-2 rounded-xl shadow-xl min-h-[120px]">
-                        <span class="text-l font-bold">CPO Sourcing Schedule</span>
-                        <h2 class="text-2xl font-bold mt-1">1,554</h2>
-                        <span class="text-sm text-yellow-500">95.96% VS 2023</span>
-                    </div>
-                </div>
-                <div class="grid grid-cols-4 gap-4 mb-2">
-                    <div class="bg-gray-800 p-2 rounded-xl shadow-xl min-h-[120px]">
-                        <span class="text-l font-bold">Cash Balance</span>
-                        <h2 class="text-2xl font-bold mt-1">37,328</h2>
-                        <span class="text-sm text-red-500">73.57% VS RKAP</span>
-                    </div>
-                    <div class="bg-gray-800 p-2 rounded-xl shadow-xl min-h-[120px]">
-                        <span class="text-l font-bold">Cash Flow Movement</span>
-                        <h2 class="text-2xl font-bold mt-1">8,343</h2>
-                        <span class="text-sm text-green-500">102.34% VS 2023</span>
-                    </div>
-                    <div class="bg-gray-800 p-2 rounded-xl shadow-xl min-h-[120px]">
-                        <span class="text-l font-bold">CFI Payment Schedule</span>
-                        <h2 class="text-2xl font-bold mt-1">1,554</h2>
-                        <span class="text-sm text-yellow-500">95.96% VS 2023</span>
-                    </div>
-                    <div class="bg-gray-800 p-2 rounded-xl shadow-xl min-h-[120px]">
-                        <span class="text-l font-bold">CFF Payment Schedule</span>
-                        <h2 class="text-2xl font-bold mt-1">1,554</h2>
-                        <span class="text-sm text-yellow-500">95.96% VS 2023</span>
-                    </div>
+                <div class="grid grid-cols-3 gap-4 mb-2">
+                    <card-operation-values v-for="(item, index) in listCardOperation" :key="index" :datas="item" />
                 </div>
             </div>
         </div>

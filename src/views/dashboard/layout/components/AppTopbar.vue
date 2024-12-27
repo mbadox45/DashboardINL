@@ -1,7 +1,7 @@
 <script setup>
 import { useLayout } from '@/views/dashboard/layout/components/layout';
 import moment from 'moment';
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 
 const { toggleMenu, toggleDarkMode, isDarkTheme } = useLayout();
 
@@ -40,9 +40,9 @@ const convertDate = (dateString) => {
     return date;
 };
 
-onMounted(() => {
-    toggleDarkMode();
-});
+// onMounted(() => {
+//     toggleDarkMode();
+// });
 </script>
 
 <template>

@@ -4,7 +4,7 @@ const layoutConfig = reactive({
     preset: 'Aura',
     primary: 'emerald',
     surface: null,
-    darkTheme: true,
+    darkTheme: false,
     menuMode: 'static'
 });
 
@@ -55,7 +55,7 @@ export function useLayout() {
 
     const isDarkTheme = computed(() => layoutConfig.darkTheme);
 
-    const getPrimary = computed(() => layoutConfig.primary);
+    // const getPrimary = computed(() => layoutConfig.primary);
 
     const getSurface = computed(() => layoutConfig.surface);
 
@@ -65,7 +65,7 @@ export function useLayout() {
         toggleMenu,
         isSidebarActive,
         isDarkTheme,
-        getPrimary,
+        // getPrimary,
         getSurface,
         setActiveMenuItem,
         toggleDarkMode
