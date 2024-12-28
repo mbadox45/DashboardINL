@@ -100,8 +100,8 @@ onUnmounted(() => {
                 </div>
             </div>
             <div v-if="load.versus.length > 1" class="flex justify-between mt-4">
-                <button @click="prevIndex" class="p-2 bg-gray-700 text-white rounded hover:bg-gray-600 transition"><i class="pi pi-chevron-left"></i> Prev</button>
-                <button @click="nextIndex" class="p-2 bg-gray-700 text-white rounded hover:bg-gray-600 transition">Next <i class="pi pi-chevron-right"></i></button>
+                <button @click="prevIndex" class="p-1 bg-gray-700 text-white text-sm rounded hover:bg-gray-600 transition flex items-center"><i class="pi pi-chevron-left mr-1"></i> Prev</button>
+                <button @click="nextIndex" class="p-1 bg-gray-700 text-white text-sm rounded hover:bg-gray-600 transition flex items-center">Next <i class="pi pi-chevron-right ml-1"></i></button>
             </div>
         </div>
     </div>

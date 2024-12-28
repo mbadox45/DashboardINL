@@ -76,6 +76,20 @@ const loadDataOperation = async () => {
                 <div class="grid grid-cols-3 gap-4 mb-2">
                     <card-operation-values v-for="(item, index) in listCardOperation" :key="index" :datas="item" />
                 </div>
+                <div class="grid grid-cols-4 gap-4 mb-2"></div>
+                <div class="mb-2">
+                    <h3 class="text-xl font-bold text-white">Sales & Marketing</h3>
+                </div>
+                <div class="grid grid-cols-4 gap-4 mb-2">
+                    <card-values v-for="(item, index) in listCardFinancial" :key="index" :datas="item" />
+                </div>
+                <div class="grid grid-cols-4 gap-4 mb-2"></div>
+                <div class="mb-2">
+                    <h3 class="text-xl font-bold text-white">Supply Chain</h3>
+                </div>
+                <div class="grid grid-cols-4 gap-4 mb-2">
+                    <card-values v-for="(item, index) in listCardFinancial" :key="index" :datas="item" />
+                </div>
             </div>
         </div>
     </div>
