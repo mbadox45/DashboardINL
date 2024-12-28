@@ -5,7 +5,7 @@ import { onMounted, ref } from 'vue';
 import HomeDash from '@/controller/home/homeDash';
 
 // Components
-import CardValues from '@/views/dashboard/report/home/components/CardValues.vue';
+import CardValues from '@/views/dashboard/report/home/components/financial/CardFinancialValues.vue';
 import ImagesHome from '@/views/dashboard/report/home/components/ImagesHome.vue';
 import CardOperationValues from '@/views/dashboard/report/home/components/operation/CardOperationValues.vue';
 

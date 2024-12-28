@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, ref, watch } from 'vue';
+import { defineProps, onMounted, onUnmounted, ref, watch } from 'vue';
 
 const props = defineProps({
     datas: {
@@ -9,14 +9,76 @@ const props = defineProps({
 });
 
 const load = ref({ name: '', icon: '', nilai: 0, persen: 0, versus: '', link: null });
+const currentIndex = ref(0);
+const animationClass = ref('fade-in');
 
 const loadData = async () => {
     const data = props.datas;
-    load.value = { name: data.name, icon: data.icon, nilai: data.value, persen: null, versus: data.versus, link: data.link };
+    load.value = {
+        name: data.name,
+        icon: data.icon,
+        nilai: data.value,
+        persen: null,
+        versus: data.versus,
+        link: data.link
+    };
 };
 
 watch(() => props.datas, loadData, { immediate: true });
+
+let intervalId;
+
+// Start the auto-cycling timer
+const startIndexCycle = () => {
+    if (load.value.versus.length <= 1) {
+        animationClass.value = 'fade-in';
+        return;
+    }
+
+    clearInterval(intervalId); // Clear any existing timer
+    intervalId = setInterval(() => {
+        animationClass.value = 'fade-out';
+        setTimeout(() => {
+            currentIndex.value = (currentIndex.value + 1) % load.value.versus.length;
+            animationClass.value = 'fade-in';
+        }, 500);
+    }, 3000); // Restart with a 3-second interval
+};
+
+// Reset the timer and navigate to the next index
+const nextIndex = () => {
+    if (load.value.versus.length > 1) {
+        animationClass.value = 'fade-out';
+        setTimeout(() => {
+            currentIndex.value = (currentIndex.value + 1) % load.value.versus.length;
+            animationClass.value = 'fade-in';
+            startIndexCycle(); // Restart the timer
+        }, 500);
+    }
+};
+
+// Reset the timer and navigate to the previous index
+const prevIndex = () => {
+    if (load.value.versus.length > 1) {
+        animationClass.value = 'fade-out';
+        setTimeout(() => {
+            currentIndex.value = (currentIndex.value - 1 + load.value.versus.length) % load.value.versus.length;
+            animationClass.value = 'fade-in';
+            startIndexCycle(); // Restart the timer
+        }, 500);
+    }
+};
+
+onMounted(() => {
+    loadData();
+    startIndexCycle();
+});
+
+onUnmounted(() => {
+    clearInterval(intervalId);
+});
 </script>
+
 <template>
     <div class="bg-gray-800 p-3 rounded-xl shadow-xl min-h-[120px] flex gap-3 items-start">
         <div class="flex flex-col w-full h-full">
@@ -34,9 +96,43 @@ watch(() => props.datas, loadData, { immediate: true });
                 <img v-show="load.icon != null" :src="load.icon" alt="Icon" class="w-28 h-28" />
                 <div class="w-full flex flex-col h-full justify-between">
                     <div class="h-full" v-show="load.nilai != null" v-html="load.nilai"></div>
-                    <div class="h-full" v-html="load.versus.length > 1 ? load.versus[2] : load.versus[0]"></div>
+                    <div :class="animationClass" class="h-full" v-html="load.versus[currentIndex]"></div>
                 </div>
+            </div>
+            <div v-if="load.versus.length > 1" class="flex justify-between mt-4">
+                <button @click="prevIndex" class="p-2 bg-gray-700 text-white rounded hover:bg-gray-600 transition"><i class="pi pi-chevron-left"></i> Prev</button>
+                <button @click="nextIndex" class="p-2 bg-gray-700 text-white rounded hover:bg-gray-600 transition">Next <i class="pi pi-chevron-right"></i></button>
             </div>
         </div>
     </div>
 </template>
+
+<style>
+.fade-in {
+    opacity: 0;
+    animation: fadeIn 0.5s forwards;
+}
+
+.fade-out {
+    opacity: 1;
+    animation: fadeOut 0.5s forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+</style>
