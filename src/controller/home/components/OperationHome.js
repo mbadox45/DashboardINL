@@ -2,20 +2,189 @@ import { valueColorPersenCondition } from '@/controller/dummyController';
 
 export const cpoOlahVsRKAP = () => {
     const name = 'CPO Olah vs RKAP vs Utility (in Kg)';
-    const value = `<div class="flex gap-2 items-center w-full h-full">
-        <span class="font-bold w-full flex flex-col ${valueColorPersenCondition(16.8)}"><span class="text-4xl">${16.8}%</span><small class="text-xs">RKAP</small></span>
-        <span class="font-bold w-full flex flex-col ${valueColorPersenCondition(13.8)}"><span class="text-4xl">${13.8}%</span><small class="text-xs">Utility</small></span>
+    const value = `<div class=" flex gap-2 items-center w-full h-full">
+        <span class="font-bold w-full flex flex-col ${valueColorPersenCondition(16.8)}"><span class="text-lg lg:text-4xl">${16.8}%</span><small class="text-[8px] lg:text-xs">RKAP</small></span>
+        <span class="font-bold w-full flex flex-col ${valueColorPersenCondition(13.8)}"><span class="text-lg lg:text-4xl">${13.8}%</span><small class="text-[8px] lg:text-xs">Utility</small></span>
     </div>`;
     // Jika Pendapatan > RKAP warna jadi green 600, sesuai kan periode
     const versus = [
         `<div class="text-xs flex flex-col gap-3 w-full h-full">
-    <span class="items-center rounded-xl w-full font-bold bg-black flex py-2 px-3"><span class="text-green-500 w-full">CPO Olah</span><span class="border-b pb-1 border-neutral-900 text-lg"> 8,860,560</span> </span>
-    <span class="items-center rounded-xl w-full font-bold bg-black flex py-2 px-3"><span class="text-green-500 w-full">RKAP</span><span class="border-b pb-1 border-neutral-900 text-lg"> 52,800,000</span> </span>
-    <span class="items-center rounded-xl w-full font-bold bg-black flex py-2 px-3"><span class="text-green-500 w-full">Utility</span><span class="border-b pb-1 border-neutral-900 text-lg"> 66,000,000</span> </span>
+    <span class="items-center rounded-xl w-full font-bold bg-black flex py-2 px-3"><span class="text-green-500 w-full text-[9px] lg:text-md">CPO Olah</span><span class="border-b pb-1 border-neutral-900 text-xs lg:text-lg"> 8,860,560</span> </span>
+    <span class="items-center rounded-xl w-full font-bold bg-black flex py-2 px-3"><span class="text-green-500 w-full text-[9px] lg:text-md">RKAP</span><span class="border-b pb-1 border-neutral-900 text-xs lg:text-lg"> 52,800,000</span> </span>
+    <span class="items-center rounded-xl w-full font-bold bg-black flex py-2 px-3"><span class="text-green-500 w-full text-[9px] lg:text-md">Utility</span><span class="border-b pb-1 border-neutral-900 text-xs lg:text-lg"> 66,000,000</span> </span>
     </div>`
     ];
     const color = 'text-red-500';
     const icon = '/images/icon/operation/development.png';
+    const link = '/test';
+
+    return { name: name, value: value, versus: versus, color: color, icon: icon, link: link };
+};
+
+export const pemakaianMaterial = () => {
+    const name = 'Pemakaian Material';
+    const value = null;
+    // Jika Pendapatan > RKAP warna jadi green 600, sesuai kan periode
+    const versus = [
+        `<div class="w-full flex items-end gap-2 mt-2">
+            <div class="flex flex-col w-full gap-2">
+                <span class="text-md lg:text-xl font-bold text-green-500">Gas Consumption (mmbtu)</span>
+                <div class="grid grid-cols-2 gap-2 text-amber-500">
+                    <div class="col-span-2 py-2 px-3 rounded-xl flex items-center justify-between bg-black">
+                        <span class="font-bold text-xs uppercase ">Total Pemakaian</span>
+                        <span class="text-md font-bold">24,425.6156</span>
+                    </div>
+                    <div class="py-2 px-3 rounded-xl flex flex-col gap-1 bg-black">
+                        <span class="text-[9px]">Incoming</span>
+                        <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
+                            <span class="text-sm font-bold">${27225.9735}</span>
+                            <span class="text-[9px]">Base on INL</span>
+                        </div>
+                        <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
+                            <span class="text-sm font-bold">${24425.6156}</span>
+                            <span class="text-[9px]">Base on Pertagas</span>
+                        </div>
+                    </div>
+                    <div class="py-2 px-3 rounded-xl flex flex-col gap-1 bg-black">
+                        <span class="text-[9px]">Outgoing</span>
+                        <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
+                            <span class="text-sm font-bold">${2278.1309}</span>
+                            <span class="text-[9px]">HP Boiler Refinery</span>
+                        </div>
+                        <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
+                            <span class="text-sm font-bold">${22147.4847}</span>
+                            <span class="text-[9px]">MP Boiler 1, 2</span>
+                        </div>
+                    </div>
+                    <div class="col-span-2 py-2 px-3 rounded-xl flex items-center justify-between bg-black">
+                        <span class="font-bold text-xs uppercase ">Selisih</span>
+                        <span class="text-md font-bold">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>`,
+        `<div class="w-full flex items-end gap-2 mt-2">
+            <div class="flex flex-col w-full gap-2">
+                <span class="text-md lg:text-xl font-bold text-green-500">Steam Consumption (Kg)</span>
+                <div class="grid grid-cols-2 gap-2 text-amber-500">
+                    <div class="col-span-2 py-2 px-3 rounded-xl flex items-center justify-between bg-black">
+                        <span class="font-bold text-xs uppercase ">Total Pemakaian</span>
+                        <span class="text-md font-bold">4,958,690</span>
+                    </div>
+                    <div class="py-2 px-3 rounded-xl flex flex-col gap-1 bg-black">
+                        <span class="text-[9px]">Incoming</span>
+                        <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
+                            <span class="text-sm font-bold">${4958690}</span>
+                            <span class="text-[9px]">Incoming</span>
+                        </div>
+                    </div>
+                    <div class="py-2 px-3 rounded-xl flex flex-col gap-1 bg-black">
+                        <span class="text-[9px]">Outgoing</span>
+                        <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
+                            <span class="text-sm font-bold">${3303100}</span>
+                            <span class="text-[9px]">Refinery</span>
+                        </div>
+                        <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
+                            <span class="text-sm font-bold">${924200}</span>
+                            <span class="text-[9px]">Fractionation</span>
+                        </div>
+                        <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
+                            <span class="text-sm font-bold">${730790}</span>
+                            <span class="text-[9px]">Others</span>
+                        </div>
+                    </div>
+                    <div class="col-span-2 py-2 px-3 rounded-xl flex items-center justify-between bg-black">
+                        <span class="font-bold text-xs uppercase ">Selisih</span>
+                        <span class="text-md font-bold">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>`,
+        `<div class="w-full flex items-end gap-2 mt-2">
+            <div class="flex flex-col w-full gap-2">
+                <span class="text-md lg:text-xl font-bold text-green-500">Water Consumption (m³)</span>
+                <div class="grid grid-cols-2 gap-2 text-amber-500">
+                    <div class="col-span-2 py-2 px-3 rounded-xl flex items-center justify-between bg-black">
+                        <span class="font-bold text-xs uppercase ">Total Pemakaian</span>
+                        <span class="text-md font-bold">4,958,690</span>
+                    </div>
+                    <div class="py-2 px-3 rounded-xl flex flex-col gap-1 bg-black">
+                        <span class="text-[9px]">Incoming</span>
+                        <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
+                            <span class="text-sm font-bold">${16670}</span>
+                            <span class="text-[9px]">from KINRA</span>
+                        </div>
+                    </div>
+                    <div class="py-2 px-3 rounded-xl flex flex-col gap-1 bg-black">
+                        <span class="text-[9px]">Outgoing</span>
+                        <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
+                            <span class="text-sm font-bold">${1635}</span>
+                            <span class="text-[9px]">Softener Prod. (Ref)</span>
+                        </div>
+                        <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
+                            <span class="text-sm font-bold">${908}</span>
+                            <span class="text-[9px]">Softener Prod. (Fract)</span>
+                        </div>
+                        <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
+                            <span class="text-sm font-bold">${7285}</span>
+                            <span class="text-[9px]">RO Prod.</span>
+                        </div>
+                        <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
+                            <span class="text-sm font-bold">${6842}</span>
+                            <span class="text-[9px]">Others</span>
+                        </div>
+                        <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
+                            <span class="text-sm font-bold">${4231}</span>
+                            <span class="text-[9px]">Waste Water (Effluent)</span>
+                        </div>
+                    </div>
+                    <div class="col-span-2 py-2 px-3 rounded-xl flex items-center justify-between bg-black">
+                        <span class="font-bold text-xs uppercase ">Selisih</span>
+                        <span class="text-md font-bold">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>`,
+        `<div class="w-full flex items-end gap-2 mt-2">
+            <div class="flex flex-col w-full gap-2">
+                <span class="text-md lg:text-xl font-bold text-green-500">Power Consumption (kWh)</span>
+                <div class="grid grid-cols-2 gap-2 text-amber-500">
+                    <div class="col-span-2 py-2 px-3 rounded-xl flex items-center justify-between bg-black">
+                        <span class="font-bold text-xs uppercase ">Total Pemakaian</span>
+                        <span class="text-md font-bold">438,400</span>
+                    </div>
+                    <div class="py-2 px-3 rounded-xl flex flex-col gap-1 bg-black">
+                        <span class="text-[9px]">Incoming</span>
+                        <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
+                            <span class="text-sm font-bold">${438400}</span>
+                            <span class="text-[9px]">PLN</span>
+                        </div>
+                    </div>
+                    <div class="py-2 px-3 rounded-xl flex flex-col gap-1 bg-black">
+                        <span class="text-[9px]">Outgoing</span>
+                        <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
+                            <span class="text-sm font-bold">${98300}</span>
+                            <span class="text-[9px]">Refinery</span>
+                        </div>
+                        <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
+                            <span class="text-sm font-bold">${75031}</span>
+                            <span class="text-[9px]">Fractionation</span>
+                        </div>
+                        <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
+                            <span class="text-sm font-bold">${6290}</span>
+                            <span class="text-[9px]">Others</span>
+                        </div>
+                    </div>
+                    <div class="col-span-2 py-2 px-3 rounded-xl flex items-center justify-between bg-black">
+                        <span class="font-bold text-xs uppercase ">Selisih</span>
+                        <span class="text-md font-bold">258779</span>
+                    </div>
+                </div>
+            </div>
+        </div>`
+    ];
+    const color = 'text-red-500';
+    const icon = null;
     const link = '/test';
 
     return { name: name, value: value, versus: versus, color: color, icon: icon, link: link };

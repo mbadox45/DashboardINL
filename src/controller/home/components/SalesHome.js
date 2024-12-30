@@ -84,7 +84,7 @@ export const UpdateVolume = () => {
         </div>
     </div>
     <div class="flex flex-col items-end gap-3 w-full h-full py-3 rounded-lg">
-        <span class="text-lg font-bold h-full">Retail</span>
+        <span class="text-lg font-bold text-center w-full h-full">Retail</span>
         <div class="flex flex-col gap-1 items-end w-full">
             <span class="text-md rounded-full bg-black font-bold py-1 px-3 border w-full text-right text-cyan-500">2,000</span>
             <span class="text-md rounded-full bg-black font-bold py-1 px-3 border w-full text-right text-lime-500">2,000</span>
@@ -92,7 +92,7 @@ export const UpdateVolume = () => {
         </div>
     </div>
     <div class="flex flex-col items-end gap-3 w-full h-full py-3 rounded-lg">
-        <span class="text-lg font-bold h-full">Bulk</span>
+        <span class="text-lg font-bold text-center w-full h-full">Bulk</span>
         <div class="flex flex-col gap-1 items-end w-full">
             <span class="text-md rounded-full bg-black font-bold py-1 px-3 border w-full text-right text-cyan-500">22,000</span>
             <span class="text-md rounded-full bg-black font-bold py-1 px-3 border w-full text-right text-lime-500">35,000</span>

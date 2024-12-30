@@ -76,21 +76,21 @@ const loadDataSales = async () => {
 </script>
 
 <template>
-    <div class="bg-black text-white p-6 pb-10 mt-2 rounded-2xl">
+    <div class="bg-black text-white p-6 pb-10 mt-2 rounded-2xl w-full">
         <div class="grid grid-cols-3 gap-4">
-            <div class="col-span-1 min-h-[650px]">
+            <div class="col-span-1 min-h-[650px] lg:flex xl:flex 2xl:flex hidden">
                 <images-home />
             </div>
-            <div class="col-span-2 flex flex-col gap-3">
-                <div class="flex flex-col gap-1">
-                    <h3 class="text-xl font-bold text-white">Financial</h3>
-                    <div class="grid grid-cols-4 gap-4 mb-2">
+            <div class="lg:col-span-2 col-span-3 flex flex-col gap-5">
+                <div class="flex flex-col gap-2">
+                    <h3 class="text-md lg:text-xl font-bold text-white">Financial</h3>
+                    <div class="grid grid-cols-4 gap-4">
                         <card-values v-for="(item, index) in listCardFinancial" :key="index" :datas="item" />
                     </div>
                 </div>
-                <div class="flex flex-col gap-1">
-                    <h3 class="text-xl font-bold text-white">Production</h3>
-                    <div class="grid grid-cols-3 gap-4 mb-2">
+                <div class="flex flex-col gap-2">
+                    <h3 class="text-md lg:text-xl font-bold text-white">Production</h3>
+                    <div class="grid grid-cols-3 gap-4">
                         <card-operation-values v-for="(item, index) in listCardOperation" :key="index" :datas="item" />
                     </div>
                 </div>

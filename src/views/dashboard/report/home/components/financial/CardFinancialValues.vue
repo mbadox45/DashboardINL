@@ -21,7 +21,7 @@ watch(() => props.datas, loadData, { immediate: true });
     <div class="bg-gray-800 p-2 rounded-xl shadow-xl min-h-[120px] flex gap-3 items-start">
         <div class="flex flex-col w-full">
             <div class="flex items-center gap-6">
-                <span class="text-l font-bold w-full">{{ load.name }}</span>
+                <span class="font-bold w-full text-[9px] lg:text-lg">{{ load.name }}</span>
                 <router-link
                     v-show="load.link != null"
                     :to="load.link"
@@ -31,7 +31,7 @@ watch(() => props.datas, loadData, { immediate: true });
                 </router-link>
             </div>
             <div class="flex items-center gap-6">
-                <img v-show="load.icon != null" :src="load.icon" alt="Icon" class="w-20 h-20" />
+                <img v-show="load.icon != null" :src="load.icon" alt="Icon" class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14" />
                 <div class="w-full">
                     <div v-html="load.nilai"></div>
                     <div v-html="load.versus"></div>

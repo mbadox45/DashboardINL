@@ -83,7 +83,7 @@ onUnmounted(() => {
     <div class="bg-gray-800 p-3 rounded-xl shadow-xl flex gap-3 items-start min-h-[350px]">
         <div class="flex flex-col w-full h-full">
             <div class="flex items-center gap-6">
-                <span class="text-l font-bold w-full">{{ load.name }}</span>
+                <span class="text-[9px] lg:text-lg font-bold w-full">{{ load.name }}</span>
                 <router-link
                     v-show="load.link != null"
                     :to="load.link"
@@ -93,7 +93,7 @@ onUnmounted(() => {
                 </router-link>
             </div>
             <div class="flex items-center gap-4 h-full">
-                <img v-show="load.icon != null" :src="load.icon" alt="Icon" class="w-28 h-28" />
+                <img v-show="load.icon != null" :src="load.icon" alt="Icon" class="hidden w-14 h-14 lg:flex lg:w-24 lg:h-24" />
                 <div class="w-full flex flex-col h-full justify-between">
                     <div class="h-full" v-show="load.nilai != null" v-html="load.nilai"></div>
                     <div :class="animationClass" class="h-full" v-html="load.versus[currentIndex]"></div>
