@@ -8,7 +8,7 @@ const props = defineProps({
     }
 });
 
-const load = ref({ name: '', icon: '', nilai: 0, persen: 0, versus: '', link: null });
+const load = ref({ name: '', icon: '', nilai: '', persen: 0, versus: '', link: null });
 const currentIndex = ref(0);
 const animationClass = ref('fade-in');
 
@@ -80,7 +80,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <div class="bg-gray-800 p-3 rounded-xl shadow-xl flex gap-3 items-start min-h-[350px]">
+    <div class="bg-gray-800 p-3 rounded-xl shadow-xl min-h-[120px] flex gap-3 items-start" :class="load.nilai">
         <div class="flex flex-col w-full h-full">
             <div class="flex items-center gap-6">
                 <span class="text-l font-bold w-full">{{ load.name }}</span>
@@ -95,7 +95,6 @@ onUnmounted(() => {
             <div class="flex items-center gap-4 h-full">
                 <img v-show="load.icon != null" :src="load.icon" alt="Icon" class="w-28 h-28" />
                 <div class="w-full flex flex-col h-full justify-between">
-                    <div class="h-full" v-show="load.nilai != null" v-html="load.nilai"></div>
                     <div :class="animationClass" class="h-full" v-html="load.versus[currentIndex]"></div>
                 </div>
             </div>
