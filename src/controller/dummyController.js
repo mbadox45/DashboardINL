@@ -1,3 +1,5 @@
+// import * as CryptoJS from 'crypto-js';
+
 export const valueColorPersenCondition = (val) => {
     let result = '';
     if (val <= 35) {
@@ -19,3 +21,17 @@ export const valueColorIntCondition = (val) => {
     }
     return result;
 };
+
+// // Encrypt Router
+// export const secretKey = 'mysecretkey';
+
+// // Fungsi untuk mengenkripsi teks
+// export const encryptQuery = (query) => {
+//     return CryptoJS.AES.encrypt(query, secretKey).toString();
+// };
+
+// // Fungsi untuk mendekripsi teks
+// export const decryptQuery = (encryptedQuery) => {
+//     const bytes = CryptoJS.AES.decrypt(encryptedQuery, secretKey);
+//     return bytes.toString(CryptoJS.enc.Utf8);
+// };

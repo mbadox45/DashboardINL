@@ -8,7 +8,6 @@ import HomeDash from '@/controller/home/homeDash';
 import CardValues from '@/views/dashboard/report/home/components/financial/CardFinancialValues.vue';
 import ImagesHome from '@/views/dashboard/report/home/components/ImagesHome.vue';
 import CardOperationValues from '@/views/dashboard/report/home/components/operation/CardOperationValues.vue';
-import CardSalesValues from '@/views/dashboard/report/home/components/sales/CardSalesValues.vue';
 
 const listCardFinancial = ref([]);
 const listCardOperation = ref([]);
@@ -76,20 +75,26 @@ const loadDataSales = async () => {
 </script>
 
 <template>
-    <div class="bg-black text-white p-6 pb-10 mt-2 rounded-2xl w-full">
+    <div class="bg-black text-white p-6 pb-10 mt-[-0.6vw] rounded-2xl w-full">
         <div class="grid grid-cols-3 gap-4">
-            <div class="col-span-1 min-h-[650px] lg:flex xl:flex 2xl:flex hidden">
+            <div class="col-span-1 xl:flex xl:flex-col xl:gap-6 hidden">
                 <images-home />
+                <div class="flex flex-col gap-2">
+                    <h3 class="text-[0.7vw] font-bold text-white">SDM</h3>
+                    <!-- <div class="grid grid-cols-4 gap-4">
+                        <card-values v-for="(item, index) in listCardFinancial" :key="index" :datas="item" />
+                    </div> -->
+                </div>
             </div>
             <div class="lg:col-span-2 col-span-3 flex flex-col gap-5">
                 <div class="flex flex-col gap-2">
-                    <h3 class="text-md lg:text-xl font-bold text-white">Financial</h3>
+                    <h3 class="text-[0.7vw] font-bold text-white">Financial</h3>
                     <div class="grid grid-cols-4 gap-4">
                         <card-values v-for="(item, index) in listCardFinancial" :key="index" :datas="item" />
                     </div>
                 </div>
                 <div class="flex flex-col gap-2">
-                    <h3 class="text-md lg:text-xl font-bold text-white">Production</h3>
+                    <h3 class="text-[0.7vw] font-bold text-white">Production</h3>
                     <div class="grid grid-cols-3 gap-4">
                         <card-operation-values v-for="(item, index) in listCardOperation" :key="index" :datas="item" />
                     </div>
@@ -97,13 +102,13 @@ const loadDataSales = async () => {
             </div>
             <div class="col-span-3 flex flex-col gap-3">
                 <div class="flex flex-col gap-1">
-                    <h3 class="text-xl font-bold text-white">Sales & Marketing</h3>
-                    <div class="grid grid-cols-4 gap-4 mb-2">
+                    <h3 class="text-[0.7vw] font-bold text-white">Sales & Marketing</h3>
+                    <!-- <div class="grid grid-cols-4 gap-4 mb-2">
                         <card-sales-values v-show="listCardSalesPerformance.length > 0" v-for="(item, index) in listCardSalesPerformance" :key="index" :datas="item" />
-                    </div>
+                    </div> -->
                 </div>
                 <div class="flex flex-col gap-1">
-                    <h3 class="text-xl font-bold text-white">Supply Chain</h3>
+                    <h3 class="text-[0.7vw] font-bold text-white">Supply Chain</h3>
                     <!-- <div class="grid grid-cols-4 gap-4 mb-2">
                         <card-values v-for="(item, index) in listCardFinancial" :key="index" :datas="item" />
                     </div> -->

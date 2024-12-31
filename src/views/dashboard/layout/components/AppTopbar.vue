@@ -3,7 +3,7 @@ import { useLayout } from '@/views/dashboard/layout/components/layout';
 import moment from 'moment';
 import { ref } from 'vue';
 
-const { toggleMenu, toggleDarkMode, isDarkTheme } = useLayout();
+const { toggleMenu } = useLayout();
 
 const beforeDate = ref(moment().format('YYYY-MM-01'));
 const now = ref(moment().format('YYYY-MM-DD'));

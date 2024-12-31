@@ -1,5 +1,8 @@
 <script setup>
+// import { encryptQuery } from '@/controller/dummyController';
 import { defineProps, ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
+const router = useRouter();
 
 const props = defineProps({
     datas: {
@@ -15,23 +18,31 @@ const loadData = async () => {
     load.value = { name: data.name, icon: data.icon, nilai: data.value, persen: null, versus: data.versus, color: data.color, link: data.link };
 };
 
+const routerLink = (path) => {
+    // const encryptedQuery = encryptQuery(JSON.stringify(path));
+    router.push({
+        path: '/detail-dashboard',
+        query: { component: path }
+    });
+};
+
 watch(() => props.datas, loadData, { immediate: true });
 </script>
 <template>
     <div class="bg-gray-800 p-2 rounded-xl shadow-xl min-h-[120px] flex gap-3 items-start">
         <div class="flex flex-col w-full">
             <div class="flex items-center gap-6">
-                <span class="font-bold w-full text-[9px] lg:text-lg">{{ load.name }}</span>
-                <router-link
+                <span class="font-bold w-full text-[0.75vw]">{{ load.name }}</span>
+                <button
                     v-show="load.link != null"
-                    :to="load.link"
-                    class="animate-pulse hover:animate-none p-4 w-[30px] h-[30px] cursor-pointer bg-transparent text-emerald-500 rotate-180 hover:rotate-[-180] hover:bg-black hover:text-amber-500 rounded-full flex items-center justify-center transition-all duration-500"
+                    @click="routerLink(load.link)"
+                    class="animate-pulse hover:animate-none p-4 w-[1.5vw] h-[1.5vw] cursor-pointer bg-transparent text-emerald-500 rotate-180 hover:rotate-[-180] hover:bg-black hover:text-amber-500 rounded-full flex items-center justify-center transition-all duration-500"
                 >
-                    <i class="pi pi-external-link" style="font-weight: 600; font-size: 15px"></i>
-                </router-link>
+                    <i class="pi pi-external-link" style="font-weight: 600; font-size: 0.9vw"></i>
+                </button>
             </div>
             <div class="flex items-center gap-6">
-                <img v-show="load.icon != null" :src="load.icon" alt="Icon" class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14" />
+                <img v-show="load.icon != null" :src="load.icon" alt="Icon" class="w-[3vw] h-[3vw]" />
                 <div class="w-full">
                     <div v-html="load.nilai"></div>
                     <div v-html="load.versus"></div>
