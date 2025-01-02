@@ -32,7 +32,7 @@ watch(() => props.datas, loadData, { immediate: true });
     <div class="bg-gray-800 p-2 rounded-xl shadow-xl min-h-[120px] flex gap-3 items-start">
         <div class="flex flex-col w-full">
             <div class="flex items-center gap-6">
-                <span class="font-bold w-full text-[0.75vw]">{{ load.name }}</span>
+                <span class="font-bold w-full text-[0.55vw]">{{ load.name }}</span>
                 <button
                     v-show="load.link != null"
                     @click="routerLink(load.link)"

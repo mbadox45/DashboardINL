@@ -9,11 +9,14 @@ import CardValues from '@/views/dashboard/report/home/components/financial/CardF
 import ImagesHome from '@/views/dashboard/report/home/components/ImagesHome.vue';
 import CardOperationValues from '@/views/dashboard/report/home/components/operation/CardOperationValues.vue';
 import CardScmValues from '@/views/dashboard/report/home/components/scm/CardSCMValues.vue';
+import CardSales from '@/views/dashboard/report/home/components/sales/CardSalesValues.vue';
+import CardSdm from '@/views/dashboard/report/home/components/sdm/CardSdmValues.vue';
 
 const listCardFinancial = ref([]);
 const listCardOperation = ref([]);
 const listCardSalesPerformance = ref([]);
 const listCardSCM = ref([]);
+const listCardSdm = ref([]);
 
 onMounted(() => {
     loadData();
@@ -24,6 +27,7 @@ const loadData = async () => {
     await loadDataOperation();
     await loadDataSales();
     await loadDataSCM();
+    await loadDataSdm();
 };
 
 const loadDataFinance = async () => {
@@ -54,7 +58,8 @@ const loadDataOperation = async () => {
             value: dataOperation[i].value,
             persentase: dataOperation[i].persentase,
             versus: dataOperation[i].versus,
-            link: dataOperation[i].link
+            link: dataOperation[i].link,
+            colspan: dataOperation[i].colspan
         });
     }
     listCardOperation.value = list;
@@ -63,7 +68,6 @@ const loadDataOperation = async () => {
 const loadDataSCM = async () => {
     const list = [];
     const dataSCM = await HomeDash.cardSCM();
-    console.log(dataSCM);
     for (let i = 0; i < dataSCM.length; i++) {
         list.push({
             name: dataSCM[i].name,
@@ -72,10 +76,28 @@ const loadDataSCM = async () => {
             value: dataSCM[i].value,
             persentase: dataSCM[i].persentase,
             versus: dataSCM[i].versus,
-            link: dataSCM[i].link
+            link: dataSCM[i].link,
+            colspan: dataSCM[i].colspan
         });
     }
     listCardSCM.value = list;
+};
+const loadDataSdm = async () => {
+    const list = [];
+    const dataSdm = await HomeDash.cardSdm();
+    for (let i = 0; i < dataSdm.length; i++) {
+        list.push({
+            name: dataSdm[i].name,
+            color: dataSdm[i].color,
+            icon: dataSdm[i].icon,
+            value: dataSdm[i].value,
+            persentase: dataSdm[i].persentase,
+            versus: dataSdm[i].versus,
+            link: dataSdm[i].link,
+            colspan: dataSdm[i].colspan
+        });
+    }
+    listCardSdm.value = list;
 };
 
 const loadDataSales = async () => {
@@ -96,49 +118,40 @@ const loadDataSales = async () => {
 </script>
 
 <template>
-    <div class="bg-black text-white p-6 pb-10 mt-[-0.6vw] rounded-2xl w-full">
+    <div class="bg-black text-white p-6 pb-10 rounded-2xl w-full">
         <div class="grid grid-cols-3 gap-4">
             <div class="col-span-1 xl:flex xl:flex-col xl:gap-6 hidden">
                 <images-home />
                 <div class="flex flex-col gap-2">
+                    <div class="grid grid-cols-1 gap-2">
+                        <card-sdm v-for="(item, index) in listCardSdm" :key="index" :datas="item" />
+                    </div>
+                </div>
+                <div class="flex flex-col gap-2">
                     <h3 class="text-[0.7vw] font-bold text-white">Sales & Marketing</h3>
-                    <!-- <div class="grid grid-cols-4 gap-4">
-                        <card-values v-for="(item, index) in listCardFinancial" :key="index" :datas="item" />
-                    </div> -->
+                    <div class="grid grid-cols-1 gap-2">
+                        <card-sales v-for="(item, index) in listCardSalesPerformance" :key="index" :datas="item" />
+                    </div>
                 </div>
             </div>
             <div class="lg:col-span-2 col-span-3 flex flex-col gap-5">
                 <div class="flex flex-col gap-2">
                     <h3 class="text-[0.7vw] font-bold text-white">Financial</h3>
-                    <div class="grid grid-cols-4 gap-4">
+                    <div class="grid grid-cols-4 gap-2">
                         <card-values v-for="(item, index) in listCardFinancial" :key="index" :datas="item" />
                     </div>
                 </div>
                 <div class="flex flex-col gap-2">
                     <h3 class="text-[0.7vw] font-bold text-white">Production</h3>
-                    <div class="grid grid-cols-3 gap-4">
+                    <div class="grid grid-cols-3 gap-2">
                         <card-operation-values v-for="(item, index) in listCardOperation" :key="index" :datas="item" />
                     </div>
                 </div>
                 <div class="flex flex-col gap-2">
                     <h3 class="text-[0.7vw] font-bold text-white">Supply Chain</h3>
-                    <div class="grid grid-cols-4 gap-4">
+                    <div class="grid grid-cols-4 gap-2">
                         <card-scm-values v-for="(item, index) in listCardSCM" :key="index" :datas="item" />
                     </div>
-                </div>
-            </div>
-            <div class="col-span-3 flex flex-col gap-3">
-                <div class="flex flex-col gap-1">
-                    <h3 class="text-[0.7vw] font-bold text-white">Sales & Marketing</h3>
-                    <!-- <div class="grid grid-cols-4 gap-4 mb-2">
-                        <card-sales-values v-show="listCardSalesPerformance.length > 0" v-for="(item, index) in listCardSalesPerformance" :key="index" :datas="item" />
-                    </div> -->
-                </div>
-                <div class="flex flex-col gap-1">
-                    <h3 class="text-[0.7vw] font-bold text-white">Supply Chain</h3>
-                    <!-- <div class="grid grid-cols-4 gap-4 mb-2">
-                        <card-values v-for="(item, index) in listCardFinancial" :key="index" :datas="item" />
-                    </div> -->
                 </div>
             </div>
         </div>

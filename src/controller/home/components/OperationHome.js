@@ -2,6 +2,7 @@ import { valueColorPersenCondition } from '@/controller/dummyController';
 
 export const cpoOlahVsRKAP = () => {
     const name = 'CPO Olah vs RKAP vs Utility (in Kg)';
+    const colspan = null;
     const value = `<div class=" flex gap-2 items-center w-full h-full">
         <span class="font-bold w-full flex flex-col ${valueColorPersenCondition(16.8)}"><span class="text-[1.3vw]">${16.8}%</span><small class="text-[0.6vw]">RKAP</small></span>
         <span class="font-bold w-full flex flex-col ${valueColorPersenCondition(13.8)}"><span class="text-[1.3vw]">${13.8}%</span><small class="text-[0.6vw]">Utility</small></span>
@@ -18,14 +19,45 @@ export const cpoOlahVsRKAP = () => {
     const icon = null;
     const link = '/test';
 
-    return { name: name, value: value, versus: versus, color: color, icon: icon, link: link };
+    return { colspan: colspan, name: name, value: value, versus: versus, color: color, icon: icon, link: link };
 };
 
 export const pemakaianMaterial = () => {
     const name = 'Pemakaian Material';
     const value = null;
+    const colspan = null;
     // Jika Pendapatan > RKAP warna jadi green 600, sesuai kan periode
     const versus = [
+        `<div class="w-full flex items-end gap-2 mt-2">
+            <div class="flex flex-col w-full gap-2">
+                <span class="text-[0.8vw] font-bold text-green-500">Chemical Consumption</span>
+                <div class="grid grid-cols-2 gap-2 text-amber-500">
+                    <div class="col-span-2 py-[0.9px] px-3 rounded-xl flex items-center justify-between bg-black">
+                        <span class="font-bold text-[0.5vw] uppercase ">Spent Bleaching Earth (BE)</span>
+                        <span class="text-[0.6vw] font-bold">159,041</span>
+                    </div>
+                    <div class="col-span-2 py-[0.9px] px-3 rounded-xl flex flex-col gap-1 bg-black">
+                        <span class="text-[0.5vw]">Detail</span>
+                        <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
+                            <span class="text-[0.6vw] font-bold">${130411}</span>
+                            <span class="text-[0.5vw]">Bleaching Earth to Poram Spec</span>
+                        </div>
+                        <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
+                            <span class="text-[0.6vw] font-bold">${0}</span>
+                            <span class="text-[0.5vw]">Bleaching Earth to Branded Spec</span>
+                        </div>
+                        <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
+                            <span class="text-[0.6vw] font-bold">${21.95}</span>
+                            <span class="text-[0.5vw]">% Oil Content</span>
+                        </div>
+                    </div>
+                    <div class="col-span-2 py-[0.9px] px-3 rounded-xl flex items-center justify-between bg-black">
+                        <span class="font-bold text-[0.5vw] uppercase ">Phosporic Acid</span>
+                        <span class="text-[0.6vw] font-bold">5139</span>
+                    </div>
+                </div>
+            </div>
+        </div>`,
         `<div class="w-full flex items-end gap-2 mt-2">
             <div class="flex flex-col w-full gap-2">
                 <span class="text-[0.8vw] font-bold text-green-500">Gas Consumption (mmbtu)</span>
@@ -187,12 +219,13 @@ export const pemakaianMaterial = () => {
     const icon = null;
     const link = '/test';
 
-    return { name: name, value: value, versus: versus, color: color, icon: icon, link: link };
+    return { colspan: colspan, name: name, value: value, versus: versus, color: color, icon: icon, link: link };
 };
 
 export const laporanProduksi = () => {
     const name = 'Laporan Produksi (in Kg)';
     const value = null;
+    const colspan = null;
     const versus = [
         `<div class="w-full flex items-end gap-2 mt-2">
             <div class="flex flex-col w-full gap-2">
@@ -352,5 +385,5 @@ export const laporanProduksi = () => {
     const color = 'text-green-500';
     const icon = null;
     const link = '/test';
-    return { name: name, value: value, versus: versus, color: color, icon: icon, link: link };
+    return { colspan: colspan, name: name, value: value, versus: versus, color: color, icon: icon, link: link };
 };

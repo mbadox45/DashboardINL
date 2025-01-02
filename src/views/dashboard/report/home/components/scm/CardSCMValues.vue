@@ -8,7 +8,7 @@ const props = defineProps({
     }
 });
 
-const load = ref({ name: '', icon: '', nilai: 0, persen: 0, versus: '', link: null });
+const load = ref({ name: '', icon: '', nilai: 0, persen: 0, versus: '', link: null, colspan: null });
 const currentIndex = ref(0);
 const animationClass = ref('fade-in');
 
@@ -20,7 +20,8 @@ const loadData = async () => {
         nilai: data.value,
         persen: null,
         versus: data.versus,
-        link: data.link
+        link: data.link,
+        colspan: data.colspan
     };
 };
 
@@ -42,7 +43,7 @@ const startIndexCycle = () => {
             currentIndex.value = (currentIndex.value + 1) % load.value.versus.length;
             animationClass.value = 'fade-in';
         }, 500);
-    }, 3000); // Restart with a 3-second interval
+    }, 5000); // Restart with a 5-second interval
 };
 
 // Reset the timer and navigate to the next index
@@ -80,10 +81,10 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <div class="bg-gray-800 p-3 rounded-xl shadow-xl flex gap-3 items-start">
+    <div class="bg-gray-800 p-3 rounded-xl shadow-xl flex gap-3 items-start" :class="load.colspan">
         <div class="flex flex-col w-full h-full">
             <div class="flex items-center gap-6">
-                <span class="text-[0.75vw] font-bold w-full">{{ load.name }}</span>
+                <span class="text-[0.55vw] font-bold w-full">{{ load.name }}</span>
                 <router-link
                     v-show="load.link != null"
                     :to="load.link"
@@ -94,16 +95,20 @@ onUnmounted(() => {
             </div>
             <div class="flex items-center gap-4 h-full">
                 <img v-show="load.icon != null" :src="load.icon" alt="Icon" class="hidden lg:flex w-[3vw] h-[3vw]" />
-                <div class="w-full flex flex-col h-full gap-6 justify-between">
+                <div class="w-full flex flex-col justify-between min-h-[3vw] gap-3">
                     <div class="h-full" v-show="load.nilai != null" v-html="load.nilai"></div>
                     <!-- <div :class="animationClass" class="min-h-[7vw]" v-html="load.versus[currentIndex]"></div> -->
                     <div :class="animationClass" v-html="load.versus[currentIndex]"></div>
                     <!-- <div class="min-h-[7vw]" v-html="load.versus[currentIndex]"></div> -->
                 </div>
             </div>
-            <div v-if="load.versus.length > 1" class="flex justify-between">
-                <button @click="prevIndex" class="p-1 bg-gray-700 text-white text-sm rounded hover:bg-gray-600 transition flex items-center text-[0.6vw]"><i class="pi pi-chevron-left mr-1" style="font-size: 0.6vw"></i> Prev</button>
-                <button @click="nextIndex" class="p-1 bg-gray-700 text-white text-sm rounded hover:bg-gray-600 transition flex items-center text-[0.6vw]">Next <i class="pi pi-chevron-right ml-1" style="font-size: 0.6vw"></i></button>
+            <div v-if="load.versus.length > 1" class="flex justify-between mt-2">
+                <button @click="prevIndex" class="p-1 bg-gray-700 text-white rounded hover:bg-gray-600 transition flex items-center text-[0.6vw] w-[1vw] h-[1vw] justify-center">
+                    <i class="pi pi-chevron-left mr-1" style="font-size: 0.5vw"></i>
+                </button>
+                <button @click="nextIndex" class="p-1 bg-gray-700 text-white rounded hover:bg-gray-600 transition flex items-center text-[0.6vw] w-[1vw] h-[1vw] justify-center">
+                    <i class="pi pi-chevron-right ml-1" style="font-size: 0.5vw"></i>
+                </button>
             </div>
         </div>
     </div>
