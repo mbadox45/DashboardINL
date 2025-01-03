@@ -3,6 +3,7 @@ import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 // Components
+import GrossProfitDetailFinance from '@/views/dashboard/report/detailPage/components/financial/GrossProfitDetailFinance.vue';
 import RevenueDetailFinance from '@/views/dashboard/report/detailPage/components/financial/RevenueDetailFinance.vue';
 
 const route = useRoute();
@@ -26,6 +27,7 @@ const funcCondition = () => {
 
 <template>
     <div class="bg-black w-full min-h-[30rem] p-6 rounded-xl">
-        <revenue-detail-finance />
+        <revenue-detail-finance v-if="routeName == 'revenue'" />
+        <gross-profit-detail-finance v-else />
     </div>
 </template>

@@ -31,7 +31,7 @@ export const grossProfitMargin = () => {
     </div>`;
     const color = 'text-amber-500';
     const icon = '/images/icon/financial/gross-profit.png';
-    const link = '/test';
+    const link = 'gross-profit';
 
     return { name: name, value: value, versus: versus, color: color, icon: icon, link: link };
 };
