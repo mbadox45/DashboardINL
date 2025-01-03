@@ -11,7 +11,7 @@ export const revenueYtd = async () => {
     const type1 = 'line';
     const type2 = 'bar';
     const colors = ['rgba(245, 217, 5, 0.6)', 'rgba(0, 34, 255, 1)'];
-    const total = '*';
+    const total = '';
     const scale1 = 'number';
     const scale2 = 'number';
     const typeChart = 'line';

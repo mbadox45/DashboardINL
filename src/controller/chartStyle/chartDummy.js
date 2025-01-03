@@ -162,7 +162,8 @@ export const comboChartOptionsApex = (total, label1, label2, listLabels, colors,
         title: {
             text: total,
             style: {
-                fontSize: '12px'
+                fontSize: '12px',
+                color: '#FF5733'
             }
         },
         colors: colors,
@@ -171,7 +172,7 @@ export const comboChartOptionsApex = (total, label1, label2, listLabels, colors,
             enabledOnSeries: [0],
             style: {
                 fontSize: '10px',
-                colors: ['#000']
+                colors: ['#FF5733']
             },
             background: {
                 enabled: false
@@ -200,12 +201,29 @@ export const comboChartOptionsApex = (total, label1, label2, listLabels, colors,
             }
         },
         labels: listLabels,
+        xaxis: {
+            labels: {
+                style: {
+                    colors: '#ffffff', // Warna font X-axis
+                    fontSize: '10px', // Ukuran font
+                    fontFamily: 'Arial, sans-serif' // Gaya font opsional
+                }
+            },
+            categories: listLabels // Label kategori untuk X-axis
+        },
         yaxis: [
             {
                 title: {
-                    text: label2
+                    text: label2,
+                    style: {
+                        color: '#ffffff' // Warna untuk judul Y-axis
+                    }
                 },
                 labels: {
+                    style: {
+                        colors: '#ffffff', // Ganti dengan warna label Y-axis
+                        fontSize: '10px' // Ukuran font opsional
+                    },
                     formatter: function (val) {
                         if (scale2 === 'percent') {
                             if (val >= 1000) {
@@ -224,9 +242,16 @@ export const comboChartOptionsApex = (total, label1, label2, listLabels, colors,
             {
                 opposite: true,
                 title: {
-                    text: label1
+                    text: label1,
+                    style: {
+                        color: '#ffffff' // Warna untuk judul Y-axis yang lain
+                    }
                 },
                 labels: {
+                    style: {
+                        colors: '#ffffff', // Ganti dengan warna label Y-axis
+                        fontSize: '10px'
+                    },
                     formatter: function (val) {
                         if (scale1 === 'percent') {
                             if (val >= 1000) {
@@ -242,7 +267,31 @@ export const comboChartOptionsApex = (total, label1, label2, listLabels, colors,
                     }
                 }
             }
-        ]
+        ],
+        legend: {
+            labels: {
+                colors: '#ffffff', // Warna font legenda
+                useSeriesColors: false // Agar warna mengikuti warna yang ditentukan
+            },
+            fontSize: '12px', // Ukuran font legenda
+            fontFamily: 'Arial, sans-serif' // Gaya font legenda
+        },
+        tooltip: {
+            theme: 'dark', // Ganti tema tooltip jika diperlukan
+            style: {
+                fontSize: '12px',
+                fontFamily: 'Arial, sans-serif',
+                color: '#FF5733' // Warna font pada tooltip
+            },
+            y: {
+                formatter: function (val) {
+                    if (val >= 1000) {
+                        return (val / 1000).toFixed(1) + 'K';
+                    }
+                    return val.toFixed(2);
+                }
+            }
+        }
     };
 };
 

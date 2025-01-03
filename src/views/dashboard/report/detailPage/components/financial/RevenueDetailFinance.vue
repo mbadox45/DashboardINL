@@ -35,7 +35,7 @@ const loadData = async () => {
 </script>
 
 <template>
-    <div class="flex flex-col items-center gap-2">
+    <div class="flex flex-col w-full items-center gap-2">
         <span class="text-[1vw] font-bold">
             {{ listdata.name || 'Loading...' }}
         </span>
@@ -46,8 +46,8 @@ const loadData = async () => {
         </div>
 
         <!-- Chart -->
-        <div v-else>
-            <VueApexCharts :type="listdata.type" :series="listdata.series" :options="listdata.options" class="w-full" height="380" style="z-index: 1 !important" />
+        <div v-else class="w-full flex flex-col gap-1">
+            <VueApexCharts :type="listdata.type" :series="listdata.series" :options="listdata.options" class="w-full" height="300px" style="z-index: 1 !important" />
         </div>
     </div>
 </template>
