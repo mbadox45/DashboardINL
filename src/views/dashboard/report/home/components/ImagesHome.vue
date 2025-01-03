@@ -1,25 +1,16 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 
 const listImages = ref([]);
-const responsiveOptions = ref([
-    {
-        breakpoint: '1300px',
-        numVisible: 4
-    },
-    {
-        breakpoint: '575px',
-        numVisible: 1
-    }
-]);
+const currentIndex = ref(0); // Index gambar saat ini
 
 onMounted(() => {
     loadImage();
+    startSlideshow(); // Memulai slideshow saat komponen dimuat
 });
 
 const loadImage = () => {
-    const list = [];
-    list.push(
+    listImages.value = [
         {
             src: '/images/profil/Picture1.png',
             title: 'Executive Dashboard',
@@ -28,39 +19,62 @@ const loadImage = () => {
         {
             src: '/images/profil/DJI_0134.JPG',
             title: 'Executive Dashboard',
-            alt: 'Profil 1'
+            alt: 'Profil 2'
         },
         {
             src: '/images/profil/DJI_0143.JPG',
             title: 'Executive Dashboard',
-            alt: 'Profil 1'
+            alt: 'Profil 3'
         },
         {
             src: '/images/profil/DJI_0146.JPG',
             title: 'Executive Dashboard',
-            alt: 'Profil 1'
+            alt: 'Profil 4'
         },
         {
             src: '/images/profil/DJI_0161.JPG',
             title: 'Executive Dashboard',
-            alt: 'Profil 1'
+            alt: 'Profil 5'
         }
-    );
-    listImages.value = list;
+    ];
+};
+
+// Fungsi untuk memulai slideshow
+const startSlideshow = () => {
+    setInterval(() => {
+        currentIndex.value = (currentIndex.value + 1) % listImages.value.length;
+    }, 5000); // Gambar berubah setiap 5 detik
 };
 </script>
 
 <template>
-    <div class="w-full rounded-xl shadow-2xl flex flex-col justify-end">
-        <Galleria :value="listImages" :responsiveOptions="responsiveOptions" :numVisible="5" :autoPlay="true" :circular="true" :transitionInterval="2000" containerStyle="max-height: 19vw" :showThumbnails="false">
-            <template #item="slotProps">
-                <img :src="slotProps.item.src" :alt="slotProps.item.alt" style="display: block" />
-            </template>
-        </Galleria>
-    </div>
-    <!-- <div class="bg-[url('/images/Picture1.png')] h-[19vw] bg-cover bg-center w-full rounded-xl shadow-2xl flex flex-col justify-end">
-        <div class="w-full bg-gradient-to-t from-amber-500 to-transparent rounded-b-xl p-6 flex flex-col justify-between">
-            <span class="text-2xl uppercase font-extrabold text-black">Executive Dashboard</span>
+    <div class="relative w-full h-[19vw] rounded-xl shadow-2xl overflow-hidden">
+        <!-- Gambar dengan efek fade -->
+        <div
+            v-for="(image, index) in listImages"
+            :key="index"
+            class="absolute top-0 left-0 w-full h-full bg-cover bg-center transition-opacity duration-1000 ease-in-out"
+            :style="{
+                opacity: index === currentIndex ? 1 : 0,
+                zIndex: index === currentIndex ? 2 : 1,
+                backgroundImage: `url(${image.src})`
+            }"
+        >
+            <div class="w-full h-full rounded-xl flex flex-col justify-end">
+                <div class="w-full bg-gradient-to-t from-amber-500 to-transparent rounded-b-xl p-6 flex flex-col justify-between">
+                    <span class="text-2xl uppercase font-extrabold text-black">{{ image.title }}</span>
+                </div>
+            </div>
         </div>
-    </div> -->
+    </div>
 </template>
+
+<style>
+.relative {
+    position: relative;
+}
+
+.absolute {
+    position: absolute;
+}
+</style>

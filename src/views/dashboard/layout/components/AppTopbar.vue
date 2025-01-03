@@ -103,7 +103,7 @@ onMounted(() => {
         <!-- Tombol untuk toggle menu -->
         <div class="flex justify-end px-4 py-1">
             <button class="bg-white text-black animate-bounce hover:bg-amber-600 hover:text-white transition-all duration-500 p-2 h-[1.6vw] w-[1.6vw] rounded-full flex items-center justify-center" @click="toggleMenu">
-                <i :class="`pi ${showMenu ? 'pi-angle-double-down' : 'pi-angle-double-up'}`" style="font-size: 0.7vw"></i>
+                <i :class="`pi ${showMenu ? 'pi-angle-double-up' : 'pi-angle-double-down'}`" style="font-size: 0.7vw"></i>
             </button>
         </div>
     </div>

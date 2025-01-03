@@ -8,8 +8,8 @@ import HomeDash from '@/controller/home/homeDash';
 import CardValues from '@/views/dashboard/report/home/components/financial/CardFinancialValues.vue';
 import ImagesHome from '@/views/dashboard/report/home/components/ImagesHome.vue';
 import CardOperationValues from '@/views/dashboard/report/home/components/operation/CardOperationValues.vue';
-import CardScmValues from '@/views/dashboard/report/home/components/scm/CardSCMValues.vue';
 import CardSales from '@/views/dashboard/report/home/components/sales/CardSalesValues.vue';
+import CardScmValues from '@/views/dashboard/report/home/components/scm/CardSCMValues.vue';
 import CardSdm from '@/views/dashboard/report/home/components/sdm/CardSdmValues.vue';
 
 const listCardFinancial = ref([]);
