@@ -28,6 +28,6 @@ const funcCondition = () => {
 <template>
     <div class="bg-black w-full min-h-[30rem] p-6 rounded-xl">
         <revenue-detail-finance v-if="routeName == 'revenue'" />
-        <gross-profit-detail-finance v-else />
+        <gross-profit-detail-finance v-if="routeName == 'gross-profit'" />
     </div>
 </template>

@@ -295,6 +295,152 @@ export const comboChartOptionsApex = (total, label1, label2, listLabels, colors,
     };
 };
 
+export const combo3ChartOptionsApex = (total, label1, label2, label3, listLabels, colors, scale1, scale2, scale3) => {
+    return {
+        chart: {
+            height: 350,
+            type: 'line'
+        },
+        stroke: {
+            width: [4, 2, 4], // Add width for the third line
+            curve: 'smooth'
+        },
+        title: {
+            text: total,
+            style: {
+                fontSize: '12px',
+                color: '#FF5733'
+            }
+        },
+        colors: colors,
+        dataLabels: {
+            enabled: false,
+            enabledOnSeries: [0],
+            style: {
+                fontSize: '10px',
+                colors: ['#FF5733']
+            },
+            background: {
+                enabled: false
+            }
+        },
+        plotOptions: {
+            dataLabels: {
+                offsetY: 10
+            },
+            bar: {
+                colors: {
+                    ranges: [
+                        {
+                            from: -Infinity,
+                            to: 0,
+                            color: 'rgb(255, 0, 0)'
+                        }
+                    ]
+                }
+            }
+        },
+        labels: listLabels,
+        xaxis: {
+            labels: {
+                style: {
+                    colors: '#ffffff',
+                    fontSize: '10px',
+                    fontFamily: 'Arial, sans-serif'
+                }
+            },
+            categories: listLabels
+        },
+        yaxis: [
+            {
+                title: {
+                    text: label1, // Pendapatan current year
+                    style: {
+                        color: '#ffffff'
+                    }
+                },
+                labels: {
+                    style: {
+                        colors: '#ffffff',
+                        fontSize: '10px'
+                    },
+                    formatter: function (val) {
+                        if (scale2 === 'percent') {
+                            return val >= 1000 ? (val / 1000).toFixed(1) + 'K%' : val.toFixed(2) + '%';
+                        } else {
+                            return val >= 1000 ? (val / 1000).toFixed(1) + 'K' : val.toFixed(2);
+                        }
+                    }
+                }
+            },
+            {
+                opposite: true,
+                title: {
+                    text: label2, // Target RKAP
+                    style: {
+                        color: '#ffffff'
+                    }
+                },
+                labels: {
+                    style: {
+                        colors: '#ffffff',
+                        fontSize: '10px'
+                    },
+                    formatter: function (val) {
+                        if (scale1 === 'percent') {
+                            return val >= 1000 ? (val / 1000).toFixed(1) + 'K%' : val.toFixed(2) + '%';
+                        } else {
+                            return val >= 1000 ? (val / 1000).toFixed(1) + 'K' : val;
+                        }
+                    }
+                }
+            },
+            {
+                opposite: true,
+                title: {
+                    text: label3, // Pendapatan previous year
+                    style: {
+                        color: '#ffffff'
+                    }
+                },
+                labels: {
+                    style: {
+                        colors: '#ffffff',
+                        fontSize: '10px'
+                    },
+                    formatter: function (val) {
+                        // Share the same formatting logic as label2
+                        if (scale2 === 'percent') {
+                            return val >= 1000 ? (val / 1000).toFixed(1) + 'K%' : val.toFixed(2) + '%';
+                        } else {
+                            return val >= 1000 ? (val / 1000).toFixed(1) + 'K' : val.toFixed(2);
+                        }
+                    }
+                }
+            }
+        ],
+        legend: {
+            labels: {
+                colors: '#ffffff',
+                useSeriesColors: false
+            },
+            fontSize: '12px',
+            fontFamily: 'Arial, sans-serif'
+        },
+        tooltip: {
+            theme: 'dark',
+            style: {
+                fontSize: '12px',
+                fontFamily: 'Arial, sans-serif',
+                color: '#FF5733'
+            },
+            y: {
+                // Adjust formatting if needed
+            }
+        }
+    };
+};
+
 export const barStackedChartOptionsApex = (total, labels) => {
     return {
         chart: {
