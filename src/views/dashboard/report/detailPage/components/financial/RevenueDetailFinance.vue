@@ -1,5 +1,6 @@
 <script setup>
-import { revenueData, revenueYtd, currentYear } from '@/controller/report/FinancialReport';
+import { revenueData, revenueYtd } from '@/controller/report/FinancialReport';
+import moment from 'moment';
 import { onMounted, ref } from 'vue';
 import VueApexCharts from 'vue3-apexcharts';
 
@@ -12,6 +13,7 @@ const listdata = ref({
 
 const revenueThisYear = ref([]);
 const revenueLastYear = ref([]);
+const currentYear = ref(moment().format('yyyy'));
 const isLoading = ref(true);
 
 onMounted(() => {
@@ -60,9 +62,75 @@ const editRow = (row) => {
         <div v-else class="w-full flex flex-col gap-4">
             <!-- Vue Apex Chart -->
             <VueApexCharts :type="listdata.type" :series="listdata.series" :options="listdata.options" class="w-full" height="300px" style="z-index: 1 !important" />
-
+            <Divider />
             <div class="flex gap-20">
-                <div class="w-1/2">
+                <div class="w-full flex flex-col gap-2">
+                    <span class="text-lg text-green-500 font-semibold">Revenue Tahun {{ currentYear }}</span>
+                    <DataTable :value="revenueThisYear" showGridlines removableSort tableStyle="background-color:#00000;">
+                        <Column field="periode" sortable headerStyle="background-color: #1a5276;" style="background-color: black; color: white">
+                            <template #header>
+                                <span class="flex justify-center items-center w-full text-center">Periode</span>
+                            </template>
+                        </Column>
+                        <Column field="pendapatan" sortable headerStyle="background-color: #1a5276;" style="background-color: black; color: white">
+                            <template #header>
+                                <span class="flex justify-center items-center w-full text-center">Pendapatan (Bn)</span>
+                            </template>
+                        </Column>
+                        <Column field="rkap" sortable headerStyle="background-color: #1a5276;" style="background-color: black; color: white">
+                            <template #header>
+                                <span class="flex justify-center items-center w-full text-center">Target RKAP (Bn)</span>
+                            </template>
+                        </Column>
+                        <Column field="quantity" sortable headerStyle="background-color: #1a5276; text-align: center;" style="background-color: black; color: white">
+                            <template #header>
+                                <span class="flex justify-center items-center w-full text-center">Action</span>
+                            </template>
+                            <template #body="{ data }">
+                                <div class="w-full flex justify-center items-center">
+                                    <button @click="editRow(data)" class="hover:opacity-80 flex justify-center items-center p-2 rounded-full w-[1.3vw] h-[1.3vw] bg-cyan-900">
+                                        <i class="pi pi-pencil" style="font-size: 0.7vw"></i>
+                                        <!-- <img src="/images/button-icon/pen.png" alt="Edit Icon" class="w-4 h-4 inline" /> -->
+                                    </button>
+                                </div>
+                            </template>
+                        </Column>
+                    </DataTable>
+                </div>
+                <div class="w-full flex flex-col gap-2">
+                    <span class="text-lg text-green-500 font-semibold">Revenue Tahun {{ Number(currentYear) - 1 }}</span>
+                    <DataTable :value="revenueLastYear" showGridlines removableSort tableStyle="background-color:#00000;">
+                        <Column field="periode" sortable headerStyle="background-color: #af601a;" style="background-color: black; color: white">
+                            <template #header>
+                                <span class="flex justify-center items-center w-full text-center">Periode</span>
+                            </template>
+                        </Column>
+                        <Column field="pendapatan" sortable headerStyle="background-color: #af601a;" style="background-color: black; color: white">
+                            <template #header>
+                                <span class="flex justify-center items-center w-full text-center">Pendapatan (Bn)</span>
+                            </template>
+                        </Column>
+                        <Column field="rkap" sortable headerStyle="background-color: #af601a;" style="background-color: black; color: white">
+                            <template #header>
+                                <span class="flex justify-center items-center w-full text-center">Target RKAP (Bn)</span>
+                            </template>
+                        </Column>
+                        <Column field="quantity" sortable headerStyle="background-color: #af601a; text-align: center;" style="background-color: black; color: white">
+                            <template #header>
+                                <span class="flex justify-center items-center w-full text-center">Action</span>
+                            </template>
+                            <template #body="{ data }">
+                                <div class="w-full flex justify-center items-center">
+                                    <button @click="editRow(data)" class="hover:opacity-80 flex justify-center items-center p-2 rounded-full w-[1.3vw] h-[1.3vw] bg-cyan-900">
+                                        <i class="pi pi-pencil" style="font-size: 0.7vw"></i>
+                                        <!-- <img src="/images/button-icon/pen.png" alt="Edit Icon" class="w-4 h-4 inline" /> -->
+                                    </button>
+                                </div>
+                            </template>
+                        </Column>
+                    </DataTable>
+                </div>
+                <!-- <div class="w-1/2">
                     <h2 class="text-lg text-green-500 font-semibold mb-2">Revenue Tahun {{ currentYear }}</h2>
                     <table class="w-full border-collapse border border-gray-300">
                         <thead>
@@ -96,7 +164,6 @@ const editRow = (row) => {
                                 <th class="border border-gray-300 p-2">Periode</th>
                                 <th class="border border-gray-300 p-2">Pendapatan (Bn)</th>
                                 <th class="border border-gray-300 p-2">Target RKAP (Bn)</th>
-                                <!-- <th class="border border-gray-300 p-2">Action</th> -->
                             </tr>
                         </thead>
                         <tbody>
@@ -104,15 +171,10 @@ const editRow = (row) => {
                                 <td class="border border-gray-300 p-2">{{ row.periode }}</td>
                                 <td class="border border-gray-300 p-2">{{ row.pendapatan }}</td>
                                 <td class="border border-gray-300 p-2">{{ row.rkap }}</td>
-                                <!-- <td class="border border-gray-300 p-2 text-center">
-                                    <button @click="editRow(row)" class="hover:opacity-80">
-                                        <img src="/images/button-icon/pen.png" alt="Edit Icon" class="w-6 h-6 inline" />
-                                    </button>
-                                </td> -->
                             </tr>
                         </tbody>
                     </table>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
