@@ -22,6 +22,23 @@ export const valueColorIntCondition = (val) => {
     return result;
 };
 
+export const animatedValue = (start, end, duration, elementId) => {
+    const stepTime = Math.abs(Math.floor(duration / Math.abs(end - start)));
+    let current = start;
+    const increment = start < end ? 1 : -1;
+
+    const timer = setInterval(() => {
+        current += increment;
+        const element = document.getElementById(elementId);
+        if (element) {
+            element.innerText = `${current}%`; // Update DOM dengan nilai saat ini
+        }
+        if ((increment > 0 && current >= end) || (increment < 0 && current <= end)) {
+            clearInterval(timer);
+        }
+    }, stepTime);
+};
+
 // // Encrypt Router
 // export const secretKey = 'mysecretkey';
 

@@ -17,6 +17,7 @@ const listCardOperation = ref([]);
 const listCardSalesPerformance = ref([]);
 const listCardSCM = ref([]);
 const listCardSdm = ref([]);
+const listDelay = ref([]);
 
 onMounted(() => {
     loadData();
@@ -28,6 +29,7 @@ const loadData = async () => {
     await loadDataSales();
     await loadDataSCM();
     await loadDataSdm();
+    await loadDelay();
 };
 
 const loadDataFinance = async () => {
@@ -115,6 +117,15 @@ const loadDataSales = async () => {
     }
     listCardSalesPerformance.value = list;
 };
+
+const loadDelay = async () => {
+    const list = [];
+    for (let i = 0; i < 22; i++) {
+        list.push(i + 1);
+    }
+    listDelay.value = list;
+    console.log(list);
+};
 </script>
 
 <template>
@@ -124,13 +135,13 @@ const loadDataSales = async () => {
                 <images-home />
                 <div class="flex flex-col gap-2">
                     <div class="grid grid-cols-1 gap-2">
-                        <card-sdm v-for="(item, index) in listCardSdm" :key="index" :datas="item" />
+                        <card-sdm v-for="(item, index) in listCardSdm" :key="index" :datas="item" :style="`animation: fadein ${index}s ease-in-out`" />
                     </div>
                 </div>
                 <div class="flex flex-col gap-2">
                     <h3 class="text-[0.7vw] font-bold text-white">Sales & Marketing</h3>
                     <div class="grid grid-cols-1 gap-2">
-                        <card-sales v-for="(item, index) in listCardSalesPerformance" :key="index" :datas="item" />
+                        <card-sales v-for="(item, index) in listCardSalesPerformance" :key="index" :datas="item" :style="`animation: fadein ${index}s ease-in-out`" />
                     </div>
                 </div>
             </div>
@@ -138,22 +149,32 @@ const loadDataSales = async () => {
                 <div class="flex flex-col gap-2">
                     <h3 class="text-[0.7vw] font-bold text-white">Financial</h3>
                     <div class="grid grid-cols-4 gap-2">
-                        <card-values v-for="(item, index) in listCardFinancial" :key="index" :datas="item" />
+                        <card-values v-for="(item, index) in listCardFinancial" :key="index" :datas="item" :style="`animation: fadein 1s ease-in-out`" />
                     </div>
                 </div>
                 <div class="flex flex-col gap-2">
                     <h3 class="text-[0.7vw] font-bold text-white">Production</h3>
                     <div class="grid grid-cols-3 gap-2">
-                        <card-operation-values v-for="(item, index) in listCardOperation" :key="index" :datas="item" />
+                        <card-operation-values v-for="(item, index) in listCardOperation" :key="index" :datas="item" :style="`animation: fadein ${index}s ease-in-out`" />
                     </div>
                 </div>
                 <div class="flex flex-col gap-2">
                     <h3 class="text-[0.7vw] font-bold text-white">Supply Chain</h3>
                     <div class="grid grid-cols-4 gap-2">
-                        <card-scm-values v-for="(item, index) in listCardSCM" :key="index" :datas="item" />
+                        <card-scm-values v-for="(item, index) in listCardSCM" :key="index" :datas="item" :style="`animation: fadein 1s ease-in-out`" />
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </template>
+<style>
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+</style>

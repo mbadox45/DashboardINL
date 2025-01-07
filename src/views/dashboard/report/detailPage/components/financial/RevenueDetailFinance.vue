@@ -65,7 +65,7 @@ const editRow = (row) => {
             <Divider />
             <div class="flex gap-20">
                 <div class="w-full flex flex-col gap-2">
-                    <span class="text-lg text-green-500 font-semibold">Revenue Tahun {{ currentYear }}</span>
+                    <span class="text-lg text-green-500 font-semibold">Revenue Tahun 2024</span>
                     <DataTable :value="revenueThisYear" showGridlines removableSort tableStyle="background-color:#00000;">
                         <Column field="periode" sortable headerStyle="background-color: #1a5276;" style="background-color: black; color: white">
                             <template #header>
@@ -98,7 +98,7 @@ const editRow = (row) => {
                     </DataTable>
                 </div>
                 <div class="w-full flex flex-col gap-2">
-                    <span class="text-lg text-green-500 font-semibold">Revenue Tahun {{ Number(currentYear) - 1 }}</span>
+                    <span class="text-lg text-green-500 font-semibold">Revenue Tahun 2023</span>
                     <DataTable :value="revenueLastYear" showGridlines removableSort tableStyle="background-color:#00000;">
                         <Column field="periode" sortable headerStyle="background-color: #af601a;" style="background-color: black; color: white">
                             <template #header>

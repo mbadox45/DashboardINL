@@ -5,7 +5,7 @@ import { valueColorIntCondition, valueColorPersenCondition } from '@/controller/
 export const revenue = () => {
     const name = 'Revenue (in IDR BN)';
     const value = `<div class="flex gap-2 items-center ${valueColorPersenCondition(30)}">
-        <span class="font-bold text-[0.9vw]">${30}%</span>
+        <span id="counter" class="font-bold text-[0.9vw]">30%</span>
     </div>`;
     // 0-35 red 36-70 amber 71-100 green
     const versus = `<div class="flex flex-col w-full mt-3">
@@ -48,7 +48,7 @@ export const ebitdaMargin = () => {
     </div>`;
     const color = 'text-amber-500';
     const icon = '/images/icon/financial/ebitda.png';
-    const link = '/test';
+    const link = 'ebitda-margin';
 
     return { name: name, value: value, versus: versus, color: color, icon: icon, link: link };
 };
@@ -65,7 +65,7 @@ export const netProfitMargin = () => {
     </div>`;
     const color = 'text-red-500';
     const icon = '/images/icon/financial/net-profit.png';
-    const link = '/test';
+    const link = 'net-profit-margin';
 
     return { name: name, value: value, versus: versus, color: color, icon: icon, link: link };
 };
@@ -83,7 +83,7 @@ export const cashBalance = () => {
     //ganti warna red 500 jika nilai sekarang < dari nilai bulan sebelumnya, kalo sama warna amber, tambahin icon up atau icon strip
     const color = 'text-green-500';
     const icon = '/images/icon/financial/balance.png';
-    const link = '/test';
+    const link = 'cash-balance';
 
     return { name: name, value: value, versus: versus, color: color, icon: icon, link: link };
 };

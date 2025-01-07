@@ -9,10 +9,10 @@ export const cpoOlahVsRKAP = () => {
     </div>`;
     // Jika Pendapatan > RKAP warna jadi green 600, sesuai kan periode
     const versus = [
-        `<div class="text-xs flex flex-col gap-3 w-full h-full">
-    <span class="items-center rounded-xl w-full font-bold bg-black flex py-1.5 px-3"><span class="text-green-500 w-full text-[0.6vw] lg:text-md">CPO Olah</span><span class=pb-1 border-neutral-900 text-[0.6vw]"> 8,860,560</span> </span>
-    <span class="items-center rounded-xl w-full font-bold bg-black flex py-1.5 px-3"><span class="text-green-500 w-full text-[0.6vw] lg:text-md">RKAP</span><span class=pb-1 border-neutral-900 text-[0.6vw]"> 52,800,000</span> </span>
-    <span class="items-center rounded-xl w-full font-bold bg-black flex py-1.5 px-3"><span class="text-green-500 w-full text-[0.6vw] lg:text-md">Utility</span><span class="pb-1 border-neutral-900 text-[0.6vw]"> 66,000,000</span> </span>
+        `<div class="flex flex-col gap-1 w-full h-full">
+    <span class="items-center rounded-xl w-full font-bold bg-black flex py-1.5 px-3"><span class="text-green-500 w-full text-[0.6vw]">CPO Olah</span><span class="pb-1 border-neutral-900 text-[0.6vw]"> 8,860,560</span> </span>
+    <span class="items-center rounded-xl w-full font-bold bg-black flex py-1.5 px-3"><span class="text-green-500 w-full text-[0.6vw]">RKAP</span><span class="pb-1 border-neutral-900 text-[0.6vw]"> 52,800,000</span> </span>
+    <span class="items-center rounded-xl w-full font-bold bg-black flex py-1.5 px-3"><span class="text-green-500 w-full text-[0.6vw]">Utility</span><span class="pb-1 border-neutral-900 text-[0.6vw]"> 66,000,000</span> </span>
     </div>`
     ];
     const color = 'text-red-500';

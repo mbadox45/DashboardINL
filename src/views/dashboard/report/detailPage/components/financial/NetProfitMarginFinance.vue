@@ -1,5 +1,5 @@
 <script setup>
-import { currentYear, grossProfit, grossProfitData } from '@/controller/report/FinancialReport';
+import { currentYear, netProfitMargin, netProfitMarginData } from '@/controller/report/FinancialReport';
 import { onMounted, ref } from 'vue';
 import VueApexCharts from 'vue3-apexcharts';
 
@@ -11,7 +11,7 @@ const listdata = ref({
 });
 
 const isLoading = ref(true);
-const dataGrossProfit = ref([]);
+const dataNetProfitMargin = ref([]);
 
 onMounted(() => {
     loadData();
@@ -19,16 +19,16 @@ onMounted(() => {
 
 const loadData = async () => {
     try {
-        const data = await grossProfit();
+        const data = await netProfitMargin();
 
         listdata.value = {
             type: data.type || 'line',
             series: data.series || [],
             options: data.chartOptions || {},
-            name: data.name || 'Gross Profit Margin (in IDR Bn)'
+            name: data.name || 'NET Profit Margin (in IDR BN)'
         };
 
-        dataGrossProfit.value = grossProfitData();
+        dataNetProfitMargin.value = netProfitMarginData();
     } catch (error) {
         console.error('Error loading data:', error);
     } finally {
@@ -60,25 +60,25 @@ const editRow = (row) => {
 
             <div class="flex gap-20">
                 <div class="w-full flex flex-col gap-2">
-                    <span class="text-lg text-green-500 font-semibold">Gross Profit Margin Tahun {{ currentYear }}</span>
-                    <DataTable :value="dataGrossProfit" showGridlines removableSort tableStyle="background-color:#00000;">
+                    <span class="text-lg text-green-500 font-semibold">NET Profit Margin Tahun {{ currentYear }}</span>
+                    <DataTable :value="dataNetProfitMargin" showGridlines removableSort tableStyle="background-color:#00000;">
                         <Column field="periode" sortable headerStyle="background-color: #1a5276;" style="background-color: black; color: white">
                             <template #header>
                                 <span class="flex justify-center items-center w-full text-center">Periode</span>
                             </template>
                         </Column>
-                        <Column field="labakotor" sortable headerStyle="background-color: #1a5276;" style="background-color: black; color: white">
+                        <Column field="lababersih" sortable headerStyle="background-color: #1a5276;" style="background-color: black; color: white">
                             <template #header>
-                                <span class="flex justify-center items-center w-full text-center">Laba Kotor (Bn)</span>
+                                <span class="flex justify-center items-center w-full text-center">Laba Bersih</span>
                             </template>
                         </Column>
-                        <Column field="gpm" sortable headerStyle="background-color: #1a5276;" style="background-color: black; color: white">
+                        <Column field="npm" sortable headerStyle="background-color: #1a5276;" style="background-color: black; color: white">
                             <template #header>
-                                <span class="flex justify-center items-center w-full text-center">GPM (%)</span>
+                                <span class="flex justify-center items-center w-full text-center">NPM (%)</span>
                             </template>
                             <template #body="{ data }">
                                 <div class="w-full flex justify-center items-center">
-                                    <span>{{ data.gpm }}%</span>
+                                    <span>{{ data.npm }}%</span>
                                 </div>
                             </template>
                         </Column>

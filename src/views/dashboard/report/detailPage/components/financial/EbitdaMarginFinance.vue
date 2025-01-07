@@ -1,5 +1,5 @@
 <script setup>
-import { currentYear, grossProfit, grossProfitData } from '@/controller/report/FinancialReport';
+import { currentYear, ebitdaMargin, ebitdaMarginData } from '@/controller/report/FinancialReport';
 import { onMounted, ref } from 'vue';
 import VueApexCharts from 'vue3-apexcharts';
 
@@ -11,7 +11,7 @@ const listdata = ref({
 });
 
 const isLoading = ref(true);
-const dataGrossProfit = ref([]);
+const dataEbitdaMargin = ref([]);
 
 onMounted(() => {
     loadData();
@@ -19,16 +19,16 @@ onMounted(() => {
 
 const loadData = async () => {
     try {
-        const data = await grossProfit();
+        const data = await ebitdaMargin();
 
         listdata.value = {
             type: data.type || 'line',
             series: data.series || [],
             options: data.chartOptions || {},
-            name: data.name || 'Gross Profit Margin (in IDR Bn)'
+            name: data.name || 'EBITDA Margin (in IDR BN)'
         };
 
-        dataGrossProfit.value = grossProfitData();
+        dataEbitdaMargin.value = ebitdaMarginData();
     } catch (error) {
         console.error('Error loading data:', error);
     } finally {
@@ -60,25 +60,25 @@ const editRow = (row) => {
 
             <div class="flex gap-20">
                 <div class="w-full flex flex-col gap-2">
-                    <span class="text-lg text-green-500 font-semibold">Gross Profit Margin Tahun {{ currentYear }}</span>
-                    <DataTable :value="dataGrossProfit" showGridlines removableSort tableStyle="background-color:#00000;">
+                    <span class="text-lg text-green-500 font-semibold">EBITDA Margin Tahun {{ currentYear }}</span>
+                    <DataTable :value="dataEbitdaMargin" showGridlines removableSort tableStyle="background-color:#00000;">
                         <Column field="periode" sortable headerStyle="background-color: #1a5276;" style="background-color: black; color: white">
                             <template #header>
                                 <span class="flex justify-center items-center w-full text-center">Periode</span>
                             </template>
                         </Column>
-                        <Column field="labakotor" sortable headerStyle="background-color: #1a5276;" style="background-color: black; color: white">
+                        <Column field="ebitda" sortable headerStyle="background-color: #1a5276;" style="background-color: black; color: white">
                             <template #header>
-                                <span class="flex justify-center items-center w-full text-center">Laba Kotor (Bn)</span>
+                                <span class="flex justify-center items-center w-full text-center">Ebitda (Bn)</span>
                             </template>
                         </Column>
-                        <Column field="gpm" sortable headerStyle="background-color: #1a5276;" style="background-color: black; color: white">
+                        <Column field="ebitdaPersen" sortable headerStyle="background-color: #1a5276;" style="background-color: black; color: white">
                             <template #header>
-                                <span class="flex justify-center items-center w-full text-center">GPM (%)</span>
+                                <span class="flex justify-center items-center w-full text-center">Ebitda (%)</span>
                             </template>
                             <template #body="{ data }">
                                 <div class="w-full flex justify-center items-center">
-                                    <span>{{ data.gpm }}%</span>
+                                    <span>{{ data.ebitdaPersen }}%</span>
                                 </div>
                             </template>
                         </Column>

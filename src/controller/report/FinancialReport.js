@@ -86,6 +86,126 @@ export const revenueData = () => {
     return { revenueThisYear, revenueLastYear };
 };
 
+export const ebitdaMarginData = () => {
+    const grossProfit = [
+        { periode: 'January', ebitda: -2.64, ebitdaPersen: -0.65 },
+        { periode: 'February', ebitda: 0.4, ebitdaPersen: 0.22 },
+        { periode: 'March', ebitda: -2.14, ebitdaPersen: -1.13 },
+        { periode: 'April', ebitda: 16.1, ebitdaPersen: 6.69 },
+        { periode: 'May', ebitda: -1.67, ebitdaPersen: -0.86 },
+        { periode: 'June', ebitda: 6.59, ebitdaPersen: 2.71 },
+        { periode: 'July', ebitda: 0, ebitdaPersen: 0 },
+        { periode: 'August', ebitda: 0, ebitdaPersen: 0 },
+        { periode: 'September', ebitda: 0, ebitdaPersen: 0 },
+        { periode: 'October', ebitda: 0, ebitdaPersen: 0 },
+        { periode: 'November', ebitda: 0, ebitdaPersen: 0 },
+        { periode: 'December', ebitda: 0, ebitdaPersen: 0 }
+    ];
+
+    return grossProfit;
+};
+
+export const ebitdaMargin = async () => {
+    // Revenue Ytd
+    const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const data1 = [-0.65, 0.22, -1.13, 6.69, -0.86, 2.71, 0, 0, 0, 0, 0, 0];
+    const data2 = [-2.46, 0.4, -2.14, 16.1, -1.67, 6.59, 0, 0, 0, 0, 0, 0];
+    const sum = parseFloat(data2.reduce((accumulator, currentValue) => accumulator + currentValue, 0).toFixed(2));
+    const total = sum + 'B IDR of Gross Profit (YTD)';
+    const label1 = 'EBITDA%';
+    const label2 = 'EBITDA';
+    const type1 = 'line';
+    const type2 = 'column';
+    const colors = ['rgba(157, 5, 245, 0.6)', 'rgba(0, 34, 255, 1)'];
+    const scale1 = 'percent';
+    const scale2 = 'number';
+    const typeChart = 'line';
+
+    const listLabels = [];
+    for (let i = 0; i < labels.length; i++) {
+        listLabels.push(moment(labels[i], 'MMMM').format('MMM'));
+    }
+
+    return {
+        name: 'Ebitda Margin & Amount (in % & IDR Bn)',
+        total: sum + ' IDR of Ebitda (YTD)',
+        type: typeChart,
+        chartOptions: comboChartOptionsApex(total, label1, label2, listLabels, colors, scale1, scale2),
+        series: [
+            {
+                name: label2,
+                type: type2,
+                data: data2
+            },
+            {
+                name: label1,
+                type: type1,
+                data: data1
+            }
+        ]
+    };
+};
+
+export const netProfitMarginData = () => {
+    const netProfit = [
+        { periode: 'January', lababersih: 4.97, npm: 0.01 },
+        { periode: 'February', lababersih: -10.98, npm: -0.06 },
+        { periode: 'March', lababersih: -12.93, npm: -0.07 },
+        { periode: 'April', lababersih: 5.07, npm: 0.02 },
+        { periode: 'May', lababersih: -9.16, npm: -0.05 },
+        { periode: 'June', lababersih: -0.31, npm: -0.0 },
+        { periode: 'July', lababersih: 0, npm: 0 },
+        { periode: 'August', lababersih: 0, npm: 0 },
+        { periode: 'September', lababersih: 0, npm: 0 },
+        { periode: 'October', lababersih: 0, npm: 0 },
+        { periode: 'November', lababersih: 0, npm: 0 },
+        { periode: 'December', lababersih: 0, npm: 0 }
+    ];
+
+    return netProfit;
+};
+
+export const netProfitMargin = async () => {
+    // Revenue Ytd
+    const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const data1 = [0.01, -0.06, -0.07, 0.02, -0.05, -0.002, 0, 0, 0, 0, 0, 0];
+    const data2 = [4.97, -10.98, -12.93, 5.07, -9.16, -0.31, 0, 0, 0, 0, 0, 0];
+    const sum = parseFloat(data2.reduce((accumulator, currentValue) => accumulator + currentValue, 0).toFixed(2));
+    const total = sum + ' Bn IDR of Net Profit (YTD)';
+    const label1 = 'NPM%';
+    const label2 = 'Laba Bersih';
+    const type1 = 'line';
+    const type2 = 'column';
+    const colors = ['rgba(157, 5, 245, 0.6)', 'rgba(0, 34, 255, 1)'];
+    const scale1 = 'percent';
+    const scale2 = 'number';
+    const typeChart = 'line';
+
+    const listLabels = [];
+    for (let i = 0; i < labels.length; i++) {
+        listLabels.push(moment(labels[i], 'MMMM').format('MMM'));
+    }
+
+    return {
+        name: 'NET Profit Margin & Amount (in % & IDR Bn)',
+        total: sum + ' Bn IDR of Net Profit (YTD)',
+        type: typeChart,
+        chartOptions: comboChartOptionsApex(total, label1, label2, listLabels, colors, scale1, scale2),
+        series: [
+            {
+                name: label2,
+                type: type2,
+                data: data2
+            },
+            {
+                name: label1,
+                type: type1,
+                data: data1
+            }
+        ]
+    };
+};
+
 export const grossProfit = async () => {
     // Revenue Ytd
     const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
