@@ -461,7 +461,7 @@ export const cashFlow = async () => {
     return {
         name: 'Cash Flow Movement (YTD Jun-24; in IDR Bn)',
         type: typeChart,
-        chartOptions: stackedChartOptionsApex(total, listLabels, null, null),
+        chartOptions: stackedChartOptionsApex(total, listLabels, null),
         series: series
     };
 };

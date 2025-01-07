@@ -684,34 +684,45 @@ export const stackedChartOptionsApex = (total, listLabels, toolbar) => {
                 horizontal: false,
                 columnWidth: '55%',
                 borderRadius: 5,
-                borderRadiusApplication: 'end'
+                borderRadiusApplication: 'end',
+                dataLabels: {
+                    total: {
+                        enabled: true,
+                        offsetX: 0,
+                        offsetY: 0,
+                        formatter: function (val) {
+                            return `${val.toFixed(2)}`;
+                        },
+                        style: {
+                            fontSize: '13px',
+                            fontWeight: 600,
+                            color: 'red'
+                        }
+                    }
+                }
             }
         },
         title: {
             text: total,
             style: {
-                colors: '#ffffff',
-                fontSize: '12px'
+                fontSize: '12px',
+                colors: '#ffffff'
             }
         },
         labels: listLabels,
         dataLabels: {
             enabled: true,
             style: {
-                fontSize: '8px', // Reduced font size for data labels inside the bar
                 fontWeight: 'bold',
-                colors: ['#fff'] // You can change the color if needed
-            },
-            formatter: function (val) {
-                return parseFloat(val).toFixed(2);
+                colors: ['#ffffff']
             }
         },
         xaxis: {
             labels: {
                 style: {
-                    colors: '#ffffff', // Warna font X-axis
-                    fontSize: '10px', // Ukuran font
-                    fontFamily: 'Arial, sans-serif' // Gaya font opsional
+                    colors: '#ffffff',
+                    fontSize: '10px',
+                    fontFamily: 'Arial, sans-serif'
                 }
             },
             tickPlacement: 'on'
@@ -719,12 +730,12 @@ export const stackedChartOptionsApex = (total, listLabels, toolbar) => {
         yaxis: {
             labels: {
                 style: {
-                    colors: '#ffffff', // Ganti dengan warna label Y-axis
-                    fontSize: '10px' // Ukuran font opsional
+                    colors: '#ffffff',
+                    fontSize: '10px'
                 },
                 formatter: function (val) {
                     if (val >= 1000) {
-                        return (val / 1000).toFixed(1) + 'K'; // Convert to thousands and append 'K'
+                        return (val / 1000).toFixed(1) + 'K';
                     }
                     return val;
                 }
@@ -732,12 +743,11 @@ export const stackedChartOptionsApex = (total, listLabels, toolbar) => {
         },
         legend: {
             labels: {
-                colors: '#ffffff', // Warna font legenda
-                useSeriesColors: false // Agar warna mengikuti warna yang ditentukan
+                colors: '#ffffff',
+                useSeriesColors: false
             },
-            position: 'bottom',
-            horizontalAlign: 'center', // Center the legend horizontally
-            // floating: false, // Set to false to make sure it does not float
+            position: 'top',
+            horizontalAlign: 'center',
             offsetY: 0
         },
         fill: {
@@ -750,9 +760,7 @@ export const stackedChartOptionsApex = (total, listLabels, toolbar) => {
                 fontFamily: 'Arial, sans-serif',
                 color: '#FF5733'
             },
-            y: {
-                // Adjust formatting if needed
-            }
+            y: {}
         }
     };
 };
