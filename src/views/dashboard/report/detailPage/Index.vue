@@ -1,8 +1,10 @@
 <script setup>
+import CryptoJS from 'crypto-js';
 import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 // Components
+import AppTopbar from '@/views/dashboard/layout/components/AppTopbar.vue';
 import CashBalanceFinance from '@/views/dashboard/report/detailPage/components/financial/CashBalanceFinance.vue';
 import CashFlowMovementFinance from '@/views/dashboard/report/detailPage/components/financial/CashFlowMovementFinance.vue';
 import CffPayScheduleFinance from '@/views/dashboard/report/detailPage/components/financial/CffPayScheduleFinance.vue';
@@ -26,7 +28,8 @@ const funcCondition = () => {
         router.push({ path: '/not-found' });
     } else {
         routeName.value = query;
-        console.log(query);
+        const bytes = CryptoJS.AES.decrypt(query, 'your-secret-key');
+        routeName.value = bytes.toString(CryptoJS.enc.Utf8);
     }
 };
 
@@ -37,18 +40,21 @@ const routerLink = () => {
 </script>
 
 <template>
-    <div class="bg-black w-full min-h-[30rem] p-6 rounded-xl">
-        <revenue-detail-finance v-if="routeName == 'revenue'" />
-        <gross-profit-detail-finance v-if="routeName == 'gross-profit'" />
-        <ebitda-margin-finance v-if="routeName == 'ebitda-margin'" />
-        <net-profit-margin-finance v-if="routeName == 'net-profit-margin'" />
-        <cash-balance-finance v-if="routeName == 'cash-balance'" />
-        <cash-flow-movement-finance v-if="routeName == 'cash-flow-movement'" />
-        <cff-pay-schedule-finance v-if="routeName == 'cff-pay-schedule'" />
-        <cfi-pay-schedule-finance v-if="routeName == 'cfi-pay-schedule'" />
-        <button class="fixed bottom-[1.5vw] left-[1.5vw] p-3 bg-amber-500 rounded-full font-extrabold border-2 hover:bg-amber-300 transition-all duration-200 flex gap-2 justify-center items-center" @click="routerLink">
-            <i class="pi pi-arrow-left animate-fadeoutleft animate-duration-2000 animate-infinite animate-delay-300" style="font-size: 0.7vw"></i>
-            <span class="animate-fadeout animate-duration-2000 animate-infinite animate-delay-300" style="font-size: 0.7vw">Back</span>
-        </button>
+    <div class="p-3 bg-neutral-950 min-h-screen text-white">
+        <app-topbar></app-topbar>
+        <div class="bg-black w-full min-h-[30rem] p-6 rounded-xl">
+            <revenue-detail-finance v-if="routeName == 'revenue'" />
+            <gross-profit-detail-finance v-if="routeName == 'gross-profit'" />
+            <ebitda-margin-finance v-if="routeName == 'ebitda-margin'" />
+            <net-profit-margin-finance v-if="routeName == 'net-profit-margin'" />
+            <cash-balance-finance v-if="routeName == 'cash-balance'" />
+            <cash-flow-movement-finance v-if="routeName == 'cash-flow-movement'" />
+            <cff-pay-schedule-finance v-if="routeName == 'cff-pay-schedule'" />
+            <cfi-pay-schedule-finance v-if="routeName == 'cfi-pay-schedule'" />
+            <button class="fixed top-[1.5vw] left-[1.5vw] p-3 z-50 bg-amber-500 rounded-full font-extrabold border-2 hover:bg-amber-600 transition-all duration-200 flex gap-2 justify-center items-center" @click="routerLink">
+                <i class="pi pi-arrow-left" style="font-size: 0.7vw"></i>
+                <span class="" style="font-size: 0.7vw">Back</span>
+            </button>
+        </div>
     </div>
 </template>

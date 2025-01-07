@@ -1,7 +1,9 @@
 <script setup>
 // import { encryptQuery } from '@/controller/dummyController';
+import CryptoJS from 'crypto-js';
 import { defineProps, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
+
 const router = useRouter();
 
 const props = defineProps({
@@ -19,10 +21,10 @@ const loadData = async () => {
 };
 
 const routerLink = (path) => {
-    // const encryptedQuery = encryptQuery(JSON.stringify(path));
+    const encryptedPath = CryptoJS.AES.encrypt(path, 'your-secret-key').toString();
     router.push({
         path: '/detail-dashboard',
-        query: { component: path }
+        query: { component: encryptedPath }
     });
 };
 

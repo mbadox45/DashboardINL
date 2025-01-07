@@ -691,12 +691,13 @@ export const stackedChartOptionsApex = (total, listLabels, toolbar) => {
                         offsetX: 0,
                         offsetY: 0,
                         formatter: function (val) {
+                            // Return the formatted value
                             return `${val.toFixed(2)}`;
                         },
                         style: {
-                            fontSize: '13px',
+                            fontSize: '12px',
                             fontWeight: 600,
-                            color: 'red'
+                            color: 'rgba(245, 158, 11, 0.8)'
                         }
                     }
                 }
