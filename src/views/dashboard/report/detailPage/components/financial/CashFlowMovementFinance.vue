@@ -56,7 +56,7 @@ const editRow = (row) => {
 
         <div v-else class="w-full flex flex-col gap-4">
             <!-- Vue Apex Chart -->
-            <VueApexCharts :type="listdata.type" :series="listdata.series" :options="listdata.options" class="w-full" height="400px" style="z-index: 1 !important" />
+            <VueApexCharts :type="listdata.type" :series="listdata.series" :options="listdata.options" class="w-full" height="450px" style="z-index: 1 !important" />
 
             <div class="flex gap-20">
                 <div class="w-full flex flex-col gap-2">
@@ -75,11 +75,6 @@ const editRow = (row) => {
                         <Column field="cfoin" sortable headerStyle="background-color: #1a5276;" style="background-color: black; color: white">
                             <template #header>
                                 <span class="flex justify-center items-center w-full text-center">CFO In</span>
-                            </template>
-                            <template #body="{ data }">
-                                <div class="w-full flex justify-center items-center">
-                                    <span>{{ data.ebitdaPersen }}%</span>
-                                </div>
                             </template>
                         </Column>
                         <Column field="cfoout" sortable headerStyle="background-color: #1a5276;" style="background-color: black; color: white">

@@ -679,27 +679,6 @@ export const stackedChartOptionsApex = (total, listLabels, toolbar) => {
                 }
             }
         ],
-        // plotOptions: {
-        //   bar: {
-        //     horizontal: false,
-        //     borderRadius: 10,
-        //     borderRadiusApplication: 'end',
-        //     borderRadiusWhenStacked: 'last',
-        //     // columnWidth: columnWidth !== null ? columnWidth : '80%', // Adjust this value to reduce/increase bar width
-        //     dataLabels: {
-        //       total: {
-        //         enabled: true,
-        //         style: {
-        //           fontSize: '10px',
-        //           fontWeight: 300
-        //         },
-        //         formatter: function(val) {
-        //             return parseFloat(val).toFixed(2);
-        //         }
-        //       }
-        //     }
-        //   },
-        // },
         plotOptions: {
             bar: {
                 horizontal: false,
@@ -711,6 +690,7 @@ export const stackedChartOptionsApex = (total, listLabels, toolbar) => {
         title: {
             text: total,
             style: {
+                colors: '#ffffff',
                 fontSize: '12px'
             }
         },

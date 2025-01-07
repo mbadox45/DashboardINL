@@ -4,6 +4,9 @@ import { useRoute, useRouter } from 'vue-router';
 
 // Components
 import CashBalanceFinance from '@/views/dashboard/report/detailPage/components/financial/CashBalanceFinance.vue';
+import CashFlowMovementFinance from '@/views/dashboard/report/detailPage/components/financial/CashFlowMovementFinance.vue';
+import CffPayScheduleFinance from '@/views/dashboard/report/detailPage/components/financial/CffPayScheduleFinance.vue';
+import CfiPayScheduleFinance from '@/views/dashboard/report/detailPage/components/financial/CfiPayScheduleFinance.vue';
 import EbitdaMarginFinance from '@/views/dashboard/report/detailPage/components/financial/EbitdaMarginFinance.vue';
 import GrossProfitDetailFinance from '@/views/dashboard/report/detailPage/components/financial/GrossProfitDetailFinance.vue';
 import NetProfitMarginFinance from '@/views/dashboard/report/detailPage/components/financial/NetProfitMarginFinance.vue';
@@ -40,6 +43,9 @@ const routerLink = () => {
         <ebitda-margin-finance v-if="routeName == 'ebitda-margin'" />
         <net-profit-margin-finance v-if="routeName == 'net-profit-margin'" />
         <cash-balance-finance v-if="routeName == 'cash-balance'" />
+        <cash-flow-movement-finance v-if="routeName == 'cash-flow-movement'" />
+        <cff-pay-schedule-finance v-if="routeName == 'cff-pay-schedule'" />
+        <cfi-pay-schedule-finance v-if="routeName == 'cfi-pay-schedule'" />
         <button class="fixed bottom-[1.5vw] left-[1.5vw] p-3 bg-amber-500 rounded-full font-extrabold border-2 hover:bg-amber-300 transition-all duration-200 flex gap-2 justify-center items-center" @click="routerLink">
             <i class="pi pi-arrow-left animate-fadeoutleft animate-duration-2000 animate-infinite animate-delay-300" style="font-size: 0.7vw"></i>
             <span class="animate-fadeout animate-duration-2000 animate-infinite animate-delay-300" style="font-size: 0.7vw">Back</span>
