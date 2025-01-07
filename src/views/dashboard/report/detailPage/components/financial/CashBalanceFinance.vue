@@ -1,5 +1,5 @@
 <script setup>
-import { currentYear, revenueData, revenueYtd } from '@/controller/report/FinancialReport';
+import { cashBalance, cashBalanceData, currentYear } from '@/controller/report/FinancialReport';
 import { onMounted, ref } from 'vue';
 import VueApexCharts from 'vue3-apexcharts';
 
@@ -10,9 +10,9 @@ const listdata = ref({
     name: null
 });
 
-const revenueThisYear = ref([]);
-const revenueLastYear = ref([]);
 const isLoading = ref(true);
+const cashBalanceThisYear = ref([]);
+const cashBalanceLastYear = ref([]);
 
 onMounted(() => {
     loadData();
@@ -20,18 +20,18 @@ onMounted(() => {
 
 const loadData = async () => {
     try {
-        const data = await revenueYtd();
+        const data = await cashBalance();
 
         listdata.value = {
             type: data.type || 'line',
             series: data.series || [],
             options: data.chartOptions || {},
-            name: data.name || 'Revenue YTD'
+            name: data.name || 'EBITDA Margin (in IDR BN)'
         };
 
-        const { revenueThisYear: thisYearData, revenueLastYear: lastYearData } = revenueData();
-        revenueThisYear.value = thisYearData;
-        revenueLastYear.value = lastYearData;
+        const { cashBalanceThisYear: thisYearData, cashBalanceLastYear: lastYearData } = cashBalanceData();
+        cashBalanceThisYear.value = thisYearData;
+        cashBalanceLastYear.value = lastYearData;
     } catch (error) {
         console.error('Error loading data:', error);
     } finally {
@@ -63,21 +63,16 @@ const editRow = (row) => {
             <Divider />
             <div class="flex gap-20">
                 <div class="w-full flex flex-col gap-2">
-                    <span class="text-lg text-green-500 font-semibold">Revenue Tahun {{ currentYear }}</span>
-                    <DataTable :value="revenueThisYear" showGridlines removableSort tableStyle="background-color:#00000;">
+                    <span class="text-lg text-sky-500 font-semibold">Cash Balance Tahun {{ currentYear }}</span>
+                    <DataTable :value="cashBalanceThisYear" showGridlines removableSort tableStyle="background-color:#00000;">
                         <Column field="periode" sortable headerStyle="background-color: #1a5276;" style="background-color: black; color: white">
                             <template #header>
                                 <span class="flex justify-center items-center w-full text-center">Periode</span>
                             </template>
                         </Column>
-                        <Column field="pendapatan" sortable headerStyle="background-color: #1a5276;" style="background-color: black; color: white">
+                        <Column field="labaBersih" sortable headerStyle="background-color: #1a5276;" style="background-color: black; color: white">
                             <template #header>
-                                <span class="flex justify-center items-center w-full text-center">Pendapatan (Bn)</span>
-                            </template>
-                        </Column>
-                        <Column field="rkap" sortable headerStyle="background-color: #1a5276;" style="background-color: black; color: white">
-                            <template #header>
-                                <span class="flex justify-center items-center w-full text-center">Target RKAP (Bn)</span>
+                                <span class="flex justify-center items-center w-full text-center">Laba Bersih (Bn)</span>
                             </template>
                         </Column>
                         <Column field="quantity" sortable headerStyle="background-color: #1a5276; text-align: center;" style="background-color: black; color: white">
@@ -96,24 +91,19 @@ const editRow = (row) => {
                     </DataTable>
                 </div>
                 <div class="w-full flex flex-col gap-2">
-                    <span class="text-lg text-green-500 font-semibold">Revenue Tahun {{ currentYear - 1 }}</span>
-                    <DataTable :value="revenueLastYear" showGridlines removableSort tableStyle="background-color:#00000;">
-                        <Column field="periode" sortable headerStyle="background-color: #af601a;" style="background-color: black; color: white">
+                    <span class="text-lg text-green-500 font-semibold">Cash Balance Tahun {{ currentYear - 1 }}</span>
+                    <DataTable :value="cashBalanceLastYear" showGridlines removableSort tableStyle="background-color:#00000;">
+                        <Column field="periode" sortable headerStyle="background-color: #22C55E;" style="background-color: black; color: white">
                             <template #header>
                                 <span class="flex justify-center items-center w-full text-center">Periode</span>
                             </template>
                         </Column>
-                        <Column field="pendapatan" sortable headerStyle="background-color: #af601a;" style="background-color: black; color: white">
+                        <Column field="labaBersih" sortable headerStyle="background-color: #22C55E;" style="background-color: black; color: white">
                             <template #header>
-                                <span class="flex justify-center items-center w-full text-center">Pendapatan (Bn)</span>
+                                <span class="flex justify-center items-center w-full text-center">Laba Bersih (Bn)</span>
                             </template>
                         </Column>
-                        <Column field="rkap" sortable headerStyle="background-color: #af601a;" style="background-color: black; color: white">
-                            <template #header>
-                                <span class="flex justify-center items-center w-full text-center">Target RKAP (Bn)</span>
-                            </template>
-                        </Column>
-                        <Column field="quantity" sortable headerStyle="background-color: #af601a; text-align: center;" style="background-color: black; color: white">
+                        <Column field="quantity" sortable headerStyle="background-color: #22C55E; text-align: center;" style="background-color: black; color: white">
                             <template #header>
                                 <span class="flex justify-center items-center w-full text-center">Action</span>
                             </template>
