@@ -70,32 +70,13 @@ export const barChartOptionsApex = (labels, color, strokeColor, dataLabelStat, t
         title: {
             text: total,
             style: {
-                fontSize: '12px'
+                fontSize: '12px',
+                color: '#0284C7'
             }
         },
         xaxis: {
             categories: labels,
-            tickPlacement: 'on',
-            labels: {
-                style: {
-                    colors: '#ffffff', // Warna font X-axis
-                    fontSize: '10px', // Ukuran font
-                    fontFamily: 'Arial, sans-serif' // Gaya font opsional
-                }
-            }
-        },
-        yaxis: {
-            title: {
-                style: {
-                    color: '#ffffff'
-                }
-            },
-            labels: {
-                style: {
-                    colors: '#ffffff',
-                    fontSize: '10px'
-                }
-            }
+            tickPlacement: 'on'
         },
         plotOptions: {
             bar: {
@@ -105,28 +86,17 @@ export const barChartOptionsApex = (labels, color, strokeColor, dataLabelStat, t
             }
         },
         dataLabels: {
-            enabled: dataLabelStat, // enables labels
+            enabled: dataLabelStat,
             style: {
-                colors: ['#ffffff'] // sets label text color to black
+                colors: ['#000'] // sets label text color to black
             },
-            offsetY: -20 // moves the label above the bar
+            offsetY: -20
         },
         colors: color,
         stroke: {
             show: true,
             width: 3,
             colors: strokeColor
-        },
-        tooltip: {
-            theme: 'dark',
-            style: {
-                fontSize: '12px',
-                fontFamily: 'Arial, sans-serif',
-                color: '#FF5733'
-            },
-            y: {
-                // Adjust formatting if needed
-            }
         }
     };
 };
