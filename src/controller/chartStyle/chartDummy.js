@@ -45,6 +45,17 @@ export const setPieChartOptions = () => {
                 }
             },
             rotation: -0.5 * Math.PI
+        },
+        tooltip: {
+            theme: 'dark',
+            style: {
+                fontSize: '12px',
+                fontFamily: 'Arial, sans-serif',
+                color: '#FF5733'
+            },
+            y: {
+                // Adjust formatting if needed
+            }
         }
     };
 };
@@ -64,7 +75,27 @@ export const barChartOptionsApex = (labels, color, strokeColor, dataLabelStat, t
         },
         xaxis: {
             categories: labels,
-            tickPlacement: 'on'
+            tickPlacement: 'on',
+            labels: {
+                style: {
+                    colors: '#ffffff', // Warna font X-axis
+                    fontSize: '10px', // Ukuran font
+                    fontFamily: 'Arial, sans-serif' // Gaya font opsional
+                }
+            }
+        },
+        yaxis: {
+            title: {
+                style: {
+                    color: '#ffffff'
+                }
+            },
+            labels: {
+                style: {
+                    colors: '#ffffff',
+                    fontSize: '10px'
+                }
+            }
         },
         plotOptions: {
             bar: {
@@ -76,7 +107,7 @@ export const barChartOptionsApex = (labels, color, strokeColor, dataLabelStat, t
         dataLabels: {
             enabled: dataLabelStat, // enables labels
             style: {
-                colors: ['#000'] // sets label text color to black
+                colors: ['#ffffff'] // sets label text color to black
             },
             offsetY: -20 // moves the label above the bar
         },
@@ -85,6 +116,17 @@ export const barChartOptionsApex = (labels, color, strokeColor, dataLabelStat, t
             show: true,
             width: 3,
             colors: strokeColor
+        },
+        tooltip: {
+            theme: 'dark',
+            style: {
+                fontSize: '12px',
+                fontFamily: 'Arial, sans-serif',
+                color: '#FF5733'
+            },
+            y: {
+                // Adjust formatting if needed
+            }
         }
     };
 };
@@ -685,29 +727,52 @@ export const stackedChartOptionsApex = (total, listLabels, toolbar) => {
             }
         },
         xaxis: {
+            labels: {
+                style: {
+                    colors: '#ffffff', // Warna font X-axis
+                    fontSize: '10px', // Ukuran font
+                    fontFamily: 'Arial, sans-serif' // Gaya font opsional
+                }
+            },
             tickPlacement: 'on'
         },
         yaxis: {
             labels: {
+                style: {
+                    colors: '#ffffff', // Ganti dengan warna label Y-axis
+                    fontSize: '10px' // Ukuran font opsional
+                },
                 formatter: function (val) {
                     if (val >= 1000) {
                         return (val / 1000).toFixed(1) + 'K'; // Convert to thousands and append 'K'
                     }
                     return val;
-                },
-                style: {
-                    fontSize: '10px' // Adjust the font size if needed
                 }
             }
         },
         legend: {
+            labels: {
+                colors: '#ffffff', // Warna font legenda
+                useSeriesColors: false // Agar warna mengikuti warna yang ditentukan
+            },
             position: 'bottom',
-            horizontalAlign: 'left', // Center the legend horizontally
+            horizontalAlign: 'center', // Center the legend horizontally
             // floating: false, // Set to false to make sure it does not float
             offsetY: 0
         },
         fill: {
             opacity: 1
+        },
+        tooltip: {
+            theme: 'dark',
+            style: {
+                fontSize: '12px',
+                fontFamily: 'Arial, sans-serif',
+                color: '#FF5733'
+            },
+            y: {
+                // Adjust formatting if needed
+            }
         }
     };
 };

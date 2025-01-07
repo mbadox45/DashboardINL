@@ -130,7 +130,7 @@ export const cashFlowMovement = () => {
     //ganti warna red 500 jika nilai minus
     const color = 'text-green-500';
     const icon = null;
-    const link = '/test';
+    const link = 'cash-flow-movement';
 
     return { name: name, value: value, versus: versus, color: color, icon: icon, link: link };
 };
@@ -158,7 +158,7 @@ export const cfiPaySchedule = () => {
     </div>`;
     const color = 'text-amber-500';
     const icon = null;
-    const link = '/test';
+    const link = 'cfi-pay-schedule';
 
     return { name: name, value: value, versus: versus, color: color, icon: icon, link: link };
 };
@@ -175,7 +175,7 @@ export const cffPaySchedule = () => {
     //ganti warna red 500 jika nilai sekarang < dari nilai bulan sebelumnya, kalo sama warna amber, tambahin icon up atau icon strip
     const color = 'text-amber-500';
     const icon = '/images/icon/financial/loan-payment.png';
-    const link = '/test';
+    const link = 'cff-pay-schedule';
 
     return { name: name, value: value, versus: versus, color: color, icon: icon, link: link };
 };
