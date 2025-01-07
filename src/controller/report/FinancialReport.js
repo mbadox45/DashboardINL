@@ -419,18 +419,9 @@ export const cfiPayment = async () => {
 
 export const cfiPaymentData = () => {
     const cfiPayment = [
-        { periode: 'January', kontraktor: 0, pekerjaan: 0, licensor: 0 },
-        { periode: 'February', kontraktor: 0, pekerjaan: 0, licensor: 0 },
-        { periode: 'March', kontraktor: 0, pekerjaan: 0, licensor: 0 },
-        { periode: 'April', kontraktor: 0, pekerjaan: 0, licensor: 0 },
-        { periode: 'May', kontraktor: 0, pekerjaan: 0, licensor: 0 },
-        { periode: 'June', kontraktor: 0, pekerjaan: 0, licensor: 0 },
-        { periode: 'July', kontraktor: 0, pekerjaan: 0, licensor: 0 },
-        { periode: 'August', kontraktor: 47.97, pekerjaan: 5, licensor: 0 },
-        { periode: 'September', kontraktor: 0, pekerjaan: 0, licensor: 0 },
-        { periode: 'October', kontraktor: 0, pekerjaan: 0, licensor: 0 },
-        { periode: 'November', kontraktor: 0, pekerjaan: 0, licensor: 0 },
-        { periode: 'December', kontraktor: 0, pekerjaan: 0, licensor: 81.9 }
+        { cfi: 'Kontraktor EPC PMG II by ETI', jan: 0, feb: 0, mar: 0, apr: 0, mei: 0, jun: 0, jul: 0, aug: 47.97, sep: 0, oct: 0, nov: 0, des: 0 },
+        { cfi: 'Pekerjaan Bangunan Perusahaan', jan: 0, feb: 0, mar: 0, apr: 0, mei: 0, jun: 0, jul: 0, aug: 5, sep: 0, oct: 0, nov: 0, des: 0 },
+        { cfi: 'Licensor Biodiesel by Desment Technology', jan: 0, feb: 0, mar: 0, apr: 0, mei: 0, jun: 0, jul: 0, aug: 0, sep: 0, oct: 0, nov: 0, des: 81.9 }
     ];
 
     return cfiPayment;

@@ -62,43 +62,133 @@ const editRow = (row) => {
                 <div class="w-full flex flex-col gap-2">
                     <span class="text-lg text-green-500 font-semibold">CFI Payment Schedule Tahun {{ currentYear }}</span>
                     <DataTable :value="dataCfiPayment" showGridlines removableSort tableStyle="background-color:#00000;">
-                        <Column field="periode" headerStyle="background-color: #1a5276;" style="background-color: black; color: white">
+                        <Column field="cfi" headerStyle="background-color: #1a5276;" style="background-color: black; color: white">
                             <template #header>
-                                <span class="flex justify-center items-center w-full text-center">Periode</span>
+                                <span class="flex justify-center items-center w-full text-center">CFI</span>
                             </template>
                             <template #body="{ data }">
-                                <div class="w-full flex justify-center items-center">
-                                    <span>{{ data.periode }}</span>
+                                <div class="w-full flex items-center">
+                                    <span>{{ data.cfi }}</span>
                                 </div>
                             </template>
                         </Column>
-                        <Column field="kontraktor" sortable headerStyle="background-color: #1a5276;" style="background-color: black; color: white">
+                        <Column field="jan" sortable headerStyle="background-color: #1a5276;" style="background-color: black; color: white">
                             <template #header>
-                                <span class="flex justify-center items-center w-full text-center">Kontraktor EPC PMG II by ETI</span>
+                                <span class="flex justify-center items-center w-full text-center">Jan</span>
                             </template>
                             <template #body="{ data }">
                                 <div class="w-full flex justify-end items-center">
-                                    <span>{{ data.kontraktor }}</span>
+                                    <span>{{ data.jan }}</span>
                                 </div>
                             </template>
                         </Column>
-                        <Column field="pekerjaan" sortable headerStyle="background-color: #1a5276;" style="background-color: black; color: white">
+                        <Column field="feb" sortable headerStyle="background-color: #1a5276;" style="background-color: black; color: white">
                             <template #header>
-                                <span class="flex justify-center items-center w-full text-center">Pekerjaan Bangunan Perusahaan</span>
+                                <span class="flex justify-center items-center w-full text-center">Feb</span>
                             </template>
                             <template #body="{ data }">
                                 <div class="w-full flex justify-end items-center">
-                                    <span>{{ data.pekerjaan }}</span>
+                                    <span>{{ data.feb }}</span>
                                 </div>
                             </template>
                         </Column>
-                        <Column field="licensor" sortable headerStyle="background-color: #1a5276;" style="background-color: black; color: white">
+                        <Column field="mar" sortable headerStyle="background-color: #1a5276;" style="background-color: black; color: white">
                             <template #header>
-                                <span class="flex justify-center items-center w-full text-center">Licensor Biodiesel by Desment Technology</span>
+                                <span class="flex justify-center items-center w-full text-center">Mar</span>
                             </template>
                             <template #body="{ data }">
                                 <div class="w-full flex justify-end items-center">
-                                    <span>{{ data.licensor }}</span>
+                                    <span>{{ data.mar }}</span>
+                                </div>
+                            </template>
+                        </Column>
+                        <Column field="apr" sortable headerStyle="background-color: #1a5276;" style="background-color: black; color: white">
+                            <template #header>
+                                <span class="flex justify-center items-center w-full text-center">Apr</span>
+                            </template>
+                            <template #body="{ data }">
+                                <div class="w-full flex justify-end items-center">
+                                    <span>{{ data.apr }}</span>
+                                </div>
+                            </template>
+                        </Column>
+                        <Column field="mei" sortable headerStyle="background-color: #1a5276;" style="background-color: black; color: white">
+                            <template #header>
+                                <span class="flex justify-center items-center w-full text-center">Mei</span>
+                            </template>
+                            <template #body="{ data }">
+                                <div class="w-full flex justify-end items-center">
+                                    <span>{{ data.mei }}</span>
+                                </div>
+                            </template>
+                        </Column>
+                        <Column field="jun" sortable headerStyle="background-color: #1a5276;" style="background-color: black; color: white">
+                            <template #header>
+                                <span class="flex justify-center items-center w-full text-center">Jun</span>
+                            </template>
+                            <template #body="{ data }">
+                                <div class="w-full flex justify-end items-center">
+                                    <span>{{ data.jun }}</span>
+                                </div>
+                            </template>
+                        </Column>
+                        <Column field="jul" sortable headerStyle="background-color: #1a5276;" style="background-color: black; color: white">
+                            <template #header>
+                                <span class="flex justify-center items-center w-full text-center">Jul</span>
+                            </template>
+                            <template #body="{ data }">
+                                <div class="w-full flex justify-end items-center">
+                                    <span>{{ data.jul }}</span>
+                                </div>
+                            </template>
+                        </Column>
+                        <Column field="aug" sortable headerStyle="background-color: #1a5276;" style="background-color: black; color: white">
+                            <template #header>
+                                <span class="flex justify-center items-center w-full text-center">Aug</span>
+                            </template>
+                            <template #body="{ data }">
+                                <div class="w-full flex justify-end items-center">
+                                    <span>{{ data.aug }}</span>
+                                </div>
+                            </template>
+                        </Column>
+                        <Column field="sep" sortable headerStyle="background-color: #1a5276;" style="background-color: black; color: white">
+                            <template #header>
+                                <span class="flex justify-center items-center w-full text-center">Sep</span>
+                            </template>
+                            <template #body="{ data }">
+                                <div class="w-full flex justify-end items-center">
+                                    <span>{{ data.sep }}</span>
+                                </div>
+                            </template>
+                        </Column>
+                        <Column field="oct" sortable headerStyle="background-color: #1a5276;" style="background-color: black; color: white">
+                            <template #header>
+                                <span class="flex justify-center items-center w-full text-center">Oct</span>
+                            </template>
+                            <template #body="{ data }">
+                                <div class="w-full flex justify-end items-center">
+                                    <span>{{ data.oct }}</span>
+                                </div>
+                            </template>
+                        </Column>
+                        <Column field="nov" sortable headerStyle="background-color: #1a5276;" style="background-color: black; color: white">
+                            <template #header>
+                                <span class="flex justify-center items-center w-full text-center">Nov</span>
+                            </template>
+                            <template #body="{ data }">
+                                <div class="w-full flex justify-end items-center">
+                                    <span>{{ data.nov }}</span>
+                                </div>
+                            </template>
+                        </Column>
+                        <Column field="des" sortable headerStyle="background-color: #1a5276;" style="background-color: black; color: white">
+                            <template #header>
+                                <span class="flex justify-center items-center w-full text-center">Des</span>
+                            </template>
+                            <template #body="{ data }">
+                                <div class="w-full flex justify-end items-center">
+                                    <span>{{ data.des }}</span>
                                 </div>
                             </template>
                         </Column>

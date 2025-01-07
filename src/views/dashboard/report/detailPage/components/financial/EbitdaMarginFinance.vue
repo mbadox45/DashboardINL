@@ -97,6 +97,7 @@ const editRow = (row) => {
                         </Column>
                     </DataTable>
                 </div>
+                <div class="w-full flex flex-col gap-2"></div>
             </div>
         </div>
     </div>
