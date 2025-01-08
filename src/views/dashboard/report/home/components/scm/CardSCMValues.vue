@@ -1,5 +1,8 @@
 <script setup>
 import { defineProps, onMounted, onUnmounted, ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const props = defineProps({
     datas: {
@@ -78,6 +81,18 @@ onMounted(() => {
 onUnmounted(() => {
     clearInterval(intervalId);
 });
+
+const routerLink = (path) => {
+    // if (path == null) {
+    // } else {
+    //     const data = JSON.stringify({ path: path, type: 'scm' });
+    //     const encryptedPath = CryptoJS.AES.encrypt(data, 'your-secret-key').toString();
+    //     router.push({
+    //         path: '/detail-dashboard',
+    //         query: { component: encryptedPath }
+    //     });
+    // }
+};
 </script>
 
 <template>

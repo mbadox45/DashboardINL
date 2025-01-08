@@ -1,5 +1,5 @@
 <script setup>
-// import { cashFlow, cashFlowData } from '@/controller/report/FinancialReport';
+// import { bulkySalesChart, cashFlowData } from '@/controller/report/OperationReport';
 import { onMounted, ref } from 'vue';
 
 const listdata = ref({
@@ -18,7 +18,7 @@ onMounted(() => {
 
 const loadData = async () => {
     try {
-        // const data = await cashFlow();
+        // const data = await bulkySalesChart();
 
         listdata.value = {
             name: 'CPO Olah vs RKAP vs Utility'
