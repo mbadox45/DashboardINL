@@ -15,8 +15,9 @@ export const revenueYtd = async () => {
     const type1 = 'line';
     const type2 = 'bar';
     const type3 = 'bar'; // Assuming you want this as a bar chart like the others
-    const colors = ['rgba(255, 99, 132, 1)', 'rgba(255, 255, 0, 0.6)', 'rgba(16, 185, 129, 0.6)']; // Add new color for last year's data
-    const total = '';
+    const colors = ['rgba(217, 119, 6, 1)', 'rgba(26, 82, 118, 0.8)', 'rgba(76, 165, 138, 0.8)']; // Add new color for last year's data
+    const colorsLabel = ['#b15d05', '#1a3e58', '#3b8e77'];
+    const total = 'Percentage 2024: 30%';
     const scale1 = 'number';
     const scale2 = 'number';
     const scale3 = 'number';
@@ -30,7 +31,7 @@ export const revenueYtd = async () => {
     return {
         name: 'Revenue (in IDR Bn)',
         type: typeChart,
-        chartOptions: combo3ChartOptionsApex(total, label1, label2, label3, listLabels, colors, scale1, scale2, scale3),
+        chartOptions: combo3ChartOptionsApex(total, label1, label2, label3, listLabels, colors, colorsLabel, scale1, scale2, scale3),
         series: [
             {
                 name: label1,
@@ -54,12 +55,12 @@ export const revenueYtd = async () => {
 
 export const revenueData = () => {
     const revenueThisYear = [
-        { periode: 'January', pendapatan: 194.27, rkap: 378.46 },
-        { periode: 'February', pendapatan: 187.77, rkap: 187.77 },
-        { periode: 'March', pendapatan: 190.14, rkap: 190.14 },
-        { periode: 'April', pendapatan: 240.53, rkap: 240.53 },
-        { periode: 'May', pendapatan: 194.27, rkap: 194.27 },
-        { periode: 'June', pendapatan: 242.86, rkap: 242.86 },
+        { periode: 'January', pendapatan: 378.46, rkap: 353.32 },
+        { periode: 'February', pendapatan: 187.77, rkap: 802 },
+        { periode: 'March', pendapatan: 190.14, rkap: 852.69 },
+        { periode: 'April', pendapatan: 240.53, rkap: 1207.45 },
+        { periode: 'May', pendapatan: 194.27, rkap: 1718.87 },
+        { periode: 'June', pendapatan: 242.86, rkap: 1643.25 },
         { periode: 'July', pendapatan: 0, rkap: 0 },
         { periode: 'August', pendapatan: 0, rkap: 0 },
         { periode: 'September', pendapatan: 0, rkap: 0 },
@@ -67,7 +68,6 @@ export const revenueData = () => {
         { periode: 'November', pendapatan: 0, rkap: 0 },
         { periode: 'December', pendapatan: 0, rkap: 0 }
     ];
-
     const revenueLastYear = [
         { periode: 'January', pendapatan: 150.0, rkap: 300.0 },
         { periode: 'February', pendapatan: 180.0, rkap: 250.0 },
@@ -87,7 +87,7 @@ export const revenueData = () => {
 };
 
 export const ebitdaMarginData = () => {
-    const grossProfit = [
+    const ebitdaMargin = [
         { periode: 'January', ebitda: -2.64, ebitdaPersen: -0.65 },
         { periode: 'February', ebitda: 0.4, ebitdaPersen: 0.22 },
         { periode: 'March', ebitda: -2.14, ebitdaPersen: -1.13 },
@@ -102,7 +102,7 @@ export const ebitdaMarginData = () => {
         { periode: 'December', ebitda: 0, ebitdaPersen: 0 }
     ];
 
-    return grossProfit;
+    return ebitdaMargin;
 };
 
 export const ebitdaMargin = async () => {
@@ -111,7 +111,7 @@ export const ebitdaMargin = async () => {
     const data1 = [-0.65, 0.22, -1.13, 6.69, -0.86, 2.71, 0, 0, 0, 0, 0, 0];
     const data2 = [-2.46, 0.4, -2.14, 16.1, -1.67, 6.59, 0, 0, 0, 0, 0, 0];
     const sum = parseFloat(data2.reduce((accumulator, currentValue) => accumulator + currentValue, 0).toFixed(2));
-    const total = sum + 'B IDR of Gross Profit (YTD)';
+    const total = sum + 'B IDR of EBITDA (YTD)';
     const label1 = 'EBITDA%';
     const label2 = 'EBITDA';
     const type1 = 'line';
@@ -207,17 +207,17 @@ export const netProfitMargin = async () => {
 };
 
 export const grossProfit = async () => {
-    // Revenue Ytd
     const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     const data1 = [3, 4.43, 6.19, 10.66, 5.43, 4.85, 0, 0, 0, 0, 0, 0];
     const data2 = [11.4, 8.3, 11.8, 25.6, 10.6, 11.8, 0, 0, 0, 0, 0, 0];
     const sum = parseFloat(data2.reduce((accumulator, currentValue) => accumulator + currentValue, 0).toFixed(2));
-    const total = sum + 'B IDR of Gross Profit (YTD)';
+    const total = sum + `B IDR of Gross Profit (YTD) ${currentYear}`;
     const label1 = 'GPM%';
     const label2 = 'Laba Kotor';
     const type1 = 'line';
     const type2 = 'column';
-    const colors = ['rgba(157, 5, 245, 0.6)', 'rgba(0, 34, 255, 1)'];
+    const colors = ['rgba(217, 70, 239, 0.8)', 'rgba(0, 188, 212, 1)'];
+    const colorsLabel = ['#a21caf', '#1a5276'];
     const scale1 = 'percent';
     const scale2 = 'number';
     const typeChart = 'line';
@@ -229,9 +229,50 @@ export const grossProfit = async () => {
 
     return {
         name: 'Gross Profit Margin & Amount (in % & IDR Bn)',
-        total: sum + 'B IDR of Gross Profit (YTD)',
+        total: total,
         type: typeChart,
-        chartOptions: comboChartOptionsApex(total, label1, label2, listLabels, colors, scale1, scale2),
+        chartOptions: comboChartOptionsApex(total, label1, label2, listLabels, colors, colorsLabel, scale1, scale2),
+        series: [
+            {
+                name: label2,
+                type: type2,
+                data: data2
+            },
+            {
+                name: label1,
+                type: type1,
+                data: data1
+            }
+        ]
+    };
+};
+
+export const grossProfitLastYear = async () => {
+    const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const data1 = [3, 4.43, 6.19, 10.66, 5.43, 4.85, 0, 0, 0, 0, 0, 0];
+    const data2 = [11.4, 8.3, 11.8, 25.6, 10.6, 11.8, 0, 0, 0, 0, 0, 0];
+    const sum = parseFloat(data2.reduce((accumulator, currentValue) => accumulator + currentValue, 0).toFixed(2));
+    const total = sum + `B IDR of Gross Profit (YTD) ${currentYear - 1}`;
+    const label1 = 'GPM%';
+    const label2 = 'Laba Kotor';
+    const type1 = 'line';
+    const type2 = 'column';
+    const colors = ['rgba(105, 115, 132, 0.8)', 'rgba(251, 191, 36, 1)'];
+    const colorsLabel = ['#2d3748', '#b45309'];
+    const scale1 = 'percent';
+    const scale2 = 'number';
+    const typeChart = 'line';
+
+    const listLabels = [];
+    for (let i = 0; i < labels.length; i++) {
+        listLabels.push(moment(labels[i], 'MMMM').format('MMM'));
+    }
+
+    return {
+        name: 'Gross Profit Margin & Amount (in % & IDR Bn)',
+        total: total,
+        type: typeChart,
+        chartOptions: comboChartOptionsApex(total, label1, label2, listLabels, colors, colorsLabel, scale1, scale2),
         series: [
             {
                 name: label2,

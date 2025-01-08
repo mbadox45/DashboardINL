@@ -191,11 +191,13 @@ export const barChartOptionsApex2 = (labels, color, strokeColor, dataLabelStat, 
     };
 };
 
-export const comboChartOptionsApex = (total, label1, label2, listLabels, colors, scale1, scale2) => {
+export const comboChartOptionsApex = (total, label1, label2, listLabels, colors, colorsLabel, scale1, scale2) => {
     return {
         chart: {
             height: 350,
-            type: 'line'
+            type: 'line',
+            background: '#000000',
+            foreColor: '#ffffff'
         },
         stroke: {
             width: [2, 4],
@@ -204,41 +206,41 @@ export const comboChartOptionsApex = (total, label1, label2, listLabels, colors,
         title: {
             text: total,
             style: {
-                fontSize: '12px',
-                color: '#FF5733'
+                color: '#d97706'
             }
         },
         colors: colors,
         dataLabels: {
-            enabled: false,
-            enabledOnSeries: [0],
+            enabled: true,
+            // enabledOnSeries: [0], // Only enable for the first series (line chart)
             style: {
                 fontSize: '10px',
-                colors: ['#FF5733']
-            },
-            background: {
-                enabled: false
+                colors: colorsLabel
             },
             formatter: function (val) {
-                if (val >= 1000) {
-                    return (val / 1000).toFixed(1) + 'K';
+                if (val === 0) {
+                    return '';
                 }
-                return val.toFixed(2);
+
+                if (scale1 === 'percent') {
+                    return val >= 1000 ? (val / 1000).toFixed(1) + 'K%' : val.toFixed(2) + '%';
+                } else {
+                    return val >= 1000 ? (val / 1000).toFixed(1) + 'K' : val;
+                }
+            },
+            background: {
+                enabled: true,
+                borderRadius: 3,
+                borderColor: '#ffffff',
+                borderWidth: 1,
+                opacity: 1
             }
         },
         plotOptions: {
-            dataLabels: {
-                offsetY: 10
-            },
             bar: {
-                colors: {
-                    ranges: [
-                        {
-                            from: -Infinity,
-                            to: 0,
-                            color: 'rgb(255, 0, 0)'
-                        }
-                    ]
+                dataLabels: {
+                    position: 'bottom',
+                    offsetY: 10
                 }
             }
         },
@@ -337,77 +339,73 @@ export const comboChartOptionsApex = (total, label1, label2, listLabels, colors,
     };
 };
 
-export const combo3ChartOptionsApex = (total, label1, label2, label3, listLabels, colors, scale1, scale2, scale3) => {
+export const combo3ChartOptionsApex = (total, label1, label2, label3, listLabels, colors, colorsLabel, scale1, scale2, scale3) => {
     return {
         chart: {
             height: 350,
-            type: 'line'
+            type: 'line',
+            background: '#000000',
+            foreColor: '#ffffff'
         },
         stroke: {
-            width: [4, 2, 4], // Add width for the third line
-            curve: 'smooth'
+            width: [2, 4, 4],
+            curve: 'straight'
+            // curve: 'smooth'
         },
         title: {
             text: total,
             style: {
-                fontSize: '12px',
-                color: '#FF5733'
+                color: '#d97706'
             }
         },
         colors: colors,
         dataLabels: {
-            enabled: false,
-            enabledOnSeries: [0],
+            enabled: true,
+            // enabledOnSeries: [0], // Only enable for the first series (line chart)
             style: {
                 fontSize: '10px',
-                colors: ['#FF5733']
+                colors: colorsLabel
+                // colors: ['#d97706', '#1a5276', '#4ca58a']
+            },
+            formatter: function (val) {
+                if (val === 0) {
+                    return '';
+                }
+
+                if (scale1 === 'percent') {
+                    return val >= 1000 ? (val / 1000).toFixed(1) + 'K%' : val.toFixed(2) + '%';
+                } else {
+                    return val >= 1000 ? (val / 1000).toFixed(1) + 'K' : val;
+                }
             },
             background: {
-                enabled: false
+                enabled: true,
+                borderRadius: 3,
+                borderColor: '#ffffff',
+                borderWidth: 1,
+                opacity: 1
             }
         },
         plotOptions: {
-            dataLabels: {
-                offsetY: 10
-            },
             bar: {
-                colors: {
-                    ranges: [
-                        {
-                            from: -Infinity,
-                            to: 0,
-                            color: 'rgb(255, 0, 0)'
-                        }
-                    ]
+                dataLabels: {
+                    position: 'bottom',
+                    offsetY: 10
                 }
             }
         },
         labels: listLabels,
         xaxis: {
-            labels: {
-                style: {
-                    colors: '#ffffff',
-                    fontSize: '10px',
-                    fontFamily: 'Arial, sans-serif'
-                }
-            },
             categories: listLabels
         },
         yaxis: [
             {
                 title: {
-                    text: label1, // Pendapatan current year
-                    style: {
-                        color: '#ffffff'
-                    }
+                    text: label1
                 },
                 labels: {
-                    style: {
-                        colors: '#ffffff',
-                        fontSize: '10px'
-                    },
                     formatter: function (val) {
-                        if (scale2 === 'percent') {
+                        if (scale1 === 'percent') {
                             return val >= 1000 ? (val / 1000).toFixed(1) + 'K%' : val.toFixed(2) + '%';
                         } else {
                             return val >= 1000 ? (val / 1000).toFixed(1) + 'K' : val.toFixed(2);
@@ -418,18 +416,11 @@ export const combo3ChartOptionsApex = (total, label1, label2, label3, listLabels
             {
                 opposite: true,
                 title: {
-                    text: label2, // Target RKAP
-                    style: {
-                        color: '#ffffff'
-                    }
+                    text: label2
                 },
                 labels: {
-                    style: {
-                        colors: '#ffffff',
-                        fontSize: '10px'
-                    },
                     formatter: function (val) {
-                        if (scale1 === 'percent') {
+                        if (scale2 === 'percent') {
                             return val >= 1000 ? (val / 1000).toFixed(1) + 'K%' : val.toFixed(2) + '%';
                         } else {
                             return val >= 1000 ? (val / 1000).toFixed(1) + 'K' : val;
@@ -440,19 +431,12 @@ export const combo3ChartOptionsApex = (total, label1, label2, label3, listLabels
             {
                 opposite: true,
                 title: {
-                    text: label3, // Pendapatan previous year
-                    style: {
-                        color: '#ffffff'
-                    }
+                    text: label3
                 },
                 labels: {
-                    style: {
-                        colors: '#ffffff',
-                        fontSize: '10px'
-                    },
                     formatter: function (val) {
                         // Share the same formatting logic as label2
-                        if (scale2 === 'percent') {
+                        if (scale3 === 'percent') {
                             return val >= 1000 ? (val / 1000).toFixed(1) + 'K%' : val.toFixed(2) + '%';
                         } else {
                             return val >= 1000 ? (val / 1000).toFixed(1) + 'K' : val.toFixed(2);
@@ -463,19 +447,14 @@ export const combo3ChartOptionsApex = (total, label1, label2, label3, listLabels
         ],
         legend: {
             labels: {
-                colors: '#ffffff',
                 useSeriesColors: false
             },
-            fontSize: '12px',
-            fontFamily: 'Arial, sans-serif'
+            position: 'top',
+            horizontalAlign: 'center',
+            offsetY: 0
         },
         tooltip: {
             theme: 'dark',
-            style: {
-                fontSize: '12px',
-                fontFamily: 'Arial, sans-serif',
-                color: '#FF5733'
-            },
             y: {
                 // Adjust formatting if needed
             }

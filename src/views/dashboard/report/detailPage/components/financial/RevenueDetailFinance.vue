@@ -63,7 +63,7 @@ const editRow = (row) => {
             <Divider />
             <div class="flex gap-20">
                 <div class="w-full flex flex-col gap-2">
-                    <span class="text-lg text-green-500 font-semibold">Revenue Tahun {{ currentYear }}</span>
+                    <span class="text-lg text-blue-500 font-semibold">Revenue Tahun {{ currentYear }}</span>
                     <DataTable :value="revenueThisYear" showGridlines removableSort tableStyle="background-color:#00000;">
                         <Column field="periode" sortable headerStyle="background-color: #1a5276;" style="background-color: black; color: white">
                             <template #header>
@@ -96,24 +96,24 @@ const editRow = (row) => {
                     </DataTable>
                 </div>
                 <div class="w-full flex flex-col gap-2">
-                    <span class="text-lg text-green-500 font-semibold">Revenue Tahun {{ currentYear - 1 }}</span>
+                    <span class="text-lg text-teal-300 font-semibold">Revenue Tahun {{ currentYear - 1 }}</span>
                     <DataTable :value="revenueLastYear" showGridlines removableSort tableStyle="background-color:#00000;">
-                        <Column field="periode" sortable headerStyle="background-color: #af601a;" style="background-color: black; color: white">
+                        <Column field="periode" sortable headerStyle="background-color: #4ca58a;" style="background-color: black; color: white">
                             <template #header>
                                 <span class="flex justify-center items-center w-full text-center">Periode</span>
                             </template>
                         </Column>
-                        <Column field="pendapatan" sortable headerStyle="background-color: #af601a;" style="background-color: black; color: white">
+                        <Column field="pendapatan" sortable headerStyle="background-color: #4ca58a;" style="background-color: black; color: white">
                             <template #header>
                                 <span class="flex justify-center items-center w-full text-center">Pendapatan (Bn)</span>
                             </template>
                         </Column>
-                        <Column field="rkap" sortable headerStyle="background-color: #af601a;" style="background-color: black; color: white">
+                        <Column field="rkap" sortable headerStyle="background-color: #4ca58a;" style="background-color: black; color: white">
                             <template #header>
                                 <span class="flex justify-center items-center w-full text-center">Target RKAP (Bn)</span>
                             </template>
                         </Column>
-                        <Column field="quantity" sortable headerStyle="background-color: #af601a; text-align: center;" style="background-color: black; color: white">
+                        <Column field="quantity" sortable headerStyle="background-color: #4ca58a; text-align: center;" style="background-color: black; color: white">
                             <template #header>
                                 <span class="flex justify-center items-center w-full text-center">Action</span>
                             </template>
