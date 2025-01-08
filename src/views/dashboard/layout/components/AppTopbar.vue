@@ -71,13 +71,13 @@ const toggleMenu = () => {
 
 // Inisialisasi animasi awal
 onMounted(() => {
-    gsap.set(menuRef.value, { height: 0, opacity: 0 }); // Topbar disembunyikan saat load
+    gsap.set(menuRef.value, { height: 1, opacity: 0 }); // Topbar disembunyikan saat load
 });
 </script>
 <template>
-    <div class="fixed flex-col gap-1 w-full z-30">
+    <div class="fixed flex-col gap-1 w-full z-10">
         <!-- Bagian yang akan dianimasikan -->
-        <div ref="menuRef" class="flex overflow-hidden justify-between gap-3 w-full px-10 py-3 bg-neutral-950">
+        <div ref="menuRef" class="flex overflow-hidden justify-between gap-3 w-full py-2 px-10 bg-neutral-950">
             <div class="flex gap-8 items-center w-full">
                 <router-link to="/" class="flex items-center gap-8">
                     <div class="flex flex-col">
@@ -101,7 +101,7 @@ onMounted(() => {
         </div>
 
         <!-- Tombol untuk toggle menu -->
-        <div class="flex justify-end px-4 py-1">
+        <div class="flex justify-end px-4">
             <button class="bg-white text-black animate-bounce hover:bg-amber-600 hover:text-white transition-all duration-500 p-2 h-[1.6vw] w-[1.6vw] rounded-full flex items-center justify-center" @click="toggleMenu">
                 <i :class="`pi ${showMenu ? 'pi-angle-double-up' : 'pi-angle-double-down'}`" style="font-size: 0.7vw"></i>
             </button>
@@ -112,5 +112,7 @@ onMounted(() => {
 <style>
 .overflow-hidden {
     overflow: hidden;
+    padding-top: 0;
+    padding-bottom: 0;
 }
 </style>

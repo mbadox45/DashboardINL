@@ -13,26 +13,36 @@ const props = defineProps({
     }
 });
 
-const load = ref({ name: '', icon: '', nilai: 0, persen: 0, versus: '', color: '', link: null });
+const load = ref({ name: '', icon: '', nilai: 0, persen: 0, versus: '', color: '', link: null, colspan: null });
 
 const loadData = async () => {
     const data = props.datas;
-    load.value = { name: data.name, icon: data.icon, nilai: data.value, persen: null, versus: data.versus, color: data.color, link: data.link };
+    load.value = { name: data.name, icon: data.icon, nilai: data.value, persen: null, versus: data.versus, color: data.color, link: data.link, colspan: data.colspan };
 };
 
 const routerLink = (path) => {
-    const data = JSON.stringify({ path: path, type: 'financial' });
-    const encryptedPath = CryptoJS.AES.encrypt(data, 'your-secret-key').toString();
-    router.push({
-        path: '/detail-dashboard',
-        query: { component: encryptedPath }
-    });
+    if (path != null) {
+        if (path == 'itf') {
+            window.open('http://36.92.181.10:38090/', '_blank');
+        } else {
+            const data = JSON.stringify({ path: path, type: 'financial' });
+            const encryptedPath = CryptoJS.AES.encrypt(data, 'your-secret-key').toString();
+            router.push({
+                path: '/detail-dashboard',
+                query: { component: encryptedPath }
+            });
+        }
+    } else {
+        router.push({
+            path: '/not-found'
+        });
+    }
 };
 
 watch(() => props.datas, loadData, { immediate: true });
 </script>
 <template>
-    <div class="bg-gray-800 p-2 rounded-xl shadow-xl min-h-[120px] flex gap-3 items-start">
+    <div class="bg-gray-800 p-2 rounded-xl shadow-xl min-h-[120px] flex gap-3 items-start" :class="load.colspan">
         <div class="flex flex-col w-full">
             <div class="flex items-center gap-6">
                 <span class="font-bold w-full text-[0.55vw]">{{ load.name }}</span>

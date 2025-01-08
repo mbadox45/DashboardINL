@@ -4,6 +4,7 @@ import { valueColorIntCondition, valueColorPersenCondition } from '@/controller/
 
 export const revenue = () => {
     const name = 'Revenue (in IDR BN)';
+    const colspan = null;
     const value = `<div class="flex gap-2 items-center ${valueColorPersenCondition(30)}">
         <span id="counter" class="font-bold text-[0.9vw]">30%</span>
     </div>`;
@@ -16,11 +17,12 @@ export const revenue = () => {
     const icon = '/images/icon/financial/revenue.png';
     const link = `revenue`;
 
-    return { name: name, value: value, versus: versus, color: color, icon: icon, link: link };
+    return { name: name, value: value, versus: versus, color: color, icon: icon, link: link, colspan: colspan };
 };
 
 export const grossProfitMargin = () => {
     const name = 'Gross Profit Margin (in IDR BN)';
+    const colspan = null;
     const value = `<div class="flex gap-2 items-center ${valueColorIntCondition(79.5)}">
         <span class="font-bold text-[0.9vw]">${79.5} (YTD)</span>
     </div>`;
@@ -33,11 +35,12 @@ export const grossProfitMargin = () => {
     const icon = '/images/icon/financial/gross-profit.png';
     const link = 'gross-profit';
 
-    return { name: name, value: value, versus: versus, color: color, icon: icon, link: link };
+    return { name: name, value: value, versus: versus, color: color, icon: icon, link: link, colspan: colspan };
 };
 
 export const ebitdaMargin = () => {
     const name = 'EBITDA Margin (in IDR BN)';
+    const colspan = null;
     const value = `<div class="flex gap-2 items-center ${valueColorIntCondition(16.82)}">
         <span class="font-bold text-[0.9vw]">${16.82} (YTD)</span>
     </div>`;
@@ -50,11 +53,12 @@ export const ebitdaMargin = () => {
     const icon = '/images/icon/financial/ebitda.png';
     const link = 'ebitda-margin';
 
-    return { name: name, value: value, versus: versus, color: color, icon: icon, link: link };
+    return { name: name, value: value, versus: versus, color: color, icon: icon, link: link, colspan: colspan };
 };
 
 export const netProfitMargin = () => {
     const name = 'NET Profit Margin (in IDR BN)';
+    const colspan = null;
     const value = `<div class="flex gap-2 items-center ${valueColorIntCondition(-23.34)}">
         <span class="font-bold text-[0.9vw]">${-23.34} (YTD)</span>
     </div>`;
@@ -67,11 +71,12 @@ export const netProfitMargin = () => {
     const icon = '/images/icon/financial/net-profit.png';
     const link = 'net-profit-margin';
 
-    return { name: name, value: value, versus: versus, color: color, icon: icon, link: link };
+    return { name: name, value: value, versus: versus, color: color, icon: icon, link: link, colspan: colspan };
 };
 
 export const cashBalance = () => {
     const name = 'Cash Balance (in IDR BN)';
+    const colspan = null;
     const value = `<div class="flex gap-2 items-center text-green-500">
     <span class="font-bold text-[1.2vw]">${535}</span>
     <i class="pi pi-sort-up-fill" style="font-size:1vw;" />
@@ -85,11 +90,12 @@ export const cashBalance = () => {
     const icon = '/images/icon/financial/balance.png';
     const link = 'cash-balance';
 
-    return { name: name, value: value, versus: versus, color: color, icon: icon, link: link };
+    return { name: name, value: value, versus: versus, color: color, icon: icon, link: link, colspan: colspan };
 };
 
 export const cashFlowMovement = () => {
     const name = 'Cash Flow Movement (in IDR BN)';
+    const colspan = null;
     const value = `<div class="flex gap-2 items-center text-green-500">
         <span class="font-bold text-[0.9vw]">${185.17}</span>
     </div>`;
@@ -132,11 +138,12 @@ export const cashFlowMovement = () => {
     const icon = null;
     const link = 'cash-flow-movement';
 
-    return { name: name, value: value, versus: versus, color: color, icon: icon, link: link };
+    return { name: name, value: value, versus: versus, color: color, icon: icon, link: link, colspan: colspan };
 };
 
 export const cfiPaySchedule = () => {
     const name = 'CFI Pay Schedule (in IDR BN)';
+    const colspan = null;
     const value = `<div class="flex gap-2 items-center text-amber-500">
         <span class="font-bold text-[0.9vw]">${134.87}</span>
     </div>`;
@@ -160,22 +167,185 @@ export const cfiPaySchedule = () => {
     const icon = null;
     const link = 'cfi-pay-schedule';
 
-    return { name: name, value: value, versus: versus, color: color, icon: icon, link: link };
+    return { name: name, value: value, versus: versus, color: color, icon: icon, link: link, colspan: colspan };
 };
 
 export const cffPaySchedule = () => {
-    const name = 'CFF Pay Schedule (in IDR BN)';
-    const value = `<div class="flex gap-2 items-center text-amber-500">
-    <span class="font-bold text-[1.2vw]">${14.2}</span>
-    <i class="pi pi-sort" style="font-size:1vw;" />
-    </div>`;
-    const versus = `<div class="text-[0.5vw] flex flex-col w-full mt-3">
-    <span class="text-cyan-500 font-bold">s/d December 2024</span>
-    </div>`;
+    const name = 'Pay Schedule (in IDR BN)';
+    const colspan = null;
+    const value = null;
+    const versus = `<div class="flex gap-1 w-full h-full">
+        <div class="flex flex-col gap-1 p-2 rounded-xl bg-black w-full">
+            <div class="flex gap-2 justify-between items-center">
+                <span class="font-bold text-[0.5vw]">CFF</span>
+                <span class="text-cyan-500 font-bold text-[0.4vw]">s/d December 2024</span>
+            </div>
+            <div class="flex gap-2 items-center text-amber-500">
+                <span class="font-bold text-[0.8vw]">14.2</span>
+                <i class="pi pi-sort" style="font-size:0.8vw;"></i>
+            </div>
+        </div>
+        <div class="flex flex-col gap-1 p-2 rounded-xl bg-black w-full">
+            <div class="flex gap-2 justify-between items-center">
+                <span class="font-bold text-[0.5vw]">CFF</span>
+            </div>
+            <div class="flex gap-2 items-center text-amber-500">
+                <span class="font-bold text-[0.8vw]">134.87</span>
+            </div>
+        </div>
+    </div>
+    `;
     //ganti warna red 500 jika nilai sekarang < dari nilai bulan sebelumnya, kalo sama warna amber, tambahin icon up atau icon strip
     const color = 'text-amber-500';
-    const icon = '/images/icon/financial/loan-payment.png';
+    const icon = null;
     const link = 'cff-pay-schedule';
 
-    return { name: name, value: value, versus: versus, color: color, icon: icon, link: link };
+    return { name: name, value: value, versus: versus, color: color, icon: icon, link: link, colspan: colspan };
+};
+
+export const hargaSpotInventoryBulky = () => {
+    const name = 'Harga Spot & Inventory Bulky';
+    const colspan = 'col-span-2';
+    const value = null;
+    const versus = `<div class="flex gap-1 w-full">
+    <div class="flex flex-col gap-1 p-2 bg-black rounded-xl w-full">
+        <span class="font-bold text-[0.5vw] text-gray-400">PFAD</span>
+        <div class="flex gap-1">
+            <div class="flex flex-col text-amber-600 justify-between items-end w-full">
+                <span class="text-[0.5vw] font-bold">3,000,000</span>
+                <span class="text-[0.4vw]">Spot</span>
+            </div>
+            <div class="flex flex-col text-green-600 justify-between items-end w-full">
+                <span class="text-[0.5vw] font-bold">3,000,000</span>
+                <span class="text-[0.4vw]">Inventory</span>
+            </div>
+        </div>
+    </div>
+    <div class="flex flex-col gap-1 p-2 bg-black rounded-xl w-full">
+        <span class="font-bold text-[0.5vw] text-gray-400">RBDPO</span>
+        <div class="flex gap-1">
+            <div class="flex flex-col text-amber-600 justify-between items-end w-full">
+                <span class="text-[0.5vw] font-bold">3,000,000</span>
+                <span class="text-[0.4vw]">Spot</span>
+            </div>
+            <div class="flex flex-col text-green-600 justify-between items-end w-full">
+                <span class="text-[0.5vw] font-bold">3,000,000</span>
+                <span class="text-[0.4vw]">Inventory</span>
+            </div>
+        </div>
+    </div>
+    <div class="flex flex-col gap-1 p-2 bg-black rounded-xl w-full">
+        <span class="font-bold text-[0.5vw] text-gray-400">Olein</span>
+        <div class="flex gap-1">
+            <div class="flex flex-col text-amber-600 justify-between items-end w-full">
+                <span class="text-[0.5vw] font-bold">3,000,000</span>
+                <span class="text-[0.4vw]">Spot</span>
+            </div>
+            <div class="flex flex-col text-green-600 justify-between items-end w-full">
+                <span class="text-[0.5vw] font-bold">3,000,000</span>
+                <span class="text-[0.4vw]">Inventory</span>
+            </div>
+        </div>
+    </div>
+    <div class="flex flex-col gap-1 p-2 bg-black rounded-xl w-full">
+        <span class="font-bold text-[0.5vw] text-gray-400">Stearin</span>
+        <div class="flex gap-1">
+            <div class="flex flex-col text-amber-600 font-bold justify-between items-end w-full">
+                <span class="text-[0.5vw] font-bold">3,000,000</span>
+                <span class="text-[0.4vw]">Spot</span>
+            </div>
+            <div class="flex flex-col text-green-600 font-bold justify-between items-end w-full">
+                <span class="text-[0.5vw] font-bold">3,000,000</span>
+                <span class="text-[0.4vw]">Inventory</span>
+            </div>
+        </div>
+    </div>
+    </div>`;
+    const color = 'text-amber-500';
+    const icon = null;
+    const link = 'cfi-pay-schedule';
+
+    return { name: name, value: value, versus: versus, color: color, icon: icon, link: link, colspan: colspan };
+};
+
+export const hargaSpotInventoryRetail = () => {
+    const name = 'Harga Spot & Inventory Retail';
+    const colspan = 'col-span-2';
+    const value = null;
+    const versus = `<div class="flex gap-1 w-full">
+    <div class="flex flex-col gap-1 p-2 bg-black rounded-xl w-full">
+        <span class="font-bold text-[0.5vw] text-gray-400">Salvaco 1L</span>
+        <div class="flex gap-1">
+            <div class="flex flex-col text-amber-600 justify-between items-end w-full">
+                <span class="text-[0.5vw] font-bold">3,000,000</span>
+                <span class="text-[0.4vw]">Spot</span>
+            </div>
+            <div class="flex flex-col text-green-600 justify-between items-end w-full">
+                <span class="text-[0.5vw] font-bold">3,000,000</span>
+                <span class="text-[0.4vw]">Inventory</span>
+            </div>
+        </div>
+    </div>
+    <div class="flex flex-col gap-1 p-2 bg-black rounded-xl w-full">
+        <span class="font-bold text-[0.5vw] text-gray-400">Salvaco 2L</span>
+        <div class="flex gap-1">
+            <div class="flex flex-col text-amber-600 justify-between items-end w-full">
+                <span class="text-[0.5vw] font-bold">3,000,000</span>
+                <span class="text-[0.4vw]">Spot</span>
+            </div>
+            <div class="flex flex-col text-green-600 justify-between items-end w-full">
+                <span class="text-[0.5vw] font-bold">3,000,000</span>
+                <span class="text-[0.4vw]">Inventory</span>
+            </div>
+        </div>
+    </div>
+    <div class="flex flex-col gap-1 p-2 bg-black rounded-xl w-full">
+        <span class="font-bold text-[0.5vw] text-gray-400">Nusakita 1L</span>
+        <div class="flex gap-1">
+            <div class="flex flex-col text-amber-600 justify-between items-end w-full">
+                <span class="text-[0.5vw] font-bold">3,000,000</span>
+                <span class="text-[0.4vw]">Spot</span>
+            </div>
+            <div class="flex flex-col text-green-600 justify-between items-end w-full">
+                <span class="text-[0.5vw] font-bold">3,000,000</span>
+                <span class="text-[0.4vw]">Inventory</span>
+            </div>
+        </div>
+    </div>
+    <div class="flex flex-col gap-1 p-2 bg-black rounded-xl w-full">
+        <span class="font-bold text-[0.5vw] text-gray-400">Nusakita 2L</span>
+        <div class="flex gap-1">
+            <div class="flex flex-col text-amber-600 font-bold justify-between items-end w-full">
+                <span class="text-[0.5vw] font-bold">3,000,000</span>
+                <span class="text-[0.4vw]">Spot</span>
+            </div>
+            <div class="flex flex-col text-green-600 font-bold justify-between items-end w-full">
+                <span class="text-[0.5vw] font-bold">3,000,000</span>
+                <span class="text-[0.4vw]">Inventory</span>
+            </div>
+        </div>
+    </div>
+    </div>`;
+    const color = 'text-amber-500';
+    const icon = null;
+    const link = 'cfi-pay-schedule';
+
+    return { name: name, value: value, versus: versus, color: color, icon: icon, link: link, colspan: colspan };
+};
+
+export const transaction = () => {
+    const name = 'Transaction Dashboard';
+    const colspan = null;
+    const value = null;
+    // Jika Pendapatan > RKAP warna jadi green 600, sesuai kan periode
+    const versus = [
+        `<div class="flex h-full justify-center w-full">
+    <span class="text-[0.8vw] text-cyan-500 text-center font-bold">Direct to Transaction Dashboard</span>
+    </div>`
+    ];
+    const color = 'text-red-500';
+    const icon = '/images/icon/scm/application.png';
+    const link = 'itf';
+
+    return { colspan: colspan, name: name, value: value, versus: versus, color: color, icon: icon, link: link };
 };
