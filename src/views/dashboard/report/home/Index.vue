@@ -124,7 +124,6 @@ const loadDelay = async () => {
         list.push(i + 1);
     }
     listDelay.value = list;
-    console.log(list);
 };
 </script>
 

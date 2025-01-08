@@ -21,7 +21,8 @@ const loadData = async () => {
 };
 
 const routerLink = (path) => {
-    const encryptedPath = CryptoJS.AES.encrypt(path, 'your-secret-key').toString();
+    const data = JSON.stringify({ path: path, type: 'financial' });
+    const encryptedPath = CryptoJS.AES.encrypt(data, 'your-secret-key').toString();
     router.push({
         path: '/detail-dashboard',
         query: { component: encryptedPath }

@@ -17,7 +17,7 @@ export const cpoOlahVsRKAP = () => {
     ];
     const color = 'text-red-500';
     const icon = null;
-    const link = '/test';
+    const link = 'cpo-olah-vs-rkap';
 
     return { colspan: colspan, name: name, value: value, versus: versus, color: color, icon: icon, link: link };
 };
