@@ -704,3 +704,21 @@ export const hargaBulkyData = () => {
 
     return bulky;
 };
+
+export const hargaRetailData = () => {
+    const bulky = [
+        { produk: 'INL 250ml', spotIdr: 10641, spotUsd: 701, invIdr: 10423, invUsd: 686 },
+        { produk: 'INL 450ml', spotIdr: 10641, spotUsd: 701, invIdr: 10423, invUsd: 686 },
+        { produk: 'INL 900ml - PP', spotIdr: 16.656, spotUsd: 856, invIdr: 12867, invUsd: 847 },
+        { produk: 'INL 900ml - SP', spotIdr: 16656, spotUsd: 856, invIdr: 12867, invUsd: 847 },
+        { produk: 'INL 1800ml', spotIdr: 16656, spotUsd: 856, invIdr: 12867, invUsd: 847 },
+        { produk: 'Minyakita 1 Ltr', spotIdr: 16656, spotUsd: 856, invIdr: 12867, invUsd: 847 },
+        { produk: 'Minyakita 2 Ltr', spotIdr: 16656, spotUsd: 856, invIdr: 12867, invUsd: 847 },
+        { produk: 'Nusakita 1 Ltr', spotIdr: 16656, spotUsd: 856, invIdr: 12867, invUsd: 847 },
+        { produk: 'Nusakita 2 Ltr', spotIdr: 16656, spotUsd: 856, invIdr: 12867, invUsd: 847 },
+        { produk: 'Salvaco 1 Ltr', spotIdr: 16656, spotUsd: 856, invIdr: 12867, invUsd: 847 },
+        { produk: 'Salvaco 2 Ltr', spotIdr: 16656, spotUsd: 856, invIdr: 12867, invUsd: 847 }
+    ];
+
+    return bulky;
+};
