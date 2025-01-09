@@ -628,8 +628,38 @@ export const cashFlow = async () => {
     };
 };
 
+export const cashFlowLastYear = async () => {
+    const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const dataSeries = [
+        { label: 'CFO in', data: [178.02, 235.31, 457.8, 256.91, 150.12, 224.94, 178.02, 235.31, 457.8, 256.91, 150.12, 224.94] },
+        { label: 'CFO out', data: [-265.33, -197.78, -164.38, -159.9, -229.55, -227.66, -265.33, -197.78, -164.38, -159.9, -229.55, -227.66] },
+        { label: 'CFI', data: [-2.46, 0, -93.86, -62.93, -0.05, -0.15, -2.46, 0, -93.86, -62.93, -0.05, -0.15] },
+        { label: 'CFF', data: [-14.67, -14.37, -14.39, -14.79, -14.42, -51.46, -14.67, -14.37, -14.39, -14.79, -14.42, -51.46] }
+    ];
+
+    const typeChart = 'bar';
+    const total = '';
+
+    const listLabels = [];
+    for (let i = 0; i < labels.length; i++) {
+        listLabels.push(moment(labels[i], 'MMMM').format('MMM'));
+    }
+    // Generating the series dynamically using a loop
+    const series = dataSeries.map((dataItem) => ({
+        name: dataItem.label,
+        data: dataItem.data
+    }));
+
+    return {
+        name: 'Cash Flow Movement (YTD Jun-24; in IDR Bn)',
+        type: typeChart,
+        chartOptions: stackedChartOptionsApex(total, listLabels, null),
+        series: series
+    };
+};
+
 export const cashFlowData = () => {
-    const cashFlow = [
+    const cashFlowThisYear = [
         { periode: 'January', cfoin: 178.02, cfoout: -265.33, cfi: -2.46, cff: -14.67 },
         { periode: 'February', cfoin: 235.31, cfoout: -197.78, cfi: 0, cff: -14.37 },
         { periode: 'March', cfoin: 457.8, cfoout: -164.38, cfi: -93.86, cff: -14.39 },
@@ -643,6 +673,20 @@ export const cashFlowData = () => {
         { periode: 'November', cfoin: 0, cfoout: 0, cfi: 0, cff: 0 },
         { periode: 'December', cfoin: 0, cfoout: 0, cfi: 0, cff: 0 }
     ];
+    const cashFlowLastYear = [
+        { periode: 'January', cfoin: 178.02, cfoout: -265.33, cfi: -2.46, cff: -14.67 },
+        { periode: 'February', cfoin: 235.31, cfoout: -197.78, cfi: 0, cff: -14.37 },
+        { periode: 'March', cfoin: 457.8, cfoout: -164.38, cfi: -93.86, cff: -14.39 },
+        { periode: 'April', cfoin: 256.91, cfoout: -159.9, cfi: -62.93, cff: -14.79 },
+        { periode: 'May', cfoin: 150.12, cfoout: -229.55, cfi: -0.05, cff: -14.42 },
+        { periode: 'June', cfoin: 224.94, cfoout: -227.66, cfi: -0.15, cff: -51.46 },
+        { periode: 'July', cfoin: 178.02, cfoout: -265.33, cfi: -2.46, cff: -14.67 },
+        { periode: 'August', cfoin: 235.31, cfoout: -197.78, cfi: 0, cff: -14.37 },
+        { periode: 'September', cfoin: 457.8, cfoout: -164.38, cfi: -93.86, cff: -14.39 },
+        { periode: 'October', cfoin: 256.91, cfoout: -159.9, cfi: -62.93, cff: -14.79 },
+        { periode: 'November', cfoin: 150.12, cfoout: -229.55, cfi: -0.05, cff: -14.42 },
+        { periode: 'December', cfoin: 224.94, cfoout: -227.66, cfi: -0.15, cff: -51.46 }
+    ];
 
-    return cashFlow;
+    return { cashFlowThisYear, cashFlowLastYear };
 };
