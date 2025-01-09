@@ -15,7 +15,7 @@ export const revenueYtd = async () => {
     const type1 = 'line';
     const type2 = 'bar';
     const type3 = 'bar'; // Assuming you want this as a bar chart like the others
-    const colors = ['rgba(217, 119, 6, 1)', 'rgba(26, 82, 118, 0.8)', 'rgba(76, 165, 138, 0.8)']; // Add new color for last year's data
+    const colors = ['rgba(217, 119, 6, 1)', 'rgba(26, 82, 118, 0.6)', 'rgba(76, 165, 138, 0.6)']; // Add new color for last year's data
     const colorsLabel = ['#b15d05', '#1a3e58', '#3b8e77'];
     const total = 'Percentage 2024: 30%';
     const scale1 = 'number';
@@ -102,18 +102,18 @@ export const ebitdaMarginData = () => {
         { periode: 'December', ebitda: 0, ebitdaPersen: 0 }
     ];
     const ebitdaMarginLastYear = [
-        { periode: 'January', ebitda: -2.64, ebitdaPersen: -0.65 },
+        { periode: 'January', ebitda: -2.46, ebitdaPersen: -0.65 },
         { periode: 'February', ebitda: 0.4, ebitdaPersen: 0.22 },
         { periode: 'March', ebitda: -2.14, ebitdaPersen: -1.13 },
         { periode: 'April', ebitda: 16.1, ebitdaPersen: 6.69 },
         { periode: 'May', ebitda: -1.67, ebitdaPersen: -0.86 },
         { periode: 'June', ebitda: 6.59, ebitdaPersen: 2.71 },
-        { periode: 'July', ebitda: 0, ebitdaPersen: 0 },
-        { periode: 'August', ebitda: 0, ebitdaPersen: 0 },
-        { periode: 'September', ebitda: 0, ebitdaPersen: 0 },
-        { periode: 'October', ebitda: 0, ebitdaPersen: 0 },
-        { periode: 'November', ebitda: 0, ebitdaPersen: 0 },
-        { periode: 'December', ebitda: 0, ebitdaPersen: 0 }
+        { periode: 'July', ebitda: 4.2, ebitdaPersen: 1.5 },
+        { periode: 'August', ebitda: -1.5, ebitdaPersen: -0.25 },
+        { periode: 'September', ebitda: 7.6, ebitdaPersen: 3.8 },
+        { periode: 'October', ebitda: -0.8, ebitdaPersen: -1.1 },
+        { periode: 'November', ebitda: 2.1, ebitdaPersen: 0.95 },
+        { periode: 'December', ebitda: 3.5, ebitdaPersen: 2.3 }
     ];
 
     return { ebitdaMarginThisYear, ebitdaMarginLastYear };
@@ -130,8 +130,8 @@ export const ebitdaMargin = async () => {
     const label2 = 'EBITDA';
     const type1 = 'line';
     const type2 = 'column';
-    const colors = ['rgba(251, 191, 36, 0.8)', 'rgba(99, 102, 241, 1)'];
-    const colorsLabel = ['#4f52c9', '#c9971c'];
+    const colors = ['rgba(251, 191, 36, 0.6)', 'rgba(99, 102, 241, 1)'];
+    const colorsLabel = ['#c9971c', '#4f52c9'];
     const scale1 = 'percent';
     const scale2 = 'number';
     const typeChart = 'line';
@@ -164,8 +164,8 @@ export const ebitdaMargin = async () => {
 export const ebitdaMarginLastYear = async () => {
     // Revenue Ytd
     const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    const data1 = [-0.65, 0.22, -1.13, 6.69, -0.86, 2.71, 0, 0, 0, 0, 0, 0];
-    const data2 = [-2.46, 0.4, -2.14, 16.1, -1.67, 6.59, 0, 0, 0, 0, 0, 0];
+    const data1 = [-0.65, 0.22, -1.13, 6.69, -0.86, 2.71, 1.5, -0.25, 3.8, -1.1, 0.95, 2.3];
+    const data2 = [-2.46, 0.4, -2.14, 16.1, -1.67, 6.59, 4.2, -1.5, 7.6, -0.8, 2.1, 3.5];
     const sum = parseFloat(data2.reduce((accumulator, currentValue) => accumulator + currentValue, 0).toFixed(2));
     const total = sum + 'B IDR of EBITDA (YTD)';
     const label1 = 'EBITDA%';
@@ -204,7 +204,7 @@ export const ebitdaMarginLastYear = async () => {
 };
 
 export const netProfitMarginData = () => {
-    const netProfit = [
+    const netProfitMarginThisYear = [
         { periode: 'January', lababersih: 4.97, npm: 0.01 },
         { periode: 'February', lababersih: -10.98, npm: -0.06 },
         { periode: 'March', lababersih: -12.93, npm: -0.07 },
@@ -218,8 +218,22 @@ export const netProfitMarginData = () => {
         { periode: 'November', lababersih: 0, npm: 0 },
         { periode: 'December', lababersih: 0, npm: 0 }
     ];
+    const netProfitMarginLastYear = [
+        { periode: 'January', lababersih: -2.46, npm: -0.65 },
+        { periode: 'February', lababersih: 0.4, npm: 0.22 },
+        { periode: 'March', lababersih: -2.14, npm: -1.13 },
+        { periode: 'April', lababersih: 16.1, npm: 6.69 },
+        { periode: 'May', lababersih: -1.67, npm: -0.86 },
+        { periode: 'June', lababersih: 6.59, npm: 2.71 },
+        { periode: 'July', lababersih: 4.2, npm: 1.5 },
+        { periode: 'August', lababersih: -1.5, npm: -0.25 },
+        { periode: 'September', lababersih: 7.6, npm: 3.8 },
+        { periode: 'October', lababersih: -0.8, npm: -1.1 },
+        { periode: 'November', lababersih: 2.1, npm: 0.95 },
+        { periode: 'December', lababersih: 3.5, npm: 2.3 }
+    ];
 
-    return netProfit;
+    return { netProfitMarginThisYear, netProfitMarginLastYear };
 };
 
 export const netProfitMargin = async () => {
@@ -233,7 +247,8 @@ export const netProfitMargin = async () => {
     const label2 = 'Laba Bersih';
     const type1 = 'line';
     const type2 = 'column';
-    const colors = ['rgba(157, 5, 245, 0.6)', 'rgba(0, 34, 255, 1)'];
+    const colors = ['rgba(6, 95, 70, 0.6)', 'rgba(34, 211, 238, 1)'];
+    const colorsLabel = ['#15803d', '#0891b2'];
     const scale1 = 'percent';
     const scale2 = 'number';
     const typeChart = 'line';
@@ -247,7 +262,49 @@ export const netProfitMargin = async () => {
         name: 'NET Profit Margin & Amount (in % & IDR Bn)',
         total: sum + ' Bn IDR of Net Profit (YTD)',
         type: typeChart,
-        chartOptions: comboChartOptionsApex(total, label1, label2, listLabels, colors, scale1, scale2),
+        chartOptions: comboChartOptionsApex(total, label1, label2, listLabels, colors, colorsLabel, scale1, scale2),
+        series: [
+            {
+                name: label2,
+                type: type2,
+                data: data2
+            },
+            {
+                name: label1,
+                type: type1,
+                data: data1
+            }
+        ]
+    };
+};
+
+export const netProfitMarginLastYear = async () => {
+    // Revenue Ytd
+    const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const data1 = [-0.65, 0.22, -1.13, 6.69, -0.86, 2.71, 1.5, -0.25, 3.8, -1.1, 0.95, 2.3];
+    const data2 = [-2.46, 0.4, -2.14, 16.1, -1.67, 6.59, 4.2, -1.5, 7.6, -0.8, 2.1, 3.5];
+    const sum = parseFloat(data2.reduce((accumulator, currentValue) => accumulator + currentValue, 0).toFixed(2));
+    const total = sum + ' Bn IDR of Net Profit (YTD)';
+    const label1 = 'NPM%';
+    const label2 = 'Laba Bersih';
+    const type1 = 'line';
+    const type2 = 'column';
+    const colors = ['rgba(245, 158, 11, 0.6)', 'rgba(101, 163, 13, 1)'];
+    const colorsLabel = ['#754c07', '#2b4506'];
+    const scale1 = 'percent';
+    const scale2 = 'number';
+    const typeChart = 'line';
+
+    const listLabels = [];
+    for (let i = 0; i < labels.length; i++) {
+        listLabels.push(moment(labels[i], 'MMMM').format('MMM'));
+    }
+
+    return {
+        name: 'NET Profit Margin & Amount (in % & IDR Bn)',
+        total: sum + ' Bn IDR of Net Profit (YTD)',
+        type: typeChart,
+        chartOptions: comboChartOptionsApex(total, label1, label2, listLabels, colors, colorsLabel, scale1, scale2),
         series: [
             {
                 name: label2,
@@ -273,7 +330,7 @@ export const grossProfit = async () => {
     const label2 = 'Laba Kotor';
     const type1 = 'line';
     const type2 = 'column';
-    const colors = ['rgba(217, 70, 239, 0.8)', 'rgba(0, 188, 212, 1)'];
+    const colors = ['rgba(217, 70, 239, 0.6)', 'rgba(0, 188, 212, 1)'];
     const colorsLabel = ['#a21caf', '#1a5276'];
     const scale1 = 'percent';
     const scale2 = 'number';
@@ -314,7 +371,7 @@ export const grossProfitLastYear = async () => {
     const label2 = 'Laba Kotor';
     const type1 = 'line';
     const type2 = 'column';
-    const colors = ['rgba(105, 115, 132, 0.8)', 'rgba(251, 191, 36, 1)'];
+    const colors = ['rgba(105, 115, 132, 0.6)', 'rgba(251, 191, 36, 1)'];
     const colorsLabel = ['#2d3748', '#b45309'];
     const scale1 = 'percent';
     const scale2 = 'number';
@@ -390,7 +447,7 @@ export const cashBalance = async () => {
     const color = ['rgba(6, 130, 212, 0.6)', 'rgba(34, 197, 94, 0.6)']; // Second bar color is Green-500
     const strokeColor = ['rgba(6, 130, 212, 1)', 'rgba(34, 197, 94, 1)']; // Stroke for second bar
     const dataLabelStat = true;
-    const total = 'by Month';
+    const total = '';
     // const typeChart = 'bar'
 
     const listLabels = [];
@@ -460,7 +517,7 @@ export const cffPayment = async () => {
     const color = ['rgba(204, 4, 4, 0.6)'];
     const strokeColor = ['rgba(204, 4, 4, 1'];
     const dataLabelStat = true;
-    const total = 'by Month';
+    const total = '';
     // const typeChart = 'line'
 
     const listLabels = [];
@@ -470,7 +527,7 @@ export const cffPayment = async () => {
 
     return {
         name: 'CFF Payment Schedule (in IDR Bn)',
-        total: 'by Month',
+        total: total,
         type: type,
         chartOptions: barChartOptionsApex(listLabels, color, strokeColor, dataLabelStat, total),
         series: [
@@ -484,18 +541,18 @@ export const cffPayment = async () => {
 
 export const cffPaymentData = () => {
     const cffPayment = [
-        { periode: 'January', pembayaran: 14.2 },
-        { periode: 'February', pembayaran: 14.2 },
-        { periode: 'March', pembayaran: 14.2 },
-        { periode: 'April', pembayaran: 14.2 },
-        { periode: 'May', pembayaran: 14.2 },
-        { periode: 'June', pembayaran: 14.2 },
-        { periode: 'July', pembayaran: 0 },
-        { periode: 'August', pembayaran: 0 },
-        { periode: 'September', pembayaran: 0 },
-        { periode: 'October', pembayaran: 0 },
-        { periode: 'November', pembayaran: 0 },
-        { periode: 'December', pembayaran: 0 }
+        { periode: 'January', pembayaran: 14.2, status: 'Paid' },
+        { periode: 'February', pembayaran: 14.2, status: 'Paid' },
+        { periode: 'March', pembayaran: 14.2, status: 'Paid' },
+        { periode: 'April', pembayaran: 14.2, status: 'Paid' },
+        { periode: 'May', pembayaran: 14.2, status: 'Paid' },
+        { periode: 'June', pembayaran: 14.2, status: 'Unpaid' },
+        { periode: 'July', pembayaran: 0, status: '-' },
+        { periode: 'August', pembayaran: 0, status: '-' },
+        { periode: 'September', pembayaran: 0, status: '-' },
+        { periode: 'October', pembayaran: 0, status: '-' },
+        { periode: 'November', pembayaran: 0, status: '-' },
+        { periode: 'December', pembayaran: 0, status: '-' }
     ];
 
     return cffPayment;
@@ -510,7 +567,7 @@ export const cfiPayment = async () => {
     ];
 
     const typeChart = 'bar';
-    const total = 'by Month';
+    const total = '';
 
     const listLabels = [];
     for (let i = 0; i < labels.length; i++) {
@@ -525,6 +582,7 @@ export const cfiPayment = async () => {
     return {
         name: 'CFI Payment Schedule (in IDR Bn)',
         type: typeChart,
+        total: total,
         chartOptions: stackedChartOptionsApex(total, listLabels, null, null),
         series: series
     };

@@ -59,7 +59,7 @@ const editRow = (row) => {
 
         <div v-else class="w-full flex flex-col gap-4">
             <!-- Vue Apex Chart -->
-            <VueApexCharts :type="listdata.type" :series="listdata.series" :options="listdata.options" class="w-full" height="300px" style="z-index: 1 !important" />
+            <VueApexCharts :type="listdata.type" :series="listdata.series" :options="listdata.options" class="w-full" height="400vw" style="z-index: 1 !important" />
             <Divider />
             <div class="flex gap-20">
                 <div class="w-full flex flex-col gap-2">

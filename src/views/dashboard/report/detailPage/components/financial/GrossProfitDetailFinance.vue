@@ -75,8 +75,8 @@ const editRow = (row) => {
         <div v-else class="w-full flex flex-col gap-4">
             <!-- Vue Apex Chart -->
             <div class="w-full flex gap-16">
-                <VueApexCharts :type="listdata.type" :series="listdata.series" :options="listdata.options" class="w-full" height="300px" style="z-index: 1 !important" />
-                <VueApexCharts :type="listdata2.type" :series="listdata2.series" :options="listdata2.options" class="w-full" height="300px" style="z-index: 1 !important" />
+                <VueApexCharts :type="listdata.type" :series="listdata.series" :options="listdata.options" class="w-full" height="400vw" style="z-index: 1 !important" />
+                <VueApexCharts :type="listdata2.type" :series="listdata2.series" :options="listdata2.options" class="w-full" height="400vw" style="z-index: 1 !important" />
             </div>
 
             <div class="flex gap-20">
