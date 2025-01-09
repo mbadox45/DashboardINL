@@ -210,32 +210,31 @@ export const hargaSpotInventoryBulky = () => {
     const versus = `<div class="flex gap-1 w-full">
     <div class="flex flex-col gap-1 p-2 bg-black rounded-xl w-full">
         <span class="font-bold text-[0.5vw] text-gray-400">PFAD</span>
-        <div class="flex gap-1">
-            <div class="flex flex-col text-amber-600 justify-between items-end w-full">
-                <span class="text-[0.5vw] font-bold">3,000,000</span>
-                <span class="text-[0.4vw]">Spot</span>
+        <div class="flex gap-1 w-full">
+            <div class="flex flex-col gap-1  w-full">
+                <div class="flex flex-col text-amber-600 justify-between items-end w-full">
+                    <span class="text-[0.5vw] font-bold">10,423</span>
+                    <span class="text-[0.4vw]">Spot (Rp/Kg)</span>
+                </div>
+                <div class="flex flex-col text-amber-600 justify-between items-end w-full">
+                    <span class="text-[0.5vw] font-bold">686</span>
+                    <span class="text-[0.4vw]">Spot (USD/Ton)</span>
+                </div>
             </div>
-            <div class="flex flex-col text-green-600 justify-between items-end w-full">
-                <span class="text-[0.5vw] font-bold">3,000,000</span>
-                <span class="text-[0.4vw]">Inventory</span>
+            <div class="flex flex-col gap-1  w-full">
+                <div class="flex flex-col text-green-600 justify-between items-end w-full">
+                    <span class="text-[0.5vw] font-bold">10,641</span>
+                    <span class="text-[0.4vw]">Inventory (Rp/Kg)</span>
+                </div>
+                <div class="flex flex-col text-green-600 justify-between items-end w-full">
+                    <span class="text-[0.5vw] font-bold">701</span>
+                    <span class="text-[0.4vw]">Inventory (USD/Ton)</span>
+                </div>
             </div>
         </div>
     </div>
     <div class="flex flex-col gap-1 p-2 bg-black rounded-xl w-full">
         <span class="font-bold text-[0.5vw] text-gray-400">RBDPO</span>
-        <div class="flex gap-1">
-            <div class="flex flex-col text-amber-600 justify-between items-end w-full">
-                <span class="text-[0.5vw] font-bold">3,000,000</span>
-                <span class="text-[0.4vw]">Spot</span>
-            </div>
-            <div class="flex flex-col text-green-600 justify-between items-end w-full">
-                <span class="text-[0.5vw] font-bold">3,000,000</span>
-                <span class="text-[0.4vw]">Inventory</span>
-            </div>
-        </div>
-    </div>
-    <div class="flex flex-col gap-1 p-2 bg-black rounded-xl w-full">
-        <span class="font-bold text-[0.5vw] text-gray-400">Olein</span>
         <div class="flex gap-1">
             <div class="flex flex-col text-amber-600 justify-between items-end w-full">
                 <span class="text-[0.5vw] font-bold">3,000,000</span>

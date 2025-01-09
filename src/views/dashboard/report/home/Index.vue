@@ -10,12 +10,13 @@ import ImagesHome from '@/views/dashboard/report/home/components/ImagesHome.vue'
 import CardOperationValues from '@/views/dashboard/report/home/components/operation/CardOperationValues.vue';
 import CardSales from '@/views/dashboard/report/home/components/sales/CardSalesValues.vue';
 import CardScmValues from '@/views/dashboard/report/home/components/scm/CardSCMValues.vue';
+import CardSdm from '@/views/dashboard/report/home/components/sdm/CardSdmValues.vue';
 
 const listCardFinancial = ref([]);
 const listCardOperation = ref([]);
 const listCardSalesPerformance = ref([]);
 const listCardSCM = ref([]);
-const listCardSdm = ref([]);
+const listCardPackaging = ref([]);
 const listDelay = ref([]);
 
 onMounted(() => {
@@ -27,7 +28,7 @@ const loadData = async () => {
     await loadDataOperation();
     await loadDataSales();
     await loadDataSCM();
-    await loadDataSdm();
+    await loadDataPackaging();
     await loadDelay();
 };
 
@@ -84,9 +85,9 @@ const loadDataSCM = async () => {
     }
     listCardSCM.value = list;
 };
-const loadDataSdm = async () => {
+const loadDataPackaging = async () => {
     const list = [];
-    const dataSdm = await HomeDash.cardSdm();
+    const dataSdm = await HomeDash.cardPackaging();
     for (let i = 0; i < dataSdm.length; i++) {
         list.push({
             name: dataSdm[i].name,
@@ -99,7 +100,7 @@ const loadDataSdm = async () => {
             colspan: dataSdm[i].colspan
         });
     }
-    listCardSdm.value = list;
+    listCardPackaging.value = list;
 };
 
 const loadDataSales = async () => {
@@ -131,13 +132,13 @@ const loadDelay = async () => {
 <template>
     <div class="bg-black text-white p-6 pb-10 rounded-2xl w-full">
         <div class="grid grid-cols-3 gap-4">
-            <div class="col-span-1 xl:flex xl:flex-col xl:gap-6 hidden">
+            <div class="col-span-1 flex flex-col gap-5">
                 <images-home />
-                <!-- <div class="flex flex-col gap-2">
+                <div class="flex flex-col gap-2">
                     <div class="grid grid-cols-1 gap-2">
-                        <card-sdm v-for="(item, index) in listCardSdm" :key="index" :datas="item" :style="`animation: fadein ${index}s ease-in-out`" />
+                        <card-sdm v-for="(item, index) in listCardPackaging" :key="index" :datas="item" :style="`animation: fadein ${index}s ease-in-out`" />
                     </div>
-                </div> -->
+                </div>
                 <div class="flex flex-col gap-2">
                     <!-- <h3 class="text-[0.7vw] font-bold text-white">Supply Chain</h3> -->
                     <div class="grid grid-cols-2 gap-2">
@@ -145,7 +146,7 @@ const loadDelay = async () => {
                     </div>
                 </div>
             </div>
-            <div class="lg:col-span-2 col-span-3 flex flex-col gap-5">
+            <div class="col-span-2 flex flex-col gap-5">
                 <div class="flex flex-col gap-2">
                     <!-- <h3 class="text-[0.7vw] font-bold text-white">Financial</h3> -->
                     <div class="grid grid-cols-4 gap-2">
