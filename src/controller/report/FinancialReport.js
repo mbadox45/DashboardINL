@@ -690,3 +690,17 @@ export const cashFlowData = () => {
 
     return { cashFlowThisYear, cashFlowLastYear };
 };
+
+export const hargaBulkyData = () => {
+    const bulky = [
+        { produk: 'CPO', spotIdr: 10641, spotUsd: 701, invIdr: 10423, invUsd: 686 },
+        { produk: 'PFAD', spotIdr: 10641, spotUsd: 701, invIdr: 10423, invUsd: 686 },
+        { produk: 'RBD Stearin', spotIdr: 16.656, spotUsd: 856, invIdr: 12867, invUsd: 847 },
+        { produk: 'RBD Olein IV-56', spotIdr: 16656, spotUsd: 856, invIdr: 12867, invUsd: 847 },
+        { produk: 'RBD Olein IV-57', spotIdr: 16656, spotUsd: 856, invIdr: 12867, invUsd: 847 },
+        { produk: 'RBD Olein IV-58', spotIdr: 16656, spotUsd: 856, invIdr: 12867, invUsd: 847 },
+        { produk: 'RBD Olein IV-60', spotIdr: 16656, spotUsd: 856, invIdr: 12867, invUsd: 847 }
+    ];
+
+    return bulky;
+};
