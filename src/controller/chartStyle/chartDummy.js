@@ -217,12 +217,14 @@ export const comboChartOptionsApex = (total, label1, label2, listLabels, colors,
                 fontSize: '10px',
                 colors: colorsLabel
             },
-            formatter: function (val) {
+            formatter: function (val, opts) {
                 if (val === 0) {
                     return '';
                 }
 
-                if (scale1 === 'percent') {
+                const seriesIndex = opts.seriesIndex; // Get the index of the series
+                const currentScale = seriesIndex === 0 ? scale2 : scale1; // Choose the correct scale
+                if (currentScale === 'percent') {
                     return val >= 1000 ? (val / 1000).toFixed(1) + 'K%' : val.toFixed(2) + '%';
                 } else {
                     return val >= 1000 ? (val / 1000).toFixed(1) + 'K' : val;
@@ -238,6 +240,15 @@ export const comboChartOptionsApex = (total, label1, label2, listLabels, colors,
         },
         plotOptions: {
             bar: {
+                colors: {
+                    ranges: [
+                        {
+                            from: -Infinity,
+                            to: 0,
+                            color: 'rgb(255, 0, 0)'
+                        }
+                    ]
+                },
                 dataLabels: {
                     position: 'bottom',
                     offsetY: 10
@@ -270,15 +281,9 @@ export const comboChartOptionsApex = (total, label1, label2, listLabels, colors,
                     },
                     formatter: function (val) {
                         if (scale2 === 'percent') {
-                            if (val >= 1000) {
-                                return (val / 1000).toFixed(1) + 'K%';
-                            }
-                            return val.toFixed(2) + '%';
+                            return val >= 1000 ? (val / 1000).toFixed(1) + 'K%' : val.toFixed(2) + '%';
                         } else {
-                            if (val >= 1000) {
-                                return (val / 1000).toFixed(1) + 'K';
-                            }
-                            return val.toFixed(2);
+                            return val >= 1000 ? (val / 1000).toFixed(1) + 'K' : val;
                         }
                     }
                 }

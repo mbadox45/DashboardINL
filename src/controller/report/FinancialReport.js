@@ -87,7 +87,21 @@ export const revenueData = () => {
 };
 
 export const ebitdaMarginData = () => {
-    const ebitdaMargin = [
+    const ebitdaMarginThisYear = [
+        { periode: 'January', ebitda: -2.64, ebitdaPersen: -0.65 },
+        { periode: 'February', ebitda: 0.4, ebitdaPersen: 0.22 },
+        { periode: 'March', ebitda: -2.14, ebitdaPersen: -1.13 },
+        { periode: 'April', ebitda: 16.1, ebitdaPersen: 6.69 },
+        { periode: 'May', ebitda: -1.67, ebitdaPersen: -0.86 },
+        { periode: 'June', ebitda: 6.59, ebitdaPersen: 2.71 },
+        { periode: 'July', ebitda: 0, ebitdaPersen: 0 },
+        { periode: 'August', ebitda: 0, ebitdaPersen: 0 },
+        { periode: 'September', ebitda: 0, ebitdaPersen: 0 },
+        { periode: 'October', ebitda: 0, ebitdaPersen: 0 },
+        { periode: 'November', ebitda: 0, ebitdaPersen: 0 },
+        { periode: 'December', ebitda: 0, ebitdaPersen: 0 }
+    ];
+    const ebitdaMarginLastYear = [
         { periode: 'January', ebitda: -2.64, ebitdaPersen: -0.65 },
         { periode: 'February', ebitda: 0.4, ebitdaPersen: 0.22 },
         { periode: 'March', ebitda: -2.14, ebitdaPersen: -1.13 },
@@ -102,7 +116,7 @@ export const ebitdaMarginData = () => {
         { periode: 'December', ebitda: 0, ebitdaPersen: 0 }
     ];
 
-    return ebitdaMargin;
+    return { ebitdaMarginThisYear, ebitdaMarginLastYear };
 };
 
 export const ebitdaMargin = async () => {
@@ -116,7 +130,8 @@ export const ebitdaMargin = async () => {
     const label2 = 'EBITDA';
     const type1 = 'line';
     const type2 = 'column';
-    const colors = ['rgba(157, 5, 245, 0.6)', 'rgba(0, 34, 255, 1)'];
+    const colors = ['rgba(251, 191, 36, 0.8)', 'rgba(99, 102, 241, 1)'];
+    const colorsLabel = ['#4f52c9', '#c9971c'];
     const scale1 = 'percent';
     const scale2 = 'number';
     const typeChart = 'line';
@@ -130,7 +145,49 @@ export const ebitdaMargin = async () => {
         name: 'Ebitda Margin & Amount (in % & IDR Bn)',
         total: sum + ' IDR of Ebitda (YTD)',
         type: typeChart,
-        chartOptions: comboChartOptionsApex(total, label1, label2, listLabels, colors, scale1, scale2),
+        chartOptions: comboChartOptionsApex(total, label1, label2, listLabels, colors, colorsLabel, scale1, scale2),
+        series: [
+            {
+                name: label2,
+                type: type2,
+                data: data2
+            },
+            {
+                name: label1,
+                type: type1,
+                data: data1
+            }
+        ]
+    };
+};
+
+export const ebitdaMarginLastYear = async () => {
+    // Revenue Ytd
+    const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const data1 = [-0.65, 0.22, -1.13, 6.69, -0.86, 2.71, 0, 0, 0, 0, 0, 0];
+    const data2 = [-2.46, 0.4, -2.14, 16.1, -1.67, 6.59, 0, 0, 0, 0, 0, 0];
+    const sum = parseFloat(data2.reduce((accumulator, currentValue) => accumulator + currentValue, 0).toFixed(2));
+    const total = sum + 'B IDR of EBITDA (YTD)';
+    const label1 = 'EBITDA%';
+    const label2 = 'EBITDA';
+    const type1 = 'line';
+    const type2 = 'column';
+    const colors = ['rgba(16, 185, 129, 0.6)', 'rgba(139, 92, 246, 1)'];
+    const colorsLabel = ['#a21caf', '#6d28d9'];
+    const scale1 = 'percent';
+    const scale2 = 'number';
+    const typeChart = 'line';
+
+    const listLabels = [];
+    for (let i = 0; i < labels.length; i++) {
+        listLabels.push(moment(labels[i], 'MMMM').format('MMM'));
+    }
+
+    return {
+        name: 'Ebitda Margin & Amount (in % & IDR Bn)',
+        total: sum + ' IDR of Ebitda (YTD)',
+        type: typeChart,
+        chartOptions: comboChartOptionsApex(total, label1, label2, listLabels, colors, colorsLabel, scale1, scale2),
         series: [
             {
                 name: label2,
@@ -249,8 +306,8 @@ export const grossProfit = async () => {
 
 export const grossProfitLastYear = async () => {
     const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    const data1 = [3, 4.43, 6.19, 10.66, 5.43, 4.85, 0, 0, 0, 0, 0, 0];
-    const data2 = [11.4, 8.3, 11.8, 25.6, 10.6, 11.8, 0, 0, 0, 0, 0, 0];
+    const data1 = [2.5, 4.0, 6.0, 10.0, 5.0, 4.5, 3.0, 4.2, 5.1, 6.3, 7.2, 8.5];
+    const data2 = [10.5, 8.0, 11.0, 25.0, 10.0, 11.0, 12.0, 15.0, 9.5, 14.2, 18.0, 21.1];
     const sum = parseFloat(data2.reduce((accumulator, currentValue) => accumulator + currentValue, 0).toFixed(2));
     const total = sum + `B IDR of Gross Profit (YTD) ${currentYear - 1}`;
     const label1 = 'GPM%';
@@ -289,7 +346,7 @@ export const grossProfitLastYear = async () => {
 };
 
 export const grossProfitData = () => {
-    const grossProfit = [
+    const grossProfitThisYear = [
         { periode: 'January', labakotor: 11.4, gpm: 3.0 },
         { periode: 'February', labakotor: 8.3, gpm: 4.43 },
         { periode: 'March', labakotor: 11.8, gpm: 6.19 },
@@ -304,7 +361,22 @@ export const grossProfitData = () => {
         { periode: 'December', labakotor: 0, gpm: 0 }
     ];
 
-    return grossProfit;
+    const grossProfitLastYear = [
+        { periode: 'January', labakotor: 2.5, gpm: 10.5 },
+        { periode: 'February', labakotor: 4.0, gpm: 8.0 },
+        { periode: 'March', labakotor: 6.0, gpm: 11.0 },
+        { periode: 'April', labakotor: 10.0, gpm: 25.0 },
+        { periode: 'May', labakotor: 5.0, gpm: 10.0 },
+        { periode: 'June', labakotor: 4.5, gpm: 11.0 },
+        { periode: 'July', labakotor: 3.0, gpm: 12.0 },
+        { periode: 'August', labakotor: 4.2, gpm: 15.0 },
+        { periode: 'September', labakotor: 5.1, gpm: 9.5 },
+        { periode: 'October', labakotor: 6.3, gpm: 14.2 },
+        { periode: 'November', labakotor: 7.2, gpm: 18.0 },
+        { periode: 'December', labakotor: 8.5, gpm: 21.1 }
+    ];
+
+    return { grossProfitThisYear, grossProfitLastYear };
 };
 
 export const cashBalance = async () => {

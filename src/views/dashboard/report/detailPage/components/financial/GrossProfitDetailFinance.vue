@@ -1,5 +1,5 @@
 <script setup>
-import { currentYear, grossProfit, grossProfitLastYear, grossProfitData } from '@/controller/report/FinancialReport';
+import { currentYear, grossProfit, grossProfitData, grossProfitLastYear } from '@/controller/report/FinancialReport';
 import { onMounted, ref } from 'vue';
 import VueApexCharts from 'vue3-apexcharts';
 
@@ -17,8 +17,8 @@ const listdata2 = ref({
 });
 
 const isLoading = ref(true);
-const dataGrossProfit = ref([]);
-const dataGrossProfit2 = ref([]);
+const dataGrossProfitThisYear = ref([]);
+const dataGrossProfitLastYear = ref([]);
 
 onMounted(() => {
     loadData();
@@ -43,7 +43,10 @@ const loadData = async () => {
             name: data2.name || 'Gross Profit Margin (in IDR Bn)'
         };
 
-        dataGrossProfit.value = grossProfitData();
+        const { grossProfitThisYear: thisYearData, grossProfitLastYear: lastYearData } = grossProfitData();
+
+        dataGrossProfitThisYear.value = thisYearData;
+        dataGrossProfitLastYear.value = lastYearData;
     } catch (error) {
         console.error('Error loading data:', error);
     } finally {
@@ -79,7 +82,7 @@ const editRow = (row) => {
             <div class="flex gap-20">
                 <div class="w-full flex flex-col gap-2">
                     <span class="text-lg text-cyan-400 font-semibold">Gross Profit Margin Tahun {{ currentYear }}</span>
-                    <DataTable :value="dataGrossProfit" showGridlines removableSort tableStyle="background-color:#00000;">
+                    <DataTable :value="dataGrossProfitThisYear" showGridlines removableSort tableStyle="background-color:#00000;">
                         <Column field="periode" sortable headerStyle="background-color: #d946ef;" style="background-color: black; color: white">
                             <template #header>
                                 <span class="flex justify-center items-center w-full text-center">Periode</span>
@@ -117,7 +120,7 @@ const editRow = (row) => {
                 </div>
                 <div class="w-full flex flex-col gap-2">
                     <span class="text-lg text-yellow-500 font-semibold">Gross Profit Margin Tahun {{ currentYear - 1 }}</span>
-                    <DataTable :value="dataGrossProfit" showGridlines removableSort tableStyle="background-color:#00000;">
+                    <DataTable :value="dataGrossProfitLastYear" showGridlines removableSort tableStyle="background-color:#00000;">
                         <Column field="periode" sortable headerStyle="background-color: #2d3748;" style="background-color: black; color: white">
                             <template #header>
                                 <span class="flex justify-center items-center w-full text-center">Periode</span>
