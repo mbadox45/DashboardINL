@@ -214,48 +214,72 @@ export const hargaSpotInventoryBulky = () => {
             <div class="flex flex-col gap-1  w-full">
                 <div class="flex flex-col text-amber-600 justify-between items-end w-full">
                     <span class="text-[0.5vw] font-bold">10,423</span>
-                    <span class="text-[0.4vw]">Spot (Rp/Kg)</span>
+                    <span class="text-[0.4vw] text-cyan-500">Spot (Rp/Kg)</span>
                 </div>
                 <div class="flex flex-col text-amber-600 justify-between items-end w-full">
                     <span class="text-[0.5vw] font-bold">686</span>
-                    <span class="text-[0.4vw]">Spot (USD/Ton)</span>
+                    <span class="text-[0.4vw] text-cyan-500">Spot (USD/Ton)</span>
                 </div>
             </div>
             <div class="flex flex-col gap-1  w-full">
                 <div class="flex flex-col text-green-600 justify-between items-end w-full">
                     <span class="text-[0.5vw] font-bold">10,641</span>
-                    <span class="text-[0.4vw]">Inventory (Rp/Kg)</span>
+                    <span class="text-[0.4vw] text-cyan-500">Inventory (Rp/Kg)</span>
                 </div>
                 <div class="flex flex-col text-green-600 justify-between items-end w-full">
                     <span class="text-[0.5vw] font-bold">701</span>
-                    <span class="text-[0.4vw]">Inventory (USD/Ton)</span>
+                    <span class="text-[0.4vw] text-cyan-500">Inventory (USD/Ton)</span>
                 </div>
             </div>
         </div>
     </div>
     <div class="flex flex-col gap-1 p-2 bg-black rounded-xl w-full">
         <span class="font-bold text-[0.5vw] text-gray-400">RBDPO</span>
-        <div class="flex gap-1">
-            <div class="flex flex-col text-amber-600 justify-between items-end w-full">
-                <span class="text-[0.5vw] font-bold">3,000,000</span>
-                <span class="text-[0.4vw]">Spot</span>
+        <div class="flex gap-1 w-full">
+            <div class="flex flex-col gap-1  w-full">
+                <div class="flex flex-col text-amber-600 justify-between items-end w-full">
+                    <span class="text-[0.5vw] font-bold">12,867</span>
+                    <span class="text-[0.4vw] text-cyan-500">Spot (Rp/Kg)</span>
+                </div>
+                <div class="flex flex-col text-amber-600 justify-between items-end w-full">
+                    <span class="text-[0.5vw] font-bold">847</span>
+                    <span class="text-[0.4vw] text-cyan-500">Spot (USD/Ton)</span>
+                </div>
             </div>
-            <div class="flex flex-col text-green-600 justify-between items-end w-full">
-                <span class="text-[0.5vw] font-bold">3,000,000</span>
-                <span class="text-[0.4vw]">Inventory</span>
+            <div class="flex flex-col gap-1  w-full">
+                <div class="flex flex-col text-green-600 justify-between items-end w-full">
+                    <span class="text-[0.5vw] font-bold">13,000</span>
+                    <span class="text-[0.4vw] text-cyan-500">Inventory (Rp/Kg)</span>
+                </div>
+                <div class="flex flex-col text-green-600 justify-between items-end w-full">
+                    <span class="text-[0.5vw] font-bold">856</span>
+                    <span class="text-[0.4vw] text-cyan-500">Inventory (USD/Ton)</span>
+                </div>
             </div>
         </div>
     </div>
     <div class="flex flex-col gap-1 p-2 bg-black rounded-xl w-full">
-        <span class="font-bold text-[0.5vw] text-gray-400">Stearin</span>
-        <div class="flex gap-1">
-            <div class="flex flex-col text-amber-600 font-bold justify-between items-end w-full">
-                <span class="text-[0.5vw] font-bold">3,000,000</span>
-                <span class="text-[0.4vw]">Spot</span>
+        <span class="font-bold text-[0.5vw] text-gray-400">RBD Stearin</span>
+        <div class="flex gap-1 w-full">
+            <div class="flex flex-col gap-1  w-full">
+                <div class="flex flex-col text-amber-600 justify-between items-end w-full">
+                    <span class="text-[0.5vw] font-bold">16,445</span>
+                    <span class="text-[0.4vw] text-cyan-500">Spot (Rp/Kg)</span>
+                </div>
+                <div class="flex flex-col text-amber-600 justify-between items-end w-full">
+                    <span class="text-[0.5vw] font-bold">1,083</span>
+                    <span class="text-[0.4vw] text-cyan-500">Spot (USD/Ton)</span>
+                </div>
             </div>
-            <div class="flex flex-col text-green-600 font-bold justify-between items-end w-full">
-                <span class="text-[0.5vw] font-bold">3,000,000</span>
-                <span class="text-[0.4vw]">Inventory</span>
+            <div class="flex flex-col gap-1  w-full">
+                <div class="flex flex-col text-green-600 justify-between items-end w-full">
+                    <span class="text-[0.5vw] font-bold">16,656</span>
+                    <span class="text-[0.4vw] text-cyan-500">Inventory (Rp/Kg)</span>
+                </div>
+                <div class="flex flex-col text-green-600 justify-between items-end w-full">
+                    <span class="text-[0.5vw] font-bold">1,097</span>
+                    <span class="text-[0.4vw] text-cyan-500">Inventory (USD/Ton)</span>
+                </div>
             </div>
         </div>
     </div>
@@ -273,54 +297,47 @@ export const hargaSpotInventoryRetail = () => {
     const value = null;
     const versus = `<div class="flex gap-1 w-full">
     <div class="flex flex-col gap-1 p-2 bg-black rounded-xl w-full">
-        <span class="font-bold text-[0.5vw] text-gray-400">Salvaco 1L</span>
-        <div class="flex gap-1">
-            <div class="flex flex-col text-amber-600 justify-between items-end w-full">
-                <span class="text-[0.5vw] font-bold">3,000,000</span>
-                <span class="text-[0.4vw]">Spot</span>
-            </div>
-            <div class="flex flex-col text-green-600 justify-between items-end w-full">
-                <span class="text-[0.5vw] font-bold">3,000,000</span>
-                <span class="text-[0.4vw]">Inventory</span>
-            </div>
-        </div>
-    </div>
-    <div class="flex flex-col gap-1 p-2 bg-black rounded-xl w-full">
-        <span class="font-bold text-[0.5vw] text-gray-400">Salvaco 2L</span>
-        <div class="flex gap-1">
-            <div class="flex flex-col text-amber-600 justify-between items-end w-full">
-                <span class="text-[0.5vw] font-bold">3,000,000</span>
-                <span class="text-[0.4vw]">Spot</span>
-            </div>
-            <div class="flex flex-col text-green-600 justify-between items-end w-full">
-                <span class="text-[0.5vw] font-bold">3,000,000</span>
-                <span class="text-[0.4vw]">Inventory</span>
+        <span class="font-bold text-[0.5vw] text-gray-400">Minyakita 1 Ltr</span>
+        <div class="flex gap-1 w-full">
+            <div class="flex flex-col gap-1 w-full">
+                <div class="flex flex-col text-amber-600 justify-between items-end w-full">
+                    <span class="text-[0.5vw] font-bold">13,499</span>
+                    <span class="text-[0.4vw] text-cyan-500">Rp/Kg</span>
+                </div>
+                <div class="flex flex-col text-amber-600 justify-between items-end w-full">
+                    <span class="text-[0.5vw] font-bold">161,983</span>
+                    <span class="text-[0.4vw] text-cyan-500">Rp/Box</span>
+                </div>
             </div>
         </div>
     </div>
     <div class="flex flex-col gap-1 p-2 bg-black rounded-xl w-full">
-        <span class="font-bold text-[0.5vw] text-gray-400">Nusakita 1L</span>
-        <div class="flex gap-1">
-            <div class="flex flex-col text-amber-600 justify-between items-end w-full">
-                <span class="text-[0.5vw] font-bold">3,000,000</span>
-                <span class="text-[0.4vw]">Spot</span>
-            </div>
-            <div class="flex flex-col text-green-600 justify-between items-end w-full">
-                <span class="text-[0.5vw] font-bold">3,000,000</span>
-                <span class="text-[0.4vw]">Inventory</span>
+        <span class="font-bold text-[0.5vw] text-gray-400">Salvaco 1 Ltr</span>
+        <div class="flex gap-1 w-full">
+            <div class="flex flex-col gap-1 w-full">
+                <div class="flex flex-col text-amber-600 justify-between items-end w-full">
+                    <span class="text-[0.5vw] font-bold">14,216</span>
+                    <span class="text-[0.4vw] text-cyan-500">Rp/Kg</span>
+                </div>
+                <div class="flex flex-col text-amber-600 justify-between items-end w-full">
+                    <span class="text-[0.5vw] font-bold">170,591</span>
+                    <span class="text-[0.4vw] text-cyan-500">Rp/Box</span>
+                </div>
             </div>
         </div>
     </div>
     <div class="flex flex-col gap-1 p-2 bg-black rounded-xl w-full">
-        <span class="font-bold text-[0.5vw] text-gray-400">Nusakita 2L</span>
-        <div class="flex gap-1">
-            <div class="flex flex-col text-amber-600 font-bold justify-between items-end w-full">
-                <span class="text-[0.5vw] font-bold">3,000,000</span>
-                <span class="text-[0.4vw]">Spot</span>
-            </div>
-            <div class="flex flex-col text-green-600 font-bold justify-between items-end w-full">
-                <span class="text-[0.5vw] font-bold">3,000,000</span>
-                <span class="text-[0.4vw]">Inventory</span>
+        <span class="font-bold text-[0.5vw] text-gray-400">Nusakita 1 Ltr</span>
+        <div class="flex gap-1 w-full">
+            <div class="flex flex-col gap-1 w-full">
+                <div class="flex flex-col text-amber-600 justify-between items-end w-full">
+                    <span class="text-[0.5vw] font-bold">13,727</span>
+                    <span class="text-[0.4vw] text-cyan-500">Rp/Kg</span>
+                </div>
+                <div class="flex flex-col text-amber-600 justify-between items-end w-full">
+                    <span class="text-[0.5vw] font-bold">164,718</span>
+                    <span class="text-[0.4vw] text-cyan-500">Rp/Box</span>
+                </div>
             </div>
         </div>
     </div>

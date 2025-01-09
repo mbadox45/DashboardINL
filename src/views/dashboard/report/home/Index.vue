@@ -17,6 +17,7 @@ const listCardOperation = ref([]);
 const listCardSalesPerformance = ref([]);
 const listCardSCM = ref([]);
 const listCardPackaging = ref([]);
+const listCardSdm = ref([]);
 const listDelay = ref([]);
 
 onMounted(() => {
@@ -30,6 +31,7 @@ const loadData = async () => {
     await loadDataSCM();
     await loadDataPackaging();
     await loadDelay();
+    await loadDataSdm();
 };
 
 const loadDataFinance = async () => {
@@ -102,6 +104,23 @@ const loadDataPackaging = async () => {
     }
     listCardPackaging.value = list;
 };
+const loadDataSdm = async () => {
+    const list = [];
+    const dataSdm = await HomeDash.cardSdm();
+    for (let i = 0; i < dataSdm.length; i++) {
+        list.push({
+            name: dataSdm[i].name,
+            color: dataSdm[i].color,
+            icon: dataSdm[i].icon,
+            value: dataSdm[i].value,
+            persentase: dataSdm[i].persentase,
+            versus: dataSdm[i].versus,
+            link: dataSdm[i].link,
+            colspan: dataSdm[i].colspan
+        });
+    }
+    listCardSdm.value = list;
+};
 
 const loadDataSales = async () => {
     const list = [];
@@ -131,8 +150,8 @@ const loadDelay = async () => {
 
 <template>
     <div class="bg-black text-white p-6 pb-10 rounded-2xl w-full">
-        <div class="grid grid-cols-3 gap-4">
-            <div class="col-span-1 flex flex-col gap-5">
+        <div class="grid grid-cols-3 gap-3">
+            <div class="col-span-1 flex flex-col gap-3">
                 <images-home />
                 <div class="flex flex-col gap-2">
                     <div class="grid grid-cols-1 gap-2">
@@ -145,8 +164,13 @@ const loadDelay = async () => {
                         <card-scm-values v-for="(item, index) in listCardSCM" :key="index" :datas="item" :style="`animation: fadein 1s ease-in-out`" />
                     </div>
                 </div>
+                <div class="flex flex-col gap-2">
+                    <div class="grid grid-cols-1 gap-2">
+                        <card-sdm v-for="(item, index) in listCardSdm" :key="index" :datas="item" :style="`animation: fadein ${index}s ease-in-out`" />
+                    </div>
+                </div>
             </div>
-            <div class="col-span-2 flex flex-col gap-5">
+            <div class="col-span-2 flex flex-col gap-3">
                 <div class="flex flex-col gap-2">
                     <!-- <h3 class="text-[0.7vw] font-bold text-white">Financial</h3> -->
                     <div class="grid grid-cols-4 gap-2">

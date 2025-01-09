@@ -406,87 +406,41 @@ export const packagingPerformance = () => {
     const value = null;
     const colspan = 'col-span-2';
     const versus = [
-        `<div class="flex flex-col w-full gap-2 h-full justify-between py-2 px-2 bg-black rounded-xl">
-        <span class="[0.6vw] w-full text-green-500">Salvaco 1 L</span>
-        <div class="w-full flex gap-1 items-center">
-            <div class="flex flex-col items-end w-full">
-                <span class="text-[0.6vw] text-amber-500">0 <small class="text-pink-500 text-[0.4vw]">Kg</small></span>
-                <span class="text-[0.4vw] text-cyan-500">Olein Consume</span>
+        `<div class="flex flex-col w-full gap-3 h-full justify-between ">
+        <div class="w-full flex gap-0 items-center">
+            <div class="flex flex-col w-full">
+                <span class="text-[0.9vw] text-amber-500">0%</span>
+                <span class="text-[0.5vw] text-cyan-500">Realisasi</span>
             </div>
-            <div class="flex flex-col items-end w-full">
-                <span class="text-[0.6vw] text-amber-500">0 <small class="text-pink-500 text-[0.4vw]">Box</small></span>
-                <span class="text-[0.4vw] text-cyan-500">Output Carton</span>
+            <div class="flex flex-col w-full">
+                <span class="text-[0.9vw] text-amber-500">0%</span>
+                <span class="text-[0.5vw] text-cyan-500">RKAP</span>
             </div>
-            <div class="flex flex-col items-end w-full">
-                <span class="text-[0.6vw] text-amber-500">0 <small class="text-pink-500 text-[0.4vw]">Gr</small></span>
-                <span class="text-[0.4vw] text-cyan-500">Consumable Vit. A</span>
+            <div class="flex flex-col w-full">
+                <span class="text-[0.9vw] text-amber-500">0%</span>
+                <span class="text-[0.5vw] text-cyan-500">Kapasitas</span>
             </div>
-            <div class="flex flex-col items-end w-full">
-                <span class="text-[0.6vw] text-amber-500">0 <small class="text-pink-500 text-[0.4vw]">Roll</small></span>
-                <span class="text-[0.4vw] text-cyan-500">Consumable Packing Tape</span>
-            </div>
-        </div>
-    </div>`,
-        `<div class="flex flex-col w-full gap-2 h-full justify-between py-2 px-2 bg-black rounded-xl">
-        <span class="[0.6vw] w-full text-green-500">Salvaco 2 L</span>
-        <div class="w-full flex gap-1 items-center">
-            <div class="flex flex-col items-end w-full">
-                <span class="text-[0.6vw] text-amber-500">0 <small class="text-pink-500 text-[0.4vw]">Kg</small></span>
-                <span class="text-[0.4vw] text-cyan-500">Olein Consume</span>
-            </div>
-            <div class="flex flex-col items-end w-full">
-                <span class="text-[0.6vw] text-amber-500">0 <small class="text-pink-500 text-[0.4vw]">Box</small></span>
-                <span class="text-[0.4vw] text-cyan-500">Output Carton</span>
-            </div>
-            <div class="flex flex-col items-end w-full">
-                <span class="text-[0.6vw] text-amber-500">0 <small class="text-pink-500 text-[0.4vw]">Gr</small></span>
-                <span class="text-[0.4vw] text-cyan-500">Consumable Vit. A</span>
-            </div>
-            <div class="flex flex-col items-end w-full">
-                <span class="text-[0.6vw] text-amber-500">0 <small class="text-pink-500 text-[0.4vw]">Roll</small></span>
-                <span class="text-[0.4vw] text-cyan-500">Consumable Packing Tape</span>
+            <div class="flex flex-col w-full">
+                <span class="text-[0.9vw] text-amber-500">0%</span>
+                <span class="text-[0.5vw] text-cyan-500">Sales Plant</span>
             </div>
         </div>
-    </div>`,
-        `<div class="flex flex-col w-full gap-2 h-full justify-between py-2 px-2 bg-black rounded-xl">
-        <span class="[0.6vw] w-full text-green-500">Nusakita 1 L</span>
-        <div class="w-full flex gap-1 items-center">
-            <div class="flex flex-col items-end w-full">
-                <span class="text-[0.6vw] text-amber-500">0 <small class="text-pink-500 text-[0.4vw]">Kg</small></span>
-                <span class="text-[0.4vw] text-cyan-500">Olein Consume</span>
+        <div class="w-full flex flex-col gap-1 items-center">
+            <div class="flex flex-row-reverse justify-between items-center w-full px-3 py-2 bg-black rounded-lg">
+                <span class="text-[0.6vw] text-pink-600">0</span>
+                <span class="text-[0.5vw] text-green-500">Realisasi</span>
             </div>
-            <div class="flex flex-col items-end w-full">
-                <span class="text-[0.6vw] text-amber-500">0 <small class="text-pink-500 text-[0.4vw]">Box</small></span>
-                <span class="text-[0.4vw] text-cyan-500">Output Carton</span>
+            <div class="flex flex-row-reverse justify-between items-center w-full px-3 py-2 bg-black rounded-lg">
+                <span class="text-[0.6vw] text-pink-600">0</span>
+                <span class="text-[0.5vw] text-green-500">RKAP</span>
             </div>
-            <div class="flex flex-col items-end w-full">
-                <span class="text-[0.6vw] text-amber-500">0 <small class="text-pink-500 text-[0.4vw]">Gr</small></span>
-                <span class="text-[0.4vw] text-cyan-500">Consumable Vit. A</span>
+            <div class="flex flex-row-reverse justify-between items-center w-full px-3 py-2 bg-black rounded-lg">
+                <span class="text-[0.6vw] text-pink-600">0</span>
+                <span class="text-[0.5vw] text-green-500">Kapasitas</span>
             </div>
-            <div class="flex flex-col items-end w-full">
-                <span class="text-[0.6vw] text-amber-500">0 <small class="text-pink-500 text-[0.4vw]">Roll</small></span>
-                <span class="text-[0.4vw] text-cyan-500">Consumable Packing Tape</span>
-            </div>
-        </div>
-    </div>`,
-        `<div class="flex flex-col w-full gap-2 h-full justify-between py-2 px-2 bg-black rounded-xl">
-        <span class="[0.6vw] w-full text-green-500">Nusakita 2 L</span>
-        <div class="w-full flex gap-1 items-center">
-            <div class="flex flex-col items-end w-full">
-                <span class="text-[0.6vw] text-amber-500">0 <small class="text-pink-500 text-[0.4vw]">Kg</small></span>
-                <span class="text-[0.4vw] text-cyan-500">Olein Consume</span>
-            </div>
-            <div class="flex flex-col items-end w-full">
-                <span class="text-[0.6vw] text-amber-500">0 <small class="text-pink-500 text-[0.4vw]">Box</small></span>
-                <span class="text-[0.4vw] text-cyan-500">Output Carton</span>
-            </div>
-            <div class="flex flex-col items-end w-full">
-                <span class="text-[0.6vw] text-amber-500">0 <small class="text-pink-500 text-[0.4vw]">Gr</small></span>
-                <span class="text-[0.4vw] text-cyan-500">Consumable Vit. A</span>
-            </div>
-            <div class="flex flex-col items-end w-full">
-                <span class="text-[0.6vw] text-amber-500">0 <small class="text-pink-500 text-[0.4vw]">Roll</small></span>
-                <span class="text-[0.4vw] text-cyan-500">Consumable Packing Tape</span>
+            <div class="flex flex-row-reverse justify-between items-center w-full px-3 py-2 bg-black rounded-lg">
+                <span class="text-[0.6vw] text-pink-600">0</span>
+                <span class="text-[0.5vw] text-green-500">Sales Plant</span>
             </div>
         </div>
     </div>`

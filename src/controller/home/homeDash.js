@@ -2,10 +2,11 @@ import { cashBalance, cashFlowMovement, cffPaySchedule, ebitdaMargin, grossProfi
 import { cpoOlahVsRKAP, laporanProduksi, packagingPerformance, pemakaianMaterial } from '@/controller/home/components/OperationHome';
 import { actualIncommingCPO, balanceStockCPO, stockBulky, stockRetail } from '@/controller/home/components/SCMHome';
 import { QtyPenjualanBulky, QtyPenjualanRetail, avgCPOKpbn, outstandingCPo, proportionCost, saldoPe } from '@/controller/home/components/SalesHome';
+import { sdm } from '@/controller/home/components/SdmHome';
 
 export default new (class HomeDashboard {
     cardSalesPerformance() {
-        const list = [avgCPOKpbn(), saldoPe(), QtyPenjualanBulky(), QtyPenjualanRetail(), outstandingCPo(), proportionCost()];
+        const list = [avgCPOKpbn(), saldoPe(), outstandingCPo(), proportionCost(), QtyPenjualanBulky(), QtyPenjualanRetail()];
         return list;
     }
     cardFinancial() {
@@ -23,6 +24,10 @@ export default new (class HomeDashboard {
     }
     cardPackaging() {
         const list = [packagingPerformance()];
+        return list;
+    }
+    cardSdm() {
+        const list = [sdm()];
         return list;
     }
 })();
