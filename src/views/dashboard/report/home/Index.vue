@@ -10,7 +10,6 @@ import ImagesHome from '@/views/dashboard/report/home/components/ImagesHome.vue'
 import CardOperationValues from '@/views/dashboard/report/home/components/operation/CardOperationValues.vue';
 import CardSales from '@/views/dashboard/report/home/components/sales/CardSalesValues.vue';
 import CardScmValues from '@/views/dashboard/report/home/components/scm/CardSCMValues.vue';
-import CardSdm from '@/views/dashboard/report/home/components/sdm/CardSdmValues.vue';
 
 const listCardFinancial = ref([]);
 const listCardOperation = ref([]);
@@ -113,7 +112,8 @@ const loadDataSales = async () => {
             icon: dataSales[i].icon,
             value: dataSales[i].value,
             versus: dataSales[i].versus,
-            link: dataSales[i].link
+            link: dataSales[i].link,
+            colspan: dataSales[i].colspan
         });
     }
     listCardSalesPerformance.value = list;
@@ -133,15 +133,15 @@ const loadDelay = async () => {
         <div class="grid grid-cols-3 gap-4">
             <div class="col-span-1 xl:flex xl:flex-col xl:gap-6 hidden">
                 <images-home />
-                <div class="flex flex-col gap-2">
+                <!-- <div class="flex flex-col gap-2">
                     <div class="grid grid-cols-1 gap-2">
                         <card-sdm v-for="(item, index) in listCardSdm" :key="index" :datas="item" :style="`animation: fadein ${index}s ease-in-out`" />
                     </div>
-                </div>
+                </div> -->
                 <div class="flex flex-col gap-2">
-                    <!-- <h3 class="text-[0.7vw] font-bold text-white">Sales & Marketing</h3> -->
-                    <div class="grid grid-cols-1 gap-2">
-                        <card-sales v-for="(item, index) in listCardSalesPerformance" :key="index" :datas="item" :style="`animation: fadein ${index}s ease-in-out`" />
+                    <!-- <h3 class="text-[0.7vw] font-bold text-white">Supply Chain</h3> -->
+                    <div class="grid grid-cols-2 gap-2">
+                        <card-scm-values v-for="(item, index) in listCardSCM" :key="index" :datas="item" :style="`animation: fadein 1s ease-in-out`" />
                     </div>
                 </div>
             </div>
@@ -159,9 +159,9 @@ const loadDelay = async () => {
                     </div>
                 </div>
                 <div class="flex flex-col gap-2">
-                    <!-- <h3 class="text-[0.7vw] font-bold text-white">Supply Chain</h3> -->
+                    <!-- <h3 class="text-[0.7vw] font-bold text-white">Sales & Marketing</h3> -->
                     <div class="grid grid-cols-4 gap-2">
-                        <card-scm-values v-for="(item, index) in listCardSCM" :key="index" :datas="item" :style="`animation: fadein 1s ease-in-out`" />
+                        <card-sales v-for="(item, index) in listCardSalesPerformance" :key="index" :datas="item" :style="`animation: fadein ${index}s ease-in-out`" />
                     </div>
                 </div>
             </div>

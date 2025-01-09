@@ -62,9 +62,14 @@ const editRow = (row) => {
 <template>
     <div class="flex flex-col w-full items-center gap-4">
         <!-- Chart Title -->
-        <span class="text-[1vw] font-bold">
-            {{ listdata.name || 'Loading...' }}
-        </span>
+        <div class="flex w-full gap-16">
+            <span class="text-[1vw] font-bold w-full text-center">
+                {{ listdata.name || 'Loading...' }}
+            </span>
+            <span class="text-[1vw] font-bold w-full text-center">
+                {{ listdata2.name || 'Loading...' }}
+            </span>
+        </div>
 
         <!-- Loading Indicator -->
         <div v-if="isLoading" class="flex justify-center items-center w-full h-[380px]">
@@ -78,7 +83,7 @@ const editRow = (row) => {
                 <VueApexCharts :type="listdata2.type" :series="listdata2.series" :options="listdata2.options" class="w-full" height="400vw" style="z-index: 1 !important" />
             </div>
 
-            <div class="flex gap-20">
+            <div class="flex flex-col gap-10">
                 <div class="w-full flex flex-col gap-2">
                     <span class="text-lg text-red-700 font-semibold">CFF Payment Schedule Tahun {{ currentYear }}</span>
                     <DataTable :value="dataCffPayment" showGridlines removableSort tableStyle="background-color:#00000;">
@@ -129,7 +134,7 @@ const editRow = (row) => {
                 </div>
                 <div class="flex gap-20">
                     <div class="w-full flex flex-col gap-2">
-                        <span class="text-lg text-green-500 font-semibold">CFI Payment Schedule Tahun {{ currentYear }}</span>
+                        <span class="text-lg text-blue-400 font-semibold">CFI Payment Schedule Tahun {{ currentYear }}</span>
                         <DataTable :value="dataCfiPayment" showGridlines removableSort tableStyle="background-color:#00000;">
                             <Column field="cfi" headerStyle="background-color: #1a5276;" style="background-color: black; color: white">
                                 <template #header>
