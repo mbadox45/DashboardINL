@@ -102,9 +102,13 @@ onUnmounted(() => {
                     <!-- <div class="min-h-[7vw]" v-html="load.versus[currentIndex]"></div> -->
                 </div>
             </div>
-            <div v-if="load.versus.length > 1" class="flex justify-between pt-1">
-                <button @click="prevIndex" class="p-1 bg-gray-700 text-white text-sm rounded hover:bg-gray-600 transition flex items-center text-[0.6vw]"><i class="pi pi-chevron-left mr-1" style="font-size: 0.6vw"></i> Prev</button>
-                <button @click="nextIndex" class="p-1 bg-gray-700 text-white text-sm rounded hover:bg-gray-600 transition flex items-center text-[0.6vw]">Next <i class="pi pi-chevron-right ml-1" style="font-size: 0.6vw"></i></button>
+            <div v-if="load.versus.length > 1" class="flex justify-between">
+                <button @click="prevIndex" class="p-1 bg-gray-700 text-white text-sm rounded hover:bg-gray-600 transition flex items-center text-[0.6vw] w-[1vw] h-[1vw] justify-center">
+                    <i class="pi pi-chevron-left mr-1" style="font-size: 0.6vw"></i>
+                </button>
+                <button @click="nextIndex" class="p-1 bg-gray-700 text-white text-sm rounded hover:bg-gray-600 transition flex items-center text-[0.6vw] w-[1vw] h-[1vw] justify-center">
+                    <i class="pi pi-chevron-right ml-1" style="font-size: 0.6vw"></i>
+                </button>
             </div>
         </div>
     </div>
