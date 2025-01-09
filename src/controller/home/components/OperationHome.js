@@ -3,16 +3,29 @@ import { valueColorPersenCondition } from '@/controller/dummyController';
 export const cpoOlahVsRKAP = () => {
     const name = 'CPO Olah vs RKAP vs Utility (in Kg)';
     const colspan = null;
-    const value = `<div class=" flex gap-2 items-center w-full h-full">
-        <span class="font-bold w-full flex flex-col ${valueColorPersenCondition(16.8)}"><span class="text-[1.3vw]">${16.8}%</span><small class="text-[0.6vw]">RKAP</small></span>
-        <span class="font-bold w-full flex flex-col ${valueColorPersenCondition(13.8)}"><span class="text-[1.3vw]">${13.8}%</span><small class="text-[0.6vw]">Utility</small></span>
-    </div>`;
+    const value = null;
     // Jika Pendapatan > RKAP warna jadi green 600, sesuai kan periode
     const versus = [
-        `<div class="flex flex-col gap-1 w-full h-full">
-    <span class="items-center rounded-xl w-full font-bold bg-black flex py-1.5 px-3"><span class="text-green-500 w-full text-[0.6vw]">CPO Olah</span><span class="pb-1 border-neutral-900 text-[0.6vw]"> 8,860,560</span> </span>
-    <span class="items-center rounded-xl w-full font-bold bg-black flex py-1.5 px-3"><span class="text-green-500 w-full text-[0.6vw]">RKAP</span><span class="pb-1 border-neutral-900 text-[0.6vw]"> 52,800,000</span> </span>
-    <span class="items-center rounded-xl w-full font-bold bg-black flex py-1.5 px-3"><span class="text-green-500 w-full text-[0.6vw]">Utility</span><span class="pb-1 border-neutral-900 text-[0.6vw]"> 66,000,000</span> </span>
+        `<div class="flex flex-col h-full justify-between gap-3">
+        <div class=" flex gap-2 items-center w-full h-full">
+            <span class="font-bold w-full flex flex-col ${valueColorPersenCondition(16.8)}"><span class="text-[1.3vw]">${16.8}%</span><small class="text-[0.6vw]">RKAP</small></span>
+            <span class="font-bold w-full flex flex-col ${valueColorPersenCondition(13.8)}"><span class="text-[1.3vw]">${13.8}%</span><small class="text-[0.6vw]">Utility</small></span>
+        </div>
+        <div class="flex flex-col gap-1 w-full h-full">
+            <span class="items-center rounded-xl w-full font-bold bg-black flex py-1.5 px-3"><span class="text-green-500 w-full text-[0.5vw]">CPO Olah</span><span class="text-pink-600 text-[0.6vw]"> 8,860,560</span> </span>
+            <span class="items-center rounded-xl w-full font-bold bg-black flex py-1.5 px-3"><span class="text-green-500 w-full text-[0.5vw]">RKAP</span><span class="text-pink-600 text-[0.6vw]"> 52,800,000</span> </span>
+            <span class="items-center rounded-xl w-full font-bold bg-black flex py-1.5 px-3"><span class="text-green-500 w-full text-[0.5vw]">Utility</span><span class="text-pink-600 text-[0.6vw]"> 66,000,000</span> </span>
+            <div class="flex gap-2 w-full">
+                <div class="w-full p-2 flex flex-col items-end font-bold bg-black rounded-xl">
+                    <span class="text-[0.6vw] text-amber-600">119,147,342,712</span>
+                    <span class="text-[0.5vw] text-cyan-600">Cost Production</span>
+                </div>
+                <div class="w-full p-2 flex flex-col items-end font-bold bg-black rounded-xl">
+                    <span class="text-[0.6vw] text-amber-600">13,446.93</span>
+                    <span class="text-[0.5vw] text-cyan-600">Rp/Kg CPO Olah</span>
+                </div>
+            </div>
+        </div>
     </div>`
     ];
     const color = 'text-red-500';

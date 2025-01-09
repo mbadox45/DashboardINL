@@ -12,6 +12,8 @@ import CffPayScheduleFinance from '@/views/dashboard/report/detailPage/component
 import CfiPayScheduleFinance from '@/views/dashboard/report/detailPage/components/financial/CfiPayScheduleFinance.vue';
 import EbitdaMarginFinance from '@/views/dashboard/report/detailPage/components/financial/EbitdaMarginFinance.vue';
 import GrossProfitDetailFinance from '@/views/dashboard/report/detailPage/components/financial/GrossProfitDetailFinance.vue';
+import HargaSpotInventoryBulkyFinance from '@/views/dashboard/report/detailPage/components/financial/HargaSpotInventoryBulkyFinance.vue';
+import HargaSpotInventoryRetailFinance from '@/views/dashboard/report/detailPage/components/financial/HargaSpotInventoryRetailFinance.vue';
 import NetProfitMarginFinance from '@/views/dashboard/report/detailPage/components/financial/NetProfitMarginFinance.vue';
 import RevenueDetailFinance from '@/views/dashboard/report/detailPage/components/financial/RevenueDetailFinance.vue';
 // Operation
@@ -60,6 +62,8 @@ const routerLink = () => {
             <cash-flow-movement-finance v-else-if="routeName == 'cash-flow-movement'" />
             <cff-pay-schedule-finance v-else-if="routeName == 'cff-pay-schedule'" />
             <cfi-pay-schedule-finance v-else-if="routeName == 'cfi-pay-schedule'" />
+            <harga-spot-inventory-bulky-finance v-else-if="routeName == 'harga-spot-inventory-bulky'" />
+            <harga-spot-inventory-retail-finance v-else-if="routeName == 'harga-spot-inventory-retail'" />
         </div>
         <div class="min-h-[30rem] p-6 rounded-xl" v-else>
             <cpo-olah-vs-rkap-operation v-if="routeName == 'cpo-olah-vs-rkap'" />

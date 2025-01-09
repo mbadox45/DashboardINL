@@ -263,7 +263,7 @@ export const hargaSpotInventoryBulky = () => {
     </div>`;
     const color = 'text-amber-500';
     const icon = null;
-    const link = 'cfi-pay-schedule';
+    const link = 'harga-spot-inventory-bulky';
 
     return { name: name, value: value, versus: versus, color: color, icon: icon, link: link, colspan: colspan };
 };
@@ -328,7 +328,7 @@ export const hargaSpotInventoryRetail = () => {
     </div>`;
     const color = 'text-amber-500';
     const icon = null;
-    const link = 'cfi-pay-schedule';
+    const link = 'harga-spot-inventory-retail';
 
     return { name: name, value: value, versus: versus, color: color, icon: icon, link: link, colspan: colspan };
 };

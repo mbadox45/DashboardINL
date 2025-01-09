@@ -1,4 +1,4 @@
-export const incomingCpo = () => {
+export const balanceStockCPO = () => {
     const name = 'Balance Stock CPO (in Ton)';
     const colspan = null;
     const value = `<div class="flex flex-col">
@@ -162,18 +162,22 @@ export const stockRetail = () => {
     return { colspan: colspan, name: name, value: value, versus: versus, color: color, icon: icon, link: link };
 };
 
-export const transaction = () => {
-    const name = 'Transaction Dashboard';
+export const actualIncommingCPO = () => {
+    const name = 'Actual Incoming CPO';
     const colspan = null;
     const value = null;
     // Jika Pendapatan > RKAP warna jadi green 600, sesuai kan periode
     const versus = [
-        `<div class="flex h-full justify-center w-full">
-    <span class="text-[0.8vw] text-cyan-500 text-center font-bold">Direct to Transaction Dashboard</span>
+        `<div class="flex flex-col gap-2 w-full">
+        <div class="w-full flex flex-col items-end font-bold"><span class="text-[0.7vw] text-amber-500">601,167,461.00</span><div class="text-[0.5vw] flex justify-between w-full"><span class="text-white font-normal w-full text-end">09 Jan 2025</span><span class="text-cyan-500 w-full text-right">Total</span></div></div>
+        <div class="flex gap-1">
+            <div class="flex flex-col-reverse items-end w-full text-cyan-500 font-bold bg-black p-2 rounded-lg"><span class="text-[0.4vw]">QTY (in Tons)</span><span class="text-amber-500 text-[0.6vw]">48,380.00</span></div>
+            <div class="flex flex-col-reverse items-end w-full text-cyan-500 font-bold bg-black p-2 rounded-lg"><span class="text-[0.4vw]">Price (in IDR)</span><span class="text-amber-500 text-[0.6vw]">12,425.95</span></div>
+        </div>
     </div>`
     ];
     const color = 'text-red-500';
-    const icon = '/images/icon/scm/application.png';
+    const icon = '/images/icon/scm/on-time.png';
     const link = '/test';
 
     return { colspan: colspan, name: name, value: value, versus: versus, color: color, icon: icon, link: link };
