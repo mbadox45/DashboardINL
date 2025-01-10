@@ -55,7 +55,7 @@ export const outstandingCPo = () => {
     // Jika Pendapatan > RKAP warna jadi green 600, sesuai kan periode
     const versus = [
         `<div class="flex flex-col items-end w-full gap-2">
-        <span class="text-[0.8vw] bg-red-100">9,000,000</span>
+        <span class="text-[0.8vw]">9,000,000</span>
         <div class="flex gap-1 w-full">
             <div class="flex flex-col w-full p-2 bg-black rounded-lg">
                 <span class="text-[0.6vw] text-amber-500 font-extrabold w-full text-right">300,000</span>
