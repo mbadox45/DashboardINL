@@ -150,64 +150,29 @@ export const stackedChartOptionsApex = (total, listLabels, toolbar) => {
     };
 };
 
-export const setPieChartData = (data, label) => {
-    const documentStyle = getComputedStyle(document.body);
-
-    return {
-        labels: label,
-        datasets: [
-            {
-                data: data,
-                backgroundColor: [documentStyle.getPropertyValue('--blue-500'), documentStyle.getPropertyValue('--orange-500')],
-                hoverBackgroundColor: [documentStyle.getPropertyValue('--blue-400'), documentStyle.getPropertyValue('--orange-400')],
-                borderWidth: 1,
-                borderRadius: 5
-            }
-        ]
-    };
-};
-
-export const setPieChartOptions = () => {
-    const documentStyle = getComputedStyle(document.documentElement);
-    const textColor = documentStyle.getPropertyValue('--text-color');
-
-    return {
-        plugins: {
-            legend: {
-                labels: {
-                    cutout: '60%',
-                    color: textColor,
-                    rotation: 0
-                },
-                display: false
-            }
-        },
-        options: {
-            layout: {
-                padding: {
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    bottom: 0
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            },
-            rotation: -0.5 * Math.PI
-        }
-    };
-};
-
 export const pieChartApex = (label) => {
     return {
         chart: {
             width: 380,
-            type: 'pie'
+            type: 'pie',
+            background: 'transparent',
+            foreColor: '#ffffff',
+            toolbar: {
+                show: true
+            }
         },
         labels: label,
+        legend: {
+            show: false
+        },
+        dataLabels: {
+            enabled: true,
+            style: {
+                fontSize: '0.3vw', // Change this to adjust the label size
+                fontWeight: 'bold',
+                colors: ['#ffffff'] // Set label color
+            }
+        },
         responsive: [
             {
                 breakpoint: 480,

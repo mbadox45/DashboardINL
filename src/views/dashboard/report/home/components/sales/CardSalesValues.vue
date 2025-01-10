@@ -102,11 +102,8 @@ onUnmounted(() => {
                 <img v-show="load.icon != null" :src="load.icon" alt="Icon" class="hidden lg:flex w-[3vw] h-[3vw]" />
                 <div class="w-full flex flex-col justify-between min-h-[3vw] gap-1">
                     <div class="h-full" v-show="load.nilai != null" v-html="load.nilai"></div>
-                    <!-- <div :class="animationClass" class="min-h-[7vw]" v-html="load.versus[currentIndex]"></div> -->
                     <div :class="animationClass" v-html="load.versus[currentIndex]"></div>
-                    <!-- <div class="min-h-[7vw]" v-html="load.versus[currentIndex]"></div> -->
                 </div>
-                <!-- <Chart v-show="load.dataChart" type="pie" :data="load.dataChart" :options="load.optionsChart" class="w-full" /> -->
                 <VueApexCharts v-show="load.dataChart != null" type="pie" :series="load.dataChart" :options="load.optionsChart" class="w-full" height="100vw" style="z-index: 1 !important" />
             </div>
             <div v-if="load.versus.length > 1" class="flex justify-between pt-1">

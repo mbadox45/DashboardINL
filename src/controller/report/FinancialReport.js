@@ -409,7 +409,7 @@ export const grossProfitData = () => {
         { periode: 'March', labakotor: 11.8, gpm: 6.19 },
         { periode: 'April', labakotor: 25.6, gpm: 10.66 },
         { periode: 'May', labakotor: 10.6, gpm: 5.43 },
-        { periode: 'June', labakotor: 11.8, gpm: 485 },
+        { periode: 'June', labakotor: 11.8, gpm: 4.85 },
         { periode: 'July', labakotor: 0, gpm: 0 },
         { periode: 'August', labakotor: 0, gpm: 0 },
         { periode: 'September', labakotor: 0, gpm: 0 },

@@ -3,15 +3,24 @@ import { valueColorIntCondition, valueColorPersenCondition } from '@/controller/
 // const links = '/detail-dashboard?component=';
 
 export const revenue = () => {
-    const name = 'Revenue (in IDR BN)';
+    const name = 'Revenue (in IDR Bn)';
     const colspan = null;
-    const value = `<div class="flex gap-2 items-center ${valueColorPersenCondition(30)}">
-        <span id="counter" class="font-bold text-[0.9vw]">30%</span>
-    </div>`;
+    const value = null;
     // 0-35 red 36-70 amber 71-100 green
-    const versus = `<div class="flex flex-col w-full mt-3">
-    <span class="text-[0.5vw] text-red-600 font-bold">Pendapatan : 60</span>
-    <span class="text-[0.5vw] text-green-600 font-bold">RKAP December 2024 : 200</span>
+    const versus = `<div class="flex gap-1 items-center h-full">
+        <div class="flex gap-2 items-center mb-3 ${valueColorPersenCondition(30)}">
+            <span class="font-bold text-[2vw]">30%</span>
+        </div>
+        <div class="flex flex-col gap-1 w-full items-end">
+            <div class="font-bold flex flex-col-reverse items-end">
+                <span class="text-white text-[0.6vw]">Pendapatan</span>
+                <span class="text-red-600 text-[0.8vw]">Rp 60</span>
+            </div>
+            <div class="font-bold flex flex-col-reverse items-end">
+                <span class="text-white text-[0.6vw]">RKAP Des 2024</span>
+                <span class="text-green-600 text-[0.8vw]">Rp 200</span>
+            </div>
+        </div>
     </div>`;
     const color = 'text-red-500';
     const icon = '/images/icon/financial/revenue.png';
@@ -21,15 +30,32 @@ export const revenue = () => {
 };
 
 export const grossProfitMargin = () => {
-    const name = 'Gross Profit Margin (in IDR BN)';
+    const name = 'Gross Profit Margin (in IDR Bn)';
     const colspan = null;
-    const value = `<div class="flex gap-2 items-center ${valueColorIntCondition(79.5)}">
-        <span class="font-bold text-[0.9vw]">${79.5} (YTD)</span>
-    </div>`;
+    const value = null;
     // Buat Pengecekan Untuk Perbandingan Dengan Data Sebelumnya, Untuk Ganti Warna & Icon
-    const versus = `<div class="flex flex-col w-full mt-3">
-    <div class="flex gap-2 text-[0.5vw] items-center text-green-600"><i class="pi pi-sort-up-fill" style="font-size:0.5vw"></i><span class="font-bold">Laba Kotor : 11.8</span></div>
-    <div class="flex gap-2 text-[0.5vw] items-center text-red-600"><i class="pi pi-sort-down-fill" style="font-size:0.5vw"></i><span class="font-bold">GPM : 4.85 %</span></div>
+    const versus = `<div class="flex gap-1 items-center h-full mt-3">
+        <div class="flex gap-2 items-center h-full ${valueColorIntCondition(79.5)}">
+            <span class="font-bold text-[1vw]">79.5</span>
+        </div>
+        <div class="flex gap-1 w-full items-end">
+            <div class="font-bold flex w-full flex-col-reverse items-center">
+                <div class="flex gap-1 items-center text-green-600">
+                    <i class="pi pi-sort-up-fill" style="0.6vw"></i>
+                    <span class="text-[0.6vw]">Rp 1.2</span>
+                </div>
+                <span class="text-white text-[0.6vw]">Laba Kotor</span>
+                <span class="text-green-600 text-[0.8vw]">Rp 11.8</span>
+            </div>
+            <div class="font-bold flex w-full flex-col-reverse items-center">
+            <div class="flex gap-1 items-center text-red-600">
+                    <i class="pi pi-sort-down-fill" style="0.6vw"></i>
+                    <span class="text-[0.6vw]">-0.58%</span>
+                </div>
+                <span class="text-white text-[0.6vw]">GPM</span>
+                <span class="text-red-600 text-[0.8vw]">4.85%</span>
+            </div>
+        </div>
     </div>`;
     const color = 'text-amber-500';
     const icon = '/images/icon/financial/gross-profit.png';
@@ -41,13 +67,30 @@ export const grossProfitMargin = () => {
 export const ebitdaMargin = () => {
     const name = 'EBITDA Margin (in IDR BN)';
     const colspan = null;
-    const value = `<div class="flex gap-2 items-center ${valueColorIntCondition(16.82)}">
-        <span class="font-bold text-[0.9vw]">${16.82} (YTD)</span>
-    </div>`;
+    const value = null;
     // Jika nilai sekarang > nilai bulan lalu,  warna jadi green 600 dan icon up, kalo sama jadi warna amber icon strip
-    const versus = `<div class="text-xs flex flex-col w-full mt-3">
-    <div class="flex gap-2 text-[0.5vw] items-center text-red-600"><i class="pi pi-sort-down-fill" style="font-size:0.5vw"></i><span class="font-bold flex gap-3"><span>EBITDA</span> <span>: </span><span>6.59</span></span></div>
-    <div class="flex gap-2 text-[0.5vw] items-center text-red-600"><i class="pi pi-sort-down-fill" style="font-size:0.5vw"></i><span class="font-bold flex gap-3"><span>EBITDA (%)</span> <span>: </span><span>2.71%</span></span></div>
+    const versus = `<div class="flex gap-1 items-center h-full mt-3">
+        <div class="flex gap-2 items-center h-full ${valueColorIntCondition(16.82)}">
+            <span class="font-bold text-[1vw]">16.82</span>
+        </div>
+        <div class="flex gap-1 w-full items-end">
+            <div class="font-bold flex w-full flex-col-reverse items-center">
+                <div class="flex gap-1 items-center text-green-600">
+                    <i class="pi pi-sort-up-fill" style="0.6vw"></i>
+                    <span class="text-[0.6vw]">Rp 8.26</span>
+                </div>
+                <span class="text-white text-[0.6vw]">EBITDA</span>
+                <span class="text-green-600 text-[0.8vw]">Rp 6.59</span>
+            </div>
+            <div class="font-bold flex w-full flex-col-reverse items-center">
+            <div class="flex gap-1 items-center text-green-600">
+                    <i class="pi pi-sort-up-fill" style="0.6vw"></i>
+                    <span class="text-[0.6vw]">3.57%</span>
+                </div>
+                <span class="text-white text-[0.6vw]">EBITDA%</span>
+                <span class="text-red-600 text-[0.8vw]">2.71%</span>
+            </div>
+        </div>
     </div>`;
     const color = 'text-amber-500';
     const icon = '/images/icon/financial/ebitda.png';
