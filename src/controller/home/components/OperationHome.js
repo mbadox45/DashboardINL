@@ -406,28 +406,119 @@ export const packagingPerformance = () => {
     const value = null;
     const colspan = 'col-span-2';
     const versus = [
-        `<div class="flex flex-col w-full gap-3 h-full justify-between mt-2">
+        `<div class="flex flex-col w-full gap-3 h-full justify-between mb-3">
+        <span class="text-[0.7vw] text-pink-400 font-bold">Salvaco 1 L</span>
         <div class="w-full flex gap-0 items-center">
             <div class="flex flex-col items-end w-full border-gray-600 border rounded-l-lg p-2">
                 <span class="text-[0.6vw] font-bold text-amber-500">1,000,000</span>
                 <span class="text-[0.5vw] text-cyan-500">Realisasi</span>
             </div>
             <div class="flex gap-1 justify-between items-center w-full border-gray-600 border p-2">
-                <span class="text-[0.9vw]">50%</span>
+                <span class="text-[0.9vw] font-bold text-amber-600">50%</span>
                 <div class="flex flex-col items-end">
                     <span class="text-[0.6vw] font-bold text-amber-500">2,000,000</span>
                     <span class="text-[0.5vw] text-cyan-500">RKAP</span>
                 </div>
             </div>
             <div class="flex gap-1 justify-between items-center w-full border-gray-600 border p-2">
-                <span class="text-[0.9vw]">30%</span>
+                <span class="text-[0.9vw] font-bold text-red-600">30%</span>
                 <div class="flex flex-col items-end">
                     <span class="text-[0.6vw] font-bold text-amber-500">300,000</span>
                     <span class="text-[0.5vw] text-cyan-500">Utility</span>
                 </div>
             </div>
             <div class="flex gap-1 justify-between items-center w-full border-gray-600 border p-2 rounded-r-lg">
-                <span class="text-[0.9vw]">50%</span>
+                <span class="text-[0.9vw] font-bold text-green-600">90%</span>
+                <div class="flex flex-col items-end">
+                    <span class="text-[0.6vw] font-bold text-amber-500">900</span>
+                    <span class="text-[0.5vw] text-cyan-500">Sales Plant</span>
+                </div>
+            </div>
+        </div>
+    </div>`,
+        `<div class="flex flex-col w-full gap-3 h-full justify-between mb-3">
+        <span class="text-[0.7vw] text-pink-400 font-bold">Salvaco 2 L</span>
+        <div class="w-full flex gap-0 items-center">
+            <div class="flex flex-col items-end w-full border-gray-600 border rounded-l-lg p-2">
+                <span class="text-[0.6vw] font-bold text-amber-500">1,000,000</span>
+                <span class="text-[0.5vw] text-cyan-500">Realisasi</span>
+            </div>
+            <div class="flex gap-1 justify-between items-center w-full border-gray-600 border p-2">
+                <span class="text-[0.9vw] font-bold text-amber-600">50%</span>
+                <div class="flex flex-col items-end">
+                    <span class="text-[0.6vw] font-bold text-amber-500">2,000,000</span>
+                    <span class="text-[0.5vw] text-cyan-500">RKAP</span>
+                </div>
+            </div>
+            <div class="flex gap-1 justify-between items-center w-full border-gray-600 border p-2">
+                <span class="text-[0.9vw] font-bold text-red-600">30%</span>
+                <div class="flex flex-col items-end">
+                    <span class="text-[0.6vw] font-bold text-amber-500">300,000</span>
+                    <span class="text-[0.5vw] text-cyan-500">Utility</span>
+                </div>
+            </div>
+            <div class="flex gap-1 justify-between items-center w-full border-gray-600 border p-2 rounded-r-lg">
+                <span class="text-[0.9vw] font-bold text-green-600">90%</span>
+                <div class="flex flex-col items-end">
+                    <span class="text-[0.6vw] font-bold text-amber-500">900</span>
+                    <span class="text-[0.5vw] text-cyan-500">Sales Plant</span>
+                </div>
+            </div>
+        </div>
+    </div>`,
+        `<div class="flex flex-col w-full gap-3 h-full justify-between mb-3">
+        <span class="text-[0.7vw] text-pink-400 font-bold">Nusakita 1 L</span>
+        <div class="w-full flex gap-0 items-center">
+            <div class="flex flex-col items-end w-full border-gray-600 border rounded-l-lg p-2">
+                <span class="text-[0.6vw] font-bold text-amber-500">1,000,000</span>
+                <span class="text-[0.5vw] text-cyan-500">Realisasi</span>
+            </div>
+            <div class="flex gap-1 justify-between items-center w-full border-gray-600 border p-2">
+                <span class="text-[0.9vw] font-bold text-amber-600">50%</span>
+                <div class="flex flex-col items-end">
+                    <span class="text-[0.6vw] font-bold text-amber-500">2,000,000</span>
+                    <span class="text-[0.5vw] text-cyan-500">RKAP</span>
+                </div>
+            </div>
+            <div class="flex gap-1 justify-between items-center w-full border-gray-600 border p-2">
+                <span class="text-[0.9vw] font-bold text-red-600">30%</span>
+                <div class="flex flex-col items-end">
+                    <span class="text-[0.6vw] font-bold text-amber-500">300,000</span>
+                    <span class="text-[0.5vw] text-cyan-500">Utility</span>
+                </div>
+            </div>
+            <div class="flex gap-1 justify-between items-center w-full border-gray-600 border p-2 rounded-r-lg">
+                <span class="text-[0.9vw] font-bold text-green-600">90%</span>
+                <div class="flex flex-col items-end">
+                    <span class="text-[0.6vw] font-bold text-amber-500">900</span>
+                    <span class="text-[0.5vw] text-cyan-500">Sales Plant</span>
+                </div>
+            </div>
+        </div>
+    </div>`,
+        `<div class="flex flex-col w-full gap-3 h-full justify-between mb-3">
+        <span class="text-[0.7vw] text-pink-400 font-bold">Nusakita 2 L</span>
+        <div class="w-full flex gap-0 items-center">
+            <div class="flex flex-col items-end w-full border-gray-600 border rounded-l-lg p-2">
+                <span class="text-[0.6vw] font-bold text-amber-500">1,000,000</span>
+                <span class="text-[0.5vw] text-cyan-500">Realisasi</span>
+            </div>
+            <div class="flex gap-1 justify-between items-center w-full border-gray-600 border p-2">
+                <span class="text-[0.9vw] font-bold text-amber-600">50%</span>
+                <div class="flex flex-col items-end">
+                    <span class="text-[0.6vw] font-bold text-amber-500">2,000,000</span>
+                    <span class="text-[0.5vw] text-cyan-500">RKAP</span>
+                </div>
+            </div>
+            <div class="flex gap-1 justify-between items-center w-full border-gray-600 border p-2">
+                <span class="text-[0.9vw] font-bold text-red-600">30%</span>
+                <div class="flex flex-col items-end">
+                    <span class="text-[0.6vw] font-bold text-amber-500">300,000</span>
+                    <span class="text-[0.5vw] text-cyan-500">Utility</span>
+                </div>
+            </div>
+            <div class="flex gap-1 justify-between items-center w-full border-gray-600 border p-2 rounded-r-lg">
+                <span class="text-[0.9vw] font-bold text-green-600">90%</span>
                 <div class="flex flex-col items-end">
                     <span class="text-[0.6vw] font-bold text-amber-500">900</span>
                     <span class="text-[0.5vw] text-cyan-500">Sales Plant</span>

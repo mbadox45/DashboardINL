@@ -44,7 +44,7 @@ watch(() => props.datas, loadData, { immediate: true });
 <template>
     <div class="bg-gray-800 p-2 rounded-xl shadow-xl min-h-[120px] flex gap-3 items-start" :class="load.colspan">
         <div class="flex flex-col w-full">
-            <div class="flex items-center gap-6">
+            <div class="flex items-center gap-3">
                 <span class="font-bold w-full text-[0.55vw]">{{ load.name }}</span>
                 <button
                     v-show="load.link != null"
@@ -54,7 +54,7 @@ watch(() => props.datas, loadData, { immediate: true });
                     <i class="pi pi-external-link" style="font-weight: 600; font-size: 0.9vw"></i>
                 </button>
             </div>
-            <div class="flex items-center gap-6">
+            <div class="flex items-center gap-3">
                 <img v-show="load.icon != null" :src="load.icon" alt="Icon" class="w-[3vw] h-[3vw]" />
                 <div class="w-full">
                     <div v-html="load.nilai"></div>

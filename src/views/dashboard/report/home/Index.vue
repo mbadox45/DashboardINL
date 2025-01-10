@@ -133,7 +133,9 @@ const loadDataSales = async () => {
             value: dataSales[i].value,
             versus: dataSales[i].versus,
             link: dataSales[i].link,
-            colspan: dataSales[i].colspan
+            colspan: dataSales[i].colspan,
+            dataChart: dataSales[i].qty,
+            optionsChart: dataSales[i].options
         });
     }
     listCardSalesPerformance.value = list;
@@ -171,9 +173,9 @@ const loadDelay = async () => {
                 </div>
             </div>
             <div class="col-span-2 flex flex-col gap-3">
-                <div class="flex flex-col gap-2">
+                <div class="flex flex-col">
                     <!-- <h3 class="text-[0.7vw] font-bold text-white">Financial</h3> -->
-                    <div class="grid grid-cols-4 gap-2">
+                    <div class="grid grid-cols-4 gap-1">
                         <card-values v-for="(item, index) in listCardFinancial" :key="index" :datas="item" :style="`animation: fadein 1s ease-in-out`" />
                     </div>
                 </div>

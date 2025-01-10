@@ -1,5 +1,7 @@
 <script setup>
 import { defineProps, onMounted, onUnmounted, ref, watch } from 'vue';
+import VueApexCharts from 'vue3-apexcharts';
+// import { pieChartApex } from '@/controller/chartStyle/radialBarDummy';
 
 const props = defineProps({
     datas: {
@@ -8,7 +10,7 @@ const props = defineProps({
     }
 });
 
-const load = ref({ name: '', icon: '', nilai: 0, persen: 0, versus: '', link: null, colspan: null });
+const load = ref({ name: '', icon: '', nilai: 0, persen: 0, versus: '', link: null, colspan: null, dataChart: null, optionsChart: null });
 const currentIndex = ref(0);
 const animationClass = ref('fade-in');
 
@@ -21,8 +23,11 @@ const loadData = async () => {
         persen: null,
         versus: data.versus,
         link: data.link,
-        colspan: data.colspan
+        colspan: data.colspan,
+        dataChart: data.dataChart,
+        optionsChart: data.optionsChart
     };
+    console.log(load.value);
 };
 
 watch(() => props.datas, loadData, { immediate: true });
@@ -101,6 +106,8 @@ onUnmounted(() => {
                     <div :class="animationClass" v-html="load.versus[currentIndex]"></div>
                     <!-- <div class="min-h-[7vw]" v-html="load.versus[currentIndex]"></div> -->
                 </div>
+                <!-- <Chart v-show="load.dataChart" type="pie" :data="load.dataChart" :options="load.optionsChart" class="w-full" /> -->
+                <VueApexCharts v-show="load.dataChart != null" type="pie" :series="load.dataChart" :options="load.optionsChart" class="w-full" height="100vw" style="z-index: 1 !important" />
             </div>
             <div v-if="load.versus.length > 1" class="flex justify-between pt-1">
                 <button @click="prevIndex" class="p-1 bg-gray-700 text-white text-sm rounded hover:bg-gray-600 transition flex items-center text-[0.6vw]"><i class="pi pi-chevron-left mr-1" style="font-size: 0.6vw"></i> Prev</button>

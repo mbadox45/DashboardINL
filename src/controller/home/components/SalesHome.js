@@ -1,5 +1,10 @@
+import { pieChartApex } from '@/controller/chartStyle/radialBarDummy';
+
 export const QtyPenjualanBulky = () => {
+    const qty = [10000, 15000, 50000, 25000];
+    const label = ['PFAD', 'RBDPO', 'RBD Stearin', 'RBD Olein'];
     const name = 'Qty Penjualan Bulky';
+    const chartData = pieChartApex(label);
     const colspan = 'col-span-2';
     const value = null;
     const versus = [
@@ -20,11 +25,14 @@ export const QtyPenjualanBulky = () => {
     const icon = '/images/icon/sales/oil-truck.png';
     const link = '/test';
 
-    return { colspan: colspan, name: name, value: value, versus: versus, color: color, icon: icon, link: link };
+    return { colspan: colspan, qty: qty, options: chartData, name: name, value: value, versus: versus, color: color, icon: icon, link: link };
 };
 
 export const QtyPenjualanRetail = () => {
+    const qty = [10000, 15000, 50000, 25000];
+    const label = ['PFAD', 'RBDPO', 'RBD Stearin', 'RBD Olein'];
     const name = 'Qty Penjualan Retail';
+    const options = pieChartApex(label);
     const colspan = 'col-span-2';
     const value = null;
     const versus = [
@@ -39,18 +47,20 @@ export const QtyPenjualanRetail = () => {
             <div class="text-[0.5vw] flex justify-between text-green-500 font-bold"><span>RKAP</span><span>200,000</span></div>
         </div>
     </div>
+
     </div>`
     ];
     const color = 'text-red-500';
     const icon = '/images/icon/sales/warehouse.png';
     const link = '/test';
 
-    return { colspan: colspan, name: name, value: value, versus: versus, color: color, icon: icon, link: link };
+    return { colspan: colspan, qty: qty, options: options, name: name, value: value, versus: versus, color: color, icon: icon, link: link };
 };
 
 export const outstandingCPo = () => {
     const name = 'Outstanding CPO (in Ton)';
     const colspan = null;
+    const options = null;
     const value = null;
     // Jika Pendapatan > RKAP warna jadi green 600, sesuai kan periode
     const versus = [
@@ -76,12 +86,13 @@ export const outstandingCPo = () => {
     const icon = null;
     const link = '/test';
 
-    return { colspan: colspan, name: name, value: value, versus: versus, color: color, icon: icon, link: link };
+    return { colspan: colspan, options: options, name: name, value: value, versus: versus, color: color, icon: icon, link: link };
 };
 
 export const saldoPe = () => {
     const name = 'Saldo PE';
     const colspan = null;
+    const options = null;
     const value = `<div class="flex justify-between gap-2 items-center">
         <span class="font-bold text-[0.9vw] text-amber-500">4,000</span>
     </div>`;
@@ -96,11 +107,12 @@ export const saldoPe = () => {
     const icon = '/images/icon/scm/import-export.png';
     const link = '/test';
 
-    return { colspan: colspan, name: name, value: value, versus: versus, color: color, icon: icon, link: link };
+    return { colspan: colspan, options: options, name: name, value: value, versus: versus, color: color, icon: icon, link: link };
 };
 
 export const avgCPOKpbn = () => {
     const name = 'Avg CPO KPBN';
+    const options = null;
     const colspan = null;
     const value = `<div class="flex justify-between gap-2 items-center">
         <span class="font-bold text-[0.8vw] text-green-600">IDR 12,633/Kg</span>
@@ -117,12 +129,13 @@ export const avgCPOKpbn = () => {
     const icon = null;
     const link = '/test';
 
-    return { colspan: colspan, name: name, value: value, versus: versus, color: color, icon: icon, link: link };
+    return { colspan: colspan, options: options, name: name, value: value, versus: versus, color: color, icon: icon, link: link };
 };
 
 export const proportionCost = () => {
     const name = 'Market Router & Levy Duty (USD)';
     const colspan = null;
+    const options = null;
     const value = null;
     const versus = [
         `<div class="flex flex-col gap-2 w-full bg-black h-full py-1 px-2 rounded-lg">
@@ -212,5 +225,5 @@ export const proportionCost = () => {
     const icon = null;
     const link = '/test';
 
-    return { colspan: colspan, name: name, value: value, versus: versus, color: color, icon: icon, link: link };
+    return { colspan: colspan, options: options, name: name, value: value, versus: versus, color: color, icon: icon, link: link };
 };
