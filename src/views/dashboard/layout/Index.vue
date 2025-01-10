@@ -57,7 +57,7 @@ function isOutsideClicked(event) {
 </script>
 
 <template>
-    <div class="layout-wrapper bg-neutral-950 text-white" :class="containerClass">
+    <div class="layout-wrapper layout-scroller bg-neutral-950 text-white" :class="containerClass">
         <app-topbar></app-topbar>
         <div class="px-4 pt-2">
             <!-- <div class="layout-main-container"> -->
@@ -68,5 +68,16 @@ function isOutsideClicked(event) {
         </div>
         <div class="layout-mask animate-fadein"></div>
     </div>
-    <Toast />
 </template>
+
+<style>
+.layout-scroller {
+    max-height: 100vh; /* Batasi tinggi maksimal */
+    overflow-y: scroll; /* Scroll tetap aktif */
+    scrollbar-width: none; /* Sembunyikan scrollbar di Firefox */
+}
+
+.layout-scroller::-webkit-scrollbar {
+    display: none; /* Sembunyikan scrollbar di Chrome, Safari, dan Edge */
+}
+</style>

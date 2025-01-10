@@ -54,11 +54,9 @@ export const outstandingCPo = () => {
     const value = null;
     // Jika Pendapatan > RKAP warna jadi green 600, sesuai kan periode
     const versus = [
-        `<div class="flex items-center w-full gap-2">
-        <div class="w-1/2">
-            <span class="text-green-500 text-[1vw] font-bold">9,000,000</span>
-        </div>
-        <div class="flex flex-col gap-1 w-full">
+        `<div class="flex flex-col items-end w-full gap-2">
+        <span class="text-[0.8vw] bg-red-100">9,000,000</span>
+        <div class="flex gap-1 w-full">
             <div class="flex flex-col w-full p-2 bg-black rounded-lg">
                 <span class="text-[0.6vw] text-amber-500 font-extrabold w-full text-right">300,000</span>
                 <div class="text-[0.4vw] text-cyan-500 flex gap-2 justify-end font-bold">
@@ -71,8 +69,6 @@ export const outstandingCPo = () => {
                     <span class="text-indigo-300">PT SALMAN JAYA</span>
                 </div>
             </div>
-        </div>
-        <div class="w-[5%]">
         </div>
     </div>`
     ];
@@ -125,7 +121,7 @@ export const avgCPOKpbn = () => {
 };
 
 export const proportionCost = () => {
-    const name = 'Proportion Cost (USD)';
+    const name = 'Market Router & Levy Duty (USD)';
     const colspan = null;
     const value = null;
     const versus = [

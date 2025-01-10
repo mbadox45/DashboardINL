@@ -5,7 +5,7 @@ export const sdm = () => {
         `<div class="flex flex-col w-full gap-1 h-full justify-between py-2 px-2">
     <div class="flex gap-1 w-full bg-black p-3 rounded-lg">
         <div class="flex gap-4 w-full items-center font-bold">
-            <img src="/images/icon/sdm/man.png" alt="Male" class="w-[2.3vw] h-[2.3vw]"/>
+            <img src="/images/icon/sdm/man.png" alt="Male" class="w-[2vw] h-[2vw]"/>
             <div class="flex flex-col text-blue-500">
                 <span class="text-[1vw]">100</span>
                 <span class="text-[0.5vw] text-gray-400">Pria</span>
@@ -18,7 +18,7 @@ export const sdm = () => {
             </div>
         </div>
         <div class="flex flex-row-reverse gap-4 w-full items-center font-bold">
-            <img src="/images/icon/sdm/woman.png" alt="Female" class="w-[2.3vw] h-[2.3vw]"/>
+            <img src="/images/icon/sdm/woman.png" alt="Female" class="w-[2vw] h-[2vw]"/>
             <div class="flex flex-col text-pink-500">
                 <span class="text-[1vw]">100</span>
                 <span class="text-[0.5vw] text-gray-400">Wanita</span>

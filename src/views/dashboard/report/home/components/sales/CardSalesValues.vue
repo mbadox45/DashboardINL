@@ -95,7 +95,7 @@ onUnmounted(() => {
             </div>
             <div class="flex items-center gap-4 h-full">
                 <img v-show="load.icon != null" :src="load.icon" alt="Icon" class="hidden lg:flex w-[3vw] h-[3vw]" />
-                <div class="w-full flex flex-col justify-between min-h-[3vw] gap-3">
+                <div class="w-full flex flex-col justify-between min-h-[3vw] gap-1">
                     <div class="h-full" v-show="load.nilai != null" v-html="load.nilai"></div>
                     <!-- <div :class="animationClass" class="min-h-[7vw]" v-html="load.versus[currentIndex]"></div> -->
                     <div :class="animationClass" v-html="load.versus[currentIndex]"></div>
