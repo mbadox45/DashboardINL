@@ -19,7 +19,7 @@ const listCardSCM = ref([]);
 const listCardPackaging = ref([]);
 const listCardSdm = ref([]);
 const listDelay = ref([]);
-const activePage = ref('0');
+const activePage = ref(0);
 
 onMounted(() => {
     loadData();
@@ -152,54 +152,50 @@ const loadDelay = async () => {
 </script>
 
 <template>
-    <div class="flex flex-col gap-3 p-6 rounded-2xl w-full bg-black">
-        <Tabs v-model:value="activePage">
-            <TabPanels>
-                <TabPanel value="0" class="bg-black">
-                    <div class="grid grid-cols-3 gap-3 text-white">
-                        <div class="col-span-1 flex flex-col gap-3">
-                            <images-home />
-                            <div class="flex flex-col gap-2">
-                                <div class="grid grid-cols-1 gap-2">
-                                    <card-sdm v-for="(item, index) in listCardPackaging" :key="index" :datas="item" :style="`animation: fadein ${index}s ease-in-out`" />
-                                </div>
-                            </div>
-                            <div class="flex flex-col gap-2">
-                                <div class="grid grid-cols-2 gap-2">
-                                    <card-scm-values v-for="(item, index) in listCardSCM" :key="index" :datas="item" :style="`animation: fadein 1s ease-in-out`" />
-                                </div>
-                            </div>
-                            <div class="flex flex-col gap-2">
-                                <div class="grid grid-cols-1 gap-2">
-                                    <card-sdm v-for="(item, index) in listCardSdm" :key="index" :datas="item" :style="`animation: fadein ${index}s ease-in-out`" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-span-2 flex flex-col gap-3">
-                            <div class="flex flex-col">
-                                <div class="grid grid-cols-4 gap-1">
-                                    <card-values v-for="(item, index) in listCardFinancial" :key="index" :datas="item" :style="`animation: fadein 1s ease-in-out`" />
-                                </div>
-                            </div>
-                            <div class="flex flex-col gap-2">
-                                <div class="grid grid-cols-3 gap-2">
-                                    <card-operation-values v-for="(item, index) in listCardOperation" :key="index" :datas="item" :style="`animation: fadein ${index}s ease-in-out`" />
-                                </div>
-                            </div>
-                            <div class="flex flex-col gap-2">
-                                <div class="grid grid-cols-4 gap-2">
-                                    <card-sales v-for="(item, index) in listCardSalesPerformance" :key="index" :datas="item" :style="`animation: fadein ${index}s ease-in-out`" />
-                                </div>
-                            </div>
-                        </div>
+    <div class="flex flex-col gap-3 p-6 rounded-2xl w-full bg-black text-white">
+        <div v-if="activePage == 0" class="grid grid-cols-3 gap-3">
+            <div class="col-span-1 flex flex-col gap-3">
+                <images-home />
+                <div class="flex flex-col gap-2">
+                    <div class="grid grid-cols-1 gap-2">
+                        <card-sdm v-for="(item, index) in listCardPackaging" :key="index" :datas="item" :style="`animation: fadein ${index}s ease-in-out`" />
                     </div>
-                </TabPanel>
-                <TabPanel value="1" class="bg-black"> </TabPanel>
-            </TabPanels>
-        </Tabs>
+                </div>
+                <div class="flex flex-col gap-2">
+                    <div class="grid grid-cols-2 gap-2">
+                        <card-scm-values v-for="(item, index) in listCardSCM" :key="index" :datas="item" :style="`animation: fadein 1s ease-in-out`" />
+                    </div>
+                </div>
+                <div class="flex flex-col gap-2">
+                    <div class="grid grid-cols-1 gap-2">
+                        <card-sdm v-for="(item, index) in listCardSdm" :key="index" :datas="item" :style="`animation: fadein ${index}s ease-in-out`" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-span-2 flex flex-col gap-3">
+                <div class="flex flex-col">
+                    <div class="grid grid-cols-4 gap-1">
+                        <card-values v-for="(item, index) in listCardFinancial" :key="index" :datas="item" :style="`animation: fadein 1s ease-in-out`" />
+                    </div>
+                </div>
+                <div class="flex flex-col gap-2">
+                    <div class="grid grid-cols-3 gap-2">
+                        <card-operation-values v-for="(item, index) in listCardOperation" :key="index" :datas="item" :style="`animation: fadein ${index}s ease-in-out`" />
+                    </div>
+                </div>
+                <div class="flex flex-col gap-2">
+                    <div class="grid grid-cols-4 gap-2">
+                        <card-sales v-for="(item, index) in listCardSalesPerformance" :key="index" :datas="item" :style="`animation: fadein ${index}s ease-in-out`" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div v-else class="">
+            <span>Test</span>
+        </div>
         <div class="flex gap-2 justify-center">
-            <button class="py-2 px-3 rounded-full border-2 hover:bg-white hover:text-black transition-all" :class="activePage == '0' ? 'bg-white text-black' : 'bg-transparent'" @click="activePage = '0'">Page 1</button>
-            <button class="py-2 px-3 rounded-full border-2 hover:bg-white hover:text-black transition-all" :class="activePage == '1' ? 'bg-white text-black' : 'bg-transparent'" @click="activePage = '1'">Page 2</button>
+            <button class="py-2 px-3 rounded-full border-2 hover:bg-white hover:text-black transition-all" :class="activePage == 0 ? 'bg-white text-black' : 'bg-transparent'" @click="activePage = 0">Page 1</button>
+            <button class="py-2 px-3 rounded-full border-2 hover:bg-white hover:text-black transition-all" :class="activePage == 1 ? 'bg-white text-black' : 'bg-transparent'" @click="activePage = 1">Page 2</button>
         </div>
     </div>
 </template>
