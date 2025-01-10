@@ -406,41 +406,32 @@ export const packagingPerformance = () => {
     const value = null;
     const colspan = 'col-span-2';
     const versus = [
-        `<div class="flex flex-col w-full gap-3 h-full justify-between ">
+        `<div class="flex flex-col w-full gap-3 h-full justify-between mt-2">
         <div class="w-full flex gap-0 items-center">
-            <div class="flex flex-col w-full">
-                <span class="text-[0.9vw] text-amber-500">0%</span>
+            <div class="flex flex-col items-end w-full border-gray-600 border rounded-l-lg p-2">
+                <span class="text-[0.6vw] font-bold text-amber-500">1,000,000</span>
                 <span class="text-[0.5vw] text-cyan-500">Realisasi</span>
             </div>
-            <div class="flex flex-col w-full">
-                <span class="text-[0.9vw] text-amber-500">0%</span>
-                <span class="text-[0.5vw] text-cyan-500">RKAP</span>
+            <div class="flex gap-1 justify-between items-center w-full border-gray-600 border p-2">
+                <span class="text-[0.9vw]">50%</span>
+                <div class="flex flex-col items-end">
+                    <span class="text-[0.6vw] font-bold text-amber-500">2,000,000</span>
+                    <span class="text-[0.5vw] text-cyan-500">RKAP</span>
+                </div>
             </div>
-            <div class="flex flex-col w-full">
-                <span class="text-[0.9vw] text-amber-500">0%</span>
-                <span class="text-[0.5vw] text-cyan-500">Kapasitas</span>
+            <div class="flex gap-1 justify-between items-center w-full border-gray-600 border p-2">
+                <span class="text-[0.9vw]">30%</span>
+                <div class="flex flex-col items-end">
+                    <span class="text-[0.6vw] font-bold text-amber-500">300,000</span>
+                    <span class="text-[0.5vw] text-cyan-500">Utility</span>
+                </div>
             </div>
-            <div class="flex flex-col w-full">
-                <span class="text-[0.9vw] text-amber-500">0%</span>
-                <span class="text-[0.5vw] text-cyan-500">Sales Plant</span>
-            </div>
-        </div>
-        <div class="w-full flex flex-col gap-1 items-center">
-            <div class="flex flex-row-reverse justify-between items-center w-full px-3 py-2 bg-black rounded-lg">
-                <span class="text-[0.6vw] text-pink-600">0</span>
-                <span class="text-[0.5vw] text-green-500">Realisasi</span>
-            </div>
-            <div class="flex flex-row-reverse justify-between items-center w-full px-3 py-2 bg-black rounded-lg">
-                <span class="text-[0.6vw] text-pink-600">0</span>
-                <span class="text-[0.5vw] text-green-500">RKAP</span>
-            </div>
-            <div class="flex flex-row-reverse justify-between items-center w-full px-3 py-2 bg-black rounded-lg">
-                <span class="text-[0.6vw] text-pink-600">0</span>
-                <span class="text-[0.5vw] text-green-500">Kapasitas</span>
-            </div>
-            <div class="flex flex-row-reverse justify-between items-center w-full px-3 py-2 bg-black rounded-lg">
-                <span class="text-[0.6vw] text-pink-600">0</span>
-                <span class="text-[0.5vw] text-green-500">Sales Plant</span>
+            <div class="flex gap-1 justify-between items-center w-full border-gray-600 border p-2 rounded-r-lg">
+                <span class="text-[0.9vw]">50%</span>
+                <div class="flex flex-col items-end">
+                    <span class="text-[0.6vw] font-bold text-amber-500">900</span>
+                    <span class="text-[0.5vw] text-cyan-500">Sales Plant</span>
+                </div>
             </div>
         </div>
     </div>`
