@@ -138,11 +138,11 @@ export const cashBalance = () => {
     const name = 'Cash Balance (in IDR BN)';
     const colspan = null;
     const value = `<div class="flex gap-2 items-center text-green-500">
-    <span class="font-bold text-[1.2vw]">${535}</span>
+    <span class="font-bold text-[1.5vw]">${535}</span>
     <i class="pi pi-sort-up-fill" style="font-size:1vw;" />
     </div>`;
     //sesuaikan periode
-    const versus = `<div class=" text-[0.5vw] flex flex-col w-full mt-3">
+    const versus = `<div class=" text-[0.8vw] flex flex-col w-full mt-3">
     <span class="text-cyan-500 font-bold">s/d December 2024</span>
     </div>`;
     //ganti warna red 500 jika nilai sekarang < dari nilai bulan sebelumnya, kalo sama warna amber, tambahin icon up atau icon strip
@@ -157,19 +157,19 @@ export const cashFlowMovement = () => {
     const name = 'Cash Flow Movement (in IDR BN)';
     const colspan = null;
     const value = `<div class="flex gap-2 items-center text-green-500">
-        <span class="font-bold text-[0.9vw]">${185.17}</span>
+        <span class="font-bold text-[1.2vw]">${185.17}</span>
     </div>`;
-    const versus = `<div class="text-[0.5vw] flex gap-3 w-full mt-3">
+    const versus = `<div class="text-[0.8vw] flex gap-3 w-full mt-3">
         <div class="flex flex-col w-full">
             <div class="flex gap-1 text-green-600 w-full items-center">
-                <i class="pi pi-sort-up-fill" style="font-size:0.5vw"></i>
+                <i class="pi pi-sort-up-fill" style="font-size:0.8vw"></i>
                 <div class="font-bold flex w-full">
                     <span class="w-full">CFO in</span>
                     <div class="w-full flex gap-2"><span class="">:</span><span class="">457.8</span></div>
                 </div>
             </div>
             <div class="flex gap-1 text-red-600 w-full items-center">
-                <i class="pi pi-sort-down-fill" style="font-size:0.5vw"></i>
+                <i class="pi pi-sort-down-fill" style="font-size:0.8vw"></i>
                 <div class="font-bold flex w-full">
                     <span class="w-full">CFO Out</span>
                     <div class="w-full flex gap-2"><span class="">:</span><span class="">-164.38</span></div>
@@ -178,14 +178,14 @@ export const cashFlowMovement = () => {
         </div>
         <div class="flex flex-col w-full">
             <div class="flex gap-1 text-red-600 w-full items-center">
-                <i class="pi pi-sort-down-fill" style="font-size:0.5vw"></i>
+                <i class="pi pi-sort-down-fill" style="font-size:0.8vw"></i>
                 <div class="font-bold flex w-full">
                     <span class="w-1/2">CFI</span>
                     <div class="w-full flex gap-2"><span class="">:</span><span class="">-93.86</span></div>
                 </div>
             </div>
             <div class="flex gap-1 text-red-600 w-full items-center">
-                <i class="pi pi-sort-down-fill" style="font-size:0.5vw"></i>
+                <i class="pi pi-sort-down-fill" style="font-size:0.8vw"></i>
                 <div class="font-bold flex w-full">
                     <span class="w-1/2">CFF</span>
                     <div class="w-full flex gap-2"><span class="">:</span><span class="">-14.39</span></div>
@@ -201,34 +201,34 @@ export const cashFlowMovement = () => {
     return { name: name, value: value, versus: versus, color: color, icon: icon, link: link, colspan: colspan };
 };
 
-export const cfiPaySchedule = () => {
-    const name = 'CFI Pay Schedule (in IDR BN)';
-    const colspan = null;
-    const value = `<div class="flex gap-2 items-center text-amber-500">
-        <span class="font-bold text-[0.9vw]">${134.87}</span>
-    </div>`;
-    const versus = `<div class="text-[0.5vw] flex flex-col w-full mt-3">
-    <table class="text-amber-600 mb-2">
-        <thead>
-            <tr>
-                <th class="border border-black bg-black py-[0.5px] px-1 text-left">Pekerjaan Bangunan...</th>
-                <th class="border border-black py-[0.5px]">5</th>
-                <th class="border border-black py-[0.5px] text-cyan-500">2 Dec 2024</th>
-            </tr>
-            <tr>
-                <th class="border border-black bg-black py-[0.5px] px-1 text-left">Licensor Biodiesel...</th>
-                <th class="border border-black py-[0.5px]">81.9</th>
-                <th class="border border-black py-[0.5px] text-cyan-500">1 Jan 2025</th>
-            </tr>
-        </thead>
-    </table>
-    </div>`;
-    const color = 'text-amber-500';
-    const icon = null;
-    const link = 'cfi-pay-schedule';
+// export const cfiPaySchedule = () => {
+//     const name = 'CFI Pay Schedule (in IDR BN)';
+//     const colspan = null;
+//     const value = `<div class="flex gap-2 items-center text-amber-500">
+//         <span class="font-bold text-[0.9vw]">${134.87}</span>
+//     </div>`;
+//     const versus = `<div class="text-[0.5vw] flex flex-col w-full mt-3">
+//     <table class="text-amber-600 mb-2">
+//         <thead>
+//             <tr>
+//                 <th class="border border-black bg-black py-[0.5px] px-1 text-left">Pekerjaan Bangunan...</th>
+//                 <th class="border border-black py-[0.5px]">5</th>
+//                 <th class="border border-black py-[0.5px] text-cyan-500">2 Dec 2024</th>
+//             </tr>
+//             <tr>
+//                 <th class="border border-black bg-black py-[0.5px] px-1 text-left">Licensor Biodiesel...</th>
+//                 <th class="border border-black py-[0.5px]">81.9</th>
+//                 <th class="border border-black py-[0.5px] text-cyan-500">1 Jan 2025</th>
+//             </tr>
+//         </thead>
+//     </table>
+//     </div>`;
+//     const color = 'text-amber-500';
+//     const icon = null;
+//     const link = 'cfi-pay-schedule';
 
-    return { name: name, value: value, versus: versus, color: color, icon: icon, link: link, colspan: colspan };
-};
+//     return { name: name, value: value, versus: versus, color: color, icon: icon, link: link, colspan: colspan };
+// };
 
 export const cffPaySchedule = () => {
     const name = 'Pay Schedule (in IDR BN)';
@@ -237,20 +237,20 @@ export const cffPaySchedule = () => {
     const versus = `<div class="flex gap-1 w-full h-full">
         <div class="flex flex-col gap-1 p-2 rounded-xl bg-black w-full">
             <div class="flex gap-2 justify-between items-center">
-                <span class="font-bold text-[0.5vw]">CFF</span>
-                <span class="text-cyan-500 font-bold text-[0.4vw]">s/d December 2024</span>
+                <span class="font-bold text-[0.9vw]">CFF</span>
+                <span class="text-cyan-500 font-bold text-[0.7vw]">s/d December 2024</span>
             </div>
             <div class="flex gap-2 items-center text-amber-500">
-                <span class="font-bold text-[0.8vw]">14.2</span>
+                <span class="font-bold text-[1.2vw]">14.2</span>
                 <i class="pi pi-sort" style="font-size:0.8vw;"></i>
             </div>
         </div>
         <div class="flex flex-col gap-1 p-2 rounded-xl bg-black w-full">
             <div class="flex gap-2 justify-between items-center">
-                <span class="font-bold text-[0.5vw]">CFF</span>
+                <span class="font-bold text-[0.9vw]">CFF</span>
             </div>
             <div class="flex gap-2 items-center text-amber-500">
-                <span class="font-bold text-[0.8vw]">134.87</span>
+                <span class="font-bold text-[1.2vw]">134.87</span>
             </div>
         </div>
     </div>
@@ -269,101 +269,101 @@ export const hargaSpotInventoryBulky = () => {
     const value = null;
     const versus = [
         `<div class="flex flex-col gap-1 p-2 bg-black rounded-xl w-full">
-        <span class="font-bold text-[0.5vw] text-gray-400">PFAD</span>
+        <span class="font-bold text-[0.8vw] text-gray-400">PFAD</span>
         <div class="flex gap-1 w-full">
             <div class="flex flex-col gap-1  w-full">
                 <div class="flex flex-col text-amber-600 justify-between items-end w-full">
-                    <span class="text-[0.5vw] font-bold">10,423</span>
-                    <span class="text-[0.4vw] text-cyan-500">Spot (Rp/Kg)</span>
+                    <span class="text-[0.8vw] font-bold">10,423</span>
+                    <span class="text-[0.7vw] text-cyan-500">Spot (Rp/Kg)</span>
                 </div>
                 <div class="flex flex-col text-amber-600 justify-between items-end w-full">
-                    <span class="text-[0.5vw] font-bold">686</span>
-                    <span class="text-[0.4vw] text-cyan-500">Spot (USD/Ton)</span>
+                    <span class="text-[0.8vw] font-bold">686</span>
+                    <span class="text-[0.7vw] text-cyan-500">Spot (USD/Ton)</span>
                 </div>
             </div>
             <div class="flex flex-col gap-1  w-full">
                 <div class="flex flex-col text-green-600 justify-between items-end w-full">
-                    <span class="text-[0.5vw] font-bold">10,641</span>
-                    <span class="text-[0.4vw] text-cyan-500">Inventory (Rp/Kg)</span>
+                    <span class="text-[0.8vw] font-bold">10,641</span>
+                    <span class="text-[0.7vw] text-cyan-500">Inventory (Rp/Kg)</span>
                 </div>
                 <div class="flex flex-col text-green-600 justify-between items-end w-full">
-                    <span class="text-[0.5vw] font-bold">701</span>
-                    <span class="text-[0.4vw] text-cyan-500">Inventory (USD/Ton)</span>
+                    <span class="text-[0.8vw] font-bold">701</span>
+                    <span class="text-[0.7vw] text-cyan-500">Inventory (USD/Ton)</span>
                 </div>
             </div>
         </div>
     </div>`,
         `<div class="flex flex-col gap-1 p-2 bg-black rounded-xl w-full">
-        <span class="font-bold text-[0.5vw] text-gray-400">RBDPO</span>
+        <span class="font-bold text-[0.8vw] text-gray-400">RBDPO</span>
         <div class="flex gap-1 w-full">
             <div class="flex flex-col gap-1  w-full">
                 <div class="flex flex-col text-amber-600 justify-between items-end w-full">
-                    <span class="text-[0.5vw] font-bold">12,867</span>
-                    <span class="text-[0.4vw] text-cyan-500">Spot (Rp/Kg)</span>
+                    <span class="text-[0.8vw] font-bold">12,867</span>
+                    <span class="text-[0.7vw] text-cyan-500">Spot (Rp/Kg)</span>
                 </div>
                 <div class="flex flex-col text-amber-600 justify-between items-end w-full">
-                    <span class="text-[0.5vw] font-bold">847</span>
-                    <span class="text-[0.4vw] text-cyan-500">Spot (USD/Ton)</span>
+                    <span class="text-[0.8vw] font-bold">847</span>
+                    <span class="text-[0.7vw] text-cyan-500">Spot (USD/Ton)</span>
                 </div>
             </div>
             <div class="flex flex-col gap-1  w-full">
                 <div class="flex flex-col text-green-600 justify-between items-end w-full">
-                    <span class="text-[0.5vw] font-bold">13,000</span>
-                    <span class="text-[0.4vw] text-cyan-500">Inventory (Rp/Kg)</span>
+                    <span class="text-[0.8vw] font-bold">13,000</span>
+                    <span class="text-[0.7vw] text-cyan-500">Inventory (Rp/Kg)</span>
                 </div>
                 <div class="flex flex-col text-green-600 justify-between items-end w-full">
-                    <span class="text-[0.5vw] font-bold">856</span>
-                    <span class="text-[0.4vw] text-cyan-500">Inventory (USD/Ton)</span>
+                    <span class="text-[0.8vw] font-bold">856</span>
+                    <span class="text-[0.7vw] text-cyan-500">Inventory (USD/Ton)</span>
                 </div>
             </div>
         </div>
     </div>`,
         `<div class="flex flex-col gap-1 p-2 bg-black rounded-xl w-full">
-        <span class="font-bold text-[0.5vw] text-gray-400">RBD Stearin</span>
+        <span class="font-bold text-[0.8vw] text-gray-400">RBD Stearin</span>
         <div class="flex gap-1 w-full">
             <div class="flex flex-col gap-1  w-full">
                 <div class="flex flex-col text-amber-600 justify-between items-end w-full">
-                    <span class="text-[0.5vw] font-bold">12,867</span>
-                    <span class="text-[0.4vw] text-cyan-500">Spot (Rp/Kg)</span>
+                    <span class="text-[0.8vw] font-bold">12,867</span>
+                    <span class="text-[0.7vw] text-cyan-500">Spot (Rp/Kg)</span>
                 </div>
                 <div class="flex flex-col text-amber-600 justify-between items-end w-full">
-                    <span class="text-[0.5vw] font-bold">847</span>
-                    <span class="text-[0.4vw] text-cyan-500">Spot (USD/Ton)</span>
+                    <span class="text-[0.8vw] font-bold">847</span>
+                    <span class="text-[0.7vw] text-cyan-500">Spot (USD/Ton)</span>
                 </div>
             </div>
             <div class="flex flex-col gap-1  w-full">
                 <div class="flex flex-col text-green-600 justify-between items-end w-full">
-                    <span class="text-[0.5vw] font-bold">13,000</span>
-                    <span class="text-[0.4vw] text-cyan-500">Inventory (Rp/Kg)</span>
+                    <span class="text-[0.8vw] font-bold">13,000</span>
+                    <span class="text-[0.7vw] text-cyan-500">Inventory (Rp/Kg)</span>
                 </div>
                 <div class="flex flex-col text-green-600 justify-between items-end w-full">
-                    <span class="text-[0.5vw] font-bold">856</span>
-                    <span class="text-[0.4vw] text-cyan-500">Inventory (USD/Ton)</span>
+                    <span class="text-[0.8vw] font-bold">856</span>
+                    <span class="text-[0.7vw] text-cyan-500">Inventory (USD/Ton)</span>
                 </div>
             </div>
         </div>
     </div>`,
         `<div class="flex flex-col gap-1 p-2 bg-black rounded-xl w-full">
-        <span class="font-bold text-[0.5vw] text-gray-400">RBD Olein</span>
+        <span class="font-bold text-[0.8vw] text-gray-400">RBD Olein</span>
         <div class="flex gap-1 w-full">
             <div class="flex flex-col gap-1  w-full">
                 <div class="flex flex-col text-amber-600 justify-between items-end w-full">
-                    <span class="text-[0.5vw] font-bold">12,867</span>
-                    <span class="text-[0.4vw] text-cyan-500">Spot (Rp/Kg)</span>
+                    <span class="text-[0.8vw] font-bold">12,867</span>
+                    <span class="text-[0.7vw] text-cyan-500">Spot (Rp/Kg)</span>
                 </div>
                 <div class="flex flex-col text-amber-600 justify-between items-end w-full">
-                    <span class="text-[0.5vw] font-bold">847</span>
-                    <span class="text-[0.4vw] text-cyan-500">Spot (USD/Ton)</span>
+                    <span class="text-[0.8vw] font-bold">847</span>
+                    <span class="text-[0.7vw] text-cyan-500">Spot (USD/Ton)</span>
                 </div>
             </div>
             <div class="flex flex-col gap-1  w-full">
                 <div class="flex flex-col text-green-600 justify-between items-end w-full">
-                    <span class="text-[0.5vw] font-bold">13,000</span>
-                    <span class="text-[0.4vw] text-cyan-500">Inventory (Rp/Kg)</span>
+                    <span class="text-[0.8vw] font-bold">13,000</span>
+                    <span class="text-[0.7vw] text-cyan-500">Inventory (Rp/Kg)</span>
                 </div>
                 <div class="flex flex-col text-green-600 justify-between items-end w-full">
-                    <span class="text-[0.5vw] font-bold">856</span>
-                    <span class="text-[0.4vw] text-cyan-500">Inventory (USD/Ton)</span>
+                    <span class="text-[0.8vw] font-bold">856</span>
+                    <span class="text-[0.7vw] text-cyan-500">Inventory (USD/Ton)</span>
                 </div>
             </div>
         </div>
@@ -382,61 +382,101 @@ export const hargaSpotInventoryRetail = () => {
     const value = null;
     const versus = [
         `<div class="flex flex-col gap-1 p-2 bg-black rounded-xl w-full">
-        <span class="font-bold text-[0.5vw] text-gray-400">Minyakita 1 Ltr</span>
+        <span class="font-bold text-[0.8vw] text-gray-400">Minyakita 1 Ltr</span>
         <div class="flex gap-1 w-full">
             <div class="flex flex-col gap-1 w-full">
                 <div class="flex flex-col text-amber-600 justify-between items-end w-full">
-                    <span class="text-[0.5vw] font-bold">13,499</span>
-                    <span class="text-[0.4vw] text-cyan-500">Rp/Kg</span>
+                    <span class="text-[0.8vw] font-bold">13,499</span>
+                    <span class="text-[0.7vw] text-cyan-500">Rp/Kg</span>
                 </div>
                 <div class="flex flex-col text-amber-600 justify-between items-end w-full">
-                    <span class="text-[0.5vw] font-bold">161,983</span>
-                    <span class="text-[0.4vw] text-cyan-500">Rp/Box</span>
+                    <span class="text-[0.8vw] font-bold">161,983</span>
+                    <span class="text-[0.7vw] text-cyan-500">Rp/Box</span>
+                </div>
+            </div>
+            <div class="flex flex-col gap-1 w-full">
+                <div class="flex flex-col text-green-600 justify-between items-end w-full">
+                    <span class="text-[0.8vw] font-bold">13,499</span>
+                    <span class="text-[0.7vw] text-cyan-500">USD/Kg</span>
+                </div>
+                <div class="flex flex-col text-green-600 justify-between items-end w-full">
+                    <span class="text-[0.8vw] font-bold">161,983</span>
+                    <span class="text-[0.7vw] text-cyan-500">USD/Box</span>
                 </div>
             </div>
         </div>
     </div>`,
         `<div class="flex flex-col gap-1 p-2 bg-black rounded-xl w-full">
-        <span class="font-bold text-[0.5vw] text-gray-400">Salvaco 1 Ltr</span>
+        <span class="font-bold text-[0.8vw] text-gray-400">Salvaco 1 Ltr</span>
         <div class="flex gap-1 w-full">
             <div class="flex flex-col gap-1 w-full">
                 <div class="flex flex-col text-amber-600 justify-between items-end w-full">
-                    <span class="text-[0.5vw] font-bold">14,216</span>
-                    <span class="text-[0.4vw] text-cyan-500">Rp/Kg</span>
+                    <span class="text-[0.8vw] font-bold">14,216</span>
+                    <span class="text-[0.7vw] text-cyan-500">Rp/Kg</span>
                 </div>
                 <div class="flex flex-col text-amber-600 justify-between items-end w-full">
-                    <span class="text-[0.5vw] font-bold">170,591</span>
-                    <span class="text-[0.4vw] text-cyan-500">Rp/Box</span>
+                    <span class="text-[0.8vw] font-bold">170,591</span>
+                    <span class="text-[0.7vw] text-cyan-500">Rp/Box</span>
+                </div>
+            </div>
+            <div class="flex flex-col gap-1 w-full">
+                <div class="flex flex-col text-green-600 justify-between items-end w-full">
+                    <span class="text-[0.8vw] font-bold">14,216</span>
+                    <span class="text-[0.7vw] text-cyan-500">USD/Kg</span>
+                </div>
+                <div class="flex flex-col text-green-600 justify-between items-end w-full">
+                    <span class="text-[0.8vw] font-bold">170,591</span>
+                    <span class="text-[0.7vw] text-cyan-500">USD/Box</span>
                 </div>
             </div>
         </div>
     </div>`,
         `<div class="flex flex-col gap-1 p-2 bg-black rounded-xl w-full">
-        <span class="font-bold text-[0.5vw] text-gray-400">Nusakita 1 Ltr</span>
+        <span class="font-bold text-[0.8vw] text-gray-400">Nusakita 1 Ltr</span>
         <div class="flex gap-1 w-full">
             <div class="flex flex-col gap-1 w-full">
                 <div class="flex flex-col text-amber-600 justify-between items-end w-full">
-                    <span class="text-[0.5vw] font-bold">13,499</span>
-                    <span class="text-[0.4vw] text-cyan-500">Rp/Kg</span>
+                    <span class="text-[0.8vw] font-bold">13,499</span>
+                    <span class="text-[0.7vw] text-cyan-500">Rp/Kg</span>
                 </div>
                 <div class="flex flex-col text-amber-600 justify-between items-end w-full">
-                    <span class="text-[0.5vw] font-bold">161,983</span>
-                    <span class="text-[0.4vw] text-cyan-500">Rp/Box</span>
+                    <span class="text-[0.8vw] font-bold">161,983</span>
+                    <span class="text-[0.7vw] text-cyan-500">Rp/Box</span>
+                </div>
+            </div>
+            <div class="flex flex-col gap-1 w-full">
+                <div class="flex flex-col text-green-600 justify-between items-end w-full">
+                    <span class="text-[0.8vw] font-bold">13,499</span>
+                    <span class="text-[0.7vw] text-cyan-500">USD/Kg</span>
+                </div>
+                <div class="flex flex-col text-green-600 justify-between items-end w-full">
+                    <span class="text-[0.8vw] font-bold">161,983</span>
+                    <span class="text-[0.7vw] text-cyan-500">USD/Box</span>
                 </div>
             </div>
         </div>
     </div>`,
         `<div class="flex flex-col gap-1 p-2 bg-black rounded-xl w-full">
-        <span class="font-bold text-[0.5vw] text-gray-400">INL 450 ML</span>
+        <span class="font-bold text-[0.8vw] text-gray-400">INL 450 ML</span>
         <div class="flex gap-1 w-full">
             <div class="flex flex-col gap-1 w-full">
                 <div class="flex flex-col text-amber-600 justify-between items-end w-full">
-                    <span class="text-[0.5vw] font-bold">14,216</span>
-                    <span class="text-[0.4vw] text-cyan-500">Rp/Kg</span>
+                    <span class="text-[0.8vw] font-bold">14,216</span>
+                    <span class="text-[0.7vw] text-cyan-500">Rp/Kg</span>
                 </div>
                 <div class="flex flex-col text-amber-600 justify-between items-end w-full">
-                    <span class="text-[0.5vw] font-bold">170,591</span>
-                    <span class="text-[0.4vw] text-cyan-500">Rp/Box</span>
+                    <span class="text-[0.8vw] font-bold">170,591</span>
+                    <span class="text-[0.7vw] text-cyan-500">Rp/Box</span>
+                </div>
+            </div>
+            <div class="flex flex-col gap-1 w-full">
+                <div class="flex flex-col text-green-600 justify-between items-end w-full">
+                    <span class="text-[0.8vw] font-bold">14,216</span>
+                    <span class="text-[0.7vw] text-cyan-500">USD/Kg</span>
+                </div>
+                <div class="flex flex-col text-green-600 justify-between items-end w-full">
+                    <span class="text-[0.8vw] font-bold">170,591</span>
+                    <span class="text-[0.7vw] text-cyan-500">USD/Box</span>
                 </div>
             </div>
         </div>

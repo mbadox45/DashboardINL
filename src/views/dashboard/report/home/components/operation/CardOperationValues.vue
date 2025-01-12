@@ -97,7 +97,7 @@ const routerLink = (path) => {
     <div class="bg-gray-800 p-3 rounded-xl shadow-xl flex gap-3 items-start min-h-[15.5vw]" :class="load.colspan">
         <div class="flex flex-col w-full h-full">
             <div class="flex items-center gap-6">
-                <span class="text-[0.55vw] font-bold w-full">{{ load.name }}</span>
+                <span class="text-[0.8vw] font-bold w-full">{{ load.name }}</span>
                 <button
                     v-show="load.link != null"
                     @click="routerLink(load.link)"

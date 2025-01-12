@@ -104,7 +104,7 @@ onUnmounted(() => {
                     <div class="h-full" v-show="load.nilai != null" v-html="load.nilai"></div>
                     <div :class="animationClass" v-html="load.versus[currentIndex]"></div>
                 </div>
-                <VueApexCharts v-show="load.dataChart != null" type="pie" :series="load.dataChart" :options="load.optionsChart" class="w-full" height="100vw" style="z-index: 1 !important" />
+                <VueApexCharts v-show="load.dataChart != null" :series="load.dataChart" :options="load.optionsChart" class="w-full" height="150vw" style="z-index: 1 !important" />
             </div>
             <div v-if="load.versus.length > 1" class="flex justify-between pt-1">
                 <button @click="prevIndex" class="p-1 bg-gray-700 text-white text-sm rounded hover:bg-gray-600 transition flex items-center text-[0.6vw]"><i class="pi pi-chevron-left mr-1" style="font-size: 0.6vw"></i> Prev</button>

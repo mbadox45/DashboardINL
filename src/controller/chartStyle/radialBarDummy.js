@@ -120,7 +120,7 @@ export const stackedChartOptionsApex = (total, listLabels, toolbar) => {
                 },
                 formatter: function (val) {
                     if (val >= 1000) {
-                        return (val / 1000).toFixed(1) + 'K';
+                        return (val / 1000).toFixed(2) + 'K';
                     }
                     return val;
                 }
@@ -150,11 +150,15 @@ export const stackedChartOptionsApex = (total, listLabels, toolbar) => {
     };
 };
 
-export const pieChartApex = (label) => {
+export const pieChartApex = (label, qty) => {
+    const formatValue = (val) => {
+        return val >= 1000 ? `${(val / 1000).toFixed(2)}k` : val; // Format values larger than 1000
+    };
+
     return {
         chart: {
             width: 380,
-            type: 'pie',
+            type: 'donut', // Change to 'donut'
             background: 'transparent',
             foreColor: '#ffffff',
             toolbar: {
@@ -162,15 +166,60 @@ export const pieChartApex = (label) => {
             }
         },
         labels: label,
+        series: qty, // Use the qty array for chart data
         legend: {
             show: false
         },
         dataLabels: {
             enabled: true,
+            formatter: (val, opts) => {
+                const rawValue = opts.w.globals.series[opts.seriesIndex];
+                return formatValue(rawValue); // Apply formatting
+            },
             style: {
-                fontSize: '0.3vw', // Change this to adjust the label size
+                fontSize: '0.6vw', // Adjust label size
                 fontWeight: 'bold',
-                colors: ['#ffffff'] // Set label color
+                colors: ['#ffffff']
+            }
+        },
+        plotOptions: {
+            pie: {
+                donut: {
+                    size: '60%', // Adjust the size of the donut hole
+                    labels: {
+                        show: true,
+                        name: {
+                            show: true,
+                            fontSize: '1vw',
+                            fontWeight: 'bold',
+                            color: '#ffffff',
+                            offsetY: -10
+                        },
+                        value: {
+                            show: true,
+                            fontSize: '1vw',
+                            fontWeight: 'bold',
+                            marginTop: '-100px',
+                            color: '#ffffff',
+                            formatter: (val) => {
+                                const total = qty.reduce((a, b) => a + b, 0);
+                                return `Total: ${formatValue(total)}`; // Format the total value
+                            }
+                        },
+                        total: {
+                            show: true,
+                            showAlways: true,
+                            label: 'Total',
+                            fontSize: '1vw',
+                            fontWeight: 'bold',
+                            color: '#ffffff',
+                            formatter: () => {
+                                const total = qty.reduce((a, b) => a + b, 0);
+                                return formatValue(total); // Apply formatting
+                            }
+                        }
+                    }
+                }
             }
         },
         responsive: [

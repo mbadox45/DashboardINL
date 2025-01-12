@@ -4,7 +4,7 @@ export const QtyPenjualanBulky = () => {
     const qty = [10000, 15000, 50000, 25000];
     const label = ['PFAD', 'RBDPO', 'RBD Stearin', 'RBD Olein'];
     const name = 'Qty Penjualan Bulky';
-    const chartData = pieChartApex(label);
+    const chartData = pieChartApex(label, qty); // Pass qty as an additional parameter
     const colspan = 'col-span-2';
     const value = null;
     const versus = [
@@ -22,7 +22,7 @@ export const QtyPenjualanBulky = () => {
     </div>`
     ];
     const color = 'text-red-500';
-    const icon = '/images/icon/sales/oil-truck.png';
+    const icon = null;
     const link = '/test';
 
     return { colspan: colspan, qty: qty, options: chartData, name: name, value: value, versus: versus, color: color, icon: icon, link: link };
@@ -32,7 +32,7 @@ export const QtyPenjualanRetail = () => {
     const qty = [10000, 15000, 50000, 25000];
     const label = ['PFAD', 'RBDPO', 'RBD Stearin', 'RBD Olein'];
     const name = 'Qty Penjualan Retail';
-    const options = pieChartApex(label);
+    const options = pieChartApex(label, qty);
     const colspan = 'col-span-2';
     const value = null;
     const versus = [
@@ -51,7 +51,7 @@ export const QtyPenjualanRetail = () => {
     </div>`
     ];
     const color = 'text-red-500';
-    const icon = '/images/icon/sales/warehouse.png';
+    const icon = null;
     const link = '/test';
 
     return { colspan: colspan, qty: qty, options: options, name: name, value: value, versus: versus, color: color, icon: icon, link: link };
@@ -115,14 +115,22 @@ export const avgCPOKpbn = () => {
     const options = null;
     const colspan = null;
     const value = `<div class="flex justify-between gap-2 items-center">
-        <span class="font-bold text-[0.8vw] text-green-600">IDR 12,633/Kg</span>
-        <span class="font-bold text-[0.8vw] text-amber-600">USD 842.2/Ton</span>
+        <span class="font-bold text-[0.7vw] text-cyan-600">Average</span>
+        <span class="font-bold text-[0.7vw] text-cyan-600">Today</span>
     </div>`;
     // Jika Pendapatan > RKAP warna jadi green 600, sesuai kan periode
     const versus = [
-        `<div class="flex flex-col w-full">
-    <span class="text-[0.5vw] text-cyan-500 font-bold">31 December 2024</span>
-    <span class="text-[0.5vw] text-cyan-500 font-bold">Jisdor : 15,000</span>
+        `<div class="flex justify-between gap-2 items-center">
+        <span class="font-bold text-[0.9vw] text-amber-600">USD 842.2/Ton</span>
+        <span class="font-bold text-[0.9vw] text-green-600">USD 842.2/Ton</span>
+    </div>
+    <div class="flex justify-between gap-2 items-center">
+        <span class="font-bold text-[0.9vw] text-amber-600">IDR 12,633/Kg</span>
+        <span class="font-bold text-[0.9vw] text-green-600">IDR 12,633/Kg</span>
+    </div>
+    <div class="flex flex-col items-center">
+        <span class="text-[0.6vw] text-cyan-500 font-bold">31 Dec 2024</span>
+        <span class="text-[0.6vw] text-cyan-500 font-bold">Jisdor : 15,000</span>
     </div>`
     ];
     const color = 'text-red-500';

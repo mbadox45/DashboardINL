@@ -90,7 +90,7 @@ onUnmounted(() => {
     <div class="bg-gray-800 p-3 rounded-xl shadow-xl flex gap-3 items-start" :class="load.colspan">
         <div class="flex flex-col w-full h-full">
             <div class="flex items-center gap-6">
-                <span class="text-[0.55vw] font-bold w-full">{{ load.name }}</span>
+                <span class="text-[0.8vw] font-bold w-full">{{ load.name }}</span>
             </div>
             <div class="flex items-center gap-4 h-full relative overflow-hidden">
                 <div :class="animationClass" class="flex transition-all duration-500 w-full">
