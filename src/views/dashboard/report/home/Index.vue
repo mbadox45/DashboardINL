@@ -159,7 +159,7 @@ const loadDataHarga = async () => {
             colspan: dataHarga[i].colspan
         });
     }
-    listCardSCM.value = list;
+    listCardHarga.value = list;
 };
 
 const loadDelay = async () => {
@@ -194,7 +194,7 @@ const loadDelay = async () => {
                     </div>
                 </div>
                 <div class="flex flex-col">
-                    <div class="grid grid-cols-2 gap-2">
+                    <div class="grid grid-cols-4 gap-2">
                         <card-values v-for="(item, index) in listCardHarga" :key="index" :datas="item" :style="`animation: fadein 1s ease-in-out`" />
                     </div>
                 </div>
