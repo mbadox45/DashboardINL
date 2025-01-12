@@ -83,7 +83,7 @@ export const stockBulky = () => {
 };
 
 export const stockRetail = () => {
-    const name = 'Balance Stock Retail (in ??)';
+    const name = 'Balance Stock Retail (in Ton)';
     const colspan = null;
     const value = null;
     // Jika Pendapatan > RKAP warna jadi green 600, sesuai kan periode
