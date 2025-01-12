@@ -14,7 +14,7 @@ const props = defineProps({
 
 const load = ref({ name: '', icon: '', nilai: 0, persen: 0, versus: '', link: null, colspan: null });
 const currentIndex = ref(0);
-const animationClass = ref('fade-in');
+const animationClass = ref('slide-in-from-right');
 
 const loadData = async () => {
     const data = props.datas;
@@ -36,40 +36,38 @@ let intervalId;
 // Start the auto-cycling timer
 const startIndexCycle = () => {
     if (load.value.versus.length <= 1) {
-        animationClass.value = 'fade-in';
+        animationClass.value = 'slide-in-from-right';
         return;
     }
 
-    clearInterval(intervalId); // Clear any existing timer
+    clearInterval(intervalId);
     intervalId = setInterval(() => {
-        animationClass.value = 'fade-out';
+        animationClass.value = 'slide-out-to-left';
         setTimeout(() => {
-            currentIndex.value = (currentIndex.value + 1) % load.value.versus.length;
-            animationClass.value = 'fade-in';
+            currentIndex.value = (currentIndex.value + 2) % load.value.versus.length;
+            animationClass.value = 'slide-in-from-right';
         }, 500);
-    }, 5000); // Restart with a 5-second interval
+    }, 5000);
 };
 
-// Reset the timer and navigate to the next index
 const nextIndex = () => {
-    if (load.value.versus.length > 1) {
-        animationClass.value = 'fade-out';
+    if (load.value.versus.length > 2) {
+        animationClass.value = 'slide-out-to-left';
         setTimeout(() => {
-            currentIndex.value = (currentIndex.value + 1) % load.value.versus.length;
-            animationClass.value = 'fade-in';
-            startIndexCycle(); // Restart the timer
+            currentIndex.value = (currentIndex.value + 2) % load.value.versus.length;
+            animationClass.value = 'slide-in-from-right';
+            startIndexCycle();
         }, 500);
     }
 };
 
-// Reset the timer and navigate to the previous index
 const prevIndex = () => {
-    if (load.value.versus.length > 1) {
-        animationClass.value = 'fade-out';
+    if (load.value.versus.length > 2) {
+        animationClass.value = 'slide-out-to-right';
         setTimeout(() => {
-            currentIndex.value = (currentIndex.value - 1 + load.value.versus.length) % load.value.versus.length;
-            animationClass.value = 'fade-in';
-            startIndexCycle(); // Restart the timer
+            currentIndex.value = (currentIndex.value - 2 + load.value.versus.length) % load.value.versus.length;
+            animationClass.value = 'slide-in-from-left';
+            startIndexCycle();
         }, 500);
     }
 };
@@ -95,7 +93,7 @@ const routerLink = (path) => {
 
 <template>
     <div class="bg-gray-800 p-3 rounded-xl shadow-xl flex gap-3 items-start min-h-[15.5vw]" :class="load.colspan">
-        <div class="flex flex-col w-full h-full">
+        <div class="flex flex-col gap-3 w-full h-full">
             <div class="flex items-center gap-6">
                 <span class="text-[0.8vw] font-bold w-full">{{ load.name }}</span>
                 <button
@@ -108,7 +106,7 @@ const routerLink = (path) => {
             </div>
             <div class="flex items-center gap-4 h-full">
                 <img v-show="load.icon != null" :src="load.icon" alt="Icon" class="hidden lg:flex w-[3vw] h-[3vw]" />
-                <div class="w-full flex flex-col h-full gap-6 justify-between">
+                <div class="w-full flex flex-col h-full gap-6 justify-between overflow-hidden">
                     <div class="h-full" v-show="load.nilai != null" v-html="load.nilai"></div>
                     <div :class="animationClass" class="min-h-[7vw]" v-html="load.versus[currentIndex]"></div>
                     <!-- <div class="min-h-[7vw]" v-html="load.versus[currentIndex]"></div> -->
@@ -127,31 +125,59 @@ const routerLink = (path) => {
 </template>
 
 <style>
-.fade-in {
-    opacity: 0;
-    animation: fadeIn 0.8s forwards;
+.slide-in-from-right {
+    transform: translateX(100%);
+    animation: slideInFromRight 0.5s forwards;
 }
 
-.fade-out {
-    opacity: 1;
-    animation: fadeOut 0.8s forwards;
+.slide-out-to-left {
+    transform: translateX(0);
+    animation: slideOutToLeft 0.5s forwards;
 }
 
-@keyframes fadeIn {
+.slide-in-from-left {
+    transform: translateX(-100%);
+    animation: slideInFromLeft 0.5s forwards;
+}
+
+.slide-out-to-right {
+    transform: translateX(0);
+    animation: slideOutToRight 0.5s forwards;
+}
+
+@keyframes slideInFromRight {
     from {
-        opacity: 0;
+        transform: translateX(100%);
     }
     to {
-        opacity: 1;
+        transform: translateX(0);
     }
 }
 
-@keyframes fadeOut {
+@keyframes slideOutToLeft {
     from {
-        opacity: 1;
+        transform: translateX(0);
     }
     to {
-        opacity: 0;
+        transform: translateX(-100%);
+    }
+}
+
+@keyframes slideInFromLeft {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOutToRight {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(100%);
     }
 }
 </style>
