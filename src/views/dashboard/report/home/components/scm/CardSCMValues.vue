@@ -1,8 +1,5 @@
 <script setup>
 import { defineProps, onMounted, onUnmounted, ref, watch } from 'vue';
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
 
 const props = defineProps({
     datas: {
@@ -81,18 +78,6 @@ onMounted(() => {
 onUnmounted(() => {
     clearInterval(intervalId);
 });
-
-const routerLink = (path) => {
-    // if (path == null) {
-    // } else {
-    //     const data = JSON.stringify({ path: path, type: 'scm' });
-    //     const encryptedPath = CryptoJS.AES.encrypt(data, 'your-secret-key').toString();
-    //     router.push({
-    //         path: '/detail-dashboard',
-    //         query: { component: encryptedPath }
-    //     });
-    // }
-};
 </script>
 
 <template>
@@ -113,16 +98,16 @@ const routerLink = (path) => {
                 <div class="w-full flex flex-col justify-between min-h-[3vw] gap-3">
                     <div class="h-full" v-show="load.nilai != null" v-html="load.nilai"></div>
                     <!-- <div :class="animationClass" class="min-h-[7vw]" v-html="load.versus[currentIndex]"></div> -->
-                    <div :class="animationClass" v-html="load.versus[currentIndex]" class="h-full"></div>
+                    <div :class="animationClass" v-html="load.versus[currentIndex]"></div>
                     <!-- <div class="min-h-[7vw]" v-html="load.versus[currentIndex]"></div> -->
                 </div>
             </div>
-            <div v-if="load.versus.length > 1" class="flex justify-between mt-2">
-                <button @click="prevIndex" class="p-1 bg-gray-700 text-white rounded hover:bg-gray-600 transition flex items-center text-[0.6vw] w-[1vw] h-[1vw] justify-center">
-                    <i class="pi pi-chevron-left mr-1" style="font-size: 0.5vw"></i>
+            <div v-if="load.versus.length > 1" class="flex justify-between">
+                <button @click="prevIndex" class="p-1 bg-gray-700 text-white text-sm rounded hover:bg-gray-600 transition flex items-center text-[0.6vw] w-[1vw] h-[1vw] justify-center">
+                    <i class="pi pi-chevron-left mr-1" style="font-size: 0.6vw"></i>
                 </button>
-                <button @click="nextIndex" class="p-1 bg-gray-700 text-white rounded hover:bg-gray-600 transition flex items-center text-[0.6vw] w-[1vw] h-[1vw] justify-center">
-                    <i class="pi pi-chevron-right ml-1" style="font-size: 0.5vw"></i>
+                <button @click="nextIndex" class="p-1 bg-gray-700 text-white text-sm rounded hover:bg-gray-600 transition flex items-center text-[0.6vw] w-[1vw] h-[1vw] justify-center">
+                    <i class="pi pi-chevron-right ml-1" style="font-size: 0.6vw"></i>
                 </button>
             </div>
         </div>

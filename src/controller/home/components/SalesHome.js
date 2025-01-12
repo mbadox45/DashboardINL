@@ -63,19 +63,22 @@ export const outstandingCPo = () => {
     const value = null;
     // Jika Pendapatan > RKAP warna jadi green 600, sesuai kan periode
     const versus = [
-        `<div class="flex flex-col items-end w-full gap-2">
-        <span class="text-[0.8vw]">9,000,000</span>
+        `<div class="flex flex-col items-end w-full gap-1">
+        <div class="flex justify-between items-center gap-2 w-full">
+            <span class="text-[1vw] font-bold">Total</span>
+            <span class="text-[1.4vw] text-amber-500 font-bold">9,000,000</span>
+        </div>
         <div class="flex gap-1 w-full">
             <div class="flex flex-col w-full p-2 bg-black rounded-lg">
-                <span class="text-[0.6vw] text-amber-500 font-extrabold w-full text-right">300,000</span>
-                <div class="text-[0.4vw] text-cyan-500 flex gap-2 justify-end font-bold">
-                    <span class="text-indigo-300">PT JAYA SEMPURNA</span>
+                <span class="text-[0.9vw] text-amber-500 font-extrabold w-full text-right">300,000</span>
+                <div class="text-[0.6vw] text-cyan-500 flex gap-2 justify-end font-bold">
+                    <span class="text-cyan-500">PT JAYA SEMPURNA</span>
                 </div>
             </div>
             <div class="flex flex-col w-full p-2 bg-black rounded-lg">
-                <span class="text-[0.6vw] text-amber-500 font-extrabold w-full text-right">300,000</span>
-                <div class="text-[0.4vw] text-cyan-500 flex gap-2 justify-end font-bold">
-                    <span class="text-indigo-300">PT SALMAN JAYA</span>
+                <span class="text-[0.9vw] text-amber-500 font-extrabold w-full text-right">300,000</span>
+                <div class="text-[0.6vw] text-cyan-500 flex gap-2 justify-end font-bold">
+                    <span class="text-cyan-500">PT SALMAN JAYA</span>
                 </div>
             </div>
         </div>
@@ -93,13 +96,13 @@ export const saldoPe = () => {
     const colspan = null;
     const options = null;
     const value = `<div class="flex justify-between gap-2 items-center">
-        <span class="font-bold text-[0.9vw] text-amber-500">4,000</span>
+        <span class="font-bold text-[1.6vw] text-amber-500">4,000</span>
     </div>`;
     // Jika Pendapatan > RKAP warna jadi green 600, sesuai kan periode
     const versus = [
         `<div class="flex flex-col w-full">
-    <span class="text-[0.5vw] text-green-500 font-bold">Saldo Awal : 10,000</span>
-    <span class="text-[0.5vw] text-red-500 font-bold">Pengiriman : Rp 6,000</span>
+    <div class="text-[0.7vw] flex items-center justify-between text-green-500 font-bold"><span>Saldo Awal</span><span>10,000</span> </div>
+    <div class="text-[0.7vw] flex items-center justify-between text-red-500 font-bold"><span>Pengiriman</span><span>Rp 6,000</span> </div>
     </div>`
     ];
     const color = 'text-red-500';
@@ -147,42 +150,42 @@ export const proportionCost = () => {
     const versus = [
         `<div class="flex flex-col gap-2 w-full bg-black h-full py-1 px-2 rounded-lg">
         <div class="flex justify-between">
-            <img src="/images/icon/sales/palm-oil.png" alt="Palm Oil" width="20vw"/>
-            <span class="text-[0.6vw]">RBDPO</span>
+            <img src="/images/icon/sales/palm-oil.png" alt="Palm Oil" width="50vw"/>
+            <span class="text-[1.2vw]">RBDPO</span>
         </div>
         <div class="flex flex-col">
-            <div class="flex justify-between text-green-500 font-bold"><span class="text-[0.4vw]">M. Routers</span><span class="text-[0.5vw]">965.00</span></div>
-            <div class="flex justify-between text-amber-500 font-bold"><span class="text-[0.4vw]">Levy Duty</span><span class="text-[0.5vw]">78.00</span></div>
+            <div class="flex justify-between text-green-500 font-bold"><span class="text-[0.6vw]">M. Routers</span><span class="text-[1vw]">965.00</span></div>
+            <div class="flex justify-between text-amber-500 font-bold"><span class="text-[0.6vw]">Levy Duty</span><span class="text-[1vw]">78.00</span></div>
         </div>
     </div>`,
         `<div class="flex flex-col gap-2 w-full bg-black h-full py-1 px-2 rounded-lg">
             <div class="flex justify-between">
-                <img src="/images/icon/sales/palm-oil.png" alt="Palm Oil" width="20vw"/>
-                <span class="text-[0.6vw]">RBD Stearin</span>
+                <img src="/images/icon/sales/palm-oil.png" alt="Palm Oil" width="50vw"/>
+                <span class="text-[1.2vw]">RBD Stearin</span>
             </div>
             <div class="flex flex-col">
-                <div class="flex justify-between text-green-500 font-bold"><span class="text-[0.4vw]">M. Routers</span><span class="text-[0.5vw]">960.00</span></div>
-                <div class="flex justify-between text-amber-500 font-bold"><span class="text-[0.4vw]">Levy Duty</span><span class="text-[0.5vw]">64.00</span></div>
+                <div class="flex justify-between text-green-500 font-bold"><span class="text-[0.6vw]">M. Routers</span><span class="text-[1vw]">960.00</span></div>
+                <div class="flex justify-between text-amber-500 font-bold"><span class="text-[0.6vw]">Levy Duty</span><span class="text-[1vw]">64.00</span></div>
             </div>
         </div>`,
         `<div class="flex flex-col gap-2 w-full bg-black h-full py-1 px-2 rounded-lg">
             <div class="flex justify-between">
-                <img src="/images/icon/sales/palm-oil.png" alt="Palm Oil" width="20vw"/>
-                <span class="text-[0.6vw]">RBD Olein</span>
+                <img src="/images/icon/sales/palm-oil.png" alt="Palm Oil" width="50vw"/>
+                <span class="text-[1.2vw]">RBD Olein</span>
             </div>
             <div class="flex flex-col">
-                <div class="flex justify-between text-green-500 font-bold"><span class="text-[0.4vw]">M. Routers</span><span class="text-[0.5vw]">960.00</span></div>
-                <div class="flex justify-between text-amber-500 font-bold"><span class="text-[0.4vw]">Levy Duty</span><span class="text-[0.5vw]">82.00</span></div>
+                <div class="flex justify-between text-green-500 font-bold"><span class="text-[0.6vw]">M. Routers</span><span class="text-[1vw]">960.00</span></div>
+                <div class="flex justify-between text-amber-500 font-bold"><span class="text-[0.6vw]">Levy Duty</span><span class="text-[1vw]">82.00</span></div>
             </div>
         </div>`,
         `<div class="flex flex-col gap-2 w-full bg-black h-full py-1 px-2 rounded-lg">
             <div class="flex justify-between">
-                <img src="/images/icon/sales/palm-oil.png" alt="Palm Oil" width="20vw"/>
-                <span class="text-[0.6vw]">PFAD</span>
+                <img src="/images/icon/sales/palm-oil.png" alt="Palm Oil" width="50vw"/>
+                <span class="text-[1.2vw]">PFAD</span>
             </div>
             <div class="flex flex-col">
-                <div class="flex justify-between text-green-500 font-bold"><span class="text-[0.4vw]">M. Routers</span><span class="text-[0.5vw]">792.00</span></div>
-                <div class="flex justify-between text-amber-500 font-bold"><span class="text-[0.4vw]">Levy Duty</span><span class="text-[0.5vw]">85.00</span></div>
+                <div class="flex justify-between text-green-500 font-bold"><span class="text-[0.6vw]">M. Routers</span><span class="text-[1vw]">792.00</span></div>
+                <div class="flex justify-between text-amber-500 font-bold"><span class="text-[0.6vw]">Levy Duty</span><span class="text-[1vw]">85.00</span></div>
             </div>
         </div>`
         //     `<div class="flex w-full gap-2 h-full items-center py-1">

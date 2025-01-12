@@ -48,7 +48,8 @@ const startSlideshow = () => {
 </script>
 
 <template>
-    <div class="relative w-full h-[19vw] rounded-xl shadow-2xl overflow-hidden">
+    <!-- <div class="relative w-full min-h-full rounded-xl shadow-2xl overflow-hidden"> -->
+    <div class="relative w-full min-h-[19vw] rounded-xl shadow-2xl overflow-hidden">
         <!-- Gambar dengan efek fade -->
         <div
             v-for="(image, index) in listImages"

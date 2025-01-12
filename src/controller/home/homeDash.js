@@ -27,7 +27,7 @@ export default new (class HomeDashboard {
         return list;
     }
     cardSCM() {
-        const list = [balanceStockCPO(), stockBulky(), stockRetail(), actualIncommingCPO(), saldoPe(), outstandingCPo(), proportionCost()];
+        const list = [balanceStockCPO(), stockBulky(), stockRetail(), actualIncommingCPO(), saldoPe(), outstandingCPo(), proportionCost(), sdm()];
         return list;
     }
     cardPackaging() {

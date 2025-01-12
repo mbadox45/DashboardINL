@@ -495,7 +495,7 @@ export const transaction = () => {
     const value = null;
     // Jika Pendapatan > RKAP warna jadi green 600, sesuai kan periode
     const versus = [
-        `<div class="flex h-full justify-center w-full">
+        `<div class="flex h-full justify-center items-center w-full">
     <span class="text-[0.8vw] text-cyan-500 text-center font-bold">Direct to Transaction Dashboard</span>
     </div>`
     ];

@@ -42,8 +42,8 @@ const routerLink = (path) => {
 watch(() => props.datas, loadData, { immediate: true });
 </script>
 <template>
-    <div class="bg-gray-800 p-2 rounded-xl shadow-xl min-h-[120px] flex gap-3 items-start" :class="load.colspan">
-        <div class="flex flex-col w-full">
+    <div class="bg-gray-800 p-2 rounded-xl shadow-xl min-h-[120px] flex h-full gap-3 items-start" :class="load.colspan">
+        <div class="flex flex-col h-full w-full">
             <div class="flex items-center gap-3">
                 <span class="font-bold w-full text-[0.8vw]">{{ load.name }}</span>
                 <button
@@ -54,11 +54,11 @@ watch(() => props.datas, loadData, { immediate: true });
                     <i class="pi pi-external-link" style="font-weight: 600; font-size: 0.9vw"></i>
                 </button>
             </div>
-            <div class="flex items-center gap-3">
+            <div class="flex h-full items-center gap-3">
                 <img v-show="load.icon != null" :src="load.icon" alt="Icon" class="w-[3vw] h-[3vw] mr-1" />
-                <div class="w-full">
+                <div class="w-full h-full">
                     <div v-html="load.nilai"></div>
-                    <div v-html="load.versus"></div>
+                    <div v-html="load.versus" class="h-full"></div>
                 </div>
             </div>
         </div>

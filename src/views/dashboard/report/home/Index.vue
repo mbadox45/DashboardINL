@@ -22,7 +22,7 @@ const listCardSCM = ref([]);
 const listCardPackaging = ref([]);
 const listCardSdm = ref([]);
 const listDelay = ref([]);
-const activePage = ref(0);
+const activePage = ref(1);
 
 onMounted(() => {
     loadData();
@@ -193,7 +193,7 @@ const loadDelay = async () => {
 </script>
 
 <template>
-    <div class="flex flex-col gap-3 p-6 rounded-2xl w-full bg-black text-white">
+    <div class="flex flex-col gap-3 p-6 rounded-2xl w-full h-full bg-black text-white">
         <div v-if="activePage == 0" class="grid grid-cols-3 gap-2">
             <div class="col-span-1 flex flex-col gap-2">
                 <images-home />
@@ -226,14 +226,9 @@ const loadDelay = async () => {
                 </div>
             </div>
         </div>
-        <div v-else class="grid grid-cols-3 gap-3">
-            <div class="col-span-1 flex flex-col gap-3">
-                <images-home />
-                <div class="flex flex-col gap-2">
-                    <div class="grid grid-cols-1 gap-2">
-                        <card-sdm v-for="(item, index) in listCardSdm" :key="index" :datas="item" :style="`animation: fadein ${index}s ease-in-out`" />
-                    </div>
-                </div>
+        <div v-else class="grid grid-cols-3 gap-3 h-full">
+            <div class="col-span-1 flex flex-col gap-3 h-full">
+                <images-home class="h-full" />
             </div>
             <div class="col-span-2 flex flex-col gap-3">
                 <div class="flex flex-col gap-2">
@@ -246,6 +241,11 @@ const loadDelay = async () => {
                         <card-operation-values v-for="(item, index) in listCardMaterial" :key="index" :datas="item" :style="`animation: fadein ${index}s ease-in-out`" />
                     </div>
                 </div>
+                <!-- <div class="flex flex-col gap-2">
+                    <div class="grid grid-cols-1 gap-2">
+                        <card-sdm v-for="(item, index) in listCardSdm" :key="index" :datas="item" :style="`animation: fadein ${index}s ease-in-out`" />
+                    </div>
+                </div> -->
             </div>
         </div>
         <div class="flex gap-2 justify-center">

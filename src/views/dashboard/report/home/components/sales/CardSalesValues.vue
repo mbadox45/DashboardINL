@@ -86,7 +86,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <div class="bg-gray-800 p-3 rounded-xl shadow-xl flex gap-3 items-start h-full" :class="load.colspan">
+    <div class="bg-gray-800 p-3 rounded-xl shadow-xl flex w-full gap-3 items-start h-full" :class="load.colspan">
         <div class="flex flex-col w-full h-full">
             <div class="flex items-center gap-6 h-full">
                 <span class="text-[0.8vw] font-bold w-full">{{ load.name }}</span>
@@ -98,11 +98,11 @@ onUnmounted(() => {
                     <i class="pi pi-external-link" style="font-weight: 600; font-size: 0.9vw"></i>
                 </router-link>
             </div>
-            <div class="flex gap-4 h-full">
+            <div class="flex gap-4 w-full h-full">
                 <img v-show="load.icon != null" :src="load.icon" alt="Icon" class="hidden lg:flex w-[3vw] h-[3vw]" />
                 <div class="w-full flex flex-col justify-between min-h-[3vw] gap-1 h-full">
-                    <div class="h-full" v-show="load.nilai != null" v-html="load.nilai"></div>
-                    <div :class="animationClass" class="h-full" v-html="load.versus[currentIndex]"></div>
+                    <div v-show="load.nilai != null" v-html="load.nilai" class="h-full w-full"></div>
+                    <div :class="animationClass" class="h-full w-full" v-html="load.versus[currentIndex]"></div>
                 </div>
                 <VueApexCharts v-show="load.dataChart != null" :series="load.dataChart" :options="load.optionsChart" class="w-full" height="150vw" style="z-index: 1 !important" />
             </div>
