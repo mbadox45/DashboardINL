@@ -22,7 +22,7 @@ const listCardSCM = ref([]);
 const listCardPackaging = ref([]);
 const listCardSdm = ref([]);
 const listDelay = ref([]);
-const activePage = ref(1);
+const activePage = ref(0);
 
 onMounted(() => {
     loadData();
