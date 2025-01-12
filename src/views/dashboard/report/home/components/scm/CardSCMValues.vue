@@ -99,7 +99,7 @@ const routerLink = (path) => {
     <div class="bg-gray-800 p-3 rounded-xl shadow-xl flex gap-3 items-start" :class="load.colspan">
         <div class="flex flex-col w-full h-full">
             <div class="flex items-center gap-6">
-                <span class="text-[0.55vw] font-bold w-full">{{ load.name }}</span>
+                <span class="text-[0.8vw] font-bold w-full">{{ load.name }}</span>
                 <router-link
                     v-show="load.link != null"
                     :to="load.link"
@@ -113,7 +113,7 @@ const routerLink = (path) => {
                 <div class="w-full flex flex-col justify-between min-h-[3vw] gap-3">
                     <div class="h-full" v-show="load.nilai != null" v-html="load.nilai"></div>
                     <!-- <div :class="animationClass" class="min-h-[7vw]" v-html="load.versus[currentIndex]"></div> -->
-                    <div :class="animationClass" v-html="load.versus[currentIndex]"></div>
+                    <div :class="animationClass" v-html="load.versus[currentIndex]" class="h-full"></div>
                     <!-- <div class="min-h-[7vw]" v-html="load.versus[currentIndex]"></div> -->
                 </div>
             </div>

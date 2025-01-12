@@ -8,15 +8,15 @@ export const QtyPenjualanBulky = () => {
     const colspan = 'col-span-2';
     const value = null;
     const versus = [
-        `<div class="flex w-full gap-2 h-full items-center py-1 px-2">
-    <div class="flex flex-col gap-2 w-full bg-black h-full py-1 px-2 rounded-lg">
+        `<div class="flex w-full gap-2 h-full  items-center py-1 px-1">
+    <div class="flex flex-col gap-2 w-full bg-black h-full py-2 px-3 rounded-lg">
         <div class="flex gap-2 justify-between items-center">
-            <span class="text-[1w] font-bold text-amber-500">50%</span>
+            <span class="text-[1.7vw] font-bold text-amber-500">50%</span>
             <span class="text-[0.5vw] font-bold text-white">s/d 31 Dec 2024</span>
         </div>
-        <div class="flex flex-col">
-            <div class="text-[0.5vw] flex justify-between text-amber-500 font-bold"><span>Real</span><span>100,000</span></div>
-            <div class="text-[0.5vw] flex justify-between text-green-500 font-bold"><span>RKAP</span><span>200,000</span></div>
+        <div class="flex gap-2 h-full">
+            <div class="flex w-full flex-col-reverse items-end justify-center text-amber-500 font-bold"><span class="text-[0.5vw]">Real</span><span class="text-[0.8]">100,000</span></div>
+            <div class="flex w-full flex-col-reverse items-end justify-center text-green-500 font-bold"><span class="text-[0.5vw]">RKAP</span><span class="text-[0.8]">200,000</span></div>
         </div>
     </div>
     </div>`
@@ -36,18 +36,17 @@ export const QtyPenjualanRetail = () => {
     const colspan = 'col-span-2';
     const value = null;
     const versus = [
-        `<div class="flex w-full gap-2 h-full items-center py-1 px-2">
-    <div class="flex flex-col gap-2 w-full bg-black h-full py-1 px-2 rounded-lg">
+        `<div class="flex w-full gap-2 h-full  items-center py-1 px-1">
+    <div class="flex flex-col gap-2 w-full bg-black h-full py-2 px-3 rounded-lg">
         <div class="flex gap-2 justify-between items-center">
-            <span class="text-[1w] font-bold text-amber-500">50%</span>
+            <span class="text-[1.7vw] font-bold text-amber-500">50%</span>
             <span class="text-[0.5vw] font-bold text-white">s/d 31 Dec 2024</span>
         </div>
-        <div class="flex flex-col">
-            <div class="text-[0.5vw] flex justify-between text-amber-500 font-bold"><span>Real</span><span>100,000</span></div>
-            <div class="text-[0.5vw] flex justify-between text-green-500 font-bold"><span>RKAP</span><span>200,000</span></div>
+        <div class="flex gap-2 h-full">
+            <div class="flex w-full flex-col-reverse items-end justify-center text-amber-500 font-bold"><span class="text-[0.5vw]">Real</span><span class="text-[0.8]">100,000</span></div>
+            <div class="flex w-full flex-col-reverse items-end justify-center text-green-500 font-bold"><span class="text-[0.5vw]">RKAP</span><span class="text-[0.8]">200,000</span></div>
         </div>
     </div>
-
     </div>`
     ];
     const color = 'text-red-500';

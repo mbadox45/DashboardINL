@@ -269,7 +269,7 @@ export const hargaSpotInventoryBulky = () => {
     const value = null;
     const versus = [
         `<div class="flex flex-col gap-1 p-2 bg-black rounded-xl w-full">
-        <span class="font-bold text-[0.8vw] text-gray-400">PFAD</span>
+        <span class="font-bold text-[0.8vw] text-pink-400">PFAD</span>
         <div class="flex gap-1 w-full">
             <div class="flex flex-col gap-1  w-full">
                 <div class="flex flex-col text-amber-600 justify-between items-end w-full">
@@ -294,7 +294,7 @@ export const hargaSpotInventoryBulky = () => {
         </div>
     </div>`,
         `<div class="flex flex-col gap-1 p-2 bg-black rounded-xl w-full">
-        <span class="font-bold text-[0.8vw] text-gray-400">RBDPO</span>
+        <span class="font-bold text-[0.8vw] text-pink-400">RBDPO</span>
         <div class="flex gap-1 w-full">
             <div class="flex flex-col gap-1  w-full">
                 <div class="flex flex-col text-amber-600 justify-between items-end w-full">
@@ -319,7 +319,7 @@ export const hargaSpotInventoryBulky = () => {
         </div>
     </div>`,
         `<div class="flex flex-col gap-1 p-2 bg-black rounded-xl w-full">
-        <span class="font-bold text-[0.8vw] text-gray-400">RBD Stearin</span>
+        <span class="font-bold text-[0.8vw] text-pink-400">RBD Stearin</span>
         <div class="flex gap-1 w-full">
             <div class="flex flex-col gap-1  w-full">
                 <div class="flex flex-col text-amber-600 justify-between items-end w-full">
@@ -344,7 +344,7 @@ export const hargaSpotInventoryBulky = () => {
         </div>
     </div>`,
         `<div class="flex flex-col gap-1 p-2 bg-black rounded-xl w-full">
-        <span class="font-bold text-[0.8vw] text-gray-400">RBD Olein</span>
+        <span class="font-bold text-[0.8vw] text-pink-400">RBD Olein</span>
         <div class="flex gap-1 w-full">
             <div class="flex flex-col gap-1  w-full">
                 <div class="flex flex-col text-amber-600 justify-between items-end w-full">
@@ -382,7 +382,7 @@ export const hargaSpotInventoryRetail = () => {
     const value = null;
     const versus = [
         `<div class="flex flex-col gap-1 p-2 bg-black rounded-xl w-full">
-        <span class="font-bold text-[0.8vw] text-gray-400">Minyakita 1 Ltr</span>
+        <span class="font-bold text-[0.8vw] text-pink-400">Minyakita 1 Ltr</span>
         <div class="flex gap-1 w-full">
             <div class="flex flex-col gap-1 w-full">
                 <div class="flex flex-col text-amber-600 justify-between items-end w-full">
@@ -407,7 +407,7 @@ export const hargaSpotInventoryRetail = () => {
         </div>
     </div>`,
         `<div class="flex flex-col gap-1 p-2 bg-black rounded-xl w-full">
-        <span class="font-bold text-[0.8vw] text-gray-400">Salvaco 1 Ltr</span>
+        <span class="font-bold text-[0.8vw] text-pink-400">Salvaco 1 Ltr</span>
         <div class="flex gap-1 w-full">
             <div class="flex flex-col gap-1 w-full">
                 <div class="flex flex-col text-amber-600 justify-between items-end w-full">
@@ -432,7 +432,7 @@ export const hargaSpotInventoryRetail = () => {
         </div>
     </div>`,
         `<div class="flex flex-col gap-1 p-2 bg-black rounded-xl w-full">
-        <span class="font-bold text-[0.8vw] text-gray-400">Nusakita 1 Ltr</span>
+        <span class="font-bold text-[0.8vw] text-pink-400">Nusakita 1 Ltr</span>
         <div class="flex gap-1 w-full">
             <div class="flex flex-col gap-1 w-full">
                 <div class="flex flex-col text-amber-600 justify-between items-end w-full">
@@ -457,7 +457,7 @@ export const hargaSpotInventoryRetail = () => {
         </div>
     </div>`,
         `<div class="flex flex-col gap-1 p-2 bg-black rounded-xl w-full">
-        <span class="font-bold text-[0.8vw] text-gray-400">INL 450 ML</span>
+        <span class="font-bold text-[0.8vw] text-pink-400">INL 450 ML</span>
         <div class="flex gap-1 w-full">
             <div class="flex flex-col gap-1 w-full">
                 <div class="flex flex-col text-amber-600 justify-between items-end w-full">

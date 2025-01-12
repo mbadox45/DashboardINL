@@ -158,7 +158,7 @@ export const pieChartApex = (label, qty) => {
     return {
         chart: {
             width: 380,
-            type: 'donut', // Change to 'donut'
+            type: 'pie', // Change to 'donut'
             background: 'transparent',
             foreColor: '#ffffff',
             toolbar: {
@@ -177,17 +177,16 @@ export const pieChartApex = (label, qty) => {
                 return formatValue(rawValue); // Apply formatting
             },
             style: {
-                fontSize: '0.6vw', // Adjust label size
-                fontWeight: 'bold',
+                fontSize: '0.5vw', // Adjust label size
                 colors: ['#ffffff']
             }
         },
         plotOptions: {
             pie: {
                 donut: {
-                    size: '60%', // Adjust the size of the donut hole
+                    size: '80%', // Adjust the size of the donut hole
                     labels: {
-                        show: true,
+                        show: false,
                         name: {
                             show: true,
                             fontSize: '1vw',
@@ -197,7 +196,7 @@ export const pieChartApex = (label, qty) => {
                         },
                         value: {
                             show: true,
-                            fontSize: '1vw',
+                            fontSize: '0.7vw',
                             fontWeight: 'bold',
                             marginTop: '-100px',
                             color: '#ffffff',
@@ -210,7 +209,7 @@ export const pieChartApex = (label, qty) => {
                             show: true,
                             showAlways: true,
                             label: 'Total',
-                            fontSize: '1vw',
+                            fontSize: '0.7vw',
                             fontWeight: 'bold',
                             color: '#ffffff',
                             formatter: () => {

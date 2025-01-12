@@ -88,13 +88,13 @@ onUnmounted(() => {
 
 <template>
     <div class="bg-gray-800 p-3 rounded-xl shadow-xl flex gap-3 items-start" :class="load.colspan">
-        <div class="flex flex-col w-full h-full">
+        <div class="flex flex-col gap-3 w-full h-full">
             <div class="flex items-center gap-6">
                 <span class="text-[0.8vw] font-bold w-full">{{ load.name }}</span>
             </div>
             <div class="flex items-center gap-4 h-full relative overflow-hidden">
-                <div :class="animationClass" class="flex transition-all duration-500 w-full">
-                    <div v-for="(item, index) in [load.versus[currentIndex], load.versus[(currentIndex + 1) % load.versus.length]]" :key="index" class="w-1/2 text-center" v-html="item"></div>
+                <div :class="animationClass" class="flex gap-2 transition-all duration-500 w-full">
+                    <div v-for="(item, index) in [load.versus[currentIndex], load.versus[(currentIndex + 1) % load.versus.length]]" :key="index" class="w-1/2" v-html="item"></div>
                 </div>
             </div>
             <div v-if="load.versus.length > 2" class="flex justify-between mt-2">
