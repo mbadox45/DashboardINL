@@ -45,28 +45,36 @@ export const pemakaianMaterial = () => {
             <div class="flex flex-col w-full gap-2">
                 <span class="text-[0.8vw] font-bold text-green-500">Chemical Consumption</span>
                 <div class="grid grid-cols-2 gap-2 text-amber-500">
-                    <div class="col-span-2 py-[0.9px] px-3 rounded-xl flex items-center justify-between bg-black">
-                        <span class="font-bold text-[0.5vw] uppercase ">Spent Bleaching Earth (BE)</span>
-                        <span class="text-[0.6vw] font-bold">159,041</span>
+                    <div class="py-[0.9px] px-3 rounded-xl flex flex-col gap-1 bg-black">
+                        <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-green-500">
+                            <span class="text-[0.8vw] font-bold">160,000</span>
+                            <span class="font-bold text-[0.7vw] uppercase ">Norma</span>
+                        </div>
+                    </div>
+                    <div class="py-[0.9px] px-3 rounded-xl flex flex-col gap-1 bg-black">
+                        <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-amber-500">
+                            <span class="text-[0.8vw] font-bold">159,041</span>
+                            <span class="font-bold text-[0.7vw] uppercase ">Spent Bleaching Earth (BE)</span>
+                        </div>
                     </div>
                     <div class="col-span-2 py-[0.9px] px-3 rounded-xl flex flex-col gap-1 bg-black">
-                        <span class="text-[0.5vw]">Detail</span>
+                        <span class="text-[0.6vw]">Detail</span>
                         <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
-                            <span class="text-[0.6vw] font-bold">${130411}</span>
-                            <span class="text-[0.5vw]">Bleaching Earth to Poram Spec</span>
+                            <span class="text-[0.8vw] font-bold">${130411}</span>
+                            <span class="text-[0.7vw]">Bleaching Earth to Poram Spec</span>
                         </div>
                         <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
-                            <span class="text-[0.6vw] font-bold">${0}</span>
-                            <span class="text-[0.5vw]">Bleaching Earth to Branded Spec</span>
+                            <span class="text-[0.8vw] font-bold">${0}</span>
+                            <span class="text-[0.7vw]">Bleaching Earth to Branded Spec</span>
                         </div>
                         <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
-                            <span class="text-[0.6vw] font-bold">${21.95}</span>
-                            <span class="text-[0.5vw]">% Oil Content</span>
+                            <span class="text-[0.8vw] font-bold">${21.95}</span>
+                            <span class="text-[0.7vw]">% Oil Content</span>
                         </div>
                     </div>
                     <div class="col-span-2 py-[0.9px] px-3 rounded-xl flex items-center justify-between bg-black">
-                        <span class="font-bold text-[0.5vw] uppercase ">Phosporic Acid</span>
-                        <span class="text-[0.6vw] font-bold">5139</span>
+                        <span class="font-bold text-[0.7vw] uppercase ">Phosporic Acid</span>
+                        <span class="text-[0.8vw] font-bold">5139</span>
                     </div>
                 </div>
             </div>
@@ -75,35 +83,43 @@ export const pemakaianMaterial = () => {
             <div class="flex flex-col w-full gap-2">
                 <span class="text-[0.8vw] font-bold text-green-500">Gas Consumption (mmbtu)</span>
                 <div class="grid grid-cols-2 gap-2 text-amber-500">
-                    <div class="col-span-2 py-[0.9px] px-3 rounded-xl flex items-center justify-between bg-black">
-                        <span class="font-bold text-[0.5vw] uppercase ">Total Pemakaian</span>
-                        <span class="text-[0.6vw] font-bold">24,425.6156</span>
-                    </div>
                     <div class="py-[0.9px] px-3 rounded-xl flex flex-col gap-1 bg-black">
-                        <span class="text-[0.5vw]">Incoming</span>
-                        <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
-                            <span class="text-[0.6vw] font-bold">27,225.9735</span>
-                            <span class="text-[0.5vw]">Base on INL</span>
-                        </div>
-                        <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
-                            <span class="text-[0.6vw] font-bold">24,425.6156</span>
-                            <span class="text-[0.5vw]">Base on Pertagas</span>
+                        <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-green-500">
+                            <span class="text-[0.8vw] font-bold">25,000</span>
+                            <span class="font-bold text-[0.7vw] uppercase ">Norma</span>
                         </div>
                     </div>
                     <div class="py-[0.9px] px-3 rounded-xl flex flex-col gap-1 bg-black">
-                        <span class="text-[0.5vw]">Outgoing</span>
+                        <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-amber-500">
+                            <span class="text-[0.8vw] font-bold">24,425.6156</span>
+                            <span class="font-bold text-[0.7vw] uppercase ">Total Pemakaian</span>
+                        </div>
+                    </div>
+                    <div class="py-[0.9px] px-3 rounded-xl flex flex-col gap-1 bg-black">
+                        <span class="text-[0.7vw]">Incoming</span>
                         <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
-                            <span class="text-[0.6vw] font-bold">22,78.1309</span>
-                            <span class="text-[0.5vw]">HP Boiler Refinery</span>
+                            <span class="text-[0.8vw] font-bold">27,225.9735</span>
+                            <span class="text-[0.7vw]">Base on INL</span>
                         </div>
                         <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
-                            <span class="text-[0.6vw] font-bold">22,147.484</span>
-                            <span class="text-[0.5vw]">MP Boiler 1, 2</span>
+                            <span class="text-[0.8vw] font-bold">24,425.6156</span>
+                            <span class="text-[0.7vw]">Base on Pertagas</span>
+                        </div>
+                    </div>
+                    <div class="py-[0.9px] px-3 rounded-xl flex flex-col gap-1 bg-black">
+                        <span class="text-[0.7vw]">Outgoing</span>
+                        <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
+                            <span class="text-[0.8vw] font-bold">22,78.1309</span>
+                            <span class="text-[0.7vw]">HP Boiler Refinery</span>
+                        </div>
+                        <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
+                            <span class="text-[0.8vw] font-bold">22,147.484</span>
+                            <span class="text-[0.7vw]">MP Boiler 1, 2</span>
                         </div>
                     </div>
                     <div class="col-span-2 py-[0.9px] px-3 rounded-xl flex items-center justify-between bg-black">
-                        <span class="font-bold text-[0.5vw] uppercase">Selisih</span>
-                        <span class="text-[0.6vw] font-bold">0</span>
+                        <span class="font-bold text-[0.7vw] uppercase">Selisih</span>
+                        <span class="text-[0.8vw] font-bold">0</span>
                     </div>
                 </div>
             </div>
@@ -112,35 +128,43 @@ export const pemakaianMaterial = () => {
             <div class="flex flex-col w-full gap-2">
                 <span class="text-[0.8vw] font-bold text-green-500">Steam Consumption (Kg)</span>
                 <div class="grid grid-cols-2 gap-2 text-amber-500">
-                    <div class="col-span-2 py-[0.9px] px-3 rounded-xl flex items-center justify-between bg-black">
-                        <span class="font-bold text-[0.5vw] uppercase ">Total Pemakaian</span>
-                        <span class="text-[0.6vw] font-bold">4,958,690</span>
+                    <div class="py-[0.9px] px-3 rounded-xl flex flex-col gap-1 bg-black">
+                        <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-green-500">
+                            <span class="text-[0.8vw] font-bold">5,000,000</span>
+                            <span class="font-bold text-[0.7vw] uppercase ">Norma</span>
+                        </div>
                     </div>
                     <div class="py-[0.9px] px-3 rounded-xl flex flex-col gap-1 bg-black">
-                        <span class="text-[0.5vw]">Incoming</span>
+                        <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-amber-500">
+                            <span class="text-[0.8vw] font-bold">4,958,690</span>
+                            <span class="font-bold text-[0.7vw] uppercase ">Total Pemakaian</span>
+                        </div>
+                    </div>
+                    <div class="py-[0.9px] px-3 rounded-xl flex flex-col gap-1 bg-black">
+                        <span class="text-[0.7vw]">Incoming</span>
                         <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
-                            <span class="text-[0.6vw] font-bold">4,958,690</span>
-                            <span class="text-[0.5vw]">Incoming</span>
+                            <span class="text-[0.8vw] font-bold">4,958,690</span>
+                            <span class="text-[0.7vw]">Incoming</span>
                         </div>
                     </div>
                     <div class="py-[0.9px] px-3 rounded-xl flex flex-col gap-1 bg-black">
                         <span class="text-[9px]">Outgoing</span>
                         <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
-                            <span class="text-[0.6vw] font-bold">3303100</span>
-                            <span class="text-[0.5vw]">Refinery</span>
+                            <span class="text-[0.8vw] font-bold">3303100</span>
+                            <span class="text-[0.7vw]">Refinery</span>
                         </div>
                         <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
-                            <span class="text-[0.6vw] font-bold">924,200</span>
-                            <span class="text-[0.5vw]">Fractionation</span>
+                            <span class="text-[0.8vw] font-bold">924,200</span>
+                            <span class="text-[0.7vw]">Fractionation</span>
                         </div>
                         <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
-                            <span class="text-[0.6vw] font-bold">730,790</span>
-                            <span class="text-[0.5vw]">Others</span>
+                            <span class="text-[0.8vw] font-bold">730,790</span>
+                            <span class="text-[0.7vw]">Others</span>
                         </div>
                     </div>
                     <div class="col-span-2 py-[0.9px] px-3 rounded-xl flex items-center justify-between bg-black">
-                        <span class="font-bold text-[0.5vw] uppercase ">Selisih</span>
-                        <span class="text-[0.6vw] font-bold">0</span>
+                        <span class="font-bold text-[0.7vw] uppercase ">Selisih</span>
+                        <span class="text-[0.8vw] font-bold">0</span>
                     </div>
                 </div>
             </div>
@@ -149,43 +173,51 @@ export const pemakaianMaterial = () => {
             <div class="flex flex-col w-full gap-2">
                 <span class="text-[0.8vw] font-bold text-green-500">Water Consumption (m³)</span>
                 <div class="grid grid-cols-2 gap-2 text-amber-500">
-                    <div class="col-span-2 py-[0.9px] px-3 rounded-xl flex items-center justify-between bg-black">
-                        <span class="font-bold text-[0.5vw] uppercase ">Total Pemakaian</span>
-                        <span class="text-[0.6vw] font-bold">4,958,690</span>
-                    </div>
                     <div class="py-[0.9px] px-3 rounded-xl flex flex-col gap-1 bg-black">
-                        <span class="text-[0.5vw]">Incoming</span>
-                        <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
-                            <span class="text-[0.6vw] font-bold">16,670</span>
-                            <span class="text-[0.5vw]">from KINRA</span>
+                        <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-green-500">
+                            <span class="text-[0.8vw] font-bold">5,000,000</span>
+                            <span class="font-bold text-[0.7vw] uppercase ">Norma</span>
                         </div>
                     </div>
                     <div class="py-[0.9px] px-3 rounded-xl flex flex-col gap-1 bg-black">
-                        <span class="text-[0.5vw]">Outgoing</span>
+                        <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-amber-500">
+                            <span class="text-[0.8vw] font-bold">4,958,690</span>
+                            <span class="font-bold text-[0.7vw] uppercase ">Total Pemakaian</span>
+                        </div>
+                    </div>
+                    <div class="py-[0.9px] px-3 rounded-xl flex flex-col gap-1 bg-black">
+                        <span class="text-[0.7vw]">Incoming</span>
                         <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
-                            <span class="text-[0.6vw] font-bold">1,635</span>
-                            <span class="text-[0.5vw]">Softener Prod. (Ref)</span>
+                            <span class="text-[0.8vw] font-bold">16,670</span>
+                            <span class="text-[0.7vw]">from KINRA</span>
+                        </div>
+                    </div>
+                    <div class="py-[0.9px] px-3 rounded-xl flex flex-col gap-1 bg-black">
+                        <span class="text-[0.7vw]">Outgoing</span>
+                        <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
+                            <span class="text-[0.8vw] font-bold">1,635</span>
+                            <span class="text-[0.7vw]">Softener Prod. (Ref)</span>
                         </div>
                         <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
-                            <span class="text-[0.6vw] font-bold">908</span>
-                            <span class="text-[0.5vw]">Softener Prod. (Fract)</span>
+                            <span class="text-[0.8vw] font-bold">908</span>
+                            <span class="text-[0.7vw]">Softener Prod. (Fract)</span>
                         </div>
                         <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
-                            <span class="text-[0.6vw] font-bold">7,285</span>
-                            <span class="text-[0.5vw]">RO Prod.</span>
+                            <span class="text-[0.8vw] font-bold">7,285</span>
+                            <span class="text-[0.7vw]">RO Prod.</span>
                         </div>
                         <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
-                            <span class="text-[0.6vw] font-bold">6,842</span>
-                            <span class="text-[0.5vw]">Others</span>
+                            <span class="text-[0.8vw] font-bold">6,842</span>
+                            <span class="text-[0.7vw]">Others</span>
                         </div>
                         <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
-                            <span class="text-[0.6vw] font-bold">4,231</span>
-                            <span class="text-[0.5vw]">Waste Water (Effluent)</span>
+                            <span class="text-[0.8vw] font-bold">4,231</span>
+                            <span class="text-[0.7vw]">Waste Water (Effluent)</span>
                         </div>
                     </div>
                     <div class="col-span-2 py-[0.9px] px-3 rounded-xl flex items-center justify-between bg-black">
-                        <span class="font-bold text-[0.5vw] uppercase ">Selisih</span>
-                        <span class="text-[0.6vw] font-bold">0</span>
+                        <span class="font-bold text-[0.7vw] uppercase ">Selisih</span>
+                        <span class="text-[0.8vw] font-bold">0</span>
                     </div>
                 </div>
             </div>
@@ -194,35 +226,43 @@ export const pemakaianMaterial = () => {
             <div class="flex flex-col w-full gap-2">
                 <span class="text-[0.8vw] font-bold text-green-500">Power Consumption (kWh)</span>
                 <div class="grid grid-cols-2 gap-2 text-amber-500">
-                    <div class="col-span-2 py-[0.9px] px-3 rounded-xl flex items-center justify-between bg-black">
-                        <span class="font-bold text-[0.5vw] uppercase ">Total Pemakaian</span>
-                        <span class="text-[0.6vw] font-bold">438,400</span>
-                    </div>
                     <div class="py-[0.9px] px-3 rounded-xl flex flex-col gap-1 bg-black">
-                        <span class="text-[0.5vw]">Incoming</span>
-                        <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
-                            <span class="text-[0.6vw] font-bold">${438400}</span>
-                            <span class="text-[0.5vw]">PLN</span>
+                        <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-green-500">
+                            <span class="text-[0.8vw] font-bold">300,000</span>
+                            <span class="font-bold text-[0.7vw] uppercase ">Norma</span>
                         </div>
                     </div>
                     <div class="py-[0.9px] px-3 rounded-xl flex flex-col gap-1 bg-black">
-                        <span class="text-[0.5vw]">Outgoing</span>
+                        <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-red-500">
+                            <span class="text-[0.8vw] font-bold">438,400</span>
+                            <span class="font-bold text-[0.7vw] uppercase ">Total Pemakaian</span>
+                        </div>
+                    </div>
+                    <div class="py-[0.9px] px-3 rounded-xl flex flex-col gap-1 bg-black">
+                        <span class="text-[0.7vw]">Incoming</span>
                         <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
-                            <span class="text-[0.6vw] font-bold">${98300}</span>
-                            <span class="text-[0.5vw]">Refinery</span>
+                            <span class="text-[0.8vw] font-bold">${438400}</span>
+                            <span class="text-[0.7vw]">PLN</span>
+                        </div>
+                    </div>
+                    <div class="py-[0.9px] px-3 rounded-xl flex flex-col gap-1 bg-black">
+                        <span class="text-[0.7vw]">Outgoing</span>
+                        <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
+                            <span class="text-[0.8vw] font-bold">${98300}</span>
+                            <span class="text-[0.7vw]">Refinery</span>
                         </div>
                         <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
-                            <span class="text-[0.6vw] font-bold">${75031}</span>
-                            <span class="text-[0.5vw]">Fractionation</span>
+                            <span class="text-[0.8vw] font-bold">${75031}</span>
+                            <span class="text-[0.7vw]">Fractionation</span>
                         </div>
                         <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
-                            <span class="text-[0.6vw] font-bold">${6290}</span>
-                            <span class="text-[0.5vw]">Others</span>
+                            <span class="text-[0.8vw] font-bold">${6290}</span>
+                            <span class="text-[0.7vw]">Others</span>
                         </div>
                     </div>
                     <div class="col-span-2 py-[0.9px] px-3 rounded-xl flex items-center justify-between bg-black">
-                        <span class="font-bold text-[0.5vw] uppercase ">Selisih</span>
-                        <span class="text-[0.6vw] font-bold">258779</span>
+                        <span class="font-bold text-[0.7vw] uppercase ">Selisih</span>
+                        <span class="text-[0.8vw] font-bold">258779</span>
                     </div>
                 </div>
             </div>
