@@ -14,7 +14,12 @@ export default new (class HomeDashboard {
     //     return list;
     // }
     cardFinancial() {
-        const list = [revenue(), grossProfitMargin(), ebitdaMargin(), netProfitMargin(), avgCPOKpbn(), cashBalance(), cashFlowMovement(), cffPaySchedule(), hargaSpotInventoryBulky(), hargaSpotInventoryRetail()];
+        const list = [revenue(), grossProfitMargin(), ebitdaMargin(), netProfitMargin(), cashBalance(), cashFlowMovement(), cffPaySchedule(), avgCPOKpbn()];
+        return list;
+    }
+
+    cardHarga() {
+        const list = [hargaSpotInventoryBulky(), hargaSpotInventoryRetail()];
         return list;
     }
     // cardFinancial() {

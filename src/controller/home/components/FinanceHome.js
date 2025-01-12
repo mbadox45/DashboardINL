@@ -65,7 +65,7 @@ export const grossProfitMargin = () => {
 };
 
 export const ebitdaMargin = () => {
-    const name = 'EBITDA Margin (in IDR BN)';
+    const name = 'EBITDA Margin (in IDR Bn)';
     const colspan = null;
     const value = null;
     // Jika nilai sekarang > nilai bulan lalu,  warna jadi green 600 dan icon up, kalo sama jadi warna amber icon strip
@@ -88,7 +88,7 @@ export const ebitdaMargin = () => {
                     <span class="text-[0.6vw]">3.57%</span>
                 </div>
                 <span class="text-white text-[0.6vw]">EBITDA%</span>
-                <span class="text-red-600 text-[0.8vw]">2.71%</span>
+                <span class="text-green-600 text-[0.8vw]">2.71%</span>
             </div>
         </div>
     </div>`;
@@ -100,15 +100,32 @@ export const ebitdaMargin = () => {
 };
 
 export const netProfitMargin = () => {
-    const name = 'NET Profit Margin (in IDR BN)';
+    const name = 'NET Profit Margin (in IDR Bn)';
     const colspan = null;
-    const value = `<div class="flex gap-2 items-center ${valueColorIntCondition(-23.34)}">
-        <span class="font-bold text-[0.9vw]">${-23.34} (YTD)</span>
-    </div>`;
+    const value = null;
     // Jika nilai positif warna jadi green 600 dan icon up
-    const versus = `<div class="text-xs flex flex-col w-full mt-3">
-    <div class="flex gap-2 text-[0.5vw] items-center text-red-600"><i class="pi pi-sort-down-fill" style="font-size:0.5vw"></i><span class="font-bold flex gap-3"><span>Laba Bersih</span> <span>: </span><span>-9.16</span></span></div>
-    <div class="flex gap-2 text-[0.5vw] items-center text-red-600"><i class="pi pi-sort-down-fill" style="font-size:0.5vw"></i><span class="font-bold flex gap-3"><span>NPM (%)</span> <span>: </span><span>-0.05%</span></span></div>
+    const versus = `<div class="flex gap-1 items-center h-full mt-3">
+        <div class="flex gap-2 items-center h-full ${valueColorIntCondition(-23.34)}">
+            <span class="font-bold text-[1vw]">-23.34</span>
+        </div>
+        <div class="flex gap-1 w-full items-end">
+            <div class="font-bold flex w-full flex-col-reverse items-center">
+                <div class="flex gap-1 items-center text-red-600">
+                    <i class="pi pi-sort-down-fill" style="0.6vw"></i>
+                    <span class="text-[0.6vw]">Rp -9.16</span>
+                </div>
+                <span class="text-white text-[0.6vw]">Laba Bersih</span>
+                <span class="text-red-600 text-[0.8vw]">Rp -14.23</span>
+            </div>
+            <div class="font-bold flex w-full flex-col-reverse items-center">
+            <div class="flex gap-1 items-center text-red-600">
+                    <i class="pi pi-sort-down-fill" style="0.6vw"></i>
+                    <span class="text-[0.6vw]">-0.05%</span>
+                </div>
+                <span class="text-white text-[0.6vw]">NPM%</span>
+                <span class="text-red-600 text-[0.8vw]">-0.07%</span>
+            </div>
+        </div>
     </div>`;
     const color = 'text-red-500';
     const icon = '/images/icon/financial/net-profit.png';

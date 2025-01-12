@@ -55,7 +55,7 @@ watch(() => props.datas, loadData, { immediate: true });
                 </button>
             </div>
             <div class="flex items-center gap-3">
-                <img v-show="load.icon != null" :src="load.icon" alt="Icon" class="w-[4vw] h-[4vw] mr-1" />
+                <img v-show="load.icon != null" :src="load.icon" alt="Icon" class="w-[3vw] h-[3vw] mr-1" />
                 <div class="w-full">
                     <div v-html="load.nilai"></div>
                     <div v-html="load.versus"></div>

@@ -13,6 +13,7 @@ import CardScmValues from '@/views/dashboard/report/home/components/scm/CardSCMV
 import CardSdm from '@/views/dashboard/report/home/components/sdm/CardSdmValues.vue';
 
 const listCardFinancial = ref([]);
+const listCardHarga = ref([]);
 const listCardOperation = ref([]);
 const listCardSalesPerformance = ref([]);
 const listCardSCM = ref([]);
@@ -33,6 +34,7 @@ const loadData = async () => {
     await loadDataPackaging();
     await loadDelay();
     await loadDataSdm();
+    await loadDataHarga();
 };
 
 const loadDataFinance = async () => {
@@ -142,6 +144,24 @@ const loadDataSales = async () => {
     listCardSalesPerformance.value = list;
 };
 
+const loadDataHarga = async () => {
+    const list = [];
+    const dataHarga = await HomeDash.cardHarga();
+    for (let i = 0; i < dataHarga.length; i++) {
+        list.push({
+            name: dataHarga[i].name,
+            color: dataHarga[i].color,
+            icon: dataHarga[i].icon,
+            value: dataHarga[i].value,
+            persentase: dataHarga[i].persentase,
+            versus: dataHarga[i].versus,
+            link: dataHarga[i].link,
+            colspan: dataHarga[i].colspan
+        });
+    }
+    listCardSCM.value = list;
+};
+
 const loadDelay = async () => {
     const list = [];
     for (let i = 0; i < 22; i++) {
@@ -169,8 +189,13 @@ const loadDelay = async () => {
             </div>
             <div class="col-span-2 flex flex-col gap-3">
                 <div class="flex flex-col">
-                    <div class="grid grid-cols-4 gap-2">
+                    <div class="grid grid-cols-3 gap-2">
                         <card-values v-for="(item, index) in listCardFinancial" :key="index" :datas="item" :style="`animation: fadein 1s ease-in-out`" />
+                    </div>
+                </div>
+                <div class="flex flex-col">
+                    <div class="grid grid-cols-2 gap-2">
+                        <card-values v-for="(item, index) in listCardHarga" :key="index" :datas="item" :style="`animation: fadein 1s ease-in-out`" />
                     </div>
                 </div>
                 <div class="flex flex-col gap-2">
