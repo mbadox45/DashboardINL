@@ -437,7 +437,7 @@ export const laporanProduksi = () => {
     //ganti warna red 500 jika nilai minus
     const color = 'text-green-500';
     const icon = null;
-    const link = '/test';
+    const link = 'laporan-produksi-operation';
     return { colspan: colspan, name: name, value: value, versus: versus, color: color, icon: icon, link: link };
 };
 
@@ -471,7 +471,7 @@ export const packagingPerformance = () => {
                 <span class="text-[1.2vw] font-bold text-green-600">90%</span>
                 <div class="flex flex-col items-end">
                     <span class="text-[0.7vw] font-bold text-amber-500">900</span>
-                    <span class="text-[0.65vw] text-cyan-500">Sales Plant</span>
+                    <span class="text-[0.65vw] text-cyan-500">Sales Plan</span>
                 </div>
             </div>
         </div>
@@ -501,7 +501,7 @@ export const packagingPerformance = () => {
                 <span class="text-[1.2vw] font-bold text-green-600">90%</span>
                 <div class="flex flex-col items-end">
                     <span class="text-[0.7vw] font-bold text-amber-500">900</span>
-                    <span class="text-[0.65vw] text-cyan-500">Sales Plant</span>
+                    <span class="text-[0.65vw] text-cyan-500">Sales Plan</span>
                 </div>
             </div>
         </div>
@@ -531,7 +531,7 @@ export const packagingPerformance = () => {
                 <span class="text-[1.2vw] font-bold text-green-600">90%</span>
                 <div class="flex flex-col items-end">
                     <span class="text-[0.7vw] font-bold text-amber-500">900</span>
-                    <span class="text-[0.65vw] text-cyan-500">Sales Plant</span>
+                    <span class="text-[0.65vw] text-cyan-500">Sales Plan</span>
                 </div>
             </div>
         </div>
@@ -569,7 +569,7 @@ export const packagingPerformance = () => {
     ];
     const color = 'text-red-500';
     const icon = null;
-    const link = '/test';
+    const link = 'packaging-operation';
 
     return { colspan: colspan, name: name, value: value, versus: versus, color: color, icon: icon, link: link };
 };

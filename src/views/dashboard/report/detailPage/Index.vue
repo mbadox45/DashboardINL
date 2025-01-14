@@ -18,6 +18,8 @@ import NetProfitMarginFinance from '@/views/dashboard/report/detailPage/componen
 import RevenueDetailFinance from '@/views/dashboard/report/detailPage/components/financial/RevenueDetailFinance.vue';
 // Operation
 import CpoOlahVsRkapOperation from '@/views/dashboard/report/detailPage/components/operation/cpoOlahRkapUtility/Index.vue';
+import LaporanProduksiOperation from '@/views/dashboard/report/detailPage/components/operation/LaporanProduksiOperation.vue';
+import PackagingOperation from '@/views/dashboard/report/detailPage/components/operation/PackagingOperation.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -38,8 +40,6 @@ const funcCondition = () => {
         const hasil = JSON.parse(jsonString);
         routeName.value = hasil.path;
         routeType.value = hasil.type;
-
-        // routeName.value = bytes.toString(CryptoJS.enc.Utf8);
         console.log(hasil);
     }
 };
@@ -67,6 +67,11 @@ const routerLink = () => {
         </div>
         <div class="min-h-[30rem] p-6 rounded-xl" v-else>
             <cpo-olah-vs-rkap-operation v-if="routeName == 'cpo-olah-vs-rkap'" />
+            <packaging-operation v-else-if="routeName == 'packaging-operation'" />
+            <laporan-produksi-operation v-else-if="routeName == 'laporan-produksi-operation'" />
+            <div v-else class="h-[30rem] w-full flex flex-col items-center justify-center">
+                <span>404 Not Found</span>
+            </div>
         </div>
         <button class="fixed top-[1.5vw] left-[1.5vw] p-3 z-50 bg-amber-500 rounded-full font-extrabold border-2 hover:bg-amber-600 transition-all duration-200 flex gap-2 justify-center items-center" @click="routerLink">
             <i class="pi pi-arrow-left" style="font-size: 0.7vw"></i>

@@ -253,6 +253,118 @@ export const combo3ChartOptionsApex = (total, label1, label2, label3, listLabels
     };
 };
 
+export const comboMultipleChartOptionsApex = (total, label, listLabels, colors, colorsLabel, scale) => {
+    const dataLabel = [];
+    for (let i = 0; i < label.length; i++) {
+        if (i > 0) {
+            dataLabel.push({
+                opposite: true,
+                title: {
+                    text: label[i]
+                },
+                labels: {
+                    formatter: function (val) {
+                        if (scale[i] === 'percent') {
+                            return val >= 1000 ? (val / 1000).toFixed(1) + 'K%' : val.toFixed(2) + '%';
+                        } else {
+                            return val >= 1000 ? (val / 1000).toFixed(1) + 'K' : val.toFixed(2);
+                        }
+                    }
+                }
+            });
+        } else {
+            dataLabel.push({
+                title: {
+                    text: label[i]
+                },
+                labels: {
+                    formatter: function (val) {
+                        if (scale[i] === 'percent') {
+                            return val >= 1000 ? (val / 1000).toFixed(1) + 'K%' : val.toFixed(2) + '%';
+                        } else {
+                            return val >= 1000 ? (val / 1000).toFixed(1) + 'K' : val.toFixed(2);
+                        }
+                    }
+                }
+            });
+        }
+    }
+    return {
+        chart: {
+            height: 350,
+            type: 'line',
+            background: '#000000',
+            foreColor: '#ffffff'
+        },
+        stroke: {
+            width: [2, 4, 4],
+            curve: 'straight'
+            // curve: 'smooth'
+        },
+        title: {
+            text: total,
+            style: {
+                color: '#d97706'
+            }
+        },
+        colors: colors,
+        dataLabels: {
+            enabled: true,
+            // enabledOnSeries: [0], // Only enable for the first series (line chart)
+            style: {
+                fontSize: '0.65vw',
+                colors: colorsLabel
+                // colors: ['#d97706', '#1a5276', '#4ca58a']
+            },
+            formatter: function (val) {
+                if (val === 0) {
+                    return '';
+                }
+
+                if (scale[0] === 'percent') {
+                    return val >= 1000 ? (val / 1000).toFixed(1) + 'K%' : val.toFixed(2) + '%';
+                } else {
+                    return val >= 1000 ? (val / 1000).toFixed(1) + 'K' : val;
+                }
+            },
+            background: {
+                enabled: true,
+                borderRadius: 3,
+                borderColor: '#ffffff',
+                borderWidth: 1,
+                opacity: 1
+            }
+        },
+        plotOptions: {
+            bar: {
+                dataLabels: {
+                    position: 'bottom',
+                    offsetY: 10
+                }
+            }
+        },
+        labels: listLabels,
+        xaxis: {
+            categories: listLabels
+        },
+        yaxis: [dataLabel],
+        legend: {
+            labels: {
+                useSeriesColors: false
+            },
+            position: 'top',
+            horizontalAlign: 'center',
+            offsetY: 0
+        },
+        tooltip: {
+            theme: 'dark',
+            y: {
+                // Adjust formatting if needed
+            }
+        }
+    };
+};
+
 export const barChartOptionsApex = (labels, color, strokeColor, dataLabelStat, total) => {
     return {
         chart: {

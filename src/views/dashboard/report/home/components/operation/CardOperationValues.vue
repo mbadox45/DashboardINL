@@ -12,7 +12,7 @@ const props = defineProps({
     }
 });
 
-const load = ref({ name: '', icon: '', nilai: 0, persen: 0, versus: '', link: null, colspan: null });
+const load = ref({ name: '', icon: '', nilai: 0, persen: 0, versus: [], link: null, colspan: null });
 const currentIndex = ref(0);
 const animationClass = ref('slide-in-from-right');
 

@@ -70,18 +70,16 @@ const toggleMenu = () => {
 };
 
 // Inisialisasi animasi awal
-onMounted(() => {
-    gsap.set(menuRef.value, { height: 1, opacity: 0 }); // Topbar disembunyikan saat load
-});
+onMounted(() => {});
 </script>
 <template>
     <div class="flex-col gap-1 w-full z-10">
         <!-- Bagian yang akan dianimasikan -->
-        <div class="flex justify-between gap-3 w-full py-2 px-10 bg-neutral-950">
+        <div class="flex justify-between gap-3 w-full py-2 px-10 bg-black">
             <div class="flex gap-8 items-center w-full">
                 <router-link to="/" class="flex items-center gap-8">
                     <div class="flex flex-col">
-                        <span class="font-bold text-xl">INL EDGE</span>
+                        <span class="font-extrabold text-xl text-cyan-900">INL EDGE</span>
                         <small class="text-[8px] uppercase text-gray-500 font-extrabold"> Empowering Decisions & Growth Excellence </small>
                     </div>
                 </router-link>
@@ -99,13 +97,6 @@ onMounted(() => {
                 </div>
             </div>
         </div>
-
-        <!-- Tombol untuk toggle menu -->
-        <!-- <div class="flex justify-end px-4">
-            <button class="bg-white text-black animate-bounce hover:bg-amber-600 hover:text-white transition-all duration-500 p-2 h-[1.6vw] w-[1.6vw] rounded-full flex items-center justify-center" @click="toggleMenu">
-                <i :class="`pi ${showMenu ? 'pi-angle-double-up' : 'pi-angle-double-down'}`" style="font-size: 0.7vw"></i>
-            </button>
-        </div> -->
     </div>
 </template>
 
