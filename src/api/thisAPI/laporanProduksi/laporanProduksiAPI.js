@@ -1,4 +1,5 @@
-import { httpAuthThisAPI, httpCommonThisAPI } from '@/api/http/httpCommon';
+import { httpAuthThisAPI } from '@/api/http/httpAuth';
+import { httpCommonThisAPI } from '@/api/http/httpCommon';
 
 export default new (class laporanProduksiAPI {
     addPost(data) {
@@ -10,6 +11,9 @@ export default new (class laporanProduksiAPI {
 
     getAll() {
         return httpCommonThisAPI.post('laporan-prod');
+    }
+    getByPeriod(date) {
+        return httpCommonThisAPI.post('laporan-prod/period', date);
     }
     getByID(id) {
         return httpCommonThisAPI.get(`laporan-prod/get/${id}`);

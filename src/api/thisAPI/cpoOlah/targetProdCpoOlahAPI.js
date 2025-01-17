@@ -1,4 +1,5 @@
-import { httpAuthThisAPI, httpCommonThisAPI } from '@/api/http/httpCommon';
+import { httpAuthThisAPI } from '@/api/http/httpAuth';
+import { httpCommonThisAPI } from '@/api/http/httpCommon';
 
 export default new (class targetProdCpoOlahAPI {
     addPost(data) {
@@ -9,7 +10,7 @@ export default new (class targetProdCpoOlahAPI {
     }
 
     getAll() {
-        return httpCommonThisAPI.post('target-prod');
+        return httpCommonThisAPI.get('target-prod');
     }
     getByPeriod(date) {
         return httpCommonThisAPI.post('target-prod/period', date);

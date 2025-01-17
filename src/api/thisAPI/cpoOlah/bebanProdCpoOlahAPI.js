@@ -1,4 +1,5 @@
-import { httpAuthThisAPI, httpCommonThisAPI } from '@/api/http/httpCommon';
+import { httpAuthThisAPI } from '@/api/http/httpAuth';
+import { httpCommonThisAPI } from '@/api/http/httpCommon';
 
 export default new (class bebanProdCpoOlahAPI {
     addPost(data) {

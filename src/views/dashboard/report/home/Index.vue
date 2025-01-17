@@ -193,7 +193,7 @@ const loadDelay = async () => {
 </script>
 
 <template>
-    <div class="flex flex-col gap-3 p-6 rounded-2xl w-full h-full bg-black text-white">
+    <div class="flex flex-col gap-3 p-6 rounded-2xl w-full h-full bg-black text-white font-mono">
         <div v-if="activePage == 0" class="grid grid-cols-3 gap-2">
             <div class="col-span-1 flex flex-col gap-2">
                 <images-home />

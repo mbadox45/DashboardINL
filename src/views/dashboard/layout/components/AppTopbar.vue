@@ -8,6 +8,7 @@ const menuRef = ref(null); // Ref untuk elemen menu
 const beforeDate = ref(moment().format('YYYY-MM-01'));
 const now = ref(moment().format('YYYY-MM-DD'));
 const dates = ref([moment(beforeDate.value).toDate(), moment(now.value).toDate()]);
+const op = ref();
 const selectedRegion = ref('pmg1');
 const region = ref([
     { name: 'PMG 1', code: 'pmg1' },
@@ -71,6 +72,10 @@ const toggleMenu = () => {
 
 // Inisialisasi animasi awal
 onMounted(() => {});
+
+const toggle = (event) => {
+    op.value.toggle(event);
+};
 </script>
 <template>
     <div class="flex-col gap-1 w-full z-10">
@@ -79,14 +84,20 @@ onMounted(() => {});
             <div class="flex gap-8 items-center w-full">
                 <router-link to="/" class="flex items-center gap-8">
                     <div class="flex flex-col">
-                        <span class="font-extrabold text-xl text-cyan-900">INL EDGE</span>
+                        <span class="font-extrabold text-xl">INL EDGE</span>
                         <small class="text-[8px] uppercase text-gray-500 font-extrabold"> Empowering Decisions & Growth Excellence </small>
                     </div>
                 </router-link>
             </div>
 
-            <div class="flex gap-3">
-                <div class="flex p-2 bg-gray-800 border rounded border-gray-600">
+            <div class="flex gap-3 w-full justify-end">
+                <button class="flex gap-2 px-3 py-2 border-2 rounded-xl hover:text-black hover:bg-white transition-all duration-300 shadow shadow-white" @click="toggle">Select by Period</button>
+                <Popover ref="op">
+                    <div class="flex flex-col gap-4 w-[25rem]">
+                        <span>Test</span>
+                    </div>
+                </Popover>
+                <!-- <div class="flex p-2 bg-gray-800 border rounded border-gray-600">
                     <Select v-model="selectedRegion" :options="region" optionLabel="name" optionValue="code" size="small" placeholder="Select a Region" class="bg-gray-800 w-30" />
                 </div>
                 <div class="flex items-center gap-3 p-2 bg-gray-800 border border-gray-600 rounded text-white w-96">
@@ -94,7 +105,7 @@ onMounted(() => {});
                     <button class="w-[28px] h-[28px] p-3 rounded-lg bg-white shadow-none hover:shadow-white hover:shadow transition-all duration-700 text-black flex items-center justify-center" @click="changeDate">
                         <i class="pi pi-search" style="font-size: 12px"></i>
                     </button>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>

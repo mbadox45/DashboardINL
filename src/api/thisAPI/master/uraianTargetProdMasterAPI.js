@@ -1,4 +1,5 @@
-import { httpAuthThisAPI, httpCommonThisAPI } from '@/api/http/httpCommon';
+import { httpAuthThisAPI } from '@/api/http/httpAuth';
+import { httpCommonThisAPI } from '@/api/http/httpCommon';
 
 export default new (class uraianTargetProdMasterAPI {
     addPost(data) {
@@ -9,7 +10,7 @@ export default new (class uraianTargetProdMasterAPI {
     }
 
     getAll() {
-        return httpCommonThisAPI.post('uraian-target-prod');
+        return httpCommonThisAPI.get('uraian-target-prod');
     }
     getByID(id) {
         return httpCommonThisAPI.get(`uraian-target-prod/get/${id}`);

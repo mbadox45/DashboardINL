@@ -1,5 +1,6 @@
-import AppLayout from '@/layout/AppLayout.vue';
+// import AppLayout from '@/layout/AppLayout.vue';
 import AppLayouts from '@/views/dashboard/layout/Index.vue';
+import DashManagement from '@/views/dashboardManagement/layout/Index.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 
 const router = createRouter({
@@ -17,9 +18,184 @@ const router = createRouter({
             ]
         },
         {
+            path: '/',
+            component: DashManagement,
+            children: [
+                {
+                    path: '/dashboard',
+                    name: 'dashboard',
+                    component: () => import('@/views/dashboardManagement/home/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        finance: true,
+                        operation: true,
+                        sales: true,
+                        scm: true,
+                        sdm: true
+                    }
+                },
+                // Finance
+                {
+                    path: '/finance/cash-flow-movement/kategori',
+                    name: 'cost-flow-movement-kategori',
+                    component: () => import('@/views/dashboardManagement/finance/cashFlowMovement/kategori/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        finance: true
+                        // operation: true
+                        // sales: true,
+                        // scm: true,
+                        // sdm: true
+                    }
+                },
+                {
+                    path: '/finance/cash-flow-schedule/kategori',
+                    name: 'cost-flow-schedule-kategori',
+                    component: () => import('@/views/dashboardManagement/finance/cashFlowSchedule/kategori/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        finance: true
+                        // operation: true
+                        // sales: true,
+                        // scm: true,
+                        // sdm: true
+                    }
+                },
+                {
+                    path: '/finance/cash-flow-schedule/pay-status',
+                    name: 'cost-flow-schedule-pay-status',
+                    component: () => import('@/views/dashboardManagement/finance/cashFlowSchedule/payStatus/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        finance: true
+                        // operation: true
+                        // sales: true,
+                        // scm: true,
+                        // sdm: true
+                    }
+                },
+                // Operation
+                {
+                    path: '/cost-prod/beban-prod',
+                    name: 'cost-beban-prod',
+                    component: () => import('@/views/dashboardManagement/costProduction/bebanProd/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        // finance: true,
+                        operation: true
+                        // sales: true,
+                        // scm: true,
+                        // sdm: true
+                    }
+                },
+                {
+                    path: '/cost-prod/target-prod',
+                    name: 'cost-target-prod',
+                    component: () => import('@/views/dashboardManagement/costProduction/targetProd/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        // finance: true,
+                        operation: true
+                        // sales: true,
+                        // scm: true,
+                        // sdm: true
+                    }
+                },
+                {
+                    path: '/operation/laporan-produksi',
+                    name: 'laporan-produksi',
+                    component: () => import('@/views/dashboardManagement/operation/laporanProduksi/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        // finance: true,
+                        operation: true
+                        // sales: true,
+                        // scm: true,
+                        // sdm: true
+                    }
+                },
+                {
+                    path: '/master/jenis-produksi',
+                    name: 'jenis-produksi',
+                    component: () => import('@/views/dashboardManagement/operation/jenisLaporanProduksi/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        // finance: true,
+                        operation: true
+                        // sales: true,
+                        // scm: true,
+                        // sdm: true
+                    }
+                },
+
+                // Master Data
+                {
+                    path: '/master/pmg',
+                    name: 'pmg',
+                    component: () => import('@/views/dashboardManagement/masterPage/pmg/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true
+                        // finance: true,
+                        // operation: true,
+                        // sales: true,
+                        // scm: true,
+                        // sdm: true
+                    }
+                },
+                {
+                    path: '/master/uraian/beban-produksi',
+                    name: 'uraian-beban-produksi',
+                    component: () => import('@/views/dashboardManagement/masterPage/uraianBebanProd/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true
+                        // finance: true,
+                        // operation: true,
+                        // sales: true,
+                        // scm: true,
+                        // sdm: true
+                    }
+                },
+                {
+                    path: '/master/uraian/target-produksi',
+                    name: 'uraian-target-produksi',
+                    component: () => import('@/views/dashboardManagement/masterPage/uraianTargetProd/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true
+                        // finance: true,
+                        // operation: true,
+                        // sales: true,
+                        // scm: true,
+                        // sdm: true
+                    }
+                }
+            ]
+        },
+        {
+            path: '/verify/:id',
+            name: 'verify',
+            component: () => import('@/views/dashboardManagement/auth/Verify.vue'),
+            meta: {
+                guestOnly: true
+            }
+        },
+        {
             path: '/detail-dashboard',
             name: 'detail',
-            component: () => import('@/views/dashboard/report/detailPage/Index.vue')
+            component: () => import('@/views/dashboard/report/detailPage/Index.vue'),
+            meta: {
+                guestOnly: true
+            }
         },
         {
             path: '/tester',
@@ -30,136 +206,104 @@ const router = createRouter({
             path: '/:pathMatch(.*)*',
             name: 'notfound404',
             component: () => import('@/views/dashboard/notfound/NotFound.vue')
-        },
-        {
-            path: '/',
-            component: AppLayout,
-            children: [
-                {
-                    path: '/dashboard',
-                    name: 'dashboard',
-                    component: () => import('@/views/Dashboard.vue')
-                },
-                {
-                    path: '/uikit/formlayout',
-                    name: 'formlayout',
-                    component: () => import('@/views/uikit/FormLayout.vue')
-                },
-                {
-                    path: '/uikit/input',
-                    name: 'input',
-                    component: () => import('@/views/uikit/InputDoc.vue')
-                },
-                {
-                    path: '/uikit/button',
-                    name: 'button',
-                    component: () => import('@/views/uikit/ButtonDoc.vue')
-                },
-                {
-                    path: '/uikit/table',
-                    name: 'table',
-                    component: () => import('@/views/uikit/TableDoc.vue')
-                },
-                {
-                    path: '/uikit/list',
-                    name: 'list',
-                    component: () => import('@/views/uikit/ListDoc.vue')
-                },
-                {
-                    path: '/uikit/tree',
-                    name: 'tree',
-                    component: () => import('@/views/uikit/TreeDoc.vue')
-                },
-                {
-                    path: '/uikit/panel',
-                    name: 'panel',
-                    component: () => import('@/views/uikit/PanelsDoc.vue')
-                },
-
-                {
-                    path: '/uikit/overlay',
-                    name: 'overlay',
-                    component: () => import('@/views/uikit/OverlayDoc.vue')
-                },
-                {
-                    path: '/uikit/media',
-                    name: 'media',
-                    component: () => import('@/views/uikit/MediaDoc.vue')
-                },
-                {
-                    path: '/uikit/message',
-                    name: 'message',
-                    component: () => import('@/views/uikit/MessagesDoc.vue')
-                },
-                {
-                    path: '/uikit/file',
-                    name: 'file',
-                    component: () => import('@/views/uikit/FileDoc.vue')
-                },
-                {
-                    path: '/uikit/menu',
-                    name: 'menu',
-                    component: () => import('@/views/uikit/MenuDoc.vue')
-                },
-                {
-                    path: '/uikit/charts',
-                    name: 'charts',
-                    component: () => import('@/views/uikit/ChartDoc.vue')
-                },
-                {
-                    path: '/uikit/misc',
-                    name: 'misc',
-                    component: () => import('@/views/uikit/MiscDoc.vue')
-                },
-                {
-                    path: '/uikit/timeline',
-                    name: 'timeline',
-                    component: () => import('@/views/uikit/TimelineDoc.vue')
-                },
-                {
-                    path: '/pages/empty',
-                    name: 'empty',
-                    component: () => import('@/views/pages/Empty.vue')
-                },
-                {
-                    path: '/pages/crud',
-                    name: 'crud',
-                    component: () => import('@/views/pages/Crud.vue')
-                },
-                {
-                    path: '/documentation',
-                    name: 'documentation',
-                    component: () => import('@/views/pages/Documentation.vue')
-                }
-            ]
-        },
-        {
-            path: '/landing',
-            name: 'landing',
-            component: () => import('@/views/pages/Landing.vue')
-        },
-        {
-            path: '/pages/notfound',
-            name: 'notfound',
-            component: () => import('@/views/pages/NotFound.vue')
-        },
-
-        {
-            path: '/auth/login',
-            name: 'login',
-            component: () => import('@/views/pages/auth/Login.vue')
-        },
-        {
-            path: '/auth/access',
-            name: 'accessDenied',
-            component: () => import('@/views/pages/auth/Access.vue')
-        },
-        {
-            path: '/auth/error',
-            name: 'error',
-            component: () => import('@/views/pages/auth/Error.vue')
         }
+        // {
+        //     path: '/landing',
+        //     name: 'landing',
+        //     component: () => import('@/views/pages/Landing.vue')
+        // },
+        // {
+        //     path: '/pages/notfound',
+        //     name: 'notfound',
+        //     component: () => import('@/views/pages/NotFound.vue')
+        // },
+
+        // {
+        //     path: '/auth/login',
+        //     name: 'login',
+        //     component: () => import('@/views/pages/auth/Login.vue')
+        // },
+        // {
+        //     path: '/auth/access',
+        //     name: 'accessDenied',
+        //     component: () => import('@/views/pages/auth/Access.vue')
+        // },
+        // {
+        //     path: '/auth/error',
+        //     name: 'error',
+        //     component: () => import('@/views/pages/auth/Error.vue')
+        // }
     ]
+});
+
+router.beforeEach((to, from, next) => {
+    const tokens = localStorage.getItem('usertoken') != null;
+    const roles = localStorage.getItem('roles');
+    // console.log(roles);
+
+    if (to.matched.some((route) => route.meta.requiresAuth)) {
+        if (tokens) {
+            if (roles == 'allUser') {
+                if (to.matched.some((route) => route.meta.allUser)) {
+                    next();
+                } else {
+                    next('/dashboard');
+                }
+            } else if (roles == 'finance') {
+                if (to.matched.some((route) => route.meta.finance)) {
+                    next();
+                } else {
+                    next('/dashboard');
+                }
+            } else if (roles == 'operation') {
+                if (to.matched.some((route) => route.meta.operation)) {
+                    next();
+                } else {
+                    next('/dashboard');
+                }
+            } else if (roles == 'sales') {
+                if (to.matched.some((route) => route.meta.sales)) {
+                    next();
+                } else {
+                    next('/dashboard');
+                }
+            } else if (roles == 'scm') {
+                if (to.matched.some((route) => route.meta.scm)) {
+                    next();
+                } else {
+                    next('/dashboard');
+                }
+            } else {
+                if (to.matched.some((route) => route.meta.sdm)) {
+                    next();
+                } else {
+                    next('/dashboard');
+                }
+            }
+        } else {
+            next('/');
+        }
+    } else if (to.matched.some((route) => route.meta.guestOnly)) {
+        if (tokens) {
+            if (roles == 'allUser') {
+                next('/dashboard');
+            } else if (roles == 'finance') {
+                next('/dashboard');
+            } else if (roles == 'logistik') {
+                next('/dashboard');
+            } else if (roles == 'operation') {
+                next('/dashboard');
+            } else if (roles == 'sales') {
+                next('/dashboard');
+            } else {
+                next('/dashboard');
+            }
+        } else {
+            next();
+        }
+    } else {
+        next();
+    }
 });
 
 export default router;

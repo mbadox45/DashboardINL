@@ -1,7 +1,8 @@
 <script setup>
 // import AppTopbar from '@/layout/AppTopbar.vue';
-import AppFooter from '@/views/dashboard/layout/components/AppFooter.vue';
-import AppTopbar from '@/views/dashboard/layout/components/AppTopbar.vue';
+// import AppFooter from '@/views/dashboard/layout/components/AppFooter.vue';
+// import AppTopbar from '@/views/dashboard/layout/components/AppTopbar.vue';
+import TopBar from '@/views/dashboard/layout/components/TopBar.vue';
 import { useLayout } from '@/views/dashboard/layout/components/layout';
 // import TopBar from '@/views/dashboard/layout/components/TopBar.vue';
 import { computed, ref, watch } from 'vue';
@@ -57,14 +58,15 @@ function isOutsideClicked(event) {
 </script>
 
 <template>
-    <div class="flex flex-col gap-2 layout-scroller bg-neutral-950 text-white" :class="containerClass">
-        <app-topbar></app-topbar>
+    <div class="flex flex-col gap-2 layout-scroller bg-neutral-950 min-h-screen text-white app-dark" :class="containerClass">
+        <!-- <app-topbar></app-topbar> -->
+        <top-bar></top-bar>
         <div class="px-4 pt-2">
             <!-- <div class="layout-main-container"> -->
             <div class="layout-main">
                 <router-view></router-view>
             </div>
-            <app-footer />
+            <!-- <app-footer /> -->
         </div>
         <div class="layout-mask animate-fadein"></div>
     </div>
