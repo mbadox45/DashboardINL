@@ -10,7 +10,7 @@ export default new (class bebanProdCpoOlahAPI {
     }
 
     getAll() {
-        return httpCommonThisAPI.post('beban-prod');
+        return httpCommonThisAPI.get('beban-prod');
     }
     getByPeriod(date) {
         return httpCommonThisAPI.post('beban-prod/period', date);

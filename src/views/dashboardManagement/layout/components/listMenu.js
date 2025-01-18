@@ -2,16 +2,28 @@ export const menuAllAccess = () => {
     const result = [
         {
             label: 'Home',
-            items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/dashboard' }]
+            items: [
+                { label: 'Main Dashboard', icon: 'pi pi-fw pi-objects-column', to: '/' },
+                { label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/dashboard' }
+            ]
         },
         {
             label: 'Finance',
             items: [
                 {
+                    label: 'Kurs',
+                    icon: 'pi pi-euro',
+                    items: [
+                        { label: 'Kurs', to: '/finance/kurs' },
+                        { label: 'Mata Uang', to: '/finance/kurs/mata-uang' }
+                    ]
+                },
+                { label: 'CPO KPBN', icon: 'pi pi-truck', to: '/finance/cpo-kpbn' },
+                {
                     label: 'Cash Flow Movement',
                     icon: 'pi pi-dollar',
                     items: [
-                        { label: 'Cash Flow Schedule', to: '/finance/cash-flow-movement' },
+                        { label: 'Cash Flow Movement & Cash Balance', to: '/finance/cash-flow-movement' },
                         { label: 'Kategori', to: '/finance/cash-flow-movement/kategori' }
                     ]
                 },
@@ -23,7 +35,8 @@ export const menuAllAccess = () => {
                         { label: 'Kategori', to: '/finance/cash-flow-schedule/kategori' },
                         { label: 'Pay Status', to: '/finance/cash-flow-schedule/pay-status' }
                     ]
-                }
+                },
+                { label: 'Profitability', icon: 'pi pi-chart-line', to: '/finance/profitability' }
             ]
         },
         {
@@ -45,7 +58,24 @@ export const menuAllAccess = () => {
                         { label: 'Laporan', to: '/operation/laporan-produksi' }
                     ]
                 },
+                {
+                    label: 'Laporan Material',
+                    icon: 'pi pi-fw pi-sitemap',
+                    items: [
+                        { label: 'Jenis Material', to: '/master/jenis-material' },
+                        { label: 'Norma', to: '/master/norma' },
+                        { label: 'Laporan', to: '/operation/laporan-produksi' }
+                    ]
+                },
                 { label: 'Pemakaian Material', icon: 'pi pi-fw pi-inbox', to: '/operation/pemakaian-material' }
+            ]
+        },
+        {
+            label: 'Supply Chain',
+            items: [
+                { label: 'Source CPO', icon: 'pi pi-fw pi-building-columns', to: '/scm/source-cpo' },
+                { label: 'Target Incoming', icon: 'pi pi-fw pi-box', to: '/scm/target-incoming' },
+                { label: 'Incoming CPO', icon: 'pi pi-fw pi-box', to: '/scm/incoming-cpo' }
             ]
         },
         {

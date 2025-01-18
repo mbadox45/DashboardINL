@@ -1,0 +1,76 @@
+import jenisLaporanMaterialAPI from '@/api/thisAPI/laporanMaterial/jenisLaporanMaterialAPI';
+import { msg_error, msg_success, msg_warning } from '@/controller/getApiFromThisApp/dummy/notificationDummy';
+
+export default new (class jenisLaporanMaterialController {
+    addPost = async (form) => {
+        try {
+            const response = await jenisLaporanMaterialAPI.addPost(form);
+            const load = response.data;
+            if (load.success == true) {
+                return msg_success;
+            } else {
+                return msg_warning;
+            }
+        } catch (error) {
+            console.log(error);
+            if (error.status == 400) {
+                return {
+                    status: false,
+                    code: 400,
+                    msg: `Data sudah tersedia.`
+                };
+            } else {
+                return msg_error;
+            }
+        }
+    };
+    updatePost = async (id, form) => {
+        try {
+            const response = await jenisLaporanMaterialAPI.updatePost(id, form);
+            const load = response.data;
+            console.log(load);
+            if (load.success == true) {
+                return msg_success;
+            } else {
+                return msg_warning;
+            }
+        } catch (error) {
+            return msg_error;
+        }
+    };
+    getAll = async () => {
+        try {
+            const response = await jenisLaporanMaterialAPI.getAll();
+            const load = response.data;
+            const data = load.data;
+            return data;
+        } catch (error) {
+            return null;
+        }
+    };
+    getByID = async (id) => {
+        try {
+            const response = await jenisLaporanMaterialAPI.getByID(id);
+            const load = response.data;
+            const data = load.data;
+            return data;
+        } catch (error) {
+            return null;
+        }
+    };
+    loadTable = async () => {
+        try {
+            const response = await this.getAll();
+            if (response != null) {
+                console.log(response);
+                const list = response;
+                // const data = response.detail;
+                return list;
+            } else {
+                return [];
+            }
+        } catch (error) {
+            return [];
+        }
+    };
+})();

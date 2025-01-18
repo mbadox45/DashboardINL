@@ -1,4 +1,5 @@
 <script setup>
+import { URL_WEB } from '@/api/http/dataVariable';
 import moment from 'moment';
 import { onMounted, ref } from 'vue';
 
@@ -15,6 +16,7 @@ const region = ref([
 const beforeDate = ref(moment().format('YYYY-MM-01'));
 const now = ref(moment().format('YYYY-MM-DD'));
 const dates = ref([moment(beforeDate.value).toDate(), moment(now.value).toDate()]);
+const getToken = ref(localStorage.getItem('usertoken'));
 
 onMounted(() => {});
 
@@ -50,9 +52,9 @@ const convertDate = (dateString) => {
 };
 
 const goToLogin = () => {
-    const getToken = localStorage.getItem('usertoken');
-    if (getToken != null) {
-        window.open('http://localhost:8481/dashboard', '_blank');
+    const token = getToken.value;
+    if (token != null) {
+        window.location.replace(`${URL_WEB}dashboard`);
     } else {
         window.open('http://36.92.181.10:8585/', '_blank');
     }
@@ -82,7 +84,8 @@ const goToLogin = () => {
                         @click="goToLogin"
                         class="pl-5 pr-10 hover:pr-5 py-3 border-2 w-full flex justify-between items-center gap-3 font-bold bg-gray-950 text-white rounded-full hover:bg-white hover:text-black uppercase shadow-none hover:shadow-sm shadow-gray-800 transition-all duration-300"
                     >
-                        <span>Login</span>
+                        <span v-if="getToken != null">Admin Dashboard</span>
+                        <span v-else>Login</span>
                         <i class="pi pi-sign-in"></i>
                     </button>
                     <!-- <div class="flex w-full gap-2 text-white">

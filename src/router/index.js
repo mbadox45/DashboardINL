@@ -18,6 +18,14 @@ const router = createRouter({
             ]
         },
         {
+            path: '/detail-dashboard',
+            name: 'detail',
+            component: () => import('@/views/dashboard/report/detailPage/Index.vue')
+            // meta: {
+            //     guestOnly: true
+            // }
+        },
+        {
             path: '/',
             component: DashManagement,
             children: [
@@ -37,9 +45,65 @@ const router = createRouter({
                 },
                 // Finance
                 {
+                    path: '/finance/kurs',
+                    name: 'kurs',
+                    component: () => import('@/views/dashboardManagement/finance/kurs/kurs/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        finance: true
+                        // operation: true
+                        // sales: true,
+                        // scm: true,
+                        // sdm: true
+                    }
+                },
+                {
+                    path: '/finance/kurs/mata-uang',
+                    name: 'kurs-mata-uang',
+                    component: () => import('@/views/dashboardManagement/finance/kurs/mataUangKurs/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        finance: true
+                        // operation: true
+                        // sales: true,
+                        // scm: true,
+                        // sdm: true
+                    }
+                },
+                {
+                    path: '/finance/cash-flow-movement',
+                    name: 'cost-flow-movement',
+                    component: () => import('@/views/dashboardManagement/finance/cashFlowMovement/cashFlowMovement/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        finance: true
+                        // operation: true
+                        // sales: true,
+                        // scm: true,
+                        // sdm: true
+                    }
+                },
+                {
                     path: '/finance/cash-flow-movement/kategori',
                     name: 'cost-flow-movement-kategori',
                     component: () => import('@/views/dashboardManagement/finance/cashFlowMovement/kategori/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        finance: true
+                        // operation: true
+                        // sales: true,
+                        // scm: true,
+                        // sdm: true
+                    }
+                },
+                {
+                    path: '/finance/cash-flow-schedule',
+                    name: 'cost-flow-schedule',
+                    component: () => import('@/views/dashboardManagement/finance/cashFlowSchedule/cashFlow/Index.vue'),
                     meta: {
                         requiresAuth: true,
                         allUser: true,
@@ -68,6 +132,20 @@ const router = createRouter({
                     path: '/finance/cash-flow-schedule/pay-status',
                     name: 'cost-flow-schedule-pay-status',
                     component: () => import('@/views/dashboardManagement/finance/cashFlowSchedule/payStatus/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        finance: true
+                        // operation: true
+                        // sales: true,
+                        // scm: true,
+                        // sdm: true
+                    }
+                },
+                {
+                    path: '/finance/profitability',
+                    name: 'profitability',
+                    component: () => import('@/views/dashboardManagement/finance/profitability/Index.vue'),
                     meta: {
                         requiresAuth: true,
                         allUser: true,
@@ -135,6 +213,64 @@ const router = createRouter({
                         // sdm: true
                     }
                 },
+                {
+                    path: '/master/jenis-material',
+                    name: 'jenis-material',
+                    component: () => import('@/views/dashboardManagement/operation/pemakaianMaterial/jenisMaterial/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        // finance: true,
+                        operation: true
+                        // sales: true,
+                        // scm: true,
+                        // sdm: true
+                    }
+                },
+
+                // Supply Chain
+                {
+                    path: '/scm/source-cpo',
+                    name: 'source-cpo',
+                    component: () => import('@/views/dashboardManagement/supplyChain/sourceCpo/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        // finance: true,
+                        // operation: true
+                        // sales: true,
+                        scm: true
+                        // sdm: true
+                    }
+                },
+                {
+                    path: '/scm/target-incoming',
+                    name: 'target-incoming',
+                    component: () => import('@/views/dashboardManagement/supplyChain/targetIncoming/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        // finance: true,
+                        // operation: true
+                        // sales: true,
+                        scm: true
+                        // sdm: true
+                    }
+                },
+                {
+                    path: '/scm/incoming-cpo',
+                    name: 'incoming-cpo',
+                    component: () => import('@/views/dashboardManagement/supplyChain/incomingCpo/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        // finance: true,
+                        // operation: true
+                        // sales: true,
+                        scm: true
+                        // sdm: true
+                    }
+                },
 
                 // Master Data
                 {
@@ -185,14 +321,6 @@ const router = createRouter({
             path: '/verify/:id',
             name: 'verify',
             component: () => import('@/views/dashboardManagement/auth/Verify.vue'),
-            meta: {
-                guestOnly: true
-            }
-        },
-        {
-            path: '/detail-dashboard',
-            name: 'detail',
-            component: () => import('@/views/dashboard/report/detailPage/Index.vue'),
             meta: {
                 guestOnly: true
             }
