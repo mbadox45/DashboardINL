@@ -5,37 +5,37 @@ import { QtyPenjualanBulky, QtyPenjualanRetail, avgCPOKpbn, outstandingCPo, prop
 import { sdm } from '@/controller/home/components/SdmHome';
 
 export default new (class HomeDashboard {
-    cardSalesPerformance() {
+    cardSalesPerformance = () => {
         const list = [QtyPenjualanBulky(), QtyPenjualanRetail()];
         return list;
-    }
-    cardFinancial() {
-        const list = [revenue(), grossProfitMargin(), ebitdaMargin(), netProfitMargin(), cashBalance(), cashFlowMovement(), cffPaySchedule(), avgCPOKpbn(), transaction()];
+    };
+    cardFinancial = async () => {
+        const list = [revenue(), grossProfitMargin(), ebitdaMargin(), netProfitMargin(), await cashBalance(), cashFlowMovement(), await cffPaySchedule(), avgCPOKpbn(), transaction()];
         return list;
-    }
+    };
 
-    cardHarga() {
+    cardHarga = () => {
         const list = [hargaSpotInventoryBulky(), hargaSpotInventoryRetail()];
         return list;
-    }
-    cardOperational() {
+    };
+    cardOperational = () => {
         const list = [cpoOlahVsRKAP(), laporanProduksi()];
         return list;
-    }
-    cardOperationalMaterial() {
+    };
+    cardOperationalMaterial = () => {
         const list = [pemakaianMaterial()];
         return list;
-    }
-    cardSCM() {
+    };
+    cardSCM = () => {
         const list = [balanceStockCPO(), stockBulky(), stockRetail(), actualIncommingCPO(), saldoPe(), outstandingCPo(), proportionCost(), sdm()];
         return list;
-    }
-    cardPackaging() {
+    };
+    cardPackaging = () => {
         const list = [packagingPerformance()];
         return list;
-    }
-    cardSdm() {
+    };
+    cardSdm = () => {
         const list = [sdm()];
         return list;
-    }
+    };
 })();

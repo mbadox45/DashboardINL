@@ -1,6 +1,15 @@
-import { valueColorIntCondition, valueColorPersenCondition } from '@/controller/dummyController';
+import cashFlowMovementFinanceController from '@/controller/dashboardMain/finance/cashFlowMovementFinanceController';
+import payScheduleFinanceController from '@/controller/dashboardMain/finance/payScheduleFinanceController';
+import { formatCurrency, valueColorIntCondition, valueColorPersenCondition } from '@/controller/dummyController';
+import moment from 'moment';
 
 // const links = '/detail-dashboard?component=';
+
+const form = {
+    idPmg: 1,
+    tanggalAwal: moment('2024-01-01').format('YYYY-MM-DD'),
+    tanggalAkhir: moment('2024-02-28').format('YYYY-MM-DD')
+};
 
 export const revenue = () => {
     const name = 'Revenue (in IDR Bn)';
@@ -134,16 +143,18 @@ export const netProfitMargin = () => {
     return { name: name, value: value, versus: versus, color: color, icon: icon, link: link, colspan: colspan };
 };
 
-export const cashBalance = () => {
+export const cashBalance = async () => {
+    const response = await cashFlowMovementFinanceController.cardBagianCashBalance(form);
+    const nilai = response.cash;
     const name = 'Cash Balance (in IDR BN)';
     const colspan = null;
-    const value = `<div class="flex gap-2 items-center text-green-500">
-    <span class="font-bold text-[1.5vw]">${535}</span>
-    <i class="pi pi-sort-up-fill" style="font-size:1vw;" />
+    const value = `<div class="flex gap-2 items-center text-green-500 ">
+    <span class="font-bold text-[1.5vw]">${nilai}</span>
+    <i class="pi pi-sort-${response.status}-fill" style="font-size:1vw;" />
     </div>`;
     //sesuaikan periode
     const versus = `<div class=" text-[0.8vw] flex flex-col w-full mt-3">
-    <span class="text-cyan-500 font-bold">s/d December 2024</span>
+    <span class="text-cyan-500 font-bold">s/d ${response.period}</span>
     </div>`;
     //ganti warna red 500 jika nilai sekarang < dari nilai bulan sebelumnya, kalo sama warna amber, tambahin icon up atau icon strip
     const color = 'text-green-500';
@@ -230,7 +241,11 @@ export const cashFlowMovement = () => {
 //     return { name: name, value: value, versus: versus, color: color, icon: icon, link: link, colspan: colspan };
 // };
 
-export const cffPaySchedule = () => {
+export const cffPaySchedule = async () => {
+    const response = await payScheduleFinanceController.cardBagian(form);
+    const cff = response.cff / 1000000000;
+    const cfi = response.cfi / 1000000000;
+    const date = response.period;
     const name = 'Pay Schedule (in IDR BN)';
     const colspan = null;
     const value = null;
@@ -238,19 +253,19 @@ export const cffPaySchedule = () => {
         <div class="flex flex-col gap-1 p-2 rounded-xl bg-black w-full">
             <div class="flex gap-2 justify-between items-center">
                 <span class="font-bold text-[0.9vw]">CFF</span>
-                <span class="text-cyan-500 font-bold text-[0.7vw]">s/d December 2024</span>
+                <span class="text-cyan-500 font-bold text-[0.7vw]">s/d ${date}</span>
             </div>
             <div class="flex gap-2 items-center text-amber-500">
-                <span class="font-bold text-[1.2vw]">14.2</span>
+                <span class="font-bold text-[1.2vw]">${formatCurrency(cff.toFixed(2))}</span>
                 <i class="pi pi-sort" style="font-size:0.8vw;"></i>
             </div>
         </div>
         <div class="flex flex-col gap-1 p-2 rounded-xl bg-black w-full">
             <div class="flex gap-2 justify-between items-center">
-                <span class="font-bold text-[0.9vw]">CFF</span>
+                <span class="font-bold text-[0.9vw]">CFI</span>
             </div>
             <div class="flex gap-2 items-center text-amber-500">
-                <span class="font-bold text-[1.2vw]">134.87</span>
+                <span class="font-bold text-[1.2vw]">${formatCurrency(cfi.toFixed(2))}</span>
             </div>
         </div>
     </div>

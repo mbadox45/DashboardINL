@@ -7,8 +7,13 @@ export const conditions = [
 
 export const kategori = [
     { name: 'Bahan Olah', id: 'bahan_olah' },
-    { name: 'produk Hasil', id: 'produk_hasil' },
+    { name: 'Produk Hasil', id: 'produk_hasil' },
     { name: 'Others', id: 'others' }
+];
+
+export const jenisTable = [
+    { name: 'Default', id: 'default' },
+    { name: 'Get All', id: 'getAll' }
 ];
 
 export const bulanKalendar = [
@@ -31,6 +36,16 @@ export const kategoriMaterial = [
     { name: 'Outgoing', id: 'outgoing' },
     { name: 'Proportion', id: 'proportion' },
     { name: 'Others', id: 'others' }
+];
+
+export const listStatus = [
+    { name: 'Aktif', id: 1 },
+    { name: 'Non Aktif', id: 0 }
+];
+
+export const jenisProduk = [
+    { name: 'Retail', id: 'ritel' },
+    { name: 'Bulk', id: 'bulk' }
 ];
 
 export const condFunction = (data) => {

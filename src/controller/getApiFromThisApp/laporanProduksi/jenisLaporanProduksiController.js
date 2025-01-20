@@ -59,84 +59,60 @@ export default new (class jenisLaporanProduksiController {
             return null;
         }
     };
-    // loadTable = async (form) => {
-    //     try {
-    //         const response = await this.getByPeriod(form);
-    //         if (response != null) {
-    //             const list = [];
-    //             // console.log(response);
-    //             for (let i = 0; i < response.length; i++) {
-    //                 const listItems = [];
-    //                 const kategori = response[i].kategori_data;
-    //                 const bahan_olah = kategori.find((item) => item.kategori == 'bahan_olah');
-    //                 const produk_hasil = kategori.find((item) => item.kategori == 'produk_hasil');
-    //                 const others = kategori.find((item) => item.kategori == 'others');
-
-    //                 // Bahan Baku
-    //                 if (bahan_olah.items != null) {
-    //                     for (let j = 0; j < bahan_olah.items.length; j++) {
-    //                         listItems.push({
-    //                             id: `${response[i].jenis_laporan} ${bahan_olah.items[j].name}`,
-    //                             name: `${bahan_olah.items[j].name} (Olah)`,
-    //                             totalQty: bahan_olah.items[j].totalQty,
-    //                             detail: bahan_olah.items[j].detail
-    //                         });
-    //                     }
-    //                 }
-    //                 // Produk Hasil
-    //                 if (produk_hasil.items != null) {
-    //                     for (let j = 0; j < produk_hasil.items.length; j++) {
-    //                         listItems.push({
-    //                             id: `${response[i].jenis_laporan} ${produk_hasil.items[j].name}`,
-    //                             name: `${produk_hasil.items[j].name} (Produksi)`,
-    //                             totalQty: produk_hasil.items[j].totalQty,
-    //                             detail: produk_hasil.items[j].detail
-    //                         });
-    //                         listItems.push({
-    //                             id: `${response[i].jenis_laporan} ${produk_hasil.items[j].name} (Yield Percentage %)`,
-    //                             name: `${produk_hasil.items[j].name} (Yield Percentage %)`,
-    //                             totalQty: produk_hasil.items[j].yieldPercentage,
-    //                             detail: []
-    //                         });
-    //                     }
-    //                 }
-    //                 // Others
-    //                 if (others.items != null) {
-    //                     for (let j = 0; j < others.items.length; j++) {
-    //                         listItems.push({
-    //                             id: `${response[i].jenis_laporan} ${others.items[j].name}`,
-    //                             name: `${others.items[j].name}`,
-    //                             totalQty: others.items[j].totalQty,
-    //                             detail: others.items[j].detail
-    //                         });
-    //                     }
-    //                 }
-    //                 listItems.push({
-    //                     id: `${response[i].jenis_laporan} Losses (Kg)`,
-    //                     name: `Losses (Kg)`,
-    //                     totalQty: response[i].losses,
-    //                     detail: []
-    //                 });
-    //                 listItems.push({
-    //                     id: `${response[i].jenis_laporan} Losses (Yield Percentage %)`,
-    //                     name: `Losses (Yield Percentage %)`,
-    //                     totalQty: response[i].lossesPercentage,
-    //                     detail: []
-    //                 });
-    //                 list.push({
-    //                     jenis_laporan: response[i].jenis_laporan,
-    //                     losses: response[i].losses,
-    //                     lossesPercentage: response[i].lossesPercentage,
-    //                     items: listItems
-    //                 });
-    //             }
-    //             // const data = response.detail;
-    //             return list;
-    //         } else {
-    //             return [];
-    //         }
-    //     } catch (error) {
-    //         return [];
-    //     }
-    // };
+    loadTable = async () => {
+        try {
+            const response = await this.getAll();
+            if (response != null) {
+                const list = response;
+                // const data = response.detail;
+                return list;
+            } else {
+                return [];
+            }
+        } catch (error) {
+            return [];
+        }
+    };
+    postData = async (form, status) => {
+        try {
+            let msg = { severity: '', content: '', icon: '' };
+            const list = form.items;
+            let kondisi;
+            for (let i = 0; i < list.length; i++) {
+                if (list[i].name != null && list[i].kategori != null) {
+                    if (i < list.length - 1) {
+                        continue;
+                    }
+                    kondisi = true;
+                } else {
+                    msg = { severity: 'warn', content: `Harap dilengkapi terlebih dahulu`, icon: 'pi-exclamation-triangle' };
+                    kondisi = false;
+                    break;
+                }
+            }
+            if (kondisi == true) {
+                if (status == 'add') {
+                    const response = await this.addPost(form);
+                    if (response.status == true) {
+                        msg = { severity: 'success', content: 'Data berhasil di tambahkan', icon: 'pi-check-circle' };
+                    } else {
+                        msg = { severity: 'error', content: 'Proses gagal, silahkan hubungi tim IT', icon: 'pi-times-circle' };
+                    }
+                    return msg;
+                } else {
+                    const response = await this.updatePost(form.id, form);
+                    if (response.status == true) {
+                        msg = { severity: 'success', content: 'Data berhasil di simpan', icon: 'pi-check-circle' };
+                    } else {
+                        msg = { severity: 'error', content: 'Proses gagal, silahkan hubungi tim IT', icon: 'pi-times-circle' };
+                    }
+                    return msg;
+                }
+            } else {
+                return msg;
+            }
+        } catch (error) {
+            return { severity: 'error', content: 'Proses gagal, silahkan hubungi tim IT', icon: 'pi-times-circle' };
+        }
+    };
 })();

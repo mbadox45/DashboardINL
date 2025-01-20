@@ -156,6 +156,20 @@ const router = createRouter({
                         // sdm: true
                     }
                 },
+                {
+                    path: '/finance/cpo-kpbn',
+                    name: 'cpo-kpbn',
+                    component: () => import('@/views/dashboardManagement/finance/cpoKpbn/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        finance: true
+                        // operation: true
+                        // sales: true,
+                        // scm: true,
+                        // sdm: true
+                    }
+                },
                 // Operation
                 {
                     path: '/cost-prod/beban-prod',
@@ -200,6 +214,20 @@ const router = createRouter({
                     }
                 },
                 {
+                    path: '/operation/laporan-produksi/create',
+                    name: 'laporan-produksi-create',
+                    component: () => import('@/views/dashboardManagement/operation/laporanProduksi/CreateIndex.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        // finance: true,
+                        operation: true
+                        // sales: true,
+                        // scm: true,
+                        // sdm: true
+                    }
+                },
+                {
                     path: '/master/jenis-produksi',
                     name: 'jenis-produksi',
                     component: () => import('@/views/dashboardManagement/operation/jenisLaporanProduksi/Index.vue'),
@@ -217,6 +245,48 @@ const router = createRouter({
                     path: '/master/jenis-material',
                     name: 'jenis-material',
                     component: () => import('@/views/dashboardManagement/operation/pemakaianMaterial/jenisMaterial/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        // finance: true,
+                        operation: true
+                        // sales: true,
+                        // scm: true,
+                        // sdm: true
+                    }
+                },
+                {
+                    path: '/operation/norma-material',
+                    name: 'norma-material',
+                    component: () => import('@/views/dashboardManagement/operation/pemakaianMaterial/normaMaterial/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        // finance: true,
+                        operation: true
+                        // sales: true,
+                        // scm: true,
+                        // sdm: true
+                    }
+                },
+                {
+                    path: '/operation/norma-material/create',
+                    name: 'norma-material-create',
+                    component: () => import('@/views/dashboardManagement/operation/pemakaianMaterial/normaMaterial/CreateIndex.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        // finance: true,
+                        operation: true
+                        // sales: true,
+                        // scm: true,
+                        // sdm: true
+                    }
+                },
+                {
+                    path: '/operation/laporan-material',
+                    name: 'laporan-material',
+                    component: () => import('@/views/dashboardManagement/operation/pemakaianMaterial/laporanMaterial/Index.vue'),
                     meta: {
                         requiresAuth: true,
                         allUser: true,
@@ -271,8 +341,64 @@ const router = createRouter({
                         // sdm: true
                     }
                 },
+                {
+                    path: '/scm/saldo-pe',
+                    name: 'saldo-pe',
+                    component: () => import('@/views/dashboardManagement/supplyChain/saldoPe/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        // finance: true,
+                        // operation: true
+                        // sales: true,
+                        scm: true
+                        // sdm: true
+                    }
+                },
+                {
+                    path: '/scm/outstanding-cpo',
+                    name: 'outstanding-cpo',
+                    component: () => import('@/views/dashboardManagement/supplyChain/outstandingCpo/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        // finance: true,
+                        // operation: true
+                        // sales: true,
+                        scm: true
+                        // sdm: true
+                    }
+                },
 
                 // Master Data
+                {
+                    path: '/master/produk',
+                    name: 'produk',
+                    component: () => import('@/views/dashboardManagement/masterPage/produk/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true
+                        // finance: true,
+                        // operation: true,
+                        // sales: true,
+                        // scm: true,
+                        // sdm: true
+                    }
+                },
+                {
+                    path: '/master/lokasi',
+                    name: 'lokasi',
+                    component: () => import('@/views/dashboardManagement/masterPage/lokasi/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true
+                        // finance: true,
+                        // operation: true,
+                        // sales: true,
+                        // scm: true,
+                        // sdm: true
+                    }
+                },
                 {
                     path: '/master/pmg',
                     name: 'pmg',
@@ -314,7 +440,35 @@ const router = createRouter({
                         // scm: true,
                         // sdm: true
                     }
+                },
+                {
+                    path: '/master/partner/supplier',
+                    name: 'partner-supplier',
+                    component: () => import('@/views/dashboardManagement/masterPage/partner/supplier/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true
+                        // finance: true,
+                        // operation: true,
+                        // sales: true,
+                        // scm: true,
+                        // sdm: true
+                    }
                 }
+                // {
+                //     path: '/master/partner/distributor',
+                //     name: 'partner-distributor',
+                //     component: () => import('@/views/dashboardManagement/masterPage/partner/distributor/Index.vue'),
+                //     meta: {
+                //         requiresAuth: true,
+                //         allUser: true
+                //         // finance: true,
+                //         // operation: true,
+                //         // sales: true,
+                //         // scm: true,
+                //         // sdm: true
+                //     }
+                // }
             ]
         },
         {

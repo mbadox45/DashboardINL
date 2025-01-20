@@ -1,7 +1,7 @@
 <script setup>
 import { formatCurrency } from '@/controller/dummyController';
-import incomingCpoScmController from '@/controller/getApiFromThisApp/supplyChain/incomingCpoScmController';
-import sourceCpoScmController from '@/controller/getApiFromThisApp/supplyChain/sourceCpoScmController';
+import cpoKpbnController from '@/controller/getApiFromThisApp/cpoKpbn/cpoKpbnController';
+import mataUangKursController from '@/controller/getApiFromThisApp/kurs/mataUangKursController';
 import { FilterMatchMode } from '@primevue/core/api';
 import moment from 'moment';
 import { onMounted, ref } from 'vue';
@@ -15,18 +15,19 @@ const logFile = ref([]);
 const optionPage = ref(0);
 
 const listTable = ref([]);
-const totalTable = ref({ totalQty: 0, totalValue: 0 });
+const totalTable = ref({ cpoOlah: 0, totalCost: 0, totalHargaSatuan: 0 });
 const search = ref();
 const expandedRows = ref([]);
 
-const pmg = ref([]);
+const selectedMataUang = ref(1);
+const listMataUang = ref([]);
 
 const op = ref();
 
-const beforeDate = ref(moment().format('YYYY-MM-01'));
-const now = ref(moment().format('YYYY-MM-DD'));
-// const beforeDate = ref('2024-01-01');
-// const now = ref(moment().format('2024-01-01'));
+// const beforeDate = ref(moment().format('YYYY-MM-01'));
+// const now = ref(moment().format('YYYY-MM-DD'));
+const beforeDate = ref('2023-01-01');
+const now = ref(moment().format('2025-01-31'));
 const dates = ref([moment(beforeDate.value).toDate(), moment(now.value).toDate()]);
 
 const initFilters = () => {
@@ -40,10 +41,8 @@ let count = ref(0);
 
 const formData = ref({
     id: null,
-    source_id: null,
     tanggal: moment().format('YYYY-MM-DD'),
-    harga: null,
-    qty: null
+    value: null
 });
 
 onMounted(() => {
@@ -54,27 +53,39 @@ const loadData = async () => {
     try {
         // Change Picker
         const form = {
+            idMataUang: selectedMataUang.value,
             tanggalAwal: beforeDate.value,
             tanggalAkhir: now.value
         };
-        const data = await incomingCpoScmController.loadTable(form);
-        listTable.value = data.data;
-        totalTable.value = {
-            totalQty: data.totalQty,
-            totalValue: data.totalValue
-        };
-
-        // get Select Option
-        const loadPMG = await sourceCpoScmController.getAll();
-        pmg.value = loadPMG;
-        console.log(loadPMG);
+        await loadCurrency();
+        const data = await cpoKpbnController.loadTable(form);
+        const list = [];
+        // for (let i = 0; i < data.length; i++) {
+        //     const uang = load.find((item) => item.id == data[i].id_mata_uang);
+        //     list.push({
+        //         id: data[i].id,
+        //         id_mata_uang: data[i].id_mata_uang,
+        //         mata_uang: uang.name,
+        //         tanggal: data[i].tanggal,
+        //         value: data[i].value
+        //     });
+        // }
+        listTable.value = data;
     } catch (error) {
         listTable.value = [];
-        totalTable.value = {
-            totalQty: 0,
-            totalValue: 0
-        };
     }
+};
+
+const loadCurrency = async () => {
+    const loadMataUang = await mataUangKursController.getAll();
+    const list = [];
+    for (let i = 0; i < loadMataUang.length; i++) {
+        list.push({
+            id: loadMataUang[i].id,
+            name: `${loadMataUang[i].symbol}_${loadMataUang[i].name} - ${loadMataUang[i].remark}`
+        });
+    }
+    listMataUang.value = list;
 };
 
 const toggle = async (event) => {
@@ -119,7 +130,7 @@ const showDrawer = async (data) => {
         drawerCond.value = true;
         messages.value = [];
         if (data != null) {
-            const response = await incomingCpoScmController.getByID(data.id);
+            const response = await cpoKpbnController.getByID(data.id);
             const history = response.history;
             console.log(response);
             const list = [];
@@ -161,18 +172,14 @@ const showDrawer = async (data) => {
             }
             logFile.value = list;
             formData.value.id = data.id;
-            formData.value.source_id = response.source_id;
             formData.value.tanggal = response.tanggal;
-            formData.value.qty = Number(response.qty);
-            formData.value.harga = Number(response.harga);
+            formData.value.value = Number(response.value);
             statusForm.value = 'edit';
         } else {
             logFile.value = [];
             formData.value.id = null;
-            formData.value.source_id = null;
             formData.value.tanggal = moment().format('YYYY-MM-DD');
-            formData.value.qty = null;
-            formData.value.harga = null;
+            formData.value.value = null;
             statusForm.value = 'add';
         }
     } catch (error) {
@@ -180,29 +187,25 @@ const showDrawer = async (data) => {
         drawerCond.value = true;
         logFile.value = [];
         formData.value.id = null;
-        formData.value.source_id = null;
         formData.value.tanggal = moment().format('YYYY-MM-DD');
-        formData.value.qty = null;
-        formData.value.harga = null;
+        formData.value.value = null;
         statusForm.value = 'add';
     }
 };
 
 const refreshForm = () => {
     messages.value = [];
-    formData.value.source_id = null;
     formData.value.tanggal = moment().format('YYYY-MM-DD');
-    formData.value.qty = null;
-    formData.value.harga = null;
+    formData.value.value = null;
 };
 
 const submitData = async () => {
-    if (!formData.value.source_id || !formData.value.tanggal || !formData.value.qty || !formData.value.harga) {
+    if (!formData.value.tanggal || !formData.value.value) {
         messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     } else {
         formData.value.tanggal = moment(formData.value.tanggal).format('YYYY-MM-DD');
         if (statusForm.value == 'add') {
-            const response = await incomingCpoScmController.addPost(formData.value);
+            const response = await cpoKpbnController.addPost(formData.value);
             if (response.status == true) {
                 messages.value = [{ severity: 'success', content: 'Data berhasil di tambahkan', id: count.value++, icon: 'pi-check-circle' }];
                 loadingSave.value = true;
@@ -215,7 +218,7 @@ const submitData = async () => {
                 messages.value = [{ severity: 'error', content: response.msg, id: count.value++, icon: 'pi-times-circle' }];
             }
         } else {
-            const response = await incomingCpoScmController.updatePost(formData.value.id, formData.value);
+            const response = await cpoKpbnController.updatePost(formData.value.id, formData.value);
             // const load = response.data;
             if (response.status == true) {
                 messages.value = [{ severity: 'success', content: 'Data berhasil di simpan', id: count.value++, icon: 'pi-check-circle' }];
@@ -236,7 +239,7 @@ const submitData = async () => {
 <template>
     <div class="flex flex-col w-full gap-8">
         <div class="flex gap-2 items-center justify-between w-full font-bold">
-            <span class="text-3xl">Incoming CPO</span>
+            <span class="text-3xl">CPO KPBN</span>
             <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-emerald-500 hover:bg-emerald-700 text-white rounded-full flex gap-2">
                 <i class="pi pi-plus"></i>
                 <span>Add Data</span>
@@ -256,20 +259,12 @@ const submitData = async () => {
                     <Message v-for="msg of messages" :key="msg.id" :severity="msg.severity" class="mt-4"><i :class="`pi ${msg.icon}`"></i> {{ msg.content }}</Message>
                 </transition-group>
                 <div class="flex flex-col gap-1">
-                    <label for="pmg">Source CPO <small class="text-red-500 font-bold">*</small></label>
-                    <Select v-model="formData.source_id" :options="pmg" optionLabel="name" optionValue="id" placeholder="Select a Source" class="w-full" />
-                </div>
-                <div class="flex flex-col gap-1">
                     <label for="date">Tanggal <small class="text-red-500 font-bold">*</small></label>
                     <DatePicker v-model="formData.tanggal" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" />
                 </div>
                 <div class="flex flex-col gap-1">
-                    <label for="qty">Quantity <small class="text-red-500 font-bold">*</small></label>
-                    <InputNumber v-model="formData.qty" inputId="minmaxfraction" placeholder="1,000,000" :minFractionDigits="0" :maxFractionDigits="2" fluid />
-                </div>
-                <div class="flex flex-col gap-1">
-                    <label for="harga">Harga <small class="text-red-500 font-bold">*</small></label>
-                    <InputNumber v-model="formData.harga" inputId="minmaxfraction" placeholder="1,000,000" :minFractionDigits="0" :maxFractionDigits="2" fluid />
+                    <label for="value">Value <small class="text-red-500 font-bold">*</small></label>
+                    <InputNumber v-model="formData.value" inputId="minmaxfraction" placeholder="1,000,000" :minFractionDigits="0" :maxFractionDigits="2" fluid />
                 </div>
                 <div class="flex flex-row-reverse w-full gap-3 mt-3">
                     <button @click="refreshForm" class="px-3 py-2 w-full border rounded-lg hover:shadow-md hover:shadow-black transition-all duration-300 shadow-sm shadow-black flex items-center gap-2 justify-center">
@@ -315,6 +310,10 @@ const submitData = async () => {
             <div class="flex flex-col items-center gap-4 w-[25rem] py-2">
                 <div class="flex flex-col gap-2 w-full">
                     <div class="flex flex-col gap-1 w-full items-start">
+                        <label for="pmg" class="text-[0.8vw]">Select by Currency</label>
+                        <Select v-model="selectedMataUang" :options="listMataUang" optionLabel="name" optionValue="id" placeholder="Select a Currency" class="w-full" />
+                    </div>
+                    <div class="flex flex-col gap-1 w-full items-start">
                         <label for="pmg" class="text-[0.8vw]">Select by Period</label>
                         <DatePicker v-model="dates" selectionMode="range" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :manualInput="false" placeholder="Select Date Range" class="w-full" />
                     </div>
@@ -337,80 +336,24 @@ const submitData = async () => {
                 </div>
             </template>
             <template #content>
-                <ScrollPanel style="width: 100%; height: 35vw">
-                    <div class="flex flex-col w-full gap-3">
-                        <DataTable v-model:expandedRows="expandedRows" :value="listTable" showGridlines dataKey="period">
-                            <Column expander style="width: 5%" />
-                            <Column field="month" sortable style="width: 25%; font-size: 0.7vw">
+                <div class="flex flex-col gap-4">
+                    <Panel v-for="(item, index) in listTable" :key="index" toggleable class="w-full">
+                        <template #header>
+                            <span class="text-[0.9vw] font-bold italic">Tahun Periode {{ item.year }}</span>
+                        </template>
+                        <div class="flex flex-col gap-3">
+                            <Panel v-for="(months, index) in item.months" :key="index" toggleable :collapsed="true" class="w-full">
                                 <template #header>
-                                    <div class="flex w-full justify-center">
-                                        <span>Periode</span>
+                                    <div class="flex w-full items-center justify-between gap-3 pr-2">
+                                        <span class="text-[0.9vw] font-bold italic">{{ moment(months.month > 9 ? `2024-${months.month.toString()}-01` : `2024-0${months.month.toString()}-01`).format('MMMM') }}</span>
+                                        <div class="flex gap-3 text-[0.8vw]">
+                                            <span class="px-3 py-1 rounded-full bg-teal-200 text-black"><span class="font-bold">Avg Kurs (USD)</span> - {{ formatCurrency(months.averageAsing.toFixed(2)) }}</span>
+                                            <span class="px-3 py-1 rounded-full bg-teal-200 text-black"><span class="font-bold">Avg Kurs (IDR)</span> - {{ formatCurrency(months.average.toFixed(2)) }}</span>
+                                        </div>
                                     </div>
                                 </template>
-                                <template #body="{ data }">
-                                    <div class="flex w-full justify-start">
-                                        <span>{{ moment(data.month > 9 ? `${data.year.toString()}-${data.month.toString()}-01` : `${data.year.toString()}-0${data.month.toString()}-01`).format('MMMM YYYY') }}</span>
-                                    </div>
-                                </template>
-                            </Column>
-                            <Column field="target" sortable style="width: 25%; font-size: 0.7vw">
-                                <template #header>
-                                    <div class="flex w-full justify-center">
-                                        <span>Target</span>
-                                    </div>
-                                </template>
-                                <template #body="{ data }">
-                                    <div class="flex w-full justify-end">
-                                        <span>{{ formatCurrency(data.target.toFixed(2)) }}</span>
-                                    </div>
-                                </template>
-                            </Column>
-                            <Column field="remaining" sortable style="width: 25%; font-size: 0.7vw">
-                                <template #header>
-                                    <div class="flex w-full justify-center">
-                                        <span>Remaining</span>
-                                    </div>
-                                </template>
-                                <template #body="{ data }">
-                                    <div class="flex w-full justify-end">
-                                        <span>{{ formatCurrency(data.remaining.toFixed(2)) }}</span>
-                                    </div>
-                                </template>
-                            </Column>
-                            <Column field="monthQty" sortable style="width: 25%; font-size: 0.7vw">
-                                <template #header>
-                                    <div class="flex w-full justify-center">
-                                        <span>Quantity</span>
-                                    </div>
-                                </template>
-                                <template #body="{ data }">
-                                    <div class="flex w-full justify-end">
-                                        <span>{{ formatCurrency(data.monthQty.toFixed(2)) }}</span>
-                                    </div>
-                                </template>
-                            </Column>
-                            <Column field="monthValue" sortable style="width: 25%; font-size: 0.7vw">
-                                <template #header>
-                                    <div class="flex w-full justify-center">
-                                        <span>Value</span>
-                                    </div>
-                                </template>
-                                <template #body="{ data }">
-                                    <div class="flex w-full justify-end">
-                                        <span>{{ formatCurrency(data.monthValue.toFixed(2)) }}</span>
-                                    </div>
-                                </template>
-                            </Column>
-                            <ColumnGroup type="footer">
-                                <Row>
-                                    <Column footer="Total :" :colspan="4" footerStyle="text-align:right; font-size:0.8vw;" />
-                                    <Column :footer="formatCurrency(totalTable.totalQty.toFixed(2))" footerStyle="text-align:right; background-color:black; color:white; font-size:0.8vw;" />
-                                    <Column :footer="formatCurrency(totalTable.totalValue.toFixed(2))" footerStyle="text-align:right; background-color:black; color:white; font-size:0.8vw;" />
-                                </Row>
-                            </ColumnGroup>
-                            <template #expansion="{ data }">
-                                <DataTable :value="data.detail" showGridlines paginator dataKey="period" :rows="10">
-                                    <Column field="tanggal" sortable style="width: 25%; font-size: 0.7vw">
+                                <DataTable :value="months.detail" showGridlines paginator :rows="10">
+                                    <Column field="tanggal" sortable style="width: 15%; font-size: 0.9vw">
                                         <template #header>
                                             <div class="flex w-full justify-center">
                                                 <span>Tanggal</span>
@@ -422,61 +365,103 @@ const submitData = async () => {
                                             </div>
                                         </template>
                                     </Column>
-                                    <Column field="source.id" sortable style="width: 25%; font-size: 0.7vw">
+                                    <Column field="kurs" sortable style="width: 25%; font-size: 0.7vw">
                                         <template #header>
                                             <div class="flex w-full justify-center">
-                                                <span>Source</span>
-                                            </div>
-                                        </template>
-                                        <template #body="{ data }">
-                                            <div class="flex w-full justify-center">
-                                                <span>{{ data.source.name }}</span>
-                                            </div>
-                                        </template>
-                                    </Column>
-                                    <Column field="harga" sortable style="width: 25%; font-size: 0.7vw">
-                                        <template #header>
-                                            <div class="flex w-full justify-center">
-                                                <span>Harga</span>
+                                                <span>Kurs (IDR)</span>
                                             </div>
                                         </template>
                                         <template #body="{ data }">
                                             <div class="flex w-full justify-end">
-                                                <span>{{ formatCurrency(Number(data.harga).toFixed(2)) }}</span>
+                                                <span class="">{{ formatCurrency(Number(data.kurs).toFixed(2)) }}</span>
                                             </div>
                                         </template>
                                     </Column>
-                                    <Column field="qty" sortable style="width: 25%; font-size: 0.7vw">
+                                    <Column field="valueAsing" sortable style="width: 25%; font-size: 0.7vw">
                                         <template #header>
                                             <div class="flex w-full justify-center">
-                                                <span>Quantity</span>
+                                                <span>Kurs (IDR)</span>
                                             </div>
                                         </template>
                                         <template #body="{ data }">
                                             <div class="flex w-full justify-end">
-                                                <span>{{ formatCurrency(Number(data.qty).toFixed(2)) }}</span>
+                                                <span class="">{{ formatCurrency(Number(data.valueAsing).toFixed(2)) }}</span>
                                             </div>
                                         </template>
                                     </Column>
-                                    <Column field="value" style="width: 5%; font-size: 0.7vw">
+                                    <Column field="value" sortable style="width: 25%; font-size: 0.7vw">
+                                        <template #header>
+                                            <div class="flex w-full justify-center">
+                                                <span>Value</span>
+                                            </div>
+                                        </template>
                                         <template #body="{ data }">
-                                            <button @click="showDrawer(data)" class="p-3 border rounded-full flex bg-gray-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
-                                                <i class="pi pi-pencil" style="font-size: 0.6vw"></i>
-                                            </button>
+                                            <div class="flex w-full justify-end">
+                                                <span class="">{{ formatCurrency(Number(data.value).toFixed(2)) }}</span>
+                                            </div>
+                                        </template>
+                                    </Column>
+                                    <Column field="id" style="width: 5%; font-size: 0.7vw">
+                                        <template #body="{ data }">
+                                            <div class="flex items-center justify-center w-full">
+                                                <button @click="showDrawer(data)" class="p-3 border rounded-full flex text-black bg-gray-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
+                                                    <i class="pi pi-pencil" style="font-size: 0.7vw"></i>
+                                                </button>
+                                            </div>
                                         </template>
                                     </Column>
                                 </DataTable>
-                            </template>
-                            <!-- <Column field="value" sortable style="width: 5%; font-size: 0.7vw">
-                                <template #body="{ data }">
-                                    <button @click="showDrawer(data)" class="p-3 border rounded-full flex bg-gray-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
-                                        <i class="pi pi-pencil" style="font-size: 0.6vw"></i>
-                                    </button>
-                                </template>
-                            </Column> -->
-                        </DataTable>
-                    </div>
-                </ScrollPanel>
+                            </Panel>
+                        </div>
+                    </Panel>
+                </div>
+                <!-- <DataTable :value="listTable" showGridlines paginator :rows="10">
+                    <Column field="tanggal" sortable style="width: 15%; font-size: 0.9vw">
+                        <template #header>
+                            <div class="flex w-full justify-center">
+                                <span>Tanggal</span>
+                            </div>
+                        </template>
+                        <template #body="{ data }">
+                            <div class="flex w-full justify-start">
+                                <span>{{ moment(data.tanggal).format('DD MMM YYYY') }}</span>
+                            </div>
+                        </template>
+                    </Column>
+                    <Column field="id_mata_uang" sortable style="width: 15%; font-size: 0.9vw">
+                        <template #header>
+                            <div class="flex w-full justify-center">
+                                <span>Mata Uang</span>
+                            </div>
+                        </template>
+                        <template #body="{ data }">
+                            <div class="flex w-full justify-center">
+                                <span>{{ data.mata_uang }}</span>
+                            </div>
+                        </template>
+                    </Column>
+                    <Column field="value" sortable style="width: 25%; font-size: 0.9vw">
+                        <template #header>
+                            <div class="flex w-full justify-center">
+                                <span>Value</span>
+                            </div>
+                        </template>
+                        <template #body="{ data }">
+                            <div class="flex w-full justify-end">
+                                <span>{{ formatCurrency(Number(data.value).toFixed(2)) }}</span>
+                            </div>
+                        </template>
+                    </Column>
+                    <Column field="value" style="width: 5%; font-size: 0.7vw">
+                        <template #body="{ data }">
+                            <div class="flex items-center justify-center w-full">
+                                <button @click="showDrawer(data)" class="p-3 border rounded-full flex bg-gray-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
+                                    <i class="pi pi-pencil" style="font-size: 0.7vw"></i>
+                                </button>
+                            </div>
+                        </template>
+                    </Column>
+                </DataTable> -->
             </template>
         </Card>
     </div>

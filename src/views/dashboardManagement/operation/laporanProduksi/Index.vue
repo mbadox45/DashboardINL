@@ -1,9 +1,9 @@
 <script setup>
+import { URL_WEB } from '@/api/http/dataVariable';
 import { formatCurrency } from '@/controller/dummyController';
-import bebanProdCpoOlahController from '@/controller/getApiFromThisApp/cpoOlah/bebanProdCpoOlahController';
+import jenisLaporanProduksiController from '@/controller/getApiFromThisApp/laporanProduksi/jenisLaporanProduksiController';
 import laporanProduksiController from '@/controller/getApiFromThisApp/laporanProduksi/laporanProduksiController';
 import pmgMasterController from '@/controller/getApiFromThisApp/master/pmgMasterController';
-import uraianBebanProdMasterController from '@/controller/getApiFromThisApp/master/uraianBebanProdMasterController';
 import moment from 'moment';
 import { computed, onMounted, ref } from 'vue';
 
@@ -22,21 +22,21 @@ const expandedRows = ref([]);
 
 const selectedPmg = ref(1);
 const pmg = ref([]);
-const listUraian = ref([]);
+const listJenis = ref([]);
 
 const op = ref();
 
-// const beforeDate = ref(moment().format('YYYY-MM-01'));
-// const now = ref(moment().format('YYYY-MM-DD'));
-const beforeDate = ref('2024-01-01');
-const now = ref('2024-01-30');
+const beforeDate = ref(moment().format('YYYY-MM-01'));
+const now = ref(moment().format('YYYY-MM-DD'));
+// const beforeDate = ref('2024-01-01');
+// const now = ref('2024-01-30');
 const dates = ref([moment(beforeDate.value).toDate(), moment(now.value).toDate()]);
 
 let count = ref(0);
 
 const formData = ref({
     id: null,
-    uraian_id: null,
+    item_produksi_id: null,
     pmg_id: null,
     tanggal: moment().format('YYYY-MM-DD'),
     value: null
@@ -54,17 +54,37 @@ const loadData = async () => {
             tanggalAwal: beforeDate.value,
             tanggalAkhir: now.value
         };
-        const data = await laporanProduksiController.loadTable(form);
-        console.log(data);
-        listTable.value = data;
+
+        await loadJenis();
 
         // get Select Option
         const loadPMG = await pmgMasterController.getAll();
-        const uraian = await uraianBebanProdMasterController.getAll();
-        listUraian.value = uraian;
         pmg.value = loadPMG;
+
+        const data = await laporanProduksiController.loadTable(form);
+        console.log(data);
+        listTable.value = data;
     } catch (error) {
         listTable.value = [];
+    }
+};
+
+const loadJenis = async () => {
+    try {
+        const response = await jenisLaporanProduksiController.getAll();
+        const list = [];
+        for (let i = 0; i < response.length; i++) {
+            const items = response[i].item_produksi;
+            for (let j = 0; j < items.length; j++) {
+                list.push({
+                    id: items[j].id,
+                    name: `(${response[i].name}) - ${items[j].name}`
+                });
+            }
+        }
+        listJenis.value = list;
+    } catch (error) {
+        return [];
     }
 };
 
@@ -113,11 +133,11 @@ const convertDate = (dateString) => {
     return date;
 };
 
-const showDrawer = async (data, mainData) => {
+const showDrawer = async (data) => {
     try {
-        drawerCond.value = true;
-        messages.value = [];
         if (data != null) {
+            drawerCond.value = true;
+            messages.value = [];
             const response = await laporanProduksiController.getByID(data.id);
             const history = response.history;
             const list = [];
@@ -126,53 +146,46 @@ const showDrawer = async (data, mainData) => {
                     toValue,
                     fromTanggal,
                     toTanggal = null;
-                if (history[i].changes.length == 0) {
-                    fromValue = null;
-                    toValue = null;
-                    fromTanggal = null;
-                    toTanggal = null;
-                } else {
-                    fromValue = history[i].changes.value == null ? null : history[i].changes.value.old;
-                    toValue = history[i].changes.value == null ? null : history[i].changes.value.new;
-                    fromTanggal = history[i].changes.tanggal == null ? null : history[i].changes.tanggal.old;
-                    toTanggal = history[i].changes.tanggal == null ? null : history[i].changes.tanggal.new;
-                }
+                // if (history[i].changes.length == 0) {
+                //     fromValue = null;
+                //     toValue = null;
+                //     fromTanggal = null;
+                //     toTanggal = null;
+                // } else {
+                //     fromValue = history[i].changes.value == null ? null : history[i].changes.value.old;
+                //     toValue = history[i].changes.value == null ? null : history[i].changes.value.new;
+                //     fromTanggal = history[i].changes.tanggal == null ? null : history[i].changes.tanggal.old;
+                //     toTanggal = history[i].changes.tanggal == null ? null : history[i].changes.tanggal.new;
+                // }
                 list.push({
                     action: history[i].action,
                     user_name: history[i].user_name,
                     date: moment(history[i].created_at).format('DD MMM YYYY - HH:mm:ss'),
-                    changesLokasi:
-                        fromValue == null && toValue == null
-                            ? []
-                            : [
-                                  { icon: 'pi pi-arrow-up text-red-500', name: fromValue },
-                                  { icon: 'pi pi-arrow-down text-green-500', name: toValue }
-                              ],
-                    changesNama:
-                        fromTanggal == null && toTanggal == null
-                            ? []
-                            : [
-                                  { icon: 'pi pi-arrow-up text-red-500', name: fromTanggal },
-                                  { icon: 'pi pi-arrow-down text-green-500', name: toTanggal }
-                              ]
+                    changesLokasi: fromValue == null && toValue == null ? [] : []
+                    // changesNama:
+                    //     fromTanggal == null && toTanggal == null
+                    //         ? []
+                    //         : [
+                    //               { icon: 'pi pi-arrow-up text-red-500', name: fromTanggal },
+                    //               { icon: 'pi pi-arrow-down text-green-500', name: toTanggal }
+                    //           ]
                 });
             }
-            const uraian = listUraian.value.find((item) => item.nama == mainData.uraian);
-            const listPmg = pmg.value.find((item) => item.nama == mainData.pmg);
             logFile.value = list;
             formData.value.id = data.id;
-            formData.value.uraian_id = uraian.id;
-            formData.value.pmg_id = listPmg.id;
+            formData.value.item_produksi_id = data.item_produksi_id;
+            formData.value.pmg_id = data.pmg_id;
             formData.value.tanggal = data.tanggal;
-            formData.value.value = data.value;
+            formData.value.qty = Number(data.qty);
             statusForm.value = 'edit';
         } else {
+            window.location.replace(`${URL_WEB}operation/laporan-produksi/create`);
             logFile.value = [];
             formData.value.id = null;
-            formData.value.uraian_id = null;
+            formData.value.item_produksi_id = null;
             formData.value.pmg_id = null;
             formData.value.tanggal = moment().format('YYYY-MM-DD');
-            formData.value.value = null;
+            formData.value.qty = null;
             statusForm.value = 'add';
         }
     } catch (error) {
@@ -180,29 +193,29 @@ const showDrawer = async (data, mainData) => {
         drawerCond.value = true;
         logFile.value = [];
         formData.value.id = null;
-        formData.value.uraian_id = null;
+        formData.value.item_produksi_id = null;
         formData.value.pmg_id = null;
         formData.value.tanggal = moment().format('YYYY-MM-DD');
-        formData.value.value = null;
+        formData.value.qty = null;
         statusForm.value = 'add';
     }
 };
 
 const refreshForm = () => {
     messages.value = [];
-    formData.value.uraian_id = null;
+    formData.value.item_produksi_id = null;
     formData.value.pmg_id = null;
     formData.value.tanggal = moment().format('YYYY-MM-DD');
-    formData.value.value = null;
+    formData.value.qty = null;
 };
 
 const submitData = async () => {
-    if (!formData.value.pmg_id || !formData.value.tanggal || !formData.value.uraian_id || !formData.value.value) {
+    if (!formData.value.pmg_id || !formData.value.tanggal || !formData.value.item_produksi_id || !formData.value.qty) {
         messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     } else {
         formData.value.tanggal = moment(formData.value.tanggal).format('YYYY-MM-DD');
         if (statusForm.value == 'add') {
-            const response = await bebanProdCpoOlahController.addPost(formData.value);
+            const response = await laporanProduksiController.addPost(formData.value);
             if (response.status == true) {
                 messages.value = [{ severity: 'success', content: 'Data berhasil di tambahkan', id: count.value++, icon: 'pi-check-circle' }];
                 loadingSave.value = true;
@@ -215,7 +228,7 @@ const submitData = async () => {
                 messages.value = [{ severity: 'error', content: response.msg, id: count.value++, icon: 'pi-times-circle' }];
             }
         } else {
-            const response = await bebanProdCpoOlahController.updatePost(formData.value.id, formData.value);
+            const response = await laporanProduksiController.updatePost(formData.value.id, formData.value);
             // const load = response.data;
             if (response.status == true) {
                 messages.value = [{ severity: 'success', content: 'Data berhasil di simpan', id: count.value++, icon: 'pi-check-circle' }];
@@ -257,7 +270,7 @@ const submitData = async () => {
                 </transition-group>
                 <div class="flex flex-col gap-1">
                     <label for="date">Uraian <small class="text-red-500 font-bold">*</small></label>
-                    <Select v-model="formData.uraian_id" filter :options="listUraian" optionLabel="nama" optionValue="id" placeholder="Select a Description" class="w-full" />
+                    <Select v-model="formData.item_produksi_id" filter :options="listJenis" optionLabel="name" optionValue="id" placeholder="Select a Description" class="w-full" />
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="date">PMG <small class="text-red-500 font-bold">*</small></label>
@@ -268,8 +281,8 @@ const submitData = async () => {
                     <DatePicker v-model="formData.tanggal" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" />
                 </div>
                 <div class="flex flex-col gap-1">
-                    <label for="date">Biaya Produksi (Rp) <small class="text-red-500 font-bold">*</small></label>
-                    <InputNumber v-model="formData.value" inputId="minmaxfraction" placeholder="1,000,000" :minFractionDigits="0" :maxFractionDigits="2" fluid />
+                    <label for="date">Quantity <small class="text-red-500 font-bold">*</small></label>
+                    <InputNumber v-model="formData.qty" inputId="minmaxfraction" placeholder="1,000,000" :minFractionDigits="0" :maxFractionDigits="2" fluid />
                 </div>
                 <div class="flex flex-row-reverse w-full gap-3 mt-3">
                     <button @click="refreshForm" class="px-3 py-2 w-full border rounded-lg hover:shadow-md hover:shadow-black transition-all duration-300 shadow-sm shadow-black flex items-center gap-2 justify-center">
@@ -359,9 +372,9 @@ const submitData = async () => {
                                         <div class="flex items-center w-full gap-3">
                                             <span class="text-[0.8vw] font-medium italic font-sans w-full">{{ items.name }}</span>
                                             <div class="w-full flex justify-end pr-5">
-                                                <span class="text-[0.8vw] font-bold" v-if="items.name.toLowerCase().includes('hari')">{{ items.totalQty }}</span>
-                                                <span class="text-[0.8vw] font-bold" v-else-if="items.name.toLowerCase().includes('%')">{{ formatCurrency(items.totalQty.toFixed(2)) }}%</span>
-                                                <span class="text-[0.8vw] font-bold" v-else>{{ formatCurrency(items.totalQty.toFixed(2)) }}</span>
+                                                <span class="text-[0.8vw] font-bold px-2 py-1 bg-cyan-200 text-black rounded-full" v-if="items.name.toLowerCase().includes('hari')">Total - {{ items.totalQty }}</span>
+                                                <span class="text-[0.8vw] font-bold px-2 py-1 bg-cyan-200 text-black rounded-full" v-else-if="items.name.toLowerCase().includes('%')">Total - {{ formatCurrency(items.totalQty.toFixed(2)) }}%</span>
+                                                <span class="text-[0.8vw] font-bold px-2 py-1 bg-cyan-200 text-black rounded-full" v-else>Total - {{ formatCurrency(items.totalQty.toFixed(2)) }}</span>
                                             </div>
                                             <div class="w-full"></div>
                                             <i v-if="items.detail.length < 1" class="pi pi-circle-fill text-red-500 pr-3 opacity-0"></i>

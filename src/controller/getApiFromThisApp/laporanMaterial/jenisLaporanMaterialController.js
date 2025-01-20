@@ -28,7 +28,6 @@ export default new (class jenisLaporanMaterialController {
         try {
             const response = await jenisLaporanMaterialAPI.updatePost(id, form);
             const load = response.data;
-            console.log(load);
             if (load.success == true) {
                 return msg_success;
             } else {
@@ -62,7 +61,6 @@ export default new (class jenisLaporanMaterialController {
         try {
             const response = await this.getAll();
             if (response != null) {
-                console.log(response);
                 const list = response;
                 // const data = response.detail;
                 return list;
@@ -71,6 +69,48 @@ export default new (class jenisLaporanMaterialController {
             }
         } catch (error) {
             return [];
+        }
+    };
+    postData = async (form, status) => {
+        try {
+            let msg = { severity: '', content: '', icon: '' };
+            const list = form.items;
+            let kondisi;
+            for (let i = 0; i < list.length; i++) {
+                if (list[i].name != null && list[i].kategori != null) {
+                    if (i < list.length - 1) {
+                        continue;
+                    }
+                    kondisi = true;
+                } else {
+                    msg = { severity: 'warn', content: `Harap dilengkapi terlebih dahulu`, icon: 'pi-exclamation-triangle' };
+                    kondisi = false;
+                    break;
+                }
+            }
+            if (kondisi == true) {
+                if (status == 'add') {
+                    const response = await this.addPost(form);
+                    if (response.status == true) {
+                        msg = { severity: 'success', content: 'Data berhasil di tambahkan', icon: 'pi-check-circle' };
+                    } else {
+                        msg = { severity: 'error', content: 'Proses gagal, silahkan hubungi tim IT', icon: 'pi-times-circle' };
+                    }
+                    return msg;
+                } else {
+                    const response = await this.updatePost(form.id, form);
+                    if (response.status == true) {
+                        msg = { severity: 'success', content: 'Data berhasil di simpan', icon: 'pi-check-circle' };
+                    } else {
+                        msg = { severity: 'error', content: 'Proses gagal, silahkan hubungi tim IT', icon: 'pi-times-circle' };
+                    }
+                    return msg;
+                }
+            } else {
+                return msg;
+            }
+        } catch (error) {
+            return { severity: 'error', content: 'Proses gagal, silahkan hubungi tim IT', icon: 'pi-times-circle' };
         }
     };
 })();

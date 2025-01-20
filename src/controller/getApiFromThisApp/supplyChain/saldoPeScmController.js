@@ -1,11 +1,11 @@
-import incomingCpoScmAPI from '@/api/thisAPI/supplyChain/incomingCpoScmAPI';
+import saldoPeScmAPI from '@/api/thisAPI/supplyChain/saldoPeScmAPI';
 import { msg_error, msg_success, msg_warning } from '@/controller/getApiFromThisApp/dummy/notificationDummy';
 import moment from 'moment';
 
-export default new (class incomingCpoScmController {
+export default new (class saldoPeScmController {
     addPost = async (form) => {
         try {
-            const response = await incomingCpoScmAPI.addPost(form);
+            const response = await saldoPeScmAPI.addPost(form);
             const load = response.data;
             if (load.success == true) {
                 return msg_success;
@@ -27,7 +27,7 @@ export default new (class incomingCpoScmController {
     };
     updatePost = async (id, form) => {
         try {
-            const response = await incomingCpoScmAPI.updatePost(id, form);
+            const response = await saldoPeScmAPI.updatePost(id, form);
             const load = response.data;
             console.log(load);
             if (load.success == true) {
@@ -41,7 +41,7 @@ export default new (class incomingCpoScmController {
     };
     getAll = async () => {
         try {
-            const response = await incomingCpoScmAPI.getAll();
+            const response = await saldoPeScmAPI.getAll();
             const load = response.data;
             const data = load.data;
             return data;
@@ -51,7 +51,7 @@ export default new (class incomingCpoScmController {
     };
     getByID = async (id) => {
         try {
-            const response = await incomingCpoScmAPI.getByID(id);
+            const response = await saldoPeScmAPI.getByID(id);
             const load = response.data;
             const data = load.data;
             return data;
@@ -61,7 +61,7 @@ export default new (class incomingCpoScmController {
     };
     getByPeriod = async (form) => {
         try {
-            const response = await incomingCpoScmAPI.getByPeriod(form);
+            const response = await saldoPeScmAPI.getByPeriod(form);
             const load = response.data;
             const data = load.data;
             return data;

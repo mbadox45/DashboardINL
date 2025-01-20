@@ -1,11 +1,11 @@
-import incomingCpoScmAPI from '@/api/thisAPI/supplyChain/incomingCpoScmAPI';
+import cpoKpbnAPI from '@/api/thisAPI/cpoKpbn/cpoKpbnAPI';
 import { msg_error, msg_success, msg_warning } from '@/controller/getApiFromThisApp/dummy/notificationDummy';
 import moment from 'moment';
 
-export default new (class incomingCpoScmController {
+export default new (class cpoKpbnController {
     addPost = async (form) => {
         try {
-            const response = await incomingCpoScmAPI.addPost(form);
+            const response = await cpoKpbnAPI.addPost(form);
             const load = response.data;
             if (load.success == true) {
                 return msg_success;
@@ -27,9 +27,8 @@ export default new (class incomingCpoScmController {
     };
     updatePost = async (id, form) => {
         try {
-            const response = await incomingCpoScmAPI.updatePost(id, form);
+            const response = await cpoKpbnAPI.updatePost(id, form);
             const load = response.data;
-            console.log(load);
             if (load.success == true) {
                 return msg_success;
             } else {
@@ -41,7 +40,7 @@ export default new (class incomingCpoScmController {
     };
     getAll = async () => {
         try {
-            const response = await incomingCpoScmAPI.getAll();
+            const response = await cpoKpbnAPI.getAll();
             const load = response.data;
             const data = load.data;
             return data;
@@ -51,9 +50,9 @@ export default new (class incomingCpoScmController {
     };
     getByID = async (id) => {
         try {
-            const response = await incomingCpoScmAPI.getByID(id);
+            const response = await cpoKpbnAPI.getByID(id);
             const load = response.data;
-            const data = load.data;
+            const data = load.pmg;
             return data;
         } catch (error) {
             return null;
@@ -61,7 +60,7 @@ export default new (class incomingCpoScmController {
     };
     getByPeriod = async (form) => {
         try {
-            const response = await incomingCpoScmAPI.getByPeriod(form);
+            const response = await cpoKpbnAPI.getByPeriod(form);
             const load = response.data;
             const data = load.data;
             return data;
@@ -73,39 +72,15 @@ export default new (class incomingCpoScmController {
         try {
             const response = await this.getByPeriod(form);
             const years = moment(form.tanggalAwal).format('YYYY');
-            const data = response.data;
+            const data = response.years;
             if (data != null) {
-                const list = [];
-                for (let i = 0; i < data.length; i++) {
-                    list.push({
-                        period: `${data[i].month} ${data[i].year}`,
-                        month: data[i].month,
-                        year: data[i].year,
-                        detail: data[i].detail,
-                        monthQty: data[i].monthQty,
-                        monthValue: data[i].monthValue,
-                        remaining: data[i].remaining,
-                        target: data[i].target
-                    });
-                }
-                return {
-                    data: list,
-                    totalQty: response.totalQty,
-                    totalValue: response.totalValue
-                };
+                const list = data;
+                return list;
             } else {
-                return {
-                    data: [],
-                    totalQty: 0,
-                    totalValue: 0
-                };
+                return [];
             }
         } catch (error) {
-            return {
-                data: [],
-                totalQty: 0,
-                totalValue: 0
-            };
+            return [];
         }
     };
 })();

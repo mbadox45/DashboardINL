@@ -54,7 +54,7 @@ export const menuAllAccess = () => {
                     label: 'Laporan Produksi',
                     icon: 'pi pi-fw pi-id-card',
                     items: [
-                        { label: 'Master', to: '/master/jenis-produksi' },
+                        { label: 'Jenis Produksi', to: '/master/jenis-produksi' },
                         { label: 'Laporan', to: '/operation/laporan-produksi' }
                     ]
                 },
@@ -63,25 +63,27 @@ export const menuAllAccess = () => {
                     icon: 'pi pi-fw pi-sitemap',
                     items: [
                         { label: 'Jenis Material', to: '/master/jenis-material' },
-                        { label: 'Norma', to: '/master/norma' },
-                        { label: 'Laporan', to: '/operation/laporan-produksi' }
+                        { label: 'Norma', to: '/operation/norma-material' },
+                        { label: 'Laporan', to: '/operation/laporan-material' }
                     ]
-                },
-                { label: 'Pemakaian Material', icon: 'pi pi-fw pi-inbox', to: '/operation/pemakaian-material' }
+                }
             ]
         },
         {
             label: 'Supply Chain',
             items: [
                 { label: 'Source CPO', icon: 'pi pi-fw pi-building-columns', to: '/scm/source-cpo' },
-                { label: 'Target Incoming', icon: 'pi pi-fw pi-box', to: '/scm/target-incoming' },
-                { label: 'Incoming CPO', icon: 'pi pi-fw pi-box', to: '/scm/incoming-cpo' }
+                { label: 'Target Incoming', icon: 'pi pi-fw pi-thumbtack', to: '/scm/target-incoming' },
+                { label: 'Incoming CPO', icon: 'pi pi-fw pi-tag', to: '/scm/incoming-cpo' },
+                { label: 'Saldo PE', icon: 'pi pi-fw pi-shop', to: '/scm/saldo-pe' },
+                { label: 'Outstanding CPO', icon: 'pi pi-fw pi-cart-arrow-down', to: '/scm/outstanding-cpo' }
             ]
         },
         {
             label: 'Master',
             items: [
                 { label: 'PMG Master', icon: 'pi pi-fw pi-building-columns', to: '/master/pmg' },
+                { label: 'Produk', icon: 'pi pi-fw pi-building-columns', to: '/master/produk' },
                 {
                     label: 'Uraian Master',
                     icon: 'pi pi-fw pi-hammer',
@@ -90,7 +92,15 @@ export const menuAllAccess = () => {
                         { label: 'Target Produksi', to: '/master/uraian/target-produksi' }
                     ]
                 },
-                { label: 'Jenis Material', icon: 'pi pi-fw pi-box', to: '/master/jenis-material' }
+                { label: 'Lokasi', icon: 'pi pi-fw pi-map-marker', to: '/master/lokasi' },
+                {
+                    label: 'Partner',
+                    icon: 'pi pi-fw pi-warehouse',
+                    items: [
+                        { label: 'Supplier', to: '/master/partner/supplier' }
+                        // { label: 'Distributor', to: '/master/partner/distributor' }
+                    ]
+                }
             ]
         }
     ];

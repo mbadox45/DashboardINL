@@ -1,11 +1,10 @@
-import incomingCpoScmAPI from '@/api/thisAPI/supplyChain/incomingCpoScmAPI';
+import outstandingCpoScmAPI from '@/api/thisAPI/supplyChain/outstandingCpoScmAPI';
 import { msg_error, msg_success, msg_warning } from '@/controller/getApiFromThisApp/dummy/notificationDummy';
-import moment from 'moment';
 
-export default new (class incomingCpoScmController {
+export default new (class outstandingCpoScmController {
     addPost = async (form) => {
         try {
-            const response = await incomingCpoScmAPI.addPost(form);
+            const response = await outstandingCpoScmAPI.addPost(form);
             const load = response.data;
             if (load.success == true) {
                 return msg_success;
@@ -27,9 +26,8 @@ export default new (class incomingCpoScmController {
     };
     updatePost = async (id, form) => {
         try {
-            const response = await incomingCpoScmAPI.updatePost(id, form);
+            const response = await outstandingCpoScmAPI.updatePost(id, form);
             const load = response.data;
-            console.log(load);
             if (load.success == true) {
                 return msg_success;
             } else {
@@ -41,7 +39,7 @@ export default new (class incomingCpoScmController {
     };
     getAll = async () => {
         try {
-            const response = await incomingCpoScmAPI.getAll();
+            const response = await outstandingCpoScmAPI.getAll();
             const load = response.data;
             const data = load.data;
             return data;
@@ -51,7 +49,7 @@ export default new (class incomingCpoScmController {
     };
     getByID = async (id) => {
         try {
-            const response = await incomingCpoScmAPI.getByID(id);
+            const response = await outstandingCpoScmAPI.getByID(id);
             const load = response.data;
             const data = load.data;
             return data;
@@ -59,11 +57,11 @@ export default new (class incomingCpoScmController {
             return null;
         }
     };
-    getByPeriod = async (form) => {
+    getByPeriod = async () => {
         try {
-            const response = await incomingCpoScmAPI.getByPeriod(form);
+            const response = await outstandingCpoScmAPI.getByPeriod();
             const load = response.data;
-            const data = load.data;
+            const data = load;
             return data;
         } catch (error) {
             return null;
@@ -71,35 +69,29 @@ export default new (class incomingCpoScmController {
     };
     loadTable = async (form) => {
         try {
-            const response = await this.getByPeriod(form);
-            const years = moment(form.tanggalAwal).format('YYYY');
-            const data = response.data;
-            if (data != null) {
-                const list = [];
-                for (let i = 0; i < data.length; i++) {
-                    list.push({
-                        period: `${data[i].month} ${data[i].year}`,
-                        month: data[i].month,
-                        year: data[i].year,
-                        detail: data[i].detail,
-                        monthQty: data[i].monthQty,
-                        monthValue: data[i].monthValue,
-                        remaining: data[i].remaining,
-                        target: data[i].target
-                    });
+            let list;
+            if (form == 'getAll') {
+                const response = await this.getAll();
+                let totalQty = 0;
+                let totalValue = 0;
+                for (let i = 0; i < response.length; i++) {
+                    totalQty += Number(response[i].qty);
+                    totalValue += Number(response[i].value);
                 }
-                return {
-                    data: list,
+                list = {
+                    data: response,
+                    totalQty: totalQty,
+                    totalValue: totalValue
+                };
+            } else {
+                const response = await this.getByPeriod();
+                list = {
+                    data: response.data,
                     totalQty: response.totalQty,
                     totalValue: response.totalValue
                 };
-            } else {
-                return {
-                    data: [],
-                    totalQty: 0,
-                    totalValue: 0
-                };
             }
+            return list;
         } catch (error) {
             return {
                 data: [],

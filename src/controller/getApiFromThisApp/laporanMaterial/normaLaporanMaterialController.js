@@ -1,11 +1,11 @@
-import laporanProduksiAPI from '@/api/thisAPI/laporanProduksi/laporanProduksiAPI';
+import normaLaporanMaterialAPI from '@/api/thisAPI/laporanMaterial/normaLaporanMaterialAPI';
 import { msg_error, msg_success, msg_warning } from '@/controller/getApiFromThisApp/dummy/notificationDummy';
 import moment from 'moment';
 
-export default new (class laporanProduksiController {
+export default new (class laporanMaterialController {
     addPost = async (form) => {
         try {
-            const response = await laporanProduksiAPI.addPost(form);
+            const response = await normaLaporanMaterialAPI.addPost(form);
             const load = response.data;
             if (load.success == true) {
                 return msg_success;
@@ -27,7 +27,7 @@ export default new (class laporanProduksiController {
     };
     updatePost = async (id, form) => {
         try {
-            const response = await laporanProduksiAPI.updatePost(id, form);
+            const response = await normaLaporanMaterialAPI.updatePost(id, form);
             const load = response.data;
             console.log(load);
             if (load.success == true) {
@@ -41,7 +41,7 @@ export default new (class laporanProduksiController {
     };
     getAll = async () => {
         try {
-            const response = await laporanProduksiAPI.getAll();
+            const response = await normaLaporanMaterialAPI.getAll();
             const load = response.data;
             const data = load.data;
             return data;
@@ -51,7 +51,7 @@ export default new (class laporanProduksiController {
     };
     getByID = async (id) => {
         try {
-            const response = await laporanProduksiAPI.getByID(id);
+            const response = await normaLaporanMaterialAPI.getByID(id);
             const load = response.data;
             const data = load.data;
             return data;
@@ -61,7 +61,7 @@ export default new (class laporanProduksiController {
     };
     getByPeriod = async (form) => {
         try {
-            const response = await laporanProduksiAPI.getByPeriod(form);
+            const response = await normaLaporanMaterialAPI.getByPeriod(form);
             const load = response.data;
             const data = load.data;
             return data;
@@ -74,7 +74,7 @@ export default new (class laporanProduksiController {
             const response = await this.getByPeriod(form);
             if (response != null) {
                 const list = [];
-                // console.log(response);
+                console.log(response);
                 for (let i = 0; i < response.length; i++) {
                     const listItems = [];
                     const kategori = response[i].kategori_data;
@@ -157,7 +157,7 @@ export default new (class laporanProduksiController {
             let kondisi;
             if (form.length > 0) {
                 for (let i = 0; i < list.length; i++) {
-                    if (list[i].item_produksi_id != null && list[i].pmg_id != null && list[i].tanggal != null && list[i].qty != null) {
+                    if (list[i].item_material_id != null && list[i].pmg_id != null && list[i].tanggal != null && list[i].qty != null && list[i].satuan != null) {
                         if (i < list.length - 1) {
                             continue;
                         }
