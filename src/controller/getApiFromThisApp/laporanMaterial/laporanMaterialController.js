@@ -157,7 +157,7 @@ export default new (class laporanMaterialController {
             let kondisi;
             if (form.length > 0) {
                 for (let i = 0; i < list.length; i++) {
-                    if (list[i].item_produksi_id != null && list[i].pmg_id != null && list[i].tanggal != null && list[i].qty != null) {
+                    if (list[i].item_material_id != null && list[i].pmg_id != null && list[i].tanggal != null && list[i].qty != null) {
                         if (i < list.length - 1) {
                             continue;
                         }
@@ -170,7 +170,7 @@ export default new (class laporanMaterialController {
                 }
                 if (kondisi == true) {
                     for (let i = 0; i < list.length; i++) {
-                        await this.addPost(list[i]);
+                        // await this.addPost(list[i]);
                     }
                     msg = { severity: 'success', content: 'Data berhasil di tambahkan', icon: 'pi-check-circle' };
                     return msg;

@@ -159,7 +159,7 @@ const submitData = async () => {
                 </transition-group>
                 <div class="flex flex-col gap-1">
                     <label for="nama">Kategori <small class="text-red-500 font-bold">*</small></label>
-                    <InputText type="text" v-model="formData.name" placeholder="Please input Name" />
+                    <InputText type="text" v-model="formData.name" placeholder="Please input Kategori" />
                 </div>
                 <div class="flex flex-row-reverse w-full gap-3">
                     <button @click="refreshForm" class="px-3 py-2 w-full border rounded-lg hover:shadow-md hover:shadow-black transition-all duration-300 shadow-sm shadow-black flex items-center gap-2 justify-center">

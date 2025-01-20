@@ -19,6 +19,7 @@ export const menuAllAccess = () => {
                     ]
                 },
                 { label: 'CPO KPBN', icon: 'pi pi-truck', to: '/finance/cpo-kpbn' },
+                { label: 'Harga', icon: 'pi pi-truck', to: '/finance/harga' },
                 {
                     label: 'Cash Flow Movement',
                     icon: 'pi pi-dollar',
@@ -76,7 +77,16 @@ export const menuAllAccess = () => {
                 { label: 'Target Incoming', icon: 'pi pi-fw pi-thumbtack', to: '/scm/target-incoming' },
                 { label: 'Incoming CPO', icon: 'pi pi-fw pi-tag', to: '/scm/incoming-cpo' },
                 { label: 'Saldo PE', icon: 'pi pi-fw pi-shop', to: '/scm/saldo-pe' },
-                { label: 'Outstanding CPO', icon: 'pi pi-fw pi-cart-arrow-down', to: '/scm/outstanding-cpo' }
+                { label: 'Outstanding CPO', icon: 'pi pi-fw pi-cart-arrow-down', to: '/scm/outstanding-cpo' },
+                {
+                    label: 'Stock',
+                    icon: 'pi pi-fw pi-warehouse',
+                    items: [
+                        { label: 'CPO', to: '/scm/stock/cpo' },
+                        { label: 'Bulk', to: '/scm/stock/bulk' },
+                        { label: 'Retail', to: '/scm/stock/retail' }
+                    ]
+                }
             ]
         },
         {

@@ -87,6 +87,20 @@ const router = createRouter({
                     }
                 },
                 {
+                    path: '/finance/cash-flow-movement/create',
+                    name: 'cost-flow-movement-create',
+                    component: () => import('@/views/dashboardManagement/finance/cashFlowMovement/cashFlowMovement/CreateIndex.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        finance: true
+                        // operation: true
+                        // sales: true,
+                        // scm: true,
+                        // sdm: true
+                    }
+                },
+                {
                     path: '/finance/cash-flow-movement/kategori',
                     name: 'cost-flow-movement-kategori',
                     component: () => import('@/views/dashboardManagement/finance/cashFlowMovement/kategori/Index.vue'),
@@ -146,6 +160,20 @@ const router = createRouter({
                     path: '/finance/profitability',
                     name: 'profitability',
                     component: () => import('@/views/dashboardManagement/finance/profitability/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        finance: true
+                        // operation: true
+                        // sales: true,
+                        // scm: true,
+                        // sdm: true
+                    }
+                },
+                {
+                    path: '/finance/profitability/create',
+                    name: 'profitability-create',
+                    component: () => import('@/views/dashboardManagement/finance/profitability/CreateIndex.vue'),
                     meta: {
                         requiresAuth: true,
                         allUser: true,
@@ -297,6 +325,20 @@ const router = createRouter({
                         // sdm: true
                     }
                 },
+                {
+                    path: '/operation/laporan-material/create',
+                    name: 'laporan-material-create',
+                    component: () => import('@/views/dashboardManagement/operation/pemakaianMaterial/laporanMaterial/CreateIndex.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        // finance: true,
+                        operation: true
+                        // sales: true,
+                        // scm: true,
+                        // sdm: true
+                    }
+                },
 
                 // Supply Chain
                 {
@@ -359,6 +401,48 @@ const router = createRouter({
                     path: '/scm/outstanding-cpo',
                     name: 'outstanding-cpo',
                     component: () => import('@/views/dashboardManagement/supplyChain/outstandingCpo/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        // finance: true,
+                        // operation: true
+                        // sales: true,
+                        scm: true
+                        // sdm: true
+                    }
+                },
+                {
+                    path: '/scm/stock/cpo',
+                    name: 'stock-cpo',
+                    component: () => import('@/views/dashboardManagement/supplyChain/stock/cpo/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        // finance: true,
+                        // operation: true
+                        // sales: true,
+                        scm: true
+                        // sdm: true
+                    }
+                },
+                {
+                    path: '/scm/stock/bulk',
+                    name: 'stock-bulk',
+                    component: () => import('@/views/dashboardManagement/supplyChain/stock/bulk/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        // finance: true,
+                        // operation: true
+                        // sales: true,
+                        scm: true
+                        // sdm: true
+                    }
+                },
+                {
+                    path: '/scm/stock/retail',
+                    name: 'stock-retail',
+                    component: () => import('@/views/dashboardManagement/supplyChain/stock/retail/Index.vue'),
                     meta: {
                         requiresAuth: true,
                         allUser: true,

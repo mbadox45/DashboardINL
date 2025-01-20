@@ -187,6 +187,7 @@ const showDrawer = async (data) => {
             formData.value.id = null;
             formData.value.pay_status_id = null;
             formData.value.kategori_id = null;
+            formData.value.name = null;
             formData.value.pmg_id = null;
             formData.value.tanggal = moment().format('YYYY-MM-DD');
             formData.value.value = null;
@@ -199,6 +200,7 @@ const showDrawer = async (data) => {
         formData.value.id = null;
         formData.value.pay_status_id = null;
         formData.value.kategori_id = null;
+        formData.value.name = null;
         formData.value.pmg_id = null;
         formData.value.tanggal = moment().format('YYYY-MM-DD');
         formData.value.value = null;
@@ -210,6 +212,7 @@ const refreshForm = () => {
     messages.value = [];
     formData.value.pay_status_id = null;
     formData.value.kategori_id = null;
+    formData.value.name = null;
     formData.value.pmg_id = null;
     formData.value.tanggal = moment().format('YYYY-MM-DD');
     formData.value.value = null;
@@ -274,6 +277,10 @@ const submitData = async () => {
                 <transition-group name="p-message" tag="div" class="flex flex-col">
                     <Message v-for="msg of messages" :key="msg.id" :severity="msg.severity" class="mt-4"><i :class="`pi ${msg.icon}`"></i> {{ msg.content }}</Message>
                 </transition-group>
+                <div class="flex flex-col gap-1">
+                    <label for="nama">Nama <small class="text-red-500 font-bold">*</small></label>
+                    <InputText type="text" v-model="formData.name" placeholder="Please input Kategori" />
+                </div>
                 <div class="flex flex-col gap-1">
                     <label for="kategori">Kategori <small class="text-red-500 font-bold">*</small></label>
                     <Select v-model="formData.kategori_id" filter :options="listKategori" optionLabel="name" optionValue="id" placeholder="Select a Description" class="w-full" />

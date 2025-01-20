@@ -27,10 +27,10 @@ const listJenis = ref([]);
 
 const op = ref();
 
-// const beforeDate = ref(moment().format('YYYY-MM-01'));
-// const now = ref(moment().format('YYYY-MM-DD'));
-const beforeDate = ref('2024-01-01');
-const now = ref('2024-01-30');
+const beforeDate = ref(moment().format('YYYY-MM-01'));
+const now = ref(moment().format('YYYY-MM-DD'));
+// const beforeDate = ref('2024-01-01');
+// const now = ref('2024-01-30');
 const dates = ref([moment(beforeDate.value).toDate(), moment(now.value).toDate()]);
 
 let count = ref(0);
@@ -179,7 +179,7 @@ const showDrawer = async (data) => {
             formData.value.qty = Number(data.qty);
             statusForm.value = 'edit';
         } else {
-            window.location.replace(`${URL_WEB}operation/laporan-produksi/create`);
+            window.location.replace(`${URL_WEB}operation/laporan-material/create`);
             logFile.value = [];
             formData.value.id = null;
             formData.value.item_produksi_id = null;
@@ -189,6 +189,7 @@ const showDrawer = async (data) => {
             statusForm.value = 'add';
         }
     } catch (error) {
+        window.location.replace(`${URL_WEB}operation/laporan-material/create`);
         messages.value = [];
         drawerCond.value = true;
         logFile.value = [];

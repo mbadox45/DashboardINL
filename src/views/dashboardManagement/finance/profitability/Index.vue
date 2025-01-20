@@ -1,4 +1,5 @@
 <script setup>
+import { URL_WEB } from '@/api/http/dataVariable';
 import { formatCurrency } from '@/controller/dummyController';
 import pmgMasterController from '@/controller/getApiFromThisApp/master/pmgMasterController';
 import kategoriProfitabilityController from '@/controller/getApiFromThisApp/profitability/kategoriProfitabilityController';
@@ -123,9 +124,9 @@ const convertDate = (dateString) => {
 
 const showDrawer = async (data) => {
     try {
-        drawerCond.value = true;
-        messages.value = [];
         if (data != null) {
+            drawerCond.value = true;
+            messages.value = [];
             const response = await profitabilityController.getByID(data.id);
             const history = response.history;
             console.log(response);
@@ -174,6 +175,7 @@ const showDrawer = async (data) => {
             formData.value.value = Number(response.value);
             statusForm.value = 'edit';
         } else {
+            window.location.replace(`${URL_WEB}finance/profitability/create`);
             logFile.value = [];
             formData.value.id = null;
             formData.value.kategori_id = null;
@@ -183,6 +185,7 @@ const showDrawer = async (data) => {
             statusForm.value = 'add';
         }
     } catch (error) {
+        window.location.replace(`${URL_WEB}finance/profitability/create`);
         messages.value = [];
         drawerCond.value = true;
         logFile.value = [];
