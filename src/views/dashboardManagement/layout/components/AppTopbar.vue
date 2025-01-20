@@ -1,10 +1,11 @@
 <script setup>
-import { URL_WEB } from '@/api/http/dataVariable';
 import { useLayout } from '@/layout/composables/layout';
 import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 // import AppConfigurator from '@/views/dashboardManagement/layout/components/AppConfigurator.vue';
 // import { useLayout } from '@/views/dashboardManagement/layout/composables/layout';
 
+const router = useRouter();
 const { toggleMenu, toggleDarkMode, isDarkTheme } = useLayout();
 const op = ref();
 const users = ref(JSON.parse(localStorage.getItem('payload')));
@@ -27,7 +28,8 @@ const signOut = () => {
     localStorage.removeItem('payload');
     localStorage.removeItem('usertoken');
     localStorage.removeItem('roles');
-    window.location.replace(URL_WEB);
+    router.push('/');
+    // window.location.replace(URL_WEB);
 };
 </script>
 
