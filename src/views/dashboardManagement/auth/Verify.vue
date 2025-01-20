@@ -1,5 +1,5 @@
 <script setup>
-import { URL_WEB, URL_WEB_Portal } from '@/api/http/dataVariable';
+import { URL_WEB_Portal } from '@/api/http/dataVariable';
 import verifyAuthController from '@/controller/getApiFromPortal/verifyAuthController';
 import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -123,7 +123,8 @@ const parseJwt = (token) => {
 
 const actionButton = () => {
     if (statusCheck.value == 'masuk') {
-        window.location.replace(`${URL_WEB}dashboard`);
+        router.push('/dashboard');
+        // window.location.replace(`${URL_WEB}dashboard`);
     } else if (statusCheck.value == 'expired') {
         window.location.replace(`${URL_WEB_Portal}`);
     } else {
