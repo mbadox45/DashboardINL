@@ -1,4 +1,5 @@
 <script setup>
+import { URL_WEB } from '@/api/http/dataVariable';
 import { formatCurrency } from '@/controller/dummyController';
 import productMasterController from '@/controller/getApiFromThisApp/master/productMasterController';
 import productStorageScmController from '@/controller/getApiFromThisApp/supplyChain/productStorageScmController';
@@ -64,6 +65,11 @@ const loadData = async () => {
     }
 };
 
+const convertDate = (dateString) => {
+    const date = moment(dateString).toDate();
+    return date;
+};
+
 const loadTanki = async () => {
     const produk = await productStorageScmController.getByJenis('tanki');
     const list = [];
@@ -116,9 +122,9 @@ const changeDate = async () => {
 
 const showDrawer = async (data) => {
     try {
-        drawerCond.value = true;
-        messages.value = [];
         if (data != null) {
+            drawerCond.value = true;
+            messages.value = [];
             const response = await bulkStockScmController.getByID(data.id);
             const history = response.history;
             const list = [];
@@ -149,6 +155,7 @@ const showDrawer = async (data) => {
             formData.value.qty = Number(data.qty);
             statusForm.value = 'edit';
         } else {
+            window.location.replace(`${URL_WEB}scm/stock/bulk/create`);
             logFile.value = [];
             formData.value.id = null;
             formData.value.tanki_id = null;
@@ -160,6 +167,7 @@ const showDrawer = async (data) => {
             statusForm.value = 'add';
         }
     } catch (error) {
+        window.location.replace(`${URL_WEB}scm/stock/bulk/create`);
         messages.value = [];
         drawerCond.value = true;
         logFile.value = [];

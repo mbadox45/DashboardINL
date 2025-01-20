@@ -1,11 +1,12 @@
 <script setup>
-import { URL_WEB } from '@/api/http/dataVariable';
 import moment from 'moment';
 import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 const icon = ref(null);
 const showMenu = ref(true);
 const visibleTop = ref(false);
+const router = useRouter();
 
 const selectedRegion = ref('pmg1');
 const region = ref([
@@ -54,7 +55,8 @@ const convertDate = (dateString) => {
 const goToLogin = () => {
     const token = getToken.value;
     if (token != null) {
-        window.location.replace(`${URL_WEB}dashboard`);
+        // window.location.replace(`${URL_WEB}dashboard`);
+        router.push('/dashboard');
     } else {
         window.open('http://36.92.181.10:8585/', '_blank');
     }

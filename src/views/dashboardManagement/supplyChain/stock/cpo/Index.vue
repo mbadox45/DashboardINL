@@ -104,6 +104,11 @@ const changeDate = async () => {
     await toggle();
 };
 
+const convertDate = (dateString) => {
+    const date = moment(dateString).toDate();
+    return date;
+};
+
 const showDrawer = async (data) => {
     try {
         drawerCond.value = true;

@@ -6,7 +6,9 @@ import retailStockScmController from '@/controller/getApiFromThisApp/supplyChain
 import { FilterMatchMode } from '@primevue/core/api';
 import moment from 'moment';
 import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const listTable = ref([]);
 const search = ref('');
 const drawerCond = ref(false);
@@ -17,11 +19,13 @@ const loadingSave = ref(false);
 const logFile = ref([]);
 const listTanki = ref([]);
 const listProduk = ref([]);
+const listTotal = ref([]);
+const totalData = ref({ totalQty: 0, totalTon: 0 });
 
-// const beforeDate = ref(moment().format('YYYY-MM-01'));
-// const now = ref(moment().format('YYYY-MM-DD'));
-const beforeDate = ref('2024-01-01');
-const now = ref('2024-02-28');
+const beforeDate = ref(moment().format('YYYY-MM-01'));
+const now = ref(moment().format('YYYY-MM-DD'));
+// const beforeDate = ref('2024-01-01');
+// const now = ref('2024-02-28');
 const dates = ref([moment(beforeDate.value).toDate(), moment(now.value).toDate()]);
 
 let count = ref(0);
@@ -29,8 +33,8 @@ const op = ref();
 
 const formData = ref({
     id: null,
-    tanki_id: null,
-    id_bulky: null,
+    warehouse_id: null,
+    id_ritel: null,
     tanggal: moment().format('YYYY-MM-DD'),
     qty: null,
     umur: null,
@@ -56,6 +60,15 @@ const loadData = async () => {
         };
         const data = await retailStockScmController.loadTable(form);
         listTable.value = data.data;
+        const total = data.total;
+
+        if (data.data != null) {
+            listTotal.value = total.products;
+            totalData.value = { totalQty: total.totalQty, totalTon: total.totalTon };
+        } else {
+            listTotal.value = null;
+            totalData.value = { totalQty: 0, totalTon: 0 };
+        }
 
         await loadTanki();
         await loadProduk();
@@ -65,12 +78,12 @@ const loadData = async () => {
 };
 
 const loadTanki = async () => {
-    const produk = await productStorageScmController.getByJenis('tanki');
+    const produk = await productStorageScmController.getByJenis('warehouse');
     const list = [];
     for (let i = 0; i < produk.length; i++) {
         list.push({
             id: produk[i].id,
-            name: produk[i].name + ' - ' + produk[i].lokasi.name
+            name: produk[i].name
         });
     }
     listTanki.value = list;
@@ -78,7 +91,7 @@ const loadTanki = async () => {
 
 const loadProduk = async () => {
     const produk = await productMasterController.getAll();
-    const jenis = produk.filter((item) => item.jenis.toLowerCase().includes('bulk'));
+    const jenis = produk.filter((item) => item.jenis.toLowerCase().includes('ritel'));
     listProduk.value = jenis;
 };
 
@@ -114,11 +127,16 @@ const changeDate = async () => {
     await toggle();
 };
 
+const convertDate = (dateString) => {
+    const date = moment(dateString).toDate();
+    return date;
+};
+
 const showDrawer = async (data) => {
     try {
-        drawerCond.value = true;
-        messages.value = [];
         if (data != null) {
+            drawerCond.value = true;
+            messages.value = [];
             const response = await retailStockScmController.getByID(data.id);
             const history = response.history;
             const list = [];
@@ -141,18 +159,19 @@ const showDrawer = async (data) => {
             }
             logFile.value = list;
             formData.value.id = data.id;
-            formData.value.tanki_id = data.tanki_id;
-            formData.value.id_bulky = data.id_bulky;
+            formData.value.warehouse_id = data.warehouse_id;
+            formData.value.id_ritel = data.id_ritel;
             formData.value.tanggal = data.tanggal;
             formData.value.remarks = data.remarks;
             formData.value.umur = Number(data.umur);
             formData.value.qty = Number(data.qty);
             statusForm.value = 'edit';
         } else {
+            router.push('/scm/stock/retail/create');
             logFile.value = [];
             formData.value.id = null;
-            formData.value.tanki_id = null;
-            formData.value.id_bulky = null;
+            formData.value.warehouse_id = null;
+            formData.value.id_ritel = null;
             formData.value.tanggal = moment().format('YYYY-MM-DD');
             formData.value.remarks = null;
             formData.value.umur = null;
@@ -160,12 +179,13 @@ const showDrawer = async (data) => {
             statusForm.value = 'add';
         }
     } catch (error) {
+        router.push('/scm/stock/retail/create');
         messages.value = [];
         drawerCond.value = true;
         logFile.value = [];
         formData.value.id = null;
-        formData.value.id_bulky = null;
-        formData.value.tanki_id = null;
+        formData.value.warehouse_id = null;
+        formData.value.id_ritel = null;
         formData.value.tanggal = moment().format('YYYY-MM-DD');
         formData.value.remarks = null;
         formData.value.umur = null;
@@ -175,8 +195,8 @@ const showDrawer = async (data) => {
 };
 
 const refreshForm = () => {
-    formData.value.tanki_id = null;
-    formData.value.id_bulky = null;
+    formData.value.warehouse_id = null;
+    formData.value.id_ritel = null;
     formData.value.tanggal = moment().format('YYYY-MM-DD');
     formData.value.remarks = null;
     formData.value.umur = null;
@@ -184,7 +204,7 @@ const refreshForm = () => {
 };
 
 const submitData = async () => {
-    if (!formData.value.tanki_id || !formData.value.tanggal || !formData.value.remarks || !formData.value.umur || !formData.value.qty || !formData.value.id_bulky) {
+    if (!formData.value.id_ritel || !formData.value.tanggal || !formData.value.remarks || !formData.value.umur || !formData.value.qty || !formData.value.warehouse_id) {
         messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     } else {
         if (statusForm.value == 'add') {
@@ -249,18 +269,18 @@ const submitData = async () => {
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="tanki">Tanki <small class="text-red-500 font-bold">*</small></label>
-                    <Select v-model="formData.tanki_id" :options="listTanki" optionLabel="name" optionValue="id" placeholder="Select a Type" class="w-full" />
+                    <Select v-model="formData.warehouse_id" :options="listTanki" optionLabel="name" optionValue="id" placeholder="Select a Type" class="w-full" />
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="produk">Produk <small class="text-red-500 font-bold">*</small></label>
-                    <Select v-model="formData.id_bulky" :options="listProduk" optionLabel="name" optionValue="id" placeholder="Select a Type" class="w-full" />
+                    <Select v-model="formData.id_ritel" :options="listProduk" optionLabel="name" optionValue="id" placeholder="Select a Type" class="w-full" />
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="umur">Umur <small class="text-red-500 font-bold">*</small></label>
                     <InputNumber v-model="formData.umur" inputId="minmaxfraction" placeholder="1,000,000" :minFractionDigits="0" :maxFractionDigits="2" fluid />
                 </div>
                 <div class="flex flex-col gap-1">
-                    <label for="qty">Stock <small class="text-red-500 font-bold">*</small></label>
+                    <label for="qty">Quantity <small class="text-red-500 font-bold">*</small></label>
                     <InputNumber v-model="formData.qty" inputId="minmaxfraction" placeholder="1,000,000" :minFractionDigits="0" :maxFractionDigits="2" fluid />
                 </div>
                 <div class="flex flex-col gap-1">
@@ -330,65 +350,147 @@ const submitData = async () => {
                         </button>
                         <Chip :label="`${moment(beforeDate).format('DD MMM YYYY')} - ${moment(now).format('DD MMM YYYY')}`" icon="pi pi-calendar" style="font-size: 0.6vw" class="font-bold" />
                     </div>
-                    <InputGroup>
+                    <!-- <InputGroup>
                         <InputText placeholder="Search Components" v-model="search['global'].value" />
                         <InputGroupAddon>
                             <i class="pi pi-search" />
                         </InputGroupAddon>
-                    </InputGroup>
+                    </InputGroup> -->
                 </div>
             </template>
             <template #content>
-                <div class="grid grid-cols-3 gap-4">
-                    <Panel v-for="(item, index) in listTable" :key="index">
+                <div class="grid grid-cols-2 gap-4">
+                    <Panel v-if="listTable.length > 0">
                         <template #header>
-                            <span>{{ item.warehouseName }}</span>
+                            <span class="font-bold">Total Stock</span>
                         </template>
-                        <DataTable :value="item.detail" showGridlines>
-                            <Column field="product.name" sortable style="width: 15%; font-size: 0.5vw">
+                        <DataTable :value="listTotal" showGridlines>
+                            <ColumnGroup type="footer">
+                                <Row>
+                                    <Column footer="TOTAL :" footerStyle="text-align:right; font-size:0.6vw;" />
+                                    <Column :footer="formatCurrency(Number(totalData.totalQty).toFixed(2))" footerStyle="text-align:right; background-color:black; color:white; font-size:0.6vw;" />
+                                    <Column :footer="formatCurrency(Number(totalData.totalTon).toFixed(2))" footerStyle="text-align:right; background-color:black; color:white; font-size:0.6vw;" />
+                                </Row>
+                            </ColumnGroup>
+                            <Column field="product_name" sortable style="width: 15%; font-size: 0.6vw">
                                 <template #header>
                                     <div class="flex w-full justify-center">
                                         <span>Product</span>
                                     </div>
                                 </template>
                                 <template #body="{ data }">
-                                    <div class="flex w-full justify-start">
-                                        <span>{{ data.product.name }}</span>
+                                    <div class="flex w-full items-center gap-2 justify-start">
+                                        <div class="p-3 border rounded-full flex bg-gray-200 justify-center items-center text-black">
+                                            <i class="pi pi-clipboard" style="font-size: 0.6vw"></i>
+                                        </div>
+                                        <span>{{ data.product_name }}</span>
                                     </div>
                                 </template>
                             </Column>
-                            <Column field="qty" sortable style="width: 15%; font-size: 0.5vw">
+                            <Column field="totalQty" sortable style="width: 15%; font-size: 0.6vw">
                                 <template #header>
                                     <div class="flex w-full justify-center">
                                         <span>Ctn</span>
                                     </div>
                                 </template>
                                 <template #body="{ data }">
-                                    <div class="flex w-full justify-start">
-                                        <span>{{ formatCurrency(Number(data.qty).toFixed(2)) }}</span>
+                                    <div class="flex w-full justify-end">
+                                        <span>{{ formatCurrency(Number(data.totalQty).toFixed(2)) }}</span>
                                     </div>
                                 </template>
                             </Column>
-                            <Column field="qtyTon" sortable style="width: 15%; font-size: 0.5vw">
+                            <Column field="totalTon" sortable style="width: 15%; font-size: 0.6vw">
                                 <template #header>
                                     <div class="flex w-full justify-center">
                                         <span>MT</span>
                                     </div>
                                 </template>
                                 <template #body="{ data }">
-                                    <div class="flex w-full justify-start">
+                                    <div class="flex w-full justify-end">
+                                        <span>{{ formatCurrency(Number(data.totalTon).toFixed(2)) }}</span>
+                                    </div>
+                                </template>
+                            </Column>
+                        </DataTable>
+                    </Panel>
+                    <Panel v-for="(item, index) in listTable" :key="index">
+                        <template #header>
+                            <span>{{ item.warehouseName }}</span>
+                        </template>
+                        <DataTable :value="item.detail" showGridlines>
+                            <ColumnGroup type="footer">
+                                <Row>
+                                    <Column footer="TOTAL :" :colspan="2" footerStyle="text-align:right; font-size:0.6vw;" />
+                                    <Column :footer="formatCurrency(Number(item.warehouseQty).toFixed(2))" footerStyle="text-align:right; background-color:black; color:white; font-size:0.6vw;" />
+                                    <Column :footer="formatCurrency(Number(item.warehouseTon).toFixed(2))" footerStyle="text-align:right; background-color:black; color:white; font-size:0.6vw;" />
+                                    <Column :footer="formatCurrency(Number(item.warehousePallet).toFixed(2))" footerStyle="text-align:right; background-color:black; color:white; font-size:0.6vw;" />
+                                </Row>
+                                <Row>
+                                    <Column footer="Kapasitas WH :" :colspan="2" footerStyle="text-align:right; font-size:0.6vw;" />
+                                    <Column :footer="formatCurrency((Number(item.warehouseCapacity) * 55).toFixed(2))" footerStyle="text-align:right; background-color:black; color:white; font-size:0.6vw;" />
+                                    <Column :footer="formatCurrency((Number(item.warehouseCapacity) * 55 * 0.010864).toFixed(2))" footerStyle="text-align:right; background-color:black; color:white; font-size:0.6vw;" />
+                                    <Column :footer="formatCurrency(Number(item.warehouseCapacity).toFixed(2))" footerStyle="text-align:right; background-color:black; color:white; font-size:0.6vw;" />
+                                </Row>
+                            </ColumnGroup>
+                            <Column field="product.name" sortable style="width: 15%; font-size: 0.6vw">
+                                <template #header>
+                                    <div class="flex w-full justify-center">
+                                        <span>Product</span>
+                                    </div>
+                                </template>
+                                <template #body="{ data }">
+                                    <div class="flex w-full items-center gap-2 justify-start">
+                                        <button @click="showDrawer(data)" class="p-3 border rounded-full flex bg-gray-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
+                                            <i class="pi pi-pencil" style="font-size: 0.6vw"></i>
+                                        </button>
+                                        <span>{{ data.product.name }}</span>
+                                    </div>
+                                </template>
+                            </Column>
+                            <Column field="tanggal" sortable style="width: 15%; font-size: 0.6vw">
+                                <template #header>
+                                    <div class="flex w-full justify-center">
+                                        <span>Tanggal</span>
+                                    </div>
+                                </template>
+                                <template #body="{ data }">
+                                    <div class="flex w-full justify-center">
+                                        <span>{{ moment(data.tanggal).format('DD MMM YYYY') }}</span>
+                                    </div>
+                                </template>
+                            </Column>
+                            <Column field="qty" sortable style="width: 15%; font-size: 0.6vw">
+                                <template #header>
+                                    <div class="flex w-full justify-center">
+                                        <span>Ctn</span>
+                                    </div>
+                                </template>
+                                <template #body="{ data }">
+                                    <div class="flex w-full justify-end">
+                                        <span>{{ formatCurrency(Number(data.qty).toFixed(2)) }}</span>
+                                    </div>
+                                </template>
+                            </Column>
+                            <Column field="qtyTon" sortable style="width: 15%; font-size: 0.6vw">
+                                <template #header>
+                                    <div class="flex w-full justify-center">
+                                        <span>MT</span>
+                                    </div>
+                                </template>
+                                <template #body="{ data }">
+                                    <div class="flex w-full justify-end">
                                         <span>{{ formatCurrency(Number(data.qtyTon).toFixed(2)) }}</span>
                                     </div>
                                 </template>
                             </Column>
-                            <Column field="qtyPallet" sortable style="width: 15%; font-size: 0.5vw">
+                            <Column field="qtyPallet" sortable style="width: 15%; font-size: 0.6vw">
                                 <template #header>
                                     <div class="flex w-full justify-center">
                                         <span>Pallet</span>
                                     </div>
                                 </template>
                                 <template #body="{ data }">
-                                    <div class="flex w-full justify-start">
+                                    <div class="flex w-full justify-end">
                                         <span>{{ formatCurrency(Number(data.qtyPallet).toFixed(2)) }}</span>
                                     </div>
                                 </template>

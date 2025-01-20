@@ -440,9 +440,37 @@ const router = createRouter({
                     }
                 },
                 {
+                    path: '/scm/stock/bulk/create',
+                    name: 'stock-bulk-create',
+                    component: () => import('@/views/dashboardManagement/supplyChain/stock/bulk/CreateIndex.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        // finance: true,
+                        // operation: true
+                        // sales: true,
+                        scm: true
+                        // sdm: true
+                    }
+                },
+                {
                     path: '/scm/stock/retail',
                     name: 'stock-retail',
                     component: () => import('@/views/dashboardManagement/supplyChain/stock/retail/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        // finance: true,
+                        // operation: true
+                        // sales: true,
+                        scm: true
+                        // sdm: true
+                    }
+                },
+                {
+                    path: '/scm/stock/retail/create',
+                    name: 'stock-retail-create',
+                    component: () => import('@/views/dashboardManagement/supplyChain/stock/retail/CreateIndex.vue'),
                     meta: {
                         requiresAuth: true,
                         allUser: true,

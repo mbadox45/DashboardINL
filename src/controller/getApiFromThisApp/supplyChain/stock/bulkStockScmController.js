@@ -93,4 +93,39 @@ export default new (class bulkStockScmController {
             };
         }
     };
+    postData = async (form) => {
+        try {
+            let msg = { severity: '', content: '', icon: '' };
+            const list = form;
+            let kondisi;
+            if (form.length > 0) {
+                for (let i = 0; i < list.length; i++) {
+                    if (list[i].tanki_id != null && list[i].id_bulky != null && list[i].tanggal != null && list[i].qty != null && list[i].umur != null && list[i].remarks != null) {
+                        if (i < list.length - 1) {
+                            continue;
+                        }
+                        kondisi = true;
+                    } else {
+                        msg = { severity: 'warn', content: `Harap dilengkapi terlebih dahulu`, icon: 'pi-exclamation-triangle' };
+                        kondisi = false;
+                        break;
+                    }
+                }
+                if (kondisi == true) {
+                    for (let i = 0; i < list.length; i++) {
+                        await this.addPost(list[i]);
+                    }
+                    msg = { severity: 'success', content: 'Data berhasil di tambahkan', icon: 'pi-check-circle' };
+                    return msg;
+                } else {
+                    return msg;
+                }
+            } else {
+                msg = { severity: 'warn', content: `Harap dilengkapi terlebih dahulu`, icon: 'pi-exclamation-triangle' };
+                return msg;
+            }
+        } catch (error) {
+            return { severity: 'error', content: 'Proses gagal, silahkan hubungi tim IT', icon: 'pi-times-circle' };
+        }
+    };
 })();
