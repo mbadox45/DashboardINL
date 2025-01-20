@@ -28,7 +28,9 @@ const signOut = () => {
     localStorage.removeItem('payload');
     localStorage.removeItem('usertoken');
     localStorage.removeItem('roles');
-    router.push('/');
+    setTimeout(function () {
+        router.push('/');
+    }, 1000);
     // window.location.replace(URL_WEB);
 };
 </script>
