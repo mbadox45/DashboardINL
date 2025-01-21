@@ -73,6 +73,20 @@ const router = createRouter({
                     }
                 },
                 {
+                    path: '/finance/harga',
+                    name: 'harga',
+                    component: () => import('@/views/dashboardManagement/finance/harga/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        finance: true
+                        // operation: true
+                        // sales: true,
+                        // scm: true,
+                        // sdm: true
+                    }
+                },
+                {
                     path: '/finance/cash-flow-movement',
                     name: 'cost-flow-movement',
                     component: () => import('@/views/dashboardManagement/finance/cashFlowMovement/cashFlowMovement/Index.vue'),
@@ -339,6 +353,90 @@ const router = createRouter({
                         // sdm: true
                     }
                 },
+                {
+                    path: '/operation/packaging',
+                    name: 'packaging',
+                    component: () => import('@/views/dashboardManagement/operation/packaging/packaging/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        // finance: true,
+                        operation: true
+                        // sales: true,
+                        // scm: true,
+                        // sdm: true
+                    }
+                },
+                {
+                    path: '/operation/packaging/uraian-target',
+                    name: 'packaging-uraian-target',
+                    component: () => import('@/views/dashboardManagement/operation/packaging/uraianTargetPackaging/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        // finance: true,
+                        operation: true
+                        // sales: true,
+                        // scm: true,
+                        // sdm: true
+                    }
+                },
+                {
+                    path: '/operation/packaging/jenis-laporan',
+                    name: 'packaging-jenis-laporan',
+                    component: () => import('@/views/dashboardManagement/operation/packaging/jenisLaporanPackaging/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        // finance: true,
+                        operation: true
+                        // sales: true,
+                        // scm: true,
+                        // sdm: true
+                    }
+                },
+                {
+                    path: '/operation/packaging/target',
+                    name: 'packaging-target',
+                    component: () => import('@/views/dashboardManagement/operation/packaging/targetPackaging/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        // finance: true,
+                        operation: true
+                        // sales: true,
+                        // scm: true,
+                        // sdm: true
+                    }
+                },
+                {
+                    path: '/operation/packaging/laporan-packaging',
+                    name: 'packaging-laporan-packaging',
+                    component: () => import('@/views/dashboardManagement/operation/packaging/laporanPackaging/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        // finance: true,
+                        operation: true
+                        // sales: true,
+                        // scm: true,
+                        // sdm: true
+                    }
+                },
+                {
+                    path: '/operation/packaging/laporan-packaging/create',
+                    name: 'packaging-laporan-packaging-create',
+                    component: () => import('@/views/dashboardManagement/operation/packaging/laporanPackaging/CreateIndex.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        // finance: true,
+                        operation: true
+                        // sales: true,
+                        // scm: true,
+                        // sdm: true
+                    }
+                },
 
                 // Supply Chain
                 {
@@ -498,6 +596,20 @@ const router = createRouter({
                     }
                 },
                 {
+                    path: '/master/produk-storage',
+                    name: 'produk-storage',
+                    component: () => import('@/views/dashboardManagement/masterPage/produkStorage/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true
+                        // finance: true,
+                        // operation: true,
+                        // sales: true,
+                        // scm: true,
+                        // sdm: true
+                    }
+                },
+                {
                     path: '/master/lokasi',
                     name: 'lokasi',
                     component: () => import('@/views/dashboardManagement/masterPage/lokasi/Index.vue'),
@@ -566,21 +678,21 @@ const router = createRouter({
                         // scm: true,
                         // sdm: true
                     }
+                },
+                {
+                    path: '/master/partner/customer',
+                    name: 'partner-customer',
+                    component: () => import('@/views/dashboardManagement/masterPage/partner/customer/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true
+                        // finance: true,
+                        // operation: true,
+                        // sales: true,
+                        // scm: true,
+                        // sdm: true
+                    }
                 }
-                // {
-                //     path: '/master/partner/distributor',
-                //     name: 'partner-distributor',
-                //     component: () => import('@/views/dashboardManagement/masterPage/partner/distributor/Index.vue'),
-                //     meta: {
-                //         requiresAuth: true,
-                //         allUser: true
-                //         // finance: true,
-                //         // operation: true,
-                //         // sales: true,
-                //         // scm: true,
-                //         // sdm: true
-                //     }
-                // }
             ]
         },
         {

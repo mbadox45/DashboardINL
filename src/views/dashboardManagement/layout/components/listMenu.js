@@ -19,7 +19,7 @@ export const menuAllAccess = () => {
                     ]
                 },
                 { label: 'CPO KPBN', icon: 'pi pi-truck', to: '/finance/cpo-kpbn' },
-                { label: 'Harga', icon: 'pi pi-truck', to: '/finance/harga' },
+                { label: 'Harga', icon: 'pi pi-ticket', to: '/finance/harga' },
                 {
                     label: 'Cash Flow Movement',
                     icon: 'pi pi-dollar',
@@ -61,13 +61,32 @@ export const menuAllAccess = () => {
                 },
                 {
                     label: 'Laporan Material',
-                    icon: 'pi pi-fw pi-sitemap',
+                    icon: 'pi pi-fw pi-building',
                     items: [
                         { label: 'Jenis Material', to: '/master/jenis-material' },
                         { label: 'Norma', to: '/operation/norma-material' },
                         { label: 'Laporan', to: '/operation/laporan-material' }
                     ]
+                },
+                {
+                    label: 'Packaging',
+                    icon: 'pi pi-fw pi-box',
+                    items: [
+                        { label: 'Packaging', to: '/operation/packaging' },
+                        { label: 'Uraian Target Packaging', to: '/operation/packaging/uraian-target' },
+                        { label: 'Target Packaging', to: '/operation/packaging/target' },
+                        { label: 'Jenis Laporan', to: '/operation/packaging/jenis-laporan' },
+                        { label: 'Laporan Packaging', to: '/operation/packaging/laporan-packaging' }
+                    ]
                 }
+            ]
+        },
+        {
+            label: 'Sales',
+            items: [
+                { label: 'Uraian Target Penjualan', icon: 'pi pi-fw pi-list-check', to: '/sales/uraian-target-penjualan' },
+                { label: 'Target Penjualan', icon: 'pi pi-fw pi-lightbulb', to: '/sales/target-penjualan' },
+                { label: 'Laporan Penjualan', icon: 'pi pi-fw pi-gauge', to: '/sales/laporan-penjualan' }
             ]
         },
         {
@@ -93,7 +112,14 @@ export const menuAllAccess = () => {
             label: 'Master',
             items: [
                 { label: 'PMG Master', icon: 'pi pi-fw pi-building-columns', to: '/master/pmg' },
-                { label: 'Produk', icon: 'pi pi-fw pi-building-columns', to: '/master/produk' },
+                {
+                    label: 'Produk',
+                    icon: 'pi pi-fw pi-book',
+                    items: [
+                        { label: 'Produk', to: '/master/produk' },
+                        { label: 'Produk Storage', to: '/master/produk-storage' }
+                    ]
+                },
                 {
                     label: 'Uraian Master',
                     icon: 'pi pi-fw pi-hammer',
@@ -105,10 +131,10 @@ export const menuAllAccess = () => {
                 { label: 'Lokasi', icon: 'pi pi-fw pi-map-marker', to: '/master/lokasi' },
                 {
                     label: 'Partner',
-                    icon: 'pi pi-fw pi-warehouse',
+                    icon: 'pi pi-fw pi-sitemap',
                     items: [
-                        { label: 'Supplier', to: '/master/partner/supplier' }
-                        // { label: 'Distributor', to: '/master/partner/distributor' }
+                        { label: 'Supplier', to: '/master/partner/supplier' },
+                        { label: 'Customer', to: '/master/partner/customer' }
                     ]
                 }
             ]

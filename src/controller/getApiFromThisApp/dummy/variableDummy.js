@@ -16,6 +16,11 @@ export const jenisTable = [
     { name: 'Get All', id: 'getAll' }
 ];
 
+export const listJenis = [
+    { name: 'Tanki', id: 'tanki' },
+    { name: 'Warehouse', id: 'warehouse' }
+];
+
 export const bulanKalendar = [
     { name: 'January', id: 1 },
     { name: 'February', id: 2 },

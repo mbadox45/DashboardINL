@@ -1,7 +1,7 @@
 <script setup>
-import supplierPartnerMasterController from '@/controller/getApiFromThisApp/master/supplierPartnerMasterController';
+import packagingController from '@/controller/getApiFromThisApp/packaging/packagingController';
 import moment from 'moment';
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
 const listTable = ref([]);
 const search = ref('');
@@ -16,13 +16,7 @@ let count = ref(0);
 
 const formData = ref({
     id: null,
-    name: null,
-    email: null,
-    kontak: null,
-    negara: null,
-    provinsi: null,
-    kota: null,
-    alamat: null
+    nama: null
 });
 
 onMounted(() => {
@@ -31,7 +25,7 @@ onMounted(() => {
 
 const loadData = async () => {
     try {
-        const data = await supplierPartnerMasterController.getAll();
+        const data = await packagingController.getAll();
         listTable.value = data;
     } catch (error) {
         listTable.value = [];
@@ -44,7 +38,7 @@ const showDrawer = async (data) => {
         messages.value = [];
         console.log(data);
         if (data != null) {
-            const response = await supplierPartnerMasterController.getByID(data.id);
+            const response = await packagingController.getByID(data.id);
             const history = response.history;
             const list = [];
             for (let i = 0; i < history.length; i++) {
@@ -54,8 +48,8 @@ const showDrawer = async (data) => {
                     from = null;
                     to = null;
                 } else {
-                    from = history[i].changes.name.old;
-                    to = history[i].changes.name.new;
+                    from = history[i].changes.nama.old;
+                    to = history[i].changes.nama.new;
                 }
                 list.push({
                     action: history[i].action,
@@ -72,24 +66,13 @@ const showDrawer = async (data) => {
             }
             logFile.value = list;
             formData.value.id = data.id;
-            formData.value.name = data.name;
-            formData.value.email = data.email;
-            formData.value.kontak = data.kontak;
-            formData.value.negara = data.negara;
-            formData.value.kota = data.kota;
-            formData.value.provinsi = data.provinsi;
-            formData.value.alamat = data.alamat;
+            formData.value.nama = data.nama;
+            console.log(formData.value);
             statusForm.value = 'edit';
         } else {
             logFile.value = [];
             formData.value.id = null;
-            formData.value.name = null;
-            formData.value.email = null;
-            formData.value.kontak = null;
-            formData.value.kota = null;
-            formData.value.provinsi = null;
-            formData.value.negara = null;
-            formData.value.alamat = null;
+            formData.value.nama = null;
             statusForm.value = 'add';
         }
     } catch (error) {
@@ -97,33 +80,22 @@ const showDrawer = async (data) => {
         drawerCond.value = true;
         logFile.value = [];
         formData.value.id = null;
-        formData.value.name = null;
-        formData.value.email = null;
-        formData.value.kontak = null;
-        formData.value.kota = null;
-        formData.value.provinsi = null;
-        formData.value.negara = null;
-        formData.value.alamat = null;
+        formData.value.nama = null;
         statusForm.value = 'add';
     }
 };
 
 const refreshForm = () => {
-    formData.value.name = null;
-    formData.value.email = null;
-    formData.value.kontak = null;
-    formData.value.kota = null;
-    formData.value.provinsi = null;
-    formData.value.negara = null;
-    formData.value.alamat = null;
+    formData.value.nama = null;
 };
 
 const submitData = async () => {
-    if (!formData.value.name || !formData.value.email || !formData.value.kontak || !formData.value.kota || !formData.value.provinsi || !formData.value.negara || !formData.value.alamat) {
+    console.log(statusForm.value, formData.value);
+    if (!formData.value.nama) {
         messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     } else {
         if (statusForm.value == 'add') {
-            const response = await supplierPartnerMasterController.addPost(formData.value);
+            const response = await packagingController.addPost(formData.value);
             // const load = response.data;
             if (response.status == true) {
                 messages.value = [{ severity: 'success', content: 'Data berhasil di tambahkan', id: count.value++, icon: 'pi-check-circle' }];
@@ -138,7 +110,7 @@ const submitData = async () => {
             }
         } else {
             console.log(formData.value);
-            const response = await supplierPartnerMasterController.updatePost(formData.value.id, formData.value);
+            const response = await packagingController.updatePost(formData.value.id, formData.value);
             // const load = response.data;
             console.log(response);
             if (response.status == true) {
@@ -155,12 +127,16 @@ const submitData = async () => {
         }
     }
 };
+
+const filteredList = computed(() => {
+    return listTable.value.filter((item) => item.nama.toLowerCase().includes(search.value.toLowerCase()));
+});
 </script>
 
 <template>
     <div class="flex flex-col w-full gap-8">
         <div class="flex gap-2 items-center justify-between w-full font-bold">
-            <span class="text-5xl">Master Distributor</span>
+            <span class="text-5xl">Master Packaging</span>
             <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-emerald-500 hover:bg-emerald-700 text-white rounded-full flex gap-2">
                 <i class="pi pi-plus"></i>
                 <span>Add Component</span>
@@ -180,28 +156,8 @@ const submitData = async () => {
                     <Message v-for="msg of messages" :key="msg.id" :severity="msg.severity" class="mt-4"><i :class="`pi ${msg.icon}`"></i> {{ msg.content }}</Message>
                 </transition-group>
                 <div class="flex flex-col gap-1">
-                    <label for="name">Nama Supplier <small class="text-red-500 font-bold">*</small></label>
-                    <InputText v-model="formData.name" placeholder="Please input Supplier Name" />
-                </div>
-                <div class="flex flex-col gap-1">
-                    <label for="kontak">Kontak <small class="text-red-500 font-bold">*</small></label>
-                    <InputText v-model="formData.kontak" placeholder="Please input Contact" />
-                </div>
-                <div class="flex flex-col gap-1">
-                    <label for="negara">Negara <small class="text-red-500 font-bold">*</small></label>
-                    <InputText v-model="formData.negara" placeholder="Please input Country" />
-                </div>
-                <div class="flex flex-col gap-1">
-                    <label for="provinsi">Provinsi <small class="text-red-500 font-bold">*</small></label>
-                    <InputText v-model="formData.provinsi" placeholder="Please input Province" />
-                </div>
-                <div class="flex flex-col gap-1">
-                    <label for="kota">Kota <small class="text-red-500 font-bold">*</small></label>
-                    <InputText v-model="formData.kota" placeholder="Please input City" />
-                </div>
-                <div class="flex flex-col gap-1">
-                    <label for="alamat">Alamat <small class="text-red-500 font-bold">*</small></label>
-                    <Textarea v-model="formData.alamat" rows="3" cols="30" placeholder="Please input Address" />
+                    <label for="nama">Nama <small class="text-red-500 font-bold">*</small></label>
+                    <InputText v-model="formData.nama" placeholder="Please input Name" />
                 </div>
                 <div class="flex flex-row-reverse w-full gap-3">
                     <button @click="refreshForm" class="px-3 py-2 w-full border rounded-lg hover:shadow-md hover:shadow-black transition-all duration-300 shadow-sm shadow-black flex items-center gap-2 justify-center">
@@ -256,101 +212,19 @@ const submitData = async () => {
                 </div>
             </template>
             <template #content>
-                <DataTable :value="listTable" showGridlines dataKey="period">
-                    <Column field="name" sortable style="width: 25%; font-size: 0.7vw">
-                        <template #header>
-                            <div class="flex w-full justify-center">
-                                <span>Name</span>
+                <ScrollPanel style="width: 100%; height: 32vw">
+                    <div class="flex flex-col gap-6">
+                        <div class="min-h-[7rem] w-full rounded-xl p-3 border flex gap-3 items-center" v-for="(item, index) in filteredList" :key="index">
+                            <i class="pi pi-box p-3 rounded-xl bg-gray-200 text-black" style="font-size: 1.2vw"></i>
+                            <div class="flex flex-col w-full items-start gap-3">
+                                <span class="text-[0.9vw]">{{ item.nama }}</span>
                             </div>
-                        </template>
-                        <template #body="{ data }">
-                            <div class="flex w-full justify-start">
-                                <span>{{ data.name }}</span>
-                            </div>
-                        </template>
-                    </Column>
-                    <Column field="email" sortable style="width: 25%; font-size: 0.7vw">
-                        <template #header>
-                            <div class="flex w-full justify-center">
-                                <span>Email</span>
-                            </div>
-                        </template>
-                        <template #body="{ data }">
-                            <div class="flex w-full justify-start">
-                                <span>{{ data.email }}</span>
-                            </div>
-                        </template>
-                    </Column>
-                    <Column field="kontak" sortable style="width: 10%; font-size: 0.7vw">
-                        <template #header>
-                            <div class="flex w-full justify-center">
-                                <span>Kontak</span>
-                            </div>
-                        </template>
-                        <template #body="{ data }">
-                            <div class="flex w-full justify-start">
-                                <span>{{ data.kontak }}</span>
-                            </div>
-                        </template>
-                    </Column>
-                    <Column field="negara" sortable style="width: 25%; font-size: 0.7vw">
-                        <template #header>
-                            <div class="flex w-full justify-center">
-                                <span>Negara</span>
-                            </div>
-                        </template>
-                        <template #body="{ data }">
-                            <div class="flex w-full justify-start">
-                                <span>{{ data.negara }}</span>
-                            </div>
-                        </template>
-                    </Column>
-                    <Column field="provinsi" sortable style="width: 25%; font-size: 0.7vw">
-                        <template #header>
-                            <div class="flex w-full justify-center">
-                                <span>Provinsi</span>
-                            </div>
-                        </template>
-                        <template #body="{ data }">
-                            <div class="flex w-full justify-start">
-                                <span>{{ data.provinsi }}</span>
-                            </div>
-                        </template>
-                    </Column>
-                    <Column field="kota" sortable style="width: 25%; font-size: 0.7vw">
-                        <template #header>
-                            <div class="flex w-full justify-center">
-                                <span>Kota</span>
-                            </div>
-                        </template>
-                        <template #body="{ data }">
-                            <div class="flex w-full justify-start">
-                                <span>{{ data.kota }}</span>
-                            </div>
-                        </template>
-                    </Column>
-                    <Column field="alamat" sortable style="width: 25%; font-size: 0.7vw">
-                        <template #header>
-                            <div class="flex w-full justify-center">
-                                <span>Alamat</span>
-                            </div>
-                        </template>
-                        <template #body="{ data }">
-                            <div class="flex w-full justify-start">
-                                <span>{{ data.alamat }}</span>
-                            </div>
-                        </template>
-                    </Column>
-                    <Column field="id" style="width: 5%; font-size: 0.7vw">
-                        <template #body="{ data }">
-                            <div class="flex justify-center items center">
-                                <button @click="showDrawer(data)" class="p-3 border rounded-full flex bg-gray-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
-                                    <i class="pi pi-pencil" style="font-size: 0.6vw"></i>
-                                </button>
-                            </div>
-                        </template>
-                    </Column>
-                </DataTable>
+                            <button @click="showDrawer(item)" class="py-3 px-3 justify-center px-3 flex items-center bg-amber-500 transition-all duration-300 hover:bg-amber-600 shadow rounded-lg text-white font-bold">
+                                <i class="pi pi-pencil"></i>
+                            </button>
+                        </div>
+                    </div>
+                </ScrollPanel>
             </template>
         </Card>
     </div>
