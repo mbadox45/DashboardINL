@@ -3,7 +3,7 @@ import { pieChartApex } from '@/controller/chartStyle/radialBarDummy';
 export const QtyPenjualanBulky = () => {
     const qty = [10000, 15000, 50000, 25000];
     const label = ['PFAD', 'RBDPO', 'RBD Stearin', 'RBD Olein'];
-    const name = 'Qty Penjualan Bulky';
+    const name = 'Qty Penjualan Bulky (in MT)';
     const chartData = pieChartApex(label, qty); // Pass qty as an additional parameter
     const colspan = 'col-span-2';
     const value = null;
@@ -31,7 +31,7 @@ export const QtyPenjualanBulky = () => {
 export const QtyPenjualanRetail = () => {
     const qty = [10000, 15000, 50000, 25000];
     const label = ['PFAD', 'RBDPO', 'RBD Stearin', 'RBD Olein'];
-    const name = 'Qty Penjualan Retail';
+    const name = 'Qty Penjualan Retail (in Box)';
     const options = pieChartApex(label, qty);
     const colspan = 'col-span-2';
     const value = null;
@@ -57,7 +57,7 @@ export const QtyPenjualanRetail = () => {
 };
 
 export const outstandingCPo = () => {
-    const name = 'Outstanding CPO (in Ton)';
+    const name = 'Outstanding CPO (in MT)';
     const colspan = null;
     const options = null;
     const value = null;
@@ -123,8 +123,8 @@ export const avgCPOKpbn = () => {
     // Jika Pendapatan > RKAP warna jadi green 600, sesuai kan periode
     const versus = [
         `<div class="flex justify-between gap-2 items-center">
-        <span class="font-bold text-[0.9vw] text-amber-600">USD 842.2/Ton</span>
-        <span class="font-bold text-[0.9vw] text-green-600">USD 842.2/Ton</span>
+        <span class="font-bold text-[0.9vw] text-amber-600">USD 842.2/MT</span>
+        <span class="font-bold text-[0.9vw] text-green-600">USD 842.2/MT</span>
     </div>
     <div class="flex justify-between gap-2 items-center">
         <span class="font-bold text-[0.9vw] text-amber-600">IDR 12,633/Kg</span>

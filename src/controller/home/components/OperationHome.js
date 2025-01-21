@@ -442,7 +442,7 @@ export const laporanProduksi = () => {
 };
 
 export const packagingPerformance = () => {
-    const name = 'Packaging';
+    const name = 'Packaging (in Box)';
     const value = null;
     const colspan = 'col-span-2';
     const versus = [

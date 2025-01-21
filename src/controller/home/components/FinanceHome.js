@@ -146,7 +146,7 @@ export const netProfitMargin = () => {
 export const cashBalance = async () => {
     const response = await cashFlowMovementFinanceController.cardBagianCashBalance(form);
     const nilai = response.cash;
-    const name = 'Cash Balance (in IDR BN)';
+    const name = 'Cash Balance (in IDR Bn)';
     const colspan = null;
     const value = `<div class="flex gap-2 items-center text-green-500 ">
     <span class="font-bold text-[1.5vw]">${nilai}</span>
@@ -165,7 +165,7 @@ export const cashBalance = async () => {
 };
 
 export const cashFlowMovement = () => {
-    const name = 'Cash Flow Movement (in IDR BN)';
+    const name = 'Cash Flow Movement (in IDR Bn)';
     const colspan = null;
     const value = `<div class="flex gap-2 items-center text-green-500">
         <span class="font-bold text-[1.2vw]">${185.17}</span>
@@ -212,41 +212,12 @@ export const cashFlowMovement = () => {
     return { name: name, value: value, versus: versus, color: color, icon: icon, link: link, colspan: colspan };
 };
 
-// export const cfiPaySchedule = () => {
-//     const name = 'CFI Pay Schedule (in IDR BN)';
-//     const colspan = null;
-//     const value = `<div class="flex gap-2 items-center text-amber-500">
-//         <span class="font-bold text-[0.9vw]">${134.87}</span>
-//     </div>`;
-//     const versus = `<div class="text-[0.5vw] flex flex-col w-full mt-3">
-//     <table class="text-amber-600 mb-2">
-//         <thead>
-//             <tr>
-//                 <th class="border border-black bg-black py-[0.5px] px-1 text-left">Pekerjaan Bangunan...</th>
-//                 <th class="border border-black py-[0.5px]">5</th>
-//                 <th class="border border-black py-[0.5px] text-cyan-500">2 Dec 2024</th>
-//             </tr>
-//             <tr>
-//                 <th class="border border-black bg-black py-[0.5px] px-1 text-left">Licensor Biodiesel...</th>
-//                 <th class="border border-black py-[0.5px]">81.9</th>
-//                 <th class="border border-black py-[0.5px] text-cyan-500">1 Jan 2025</th>
-//             </tr>
-//         </thead>
-//     </table>
-//     </div>`;
-//     const color = 'text-amber-500';
-//     const icon = null;
-//     const link = 'cfi-pay-schedule';
-
-//     return { name: name, value: value, versus: versus, color: color, icon: icon, link: link, colspan: colspan };
-// };
-
 export const cffPaySchedule = async () => {
     const response = await payScheduleFinanceController.cardBagian(form);
     const cff = response.cff / 1000000000;
     const cfi = response.cfi / 1000000000;
     const date = response.period;
-    const name = 'Pay Schedule (in IDR BN)';
+    const name = 'Pay Schedule (in IDR Bn)';
     const colspan = null;
     const value = null;
     const versus = `<div class="flex gap-1 w-full h-full">
@@ -279,7 +250,7 @@ export const cffPaySchedule = async () => {
 };
 
 export const hargaSpotInventoryBulky = () => {
-    const name = 'Harga Spot & Inventory Bulky';
+    const name = 'Harga Spot & Inv. Bulky';
     const colspan = 'col-span-2';
     const value = null;
     const versus = [
@@ -293,17 +264,17 @@ export const hargaSpotInventoryBulky = () => {
                 </div>
                 <div class="flex flex-col text-amber-600 justify-between items-end w-full">
                     <span class="text-[0.8vw] font-bold">686</span>
-                    <span class="text-[0.7vw] text-cyan-500">Spot (USD/Ton)</span>
+                    <span class="text-[0.7vw] text-cyan-500">Spot (USD/MT)</span>
                 </div>
             </div>
             <div class="flex flex-col gap-1  w-full">
                 <div class="flex flex-col text-green-600 justify-between items-end w-full">
                     <span class="text-[0.8vw] font-bold">10,641</span>
-                    <span class="text-[0.7vw] text-cyan-500">Inventory (Rp/Kg)</span>
+                    <span class="text-[0.7vw] text-cyan-500">Inv. (Rp/Kg)</span>
                 </div>
                 <div class="flex flex-col text-green-600 justify-between items-end w-full">
                     <span class="text-[0.8vw] font-bold">701</span>
-                    <span class="text-[0.7vw] text-cyan-500">Inventory (USD/Ton)</span>
+                    <span class="text-[0.7vw] text-cyan-500">Inv. (USD/MT)</span>
                 </div>
             </div>
         </div>
@@ -318,17 +289,17 @@ export const hargaSpotInventoryBulky = () => {
                 </div>
                 <div class="flex flex-col text-amber-600 justify-between items-end w-full">
                     <span class="text-[0.8vw] font-bold">847</span>
-                    <span class="text-[0.7vw] text-cyan-500">Spot (USD/Ton)</span>
+                    <span class="text-[0.7vw] text-cyan-500">Spot (USD/MT)</span>
                 </div>
             </div>
             <div class="flex flex-col gap-1  w-full">
                 <div class="flex flex-col text-green-600 justify-between items-end w-full">
                     <span class="text-[0.8vw] font-bold">13,000</span>
-                    <span class="text-[0.7vw] text-cyan-500">Inventory (Rp/Kg)</span>
+                    <span class="text-[0.7vw] text-cyan-500">Inv. (Rp/Kg)</span>
                 </div>
                 <div class="flex flex-col text-green-600 justify-between items-end w-full">
                     <span class="text-[0.8vw] font-bold">856</span>
-                    <span class="text-[0.7vw] text-cyan-500">Inventory (USD/Ton)</span>
+                    <span class="text-[0.7vw] text-cyan-500">Inv. (USD/MT)</span>
                 </div>
             </div>
         </div>
@@ -343,17 +314,17 @@ export const hargaSpotInventoryBulky = () => {
                 </div>
                 <div class="flex flex-col text-amber-600 justify-between items-end w-full">
                     <span class="text-[0.8vw] font-bold">847</span>
-                    <span class="text-[0.7vw] text-cyan-500">Spot (USD/Ton)</span>
+                    <span class="text-[0.7vw] text-cyan-500">Spot (USD/MT)</span>
                 </div>
             </div>
             <div class="flex flex-col gap-1  w-full">
                 <div class="flex flex-col text-green-600 justify-between items-end w-full">
                     <span class="text-[0.8vw] font-bold">13,000</span>
-                    <span class="text-[0.7vw] text-cyan-500">Inventory (Rp/Kg)</span>
+                    <span class="text-[0.7vw] text-cyan-500">Inv. (Rp/Kg)</span>
                 </div>
                 <div class="flex flex-col text-green-600 justify-between items-end w-full">
                     <span class="text-[0.8vw] font-bold">856</span>
-                    <span class="text-[0.7vw] text-cyan-500">Inventory (USD/Ton)</span>
+                    <span class="text-[0.7vw] text-cyan-500">Inv. (USD/MT)</span>
                 </div>
             </div>
         </div>
@@ -368,17 +339,17 @@ export const hargaSpotInventoryBulky = () => {
                 </div>
                 <div class="flex flex-col text-amber-600 justify-between items-end w-full">
                     <span class="text-[0.8vw] font-bold">847</span>
-                    <span class="text-[0.7vw] text-cyan-500">Spot (USD/Ton)</span>
+                    <span class="text-[0.7vw] text-cyan-500">Spot (USD/MT)</span>
                 </div>
             </div>
             <div class="flex flex-col gap-1  w-full">
                 <div class="flex flex-col text-green-600 justify-between items-end w-full">
                     <span class="text-[0.8vw] font-bold">13,000</span>
-                    <span class="text-[0.7vw] text-cyan-500">Inventory (Rp/Kg)</span>
+                    <span class="text-[0.7vw] text-cyan-500">Inv. (Rp/Kg)</span>
                 </div>
                 <div class="flex flex-col text-green-600 justify-between items-end w-full">
                     <span class="text-[0.8vw] font-bold">856</span>
-                    <span class="text-[0.7vw] text-cyan-500">Inventory (USD/Ton)</span>
+                    <span class="text-[0.7vw] text-cyan-500">Inv. (USD/MT)</span>
                 </div>
             </div>
         </div>
@@ -392,7 +363,7 @@ export const hargaSpotInventoryBulky = () => {
 };
 
 export const hargaSpotInventoryRetail = () => {
-    const name = 'Harga Spot & Inventory Retail';
+    const name = 'Harga Spot & Inv. Retail';
     const colspan = 'col-span-2';
     const value = null;
     const versus = [
@@ -402,21 +373,21 @@ export const hargaSpotInventoryRetail = () => {
             <div class="flex flex-col gap-1 w-full">
                 <div class="flex flex-col text-amber-600 justify-between items-end w-full">
                     <span class="text-[0.8vw] font-bold">13,499</span>
-                    <span class="text-[0.7vw] text-cyan-500">Rp/Kg</span>
+                    <span class="text-[0.7vw] text-cyan-500">Spot (Rp/Box)</span>
                 </div>
                 <div class="flex flex-col text-amber-600 justify-between items-end w-full">
                     <span class="text-[0.8vw] font-bold">161,983</span>
-                    <span class="text-[0.7vw] text-cyan-500">Rp/Box</span>
+                    <span class="text-[0.7vw] text-cyan-500">Spot (USD/Box)</span>
                 </div>
             </div>
             <div class="flex flex-col gap-1 w-full">
                 <div class="flex flex-col text-green-600 justify-between items-end w-full">
                     <span class="text-[0.8vw] font-bold">13,499</span>
-                    <span class="text-[0.7vw] text-cyan-500">USD/Kg</span>
+                    <span class="text-[0.7vw] text-cyan-500">Inv. (Rp/Box)</span>
                 </div>
                 <div class="flex flex-col text-green-600 justify-between items-end w-full">
                     <span class="text-[0.8vw] font-bold">161,983</span>
-                    <span class="text-[0.7vw] text-cyan-500">USD/Box</span>
+                    <span class="text-[0.7vw] text-cyan-500">Inv. (USD/Box)</span>
                 </div>
             </div>
         </div>
@@ -427,21 +398,21 @@ export const hargaSpotInventoryRetail = () => {
             <div class="flex flex-col gap-1 w-full">
                 <div class="flex flex-col text-amber-600 justify-between items-end w-full">
                     <span class="text-[0.8vw] font-bold">14,216</span>
-                    <span class="text-[0.7vw] text-cyan-500">Rp/Kg</span>
+                    <span class="text-[0.7vw] text-cyan-500">Spot (Rp/Box)</span>
                 </div>
                 <div class="flex flex-col text-amber-600 justify-between items-end w-full">
                     <span class="text-[0.8vw] font-bold">170,591</span>
-                    <span class="text-[0.7vw] text-cyan-500">Rp/Box</span>
+                    <span class="text-[0.7vw] text-cyan-500">Spot (USD/Box)</span>
                 </div>
             </div>
             <div class="flex flex-col gap-1 w-full">
                 <div class="flex flex-col text-green-600 justify-between items-end w-full">
                     <span class="text-[0.8vw] font-bold">14,216</span>
-                    <span class="text-[0.7vw] text-cyan-500">USD/Kg</span>
+                    <span class="text-[0.7vw] text-cyan-500">Inv. (Rp/Box)</span>
                 </div>
                 <div class="flex flex-col text-green-600 justify-between items-end w-full">
                     <span class="text-[0.8vw] font-bold">170,591</span>
-                    <span class="text-[0.7vw] text-cyan-500">USD/Box</span>
+                    <span class="text-[0.7vw] text-cyan-500">Inv. (USD/Box)</span>
                 </div>
             </div>
         </div>
@@ -452,21 +423,21 @@ export const hargaSpotInventoryRetail = () => {
             <div class="flex flex-col gap-1 w-full">
                 <div class="flex flex-col text-amber-600 justify-between items-end w-full">
                     <span class="text-[0.8vw] font-bold">13,499</span>
-                    <span class="text-[0.7vw] text-cyan-500">Rp/Kg</span>
+                    <span class="text-[0.7vw] text-cyan-500">Spot (Rp/Box)</span>
                 </div>
                 <div class="flex flex-col text-amber-600 justify-between items-end w-full">
                     <span class="text-[0.8vw] font-bold">161,983</span>
-                    <span class="text-[0.7vw] text-cyan-500">Rp/Box</span>
+                    <span class="text-[0.7vw] text-cyan-500">Spot (USD/Box)</span>
                 </div>
             </div>
             <div class="flex flex-col gap-1 w-full">
                 <div class="flex flex-col text-green-600 justify-between items-end w-full">
                     <span class="text-[0.8vw] font-bold">13,499</span>
-                    <span class="text-[0.7vw] text-cyan-500">USD/Kg</span>
+                    <span class="text-[0.7vw] text-cyan-500">Inv. (Rp/Box)</span>
                 </div>
                 <div class="flex flex-col text-green-600 justify-between items-end w-full">
                     <span class="text-[0.8vw] font-bold">161,983</span>
-                    <span class="text-[0.7vw] text-cyan-500">USD/Box</span>
+                    <span class="text-[0.7vw] text-cyan-500">Inv. (USD/Box)</span>
                 </div>
             </div>
         </div>
@@ -477,21 +448,21 @@ export const hargaSpotInventoryRetail = () => {
             <div class="flex flex-col gap-1 w-full">
                 <div class="flex flex-col text-amber-600 justify-between items-end w-full">
                     <span class="text-[0.8vw] font-bold">14,216</span>
-                    <span class="text-[0.7vw] text-cyan-500">Rp/Kg</span>
+                    <span class="text-[0.7vw] text-cyan-500">Spot (Rp/Box)</span>
                 </div>
                 <div class="flex flex-col text-amber-600 justify-between items-end w-full">
                     <span class="text-[0.8vw] font-bold">170,591</span>
-                    <span class="text-[0.7vw] text-cyan-500">Rp/Box</span>
+                    <span class="text-[0.7vw] text-cyan-500">Spot (USD/Box)</span>
                 </div>
             </div>
             <div class="flex flex-col gap-1 w-full">
                 <div class="flex flex-col text-green-600 justify-between items-end w-full">
                     <span class="text-[0.8vw] font-bold">14,216</span>
-                    <span class="text-[0.7vw] text-cyan-500">USD/Kg</span>
+                    <span class="text-[0.7vw] text-cyan-500">Inv. (Rp/Box)</span>
                 </div>
                 <div class="flex flex-col text-green-600 justify-between items-end w-full">
                     <span class="text-[0.8vw] font-bold">170,591</span>
-                    <span class="text-[0.7vw] text-cyan-500">USD/Box</span>
+                    <span class="text-[0.7vw] text-cyan-500">Inv. (USD/Box)</span>
                 </div>
             </div>
         </div>
