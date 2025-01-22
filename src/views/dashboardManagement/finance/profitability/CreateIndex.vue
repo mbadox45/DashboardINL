@@ -145,10 +145,10 @@ const postData = async (cond) => {
                             <label for="date" class="font-bold">Tanggal <small class="text-red-500 font-bold">*</small></label>
                             <DatePicker v-model="tanggal" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" />
                         </div>
-                        <div class="flex flex-col gap-1 w-full">
+                        <!-- <div class="flex flex-col gap-1 w-full">
                             <label for="date" class="font-bold">PMG <small class="text-red-500 font-bold">*</small></label>
                             <Select v-model="pmg" filter :options="listPmg" optionLabel="nama" optionValue="id" placeholder="Select a PMG" class="w-full" @change="loadJenis" />
-                        </div>
+                        </div> -->
                     </div>
                     <Divider align="left" type="solid"><b>Form Item</b></Divider>
                     <ScrollPanel style="width: 100%; height: 22rem">

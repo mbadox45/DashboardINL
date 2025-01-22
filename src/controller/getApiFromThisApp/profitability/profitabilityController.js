@@ -1,6 +1,5 @@
 import profitabilityAPI from '@/api/thisAPI/profitability/profitabilityAPI';
 import { msg_error, msg_success, msg_warning } from '@/controller/getApiFromThisApp/dummy/notificationDummy';
-import { bulanKalendar } from '@/controller/getApiFromThisApp/dummy/variableDummy';
 import moment from 'moment';
 
 export default new (class profitabilityController {
@@ -74,12 +73,13 @@ export default new (class profitabilityController {
         try {
             const response = await this.getByPeriod(form);
             const years = moment(form.tanggalAwal).format('YYYY');
+            // console.log(response);
             if (response != null) {
                 const list = [];
                 // Last Year
-                const bulan = bulanKalendar;
-                const lastYear = response.data.lastYear;
-                const thisYear = response.data.thisYear;
+                // const bulan = bulanKalendar;
+                const lastYear = response.lastYear;
+                const thisYear = response.thisYear;
 
                 list.push({ name: `Last Year ${Number(years) - 1}`, items: lastYear.months }, { name: `This Year ${Number(years)}`, items: thisYear.months });
                 console.log(list);
@@ -98,7 +98,7 @@ export default new (class profitabilityController {
             let kondisi;
             if (form.length > 0) {
                 for (let i = 0; i < list.length; i++) {
-                    if (list[i].kategori_id != null && list[i].pmg_id != null && list[i].tanggal != null && list[i].value != null) {
+                    if (list[i].kategori_id != null && list[i].tanggal != null && list[i].value != null) {
                         if (i < list.length - 1) {
                             continue;
                         }

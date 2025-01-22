@@ -324,10 +324,10 @@ const submitData = async () => {
         <Popover ref="op">
             <div class="flex flex-col items-center gap-4 w-[25rem] py-2">
                 <div class="flex flex-col gap-2 w-full">
-                    <div class="flex flex-col gap-1 w-full items-start">
+                    <!-- <div class="flex flex-col gap-1 w-full items-start">
                         <label for="pmg" class="text-[0.8vw]">Select by PMG</label>
                         <Select v-model="selectedPmg" :options="pmg" optionLabel="nama" optionValue="id" placeholder="Select a Region" class="w-full" />
-                    </div>
+                    </div> -->
                     <div class="flex flex-col gap-1 w-full items-start">
                         <label for="pmg" class="text-[0.8vw]">Select by Period</label>
                         <DatePicker v-model="dates" selectionMode="range" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :manualInput="false" placeholder="Select Date Range" class="w-full" />

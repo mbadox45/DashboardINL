@@ -93,7 +93,7 @@ const showDrawer = async (data) => {
         drawerCond.value = true;
         messages.value = [];
         if (data != null) {
-            const response = await productStorageScmController.getByID(data.id);
+            const response = await hargaFinanceController.getByID(data.id);
             console.log(response);
             const history = response.history;
             const list = [];
@@ -197,7 +197,7 @@ const submitData = async () => {
         messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     } else {
         if (statusForm.value == 'add') {
-            const response = await productStorageScmController.addPost(formData.value);
+            const response = await hargaFinanceController.addPost(formData.value);
             // const load = response.data;
             if (response.status == true) {
                 messages.value = [{ severity: 'success', content: 'Data berhasil di tambahkan', id: count.value++, icon: 'pi-check-circle' }];
@@ -212,7 +212,7 @@ const submitData = async () => {
             }
         } else {
             console.log(formData.value);
-            const response = await productStorageScmController.updatePost(formData.value.id, formData.value);
+            const response = await hargaFinanceController.updatePost(formData.value.id, formData.value);
             // const load = response.data;
             console.log(response);
             if (response.status == true) {

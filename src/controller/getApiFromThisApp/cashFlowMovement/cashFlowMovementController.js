@@ -98,7 +98,7 @@ export default new (class cashFlowMovementController {
             let kondisi;
             if (form.length > 0) {
                 for (let i = 0; i < list.length; i++) {
-                    if (list[i].kategori_id != null && list[i].pmg_id != null && list[i].tanggal != null && list[i].value != null) {
+                    if (list[i].kategori_id != null && list[i].tanggal != null && list[i].value != null) {
                         if (i < list.length - 1) {
                             continue;
                         }

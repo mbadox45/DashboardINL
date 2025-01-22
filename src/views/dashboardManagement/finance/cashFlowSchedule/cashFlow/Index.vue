@@ -219,7 +219,7 @@ const refreshForm = () => {
 };
 
 const submitData = async () => {
-    if (!formData.value.pmg_id || !formData.value.tanggal || !formData.value.pay_status_id || !formData.value.value || !formData.value.name || !formData.value.kategori_id) {
+    if (!formData.value.tanggal || !formData.value.pay_status_id || !formData.value.value || !formData.value.name || !formData.value.kategori_id) {
         messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     } else {
         formData.value.tanggal = moment(formData.value.tanggal).format('YYYY-MM-DD');
@@ -289,10 +289,10 @@ const submitData = async () => {
                     <label for="pay">Status Pembayaran <small class="text-red-500 font-bold">*</small></label>
                     <Select v-model="formData.pay_status_id" filter :options="listPayment" optionLabel="name" optionValue="id" placeholder="Select a Description" class="w-full" />
                 </div>
-                <div class="flex flex-col gap-1">
+                <!-- <div class="flex flex-col gap-1">
                     <label for="pmg">PMG <small class="text-red-500 font-bold">*</small></label>
                     <Select v-model="formData.pmg_id" :options="pmg" optionLabel="nama" optionValue="id" placeholder="Select a Region" class="w-full" />
-                </div>
+                </div> -->
                 <div class="flex flex-col gap-1">
                     <label for="date">Tanggal <small class="text-red-500 font-bold">*</small></label>
                     <DatePicker v-model="formData.tanggal" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" />
