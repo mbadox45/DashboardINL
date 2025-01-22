@@ -1,12 +1,12 @@
 version: "4.3"
 
 services:
-    inlEdgeDashboard-app:
+    fe_dashboardinl-app:
         build:
             context: "."
-        container_name: inlEdgeDashboard-app
+        container_name: fe_dashboardinl-app
         ports:
-            - 8091:8481
+            - 8481:8481
         networks:
             backend:
                 aliases:
@@ -14,4 +14,4 @@ services:
 
 networks:
     backend:
-        name: inlEdgeDashboard-network
+        name: fe_dashboardinl-network
