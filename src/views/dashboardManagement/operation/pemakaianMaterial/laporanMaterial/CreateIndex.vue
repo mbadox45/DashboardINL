@@ -1,11 +1,12 @@
 <script setup>
-import { URL_WEB } from '@/api/http/dataVariable';
 import jenisLaporanMaterialController from '@/controller/getApiFromThisApp/laporanMaterial/jenisLaporanMaterialController';
 import laporanMaterialController from '@/controller/getApiFromThisApp/laporanMaterial/laporanMaterialController';
 import pmgMasterController from '@/controller/getApiFromThisApp/master/pmgMasterController';
 import moment from 'moment';
 import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const messages = ref([]);
 const tanggal = ref(moment().format('YYYY-MM-DD'));
 const maxDate = ref(moment().format('YYYY-MM-DD'));
@@ -82,7 +83,8 @@ const resetForm = () => {
 
 const postData = async (cond) => {
     if (cond == 'back') {
-        window.location.replace(`${URL_WEB}operation/laporan-material`);
+        router.push('/operation/laporan-material');
+        // window.location.replace(`${URL_WEB}operation/laporan-material`);
     } else {
         loadings.value = true;
         const response = await laporanMaterialController.postData(formData.value);
@@ -90,7 +92,7 @@ const postData = async (cond) => {
         if (response.severity == 'success') {
             setTimeout(function () {
                 loadings.value = false;
-                window.location.replace(`${URL_WEB}operation/laporan-material`);
+                router.push('/operation/laporan-material');
             }, setTime.value);
         } else {
             loadings.value = false;
@@ -102,7 +104,7 @@ const postData = async (cond) => {
 <template>
     <div class="flex flex-col w-full gap-8">
         <div class="flex gap-2 items-center justify-between w-full font-bold">
-            <span class="text-3xl">Form Data (Norma Material)</span>
+            <span class="text-3xl">Form Data (Laporan Material)</span>
             <div class="flex gap-3">
                 <button
                     @click="postData('save')"

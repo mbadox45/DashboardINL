@@ -1,6 +1,7 @@
 import cashFlowMovementFinanceController from '@/controller/dashboardMain/finance/cashFlowMovementFinanceController';
 import payScheduleFinanceController from '@/controller/dashboardMain/finance/payScheduleFinanceController';
 import { formatCurrency, valueColorIntCondition, valueColorPersenCondition } from '@/controller/dummyController';
+import financeHomeController from '@/controller/home/controllerHomePage/financeHomeController';
 import moment from 'moment';
 
 // const links = '/detail-dashboard?component=';
@@ -11,7 +12,8 @@ const form = {
     tanggalAkhir: moment('2024-02-28').format('YYYY-MM-DD')
 };
 
-export const revenue = () => {
+export const revenue = async () => {
+    const response = await financeHomeController.revenue(form);
     const name = 'Revenue (in IDR Bn)';
     const colspan = null;
     const value = null;

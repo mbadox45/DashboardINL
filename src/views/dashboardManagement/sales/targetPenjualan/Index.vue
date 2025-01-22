@@ -1,9 +1,9 @@
 <script setup>
 import { formatCurrency } from '@/controller/dummyController';
-import hargaFinanceController from '@/controller/getApiFromThisApp/harga/hargaFinanceController';
-import mataUangKursController from '@/controller/getApiFromThisApp/kurs/mataUangKursController';
 import lokasiMasterController from '@/controller/getApiFromThisApp/master/lokasiMasterController';
-import productStorageScmController from '@/controller/getApiFromThisApp/supplyChain/productStorageScmController';
+import productMasterController from '@/controller/getApiFromThisApp/master/productMasterController';
+import targetPenjualanController from '@/controller/getApiFromThisApp/sales/targetPenjualanController';
+import uraianPenjualanController from '@/controller/getApiFromThisApp/sales/uraianPenjualanController';
 import { FilterMatchMode } from '@primevue/core/api';
 import moment from 'moment';
 import { onMounted, ref } from 'vue';
@@ -19,18 +19,21 @@ const logFile = ref([]);
 const listLokasi = ref([]);
 const allData = ref();
 
+const listProduct = ref([]);
+const listUraian = ref([]);
+
+const expandedRows = ref({});
+
 let count = ref(0);
 
 const formData = ref({
     id: null,
-    name: null,
-    jenis: null,
-    id_lokasi: null,
-    kapasitas: null
+    uraian_id: null,
+    product_id: null,
+    tanggal: moment().format('YYYY-MM-DD'),
+    qty: null
 });
 
-const selectedMataUang = ref(1);
-const listMataUang = ref([]);
 const optionButton = ref(0);
 
 const op = ref();
@@ -55,37 +58,35 @@ onMounted(() => {
 const loadData = async () => {
     try {
         const form = {
-            idMataUang: selectedMataUang.value,
             tanggalAwal: beforeDate.value,
             tanggalAkhir: now.value
         };
-        const data = await hargaFinanceController.loadTable(form);
+        const data = await targetPenjualanController.loadTable(form);
         allData.value = data;
+        const ritel = data.ritel;
+        const bulk = data.bulk;
+
+        const produk = await productMasterController.getAll();
         if (optionButton.value == 1) {
-            listTable.value = data.latestHargaRitel;
+            listTable.value = ritel.products;
+            listProduct.value = produk.filter((item) => item.jenis == 'ritel');
         } else {
-            listTable.value = data.latestHargaBulk;
+            listProduct.value = produk.filter((item) => item.jenis == 'bulk');
+            listTable.value = bulk.products;
         }
+
+        await loadUraian();
 
         const lokasi = await lokasiMasterController.getAll();
         listLokasi.value = lokasi;
-
-        await loadCurrency();
     } catch (error) {
         listTable.value = [];
     }
 };
 
-const loadCurrency = async () => {
-    const loadMataUang = await mataUangKursController.getAll();
-    const list = [];
-    for (let i = 0; i < loadMataUang.length; i++) {
-        list.push({
-            id: loadMataUang[i].id,
-            name: `${loadMataUang[i].symbol}_${loadMataUang[i].name} - ${loadMataUang[i].remark}`
-        });
-    }
-    listMataUang.value = list;
+const loadUraian = async () => {
+    const response = await uraianPenjualanController.getAll();
+    listUraian.value = response;
 };
 
 const showDrawer = async (data) => {
@@ -93,7 +94,7 @@ const showDrawer = async (data) => {
         drawerCond.value = true;
         messages.value = [];
         if (data != null) {
-            const response = await productStorageScmController.getByID(data.id);
+            const response = await targetPenjualanController.getByID(data.id);
             console.log(response);
             const history = response.history;
             const list = [];
@@ -116,18 +117,18 @@ const showDrawer = async (data) => {
             }
             logFile.value = list;
             formData.value.id = data.id;
-            formData.value.name = data.name;
-            formData.value.jenis = data.jenis;
-            formData.value.kapasitas = Number(data.kapasitas);
-            formData.value.id_lokasi = data.id_lokasi;
+            formData.value.uraian_id = response.uraian_id;
+            formData.value.product_id = response.product_id;
+            formData.value.qty = Number(data.qty);
+            formData.value.tanggal = data.tanggal;
             statusForm.value = 'edit';
         } else {
             logFile.value = [];
             formData.value.id = null;
-            formData.value.name = null;
-            formData.value.jenis = null;
-            formData.value.kapasitas = null;
-            formData.value.id_lokasi = null;
+            formData.value.uraian_id = null;
+            formData.value.product_id = null;
+            formData.value.qty = null;
+            formData.value.tanggal = moment().format('YYYY-MM-DD');
             statusForm.value = 'add';
         }
     } catch (error) {
@@ -135,19 +136,19 @@ const showDrawer = async (data) => {
         drawerCond.value = true;
         logFile.value = [];
         formData.value.id = null;
-        formData.value.name = null;
-        formData.value.jenis = null;
-        formData.value.kapasitas = null;
-        formData.value.id_lokasi = null;
+        formData.value.uraian_id = null;
+        formData.value.product_id = null;
+        formData.value.qty = null;
+        formData.value.tanggal = moment().format('YYYY-MM-DD');
         statusForm.value = 'add';
     }
 };
 
 const refreshForm = () => {
-    formData.value.name = null;
-    formData.value.jenis = null;
-    formData.value.kapasitas = null;
-    formData.value.id_lokasi = null;
+    ormData.value.uraian_id = null;
+    formData.value.product_id = null;
+    formData.value.qty = null;
+    formData.value.tanggal = moment().format('YYYY-MM-DD');
 };
 
 const toggle = async (event) => {
@@ -193,11 +194,11 @@ const selectButton = async (val) => {
 };
 
 const submitData = async () => {
-    if (!formData.value.name || !formData.value.jenis || !formData.value.kapasitas || !formData.value.id_lokasi) {
+    if (!formData.value.uraian_id || !formData.value.product_id || !formData.value.tanggal || !formData.value.qty) {
         messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     } else {
         if (statusForm.value == 'add') {
-            const response = await productStorageScmController.addPost(formData.value);
+            const response = await targetPenjualanController.addPost(formData.value);
             // const load = response.data;
             if (response.status == true) {
                 messages.value = [{ severity: 'success', content: 'Data berhasil di tambahkan', id: count.value++, icon: 'pi-check-circle' }];
@@ -212,7 +213,7 @@ const submitData = async () => {
             }
         } else {
             console.log(formData.value);
-            const response = await productStorageScmController.updatePost(formData.value.id, formData.value);
+            const response = await targetPenjualanController.updatePost(formData.value.id, formData.value);
             // const load = response.data;
             console.log(response);
             if (response.status == true) {
@@ -234,7 +235,7 @@ const submitData = async () => {
 <template>
     <div class="flex flex-col w-full gap-8">
         <div class="flex gap-2 items-center justify-between w-full font-bold">
-            <span class="text-3xl">Harga</span>
+            <span class="text-3xl">Target Penjualan</span>
             <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-emerald-500 hover:bg-emerald-700 text-white rounded-full flex gap-2">
                 <i class="pi pi-plus"></i>
                 <span>Add Component</span>
@@ -254,20 +255,20 @@ const submitData = async () => {
                     <Message v-for="msg of messages" :key="msg.id" :severity="msg.severity" class="mt-4"><i :class="`pi ${msg.icon}`"></i> {{ msg.content }}</Message>
                 </transition-group>
                 <div class="flex flex-col gap-1">
-                    <label for="name">Nama Produk <small class="text-red-500 font-bold">*</small></label>
-                    <InputText v-model="formData.name" placeholder="Please input Product" />
-                </div>
-                <!-- <div class="flex flex-col gap-1">
-                    <label for="date">Jenis <small class="text-red-500 font-bold">*</small></label>
-                    <Select v-model="formData.jenis" :options="listJenis" optionLabel="name" optionValue="id" placeholder="Select a Type" class="w-full" @change="valueCondition" />
+                    <label for="date">Uraian <small class="text-red-500 font-bold">*</small></label>
+                    <Select v-model="formData.uraian_id" :options="listUraian" optionLabel="nama" optionValue="id" placeholder="Select a Type" class="w-full" />
                 </div>
                 <div class="flex flex-col gap-1">
-                    <label for="lokasi">Lokasi <small class="text-red-500 font-bold">*</small></label>
-                    <Select v-model="formData.id_lokasi" :options="listLokasi" optionLabel="name" optionValue="id" placeholder="Select a Type" class="w-full" @change="valueCondition" />
-                </div> -->
+                    <label for="lokasi">Produk <small class="text-red-500 font-bold">*</small></label>
+                    <Select v-model="formData.product_id" :options="listProduct" optionLabel="name" optionValue="id" placeholder="Select a Type" class="w-full" />
+                </div>
+                <div class="flex flex-col gap-1 w-full">
+                    <label for="date" class="font-bold">Tanggal <small class="text-red-500 font-bold">*</small></label>
+                    <DatePicker v-model="formData.tanggal" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" />
+                </div>
                 <div class="flex flex-col gap-1">
                     <label for="kapasitas">Kapasitas <small class="text-red-500 font-bold">*</small></label>
-                    <InputNumber v-model="formData.kapasitas" inputId="minmaxfraction" placeholder="1,000,000" :minFractionDigits="0" :maxFractionDigits="2" fluid />
+                    <InputNumber v-model="formData.qty" inputId="minmaxfraction" placeholder="1,000,000" :minFractionDigits="0" :maxFractionDigits="2" fluid />
                 </div>
                 <div class="flex flex-row-reverse w-full gap-3">
                     <button @click="refreshForm" class="px-3 py-2 w-full border rounded-lg hover:shadow-md hover:shadow-black transition-all duration-300 shadow-sm shadow-black flex items-center gap-2 justify-center">
@@ -313,10 +314,6 @@ const submitData = async () => {
             <div class="flex flex-col items-center gap-4 w-[25rem] py-2">
                 <div class="flex flex-col gap-2 w-full">
                     <div class="flex flex-col gap-1 w-full items-start">
-                        <label for="pmg" class="text-[0.8vw]">Select by Currency</label>
-                        <Select v-model="selectedMataUang" :options="listMataUang" optionLabel="name" optionValue="id" placeholder="Select a Currency" class="w-full" />
-                    </div>
-                    <div class="flex flex-col gap-1 w-full items-start">
                         <label for="pmg" class="text-[0.8vw]">Select by Period</label>
                         <DatePicker v-model="dates" selectionMode="range" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :manualInput="false" placeholder="Select Date Range" class="w-full" />
                     </div>
@@ -358,8 +355,95 @@ const submitData = async () => {
                             <i class="pi pi-search" />
                         </InputGroupAddon>
                     </InputGroup>
-                    <DataTable :value="listTable" v-model:filters="search" showGridlines paginator :rows="10" dataKey="period">
-                        <Column field="product.name" sortable style="width: 15%; font-size: 0.7vw">
+                    <ScrollPanel style="width: 100%; height: 35vw">
+                        <div class="flex flex-col gap-3">
+                            <Panel v-for="(item, index) in listTable" :key="index" toggleable :collapsed="true">
+                                <template #header>
+                                    <span class="text-[0.9vw] font-bold italic">{{ item.name }}</span>
+                                </template>
+                                <DataTable v-model:expandedRows="expandedRows" :value="item.target" showGridlines dataKey="percentageQtyToTarget">
+                                    <Column expander style="width: 5%" />
+                                    <Column field="name" sortable style="width: 15%; font-size: 0.7vw">
+                                        <template #header>
+                                            <div class="flex w-full justify-center">
+                                                <span>Uraian</span>
+                                            </div>
+                                        </template>
+                                        <template #body="{ data }">
+                                            <div class="flex w-full justify-start">
+                                                <span>{{ data.nama }}</span>
+                                            </div>
+                                        </template>
+                                    </Column>
+                                    <Column field="totalQty" sortable style="width: 25%; font-size: 0.7vw">
+                                        <template #header>
+                                            <div class="flex w-full justify-center">
+                                                <span>Target (%)</span>
+                                            </div>
+                                        </template>
+                                        <template #body="{ data }">
+                                            <div class="flex w-full justify-end">
+                                                <span class="capitalize">{{ formatCurrency(Number(data.percentageQtyToTarget).toFixed(2)) }}%</span>
+                                            </div>
+                                        </template>
+                                    </Column>
+                                    <Column field="totalQty" sortable style="width: 25%; font-size: 0.7vw">
+                                        <template #header>
+                                            <div class="flex w-full justify-center">
+                                                <span>Target Qty</span>
+                                            </div>
+                                        </template>
+                                        <template #body="{ data }">
+                                            <div class="flex w-full justify-end">
+                                                <span class="capitalize">{{ formatCurrency(Number(data.totalQtyTarget).toFixed(2)) }}</span>
+                                            </div>
+                                        </template>
+                                    </Column>
+                                    <template #expansion="slotProps">
+                                        <div class="p-4">
+                                            <DataTable :value="slotProps.data.detail">
+                                                <Column field="tanggal" sortable style="width: 15%; font-size: 0.7vw">
+                                                    <template #header>
+                                                        <div class="flex w-full justify-center">
+                                                            <span>Uraian</span>
+                                                        </div>
+                                                    </template>
+                                                    <template #body="{ data }">
+                                                        <div class="flex w-full justify-start">
+                                                            <span>{{ moment(data.tanggal).format('DD MMMM YYYY') }}</span>
+                                                        </div>
+                                                    </template>
+                                                </Column>
+                                                <Column field="qty" sortable style="width: 25%; font-size: 0.7vw">
+                                                    <template #header>
+                                                        <div class="flex w-full justify-center">
+                                                            <span>Quantity</span>
+                                                        </div>
+                                                    </template>
+                                                    <template #body="{ data }">
+                                                        <div class="flex w-full justify-end">
+                                                            <span class="capitalize">{{ formatCurrency(Number(data.qty).toFixed(2)) }}</span>
+                                                        </div>
+                                                    </template>
+                                                </Column>
+                                                <Column field="id" style="width: 5%; font-size: 0.7vw">
+                                                    <template #body="{ data }">
+                                                        <div class="flex justify-center items center">
+                                                            <button @click="showDrawer(data)" class="p-3 border rounded-full flex bg-gray-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
+                                                                <i class="pi pi-pencil" style="font-size: 0.6vw"></i>
+                                                            </button>
+                                                        </div>
+                                                    </template>
+                                                </Column>
+                                            </DataTable>
+                                        </div>
+                                    </template>
+                                </DataTable>
+                            </Panel>
+                        </div>
+                    </ScrollPanel>
+                    <!-- <DataTable :value="listTable" v-model:filters="search" showGridlines paginator :rows="10" dataKey="period">
+                        <Column field="name" sortable style="width: 15%; font-size: 0.7vw">
                             <template #header>
                                 <div class="flex w-full justify-center">
                                     <span>Product</span>
@@ -367,7 +451,31 @@ const submitData = async () => {
                             </template>
                             <template #body="{ data }">
                                 <div class="flex w-full justify-start">
-                                    <span>{{ data.product.name }}</span>
+                                    <span>{{ data.name }}</span>
+                                </div>
+                            </template>
+                        </Column>
+                        <Column field="jenis" sortable style="width: 15%; font-size: 0.7vw">
+                            <template #header>
+                                <div class="flex w-full justify-center">
+                                    <span>Product</span>
+                                </div>
+                            </template>
+                            <template #body="{ data }">
+                                <div class="flex w-full justify-start">
+                                    <span class="capitalize">{{ data.jenis }}</span>
+                                </div>
+                            </template>
+                        </Column>
+                        <Column field="totalQty" sortable style="width: 25%; font-size: 0.7vw">
+                            <template #header>
+                                <div class="flex w-full justify-center">
+                                    <span>Quantity</span>
+                                </div>
+                            </template>
+                            <template #body="{ data }">
+                                <div class="flex w-full justify-end">
+                                    <span class="capitalize">{{ formatCurrency(Number(data.totalQty).toFixed(2)) }}</span>
                                 </div>
                             </template>
                         </Column>
@@ -431,18 +539,6 @@ const submitData = async () => {
                                 </div>
                             </template>
                         </Column>
-                        <Column field="hargaAsingInventory" sortable style="width: 25%; font-size: 0.7vw">
-                            <template #header>
-                                <div class="flex w-full justify-center">
-                                    <span>Harga Inventory Asing</span>
-                                </div>
-                            </template>
-                            <template #body="{ data }">
-                                <div class="flex w-full justify-end">
-                                    <span class="capitalize">{{ formatCurrency(Number(data.hargaAsingInventory).toFixed(2)) }}</span>
-                                </div>
-                            </template>
-                        </Column>
                         <Column field="id" style="width: 5%; font-size: 0.7vw">
                             <template #body="{ data }">
                                 <div class="flex justify-center items center">
@@ -452,67 +548,8 @@ const submitData = async () => {
                                 </div>
                             </template>
                         </Column>
-                    </DataTable>
+                    </DataTable> -->
                 </div>
-                <!-- <DataTable :value="listTable" v-model:filters="search" showGridlines paginator :rows="10" dataKey="period">
-                    <Column field="name" sortable style="width: 25%; font-size: 0.7vw">
-                        <template #header>
-                            <div class="flex w-full justify-center">
-                                <span>Name</span>
-                            </div>
-                        </template>
-                        <template #body="{ data }">
-                            <div class="flex w-full justify-start">
-                                <span>{{ data.name }}</span>
-                            </div>
-                        </template>
-                    </Column>
-                    <Column field="lokasi.name" sortable style="width: 25%; font-size: 0.7vw">
-                        <template #header>
-                            <div class="flex w-full justify-center">
-                                <span>Lokasi</span>
-                            </div>
-                        </template>
-                        <template #body="{ data }">
-                            <div class="flex w-full justify-start">
-                                <span class="capitalize">{{ data.lokasi.name }}</span>
-                            </div>
-                        </template>
-                    </Column>
-                    <Column field="jenis" sortable style="width: 10%; font-size: 0.7vw">
-                        <template #header>
-                            <div class="flex w-full justify-center">
-                                <span>Jenis</span>
-                            </div>
-                        </template>
-                        <template #body="{ data }">
-                            <div class="flex w-full justify-start">
-                                <span class="capitalize">{{ data.jenis }}</span>
-                            </div>
-                        </template>
-                    </Column>
-                    <Column field="kapasitas" sortable style="width: 25%; font-size: 0.7vw">
-                        <template #header>
-                            <div class="flex w-full justify-center">
-                                <span>Kapasitas</span>
-                            </div>
-                        </template>
-                        <template #body="{ data }">
-                            <div class="flex w-full justify-end">
-                                <span class="capitalize">{{ formatCurrency(Number(data.kapasitas).toFixed(2)) }}</span>
-                            </div>
-                        </template>
-                    </Column>
-                    <Column field="id" style="width: 5%; font-size: 0.7vw">
-                        <template #body="{ data }">
-                            <div class="flex justify-center items center">
-                                <button @click="showDrawer(data)" class="p-3 border rounded-full flex bg-gray-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
-                                    <i class="pi pi-pencil" style="font-size: 0.6vw"></i>
-                                </button>
-                            </div>
-                        </template>
-                    </Column>
-                </DataTable> -->
             </template>
         </Card>
     </div>

@@ -438,6 +438,64 @@ const router = createRouter({
                     }
                 },
 
+                // Sales / Penjualan
+                {
+                    path: '/sales/uraian-target-penjualan',
+                    name: 'sales-uraian-target-penjualan',
+                    component: () => import('@/views/dashboardManagement/sales/uraianTargetPenjualan/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        // finance: true,
+                        // operation: true
+                        sales: true
+                        // scm: true
+                        // sdm: true
+                    }
+                },
+                {
+                    path: '/sales/target-penjualan',
+                    name: 'sales-target-penjualan',
+                    component: () => import('@/views/dashboardManagement/sales/targetPenjualan/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        // finance: true,
+                        // operation: true
+                        sales: true
+                        // scm: true
+                        // sdm: true
+                    }
+                },
+                {
+                    path: '/sales/laporan-penjualan',
+                    name: 'sales-laporan-penjualan',
+                    component: () => import('@/views/dashboardManagement/sales/laporanPenjualan/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        // finance: true,
+                        // operation: true
+                        sales: true
+                        // scm: true
+                        // sdm: true
+                    }
+                },
+                {
+                    path: '/sales/levy-duty-proportion-cost',
+                    name: 'sales-levy-duty-proportion-cost',
+                    component: () => import('@/views/dashboardManagement/sales/levyDutyPenjualan/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        // finance: true,
+                        // operation: true
+                        sales: true
+                        // scm: true
+                        // sdm: true
+                    }
+                },
+
                 // Supply Chain
                 {
                     path: '/scm/source-cpo',

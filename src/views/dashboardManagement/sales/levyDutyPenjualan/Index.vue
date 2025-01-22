@@ -1,15 +1,12 @@
 <script setup>
-import { formatCurrency } from '@/controller/dummyController';
-import jenisLaporanPackagingController from '@/controller/getApiFromThisApp/packaging/jenisLaporanPackagingController';
-import laporanPackagingController from '@/controller/getApiFromThisApp/packaging/laporanPackagingController';
-import packagingController from '@/controller/getApiFromThisApp/packaging/packagingController';
-import targetPackagingController from '@/controller/getApiFromThisApp/packaging/targetPackagingController';
-import uraianPackagingController from '@/controller/getApiFromThisApp/packaging/uraianPackagingController';
+import cpoKpbnController from '@/controller/getApiFromThisApp/cpoKpbn/cpoKpbnController';
+import mataUangKursController from '@/controller/getApiFromThisApp/kurs/mataUangKursController';
+import productMasterController from '@/controller/getApiFromThisApp/master/productMasterController';
+import levyRoutersPenjualanController from '@/controller/getApiFromThisApp/sales/levyRoutersPenjualanController';
+import { FilterMatchMode } from '@primevue/core/api';
 import moment from 'moment';
-import { computed, onMounted, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { onMounted, ref } from 'vue';
 
-const router = useRouter();
 const drawerCond = ref(false);
 const messages = ref([]);
 const statusForm = ref('add');
@@ -17,33 +14,35 @@ const timeResponse = ref(3000);
 const loadingSave = ref(false);
 const logFile = ref([]);
 const optionPage = ref(0);
-const loadingTable = ref(false);
+const listProduct = ref([]);
 
 const listTable = ref([]);
 const totalTable = ref({ cpoOlah: 0, totalCost: 0, totalHargaSatuan: 0 });
 const search = ref();
 const expandedRows = ref([]);
 
-const selectedPmg = ref(1);
-const pmg = ref([]);
-const listJenis = ref([]);
-const listUraian = ref([]);
+const selectedMataUang = ref(1);
+const listMataUang = ref([]);
 
 const op = ref();
 
-const beforeDate = ref(moment().format('YYYY-MM-01'));
-const now = ref(moment().format('YYYY-MM-DD'));
-// const beforeDate = ref('2024-01-01');
-// const now = ref('2024-02-28');
+// const beforeDate = ref(moment().format('YYYY-MM-01'));
+// const now = ref(moment().format('YYYY-MM-DD'));
+const beforeDate = ref('2023-01-01');
+const now = ref(moment().format('2025-01-28'));
 const dates = ref([moment(beforeDate.value).toDate(), moment(now.value).toDate()]);
+
+const initFilters = () => {
+    search.value = {
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS }
+    };
+};
+initFilters();
 
 let count = ref(0);
 
 const formData = ref({
     id: null,
-    uraian_id: null,
-    packaging_id: null,
-    jenis_id: null,
     tanggal: moment().format('YYYY-MM-DD'),
     value: null
 });
@@ -53,59 +52,51 @@ onMounted(() => {
 });
 
 const loadData = async () => {
-    loadingTable.value = true;
     try {
         // Change Picker
         const form = {
-            idPackaging: selectedPmg.value,
+            idMataUang: selectedMataUang.value,
             tanggalAwal: beforeDate.value,
             tanggalAkhir: now.value
         };
-
-        await loadJenis();
-
-        // get Select Option
-        const loadPMG = await packagingController.getAll();
-        pmg.value = loadPMG;
-
-        const uraian = await uraianPackagingController.getAll();
-        listUraian.value = uraian;
-
-        const data = await targetPackagingController.loadTable(form);
+        await loadCurrency();
+        await loadProduk();
+        const data = await levyRoutersPenjualanController.loadTable(form);
+        console.log(data);
+        const list = [];
+        // for (let i = 0; i < data.length; i++) {
+        //     const uang = load.find((item) => item.id == data[i].id_mata_uang);
+        //     list.push({
+        //         id: data[i].id,
+        //         id_mata_uang: data[i].id_mata_uang,
+        //         mata_uang: uang.name,
+        //         tanggal: data[i].tanggal,
+        //         value: data[i].value
+        //     });
+        // }
         listTable.value = data;
-        loadingTable.value = false;
     } catch (error) {
         listTable.value = [];
-        loadingTable.value = false;
     }
 };
 
-const loadJenis = async () => {
-    try {
-        const response = await jenisLaporanPackagingController.getAll();
-        const list = [];
-        for (let i = 0; i < response.length; i++) {
-            const items = response[i].item_packaging;
-            for (let j = 0; j < items.length; j++) {
-                list.push({
-                    id: items[j].id,
-                    name: `(${response[i].name}) - ${items[j].name}`
-                });
-            }
-        }
-        listJenis.value = list;
-    } catch (error) {
-        return [];
-    }
+const loadProduk = async () => {
+    const response = await productMasterController.getAll();
+    const bulk = response.filter((item) => item.jenis == 'bulk');
+    listProduct.value = bulk;
 };
 
-const filteredList = computed(() => {
-    return listTable.value.filter((item) => {
-        const jenisLaporan = item.jenis.name || ''; // Pastikan tidak null atau undefined
-        const searchValue = search.value || ''; // Pastikan tidak null atau undefined
-        return jenisLaporan.toLowerCase().includes(searchValue.toLowerCase());
-    });
-});
+const loadCurrency = async () => {
+    const loadMataUang = await mataUangKursController.getAll();
+    const list = [];
+    for (let i = 0; i < loadMataUang.length; i++) {
+        list.push({
+            id: loadMataUang[i].id,
+            name: `${loadMataUang[i].symbol}_${loadMataUang[i].name} - ${loadMataUang[i].remark}`
+        });
+    }
+    listMataUang.value = list;
+};
 
 const toggle = async (event) => {
     op.value.toggle(event);
@@ -146,71 +137,66 @@ const convertDate = (dateString) => {
 
 const showDrawer = async (data) => {
     try {
+        drawerCond.value = true;
+        messages.value = [];
         if (data != null) {
-            drawerCond.value = true;
-            messages.value = [];
-            const response = await laporanPackagingController.getByID(data.id);
+            const response = await cpoKpbnController.getByID(data.id);
             const history = response.history;
+            console.log(response);
             const list = [];
             for (let i = 0; i < history.length; i++) {
                 let fromValue,
                     toValue,
                     fromTanggal,
                     toTanggal = null;
-                // if (history[i].changes.length == 0) {
-                //     fromValue = null;
-                //     toValue = null;
-                //     fromTanggal = null;
-                //     toTanggal = null;
-                // } else {
-                //     fromValue = history[i].changes.value == null ? null : history[i].changes.value.old;
-                //     toValue = history[i].changes.value == null ? null : history[i].changes.value.new;
-                //     fromTanggal = history[i].changes.tanggal == null ? null : history[i].changes.tanggal.old;
-                //     toTanggal = history[i].changes.tanggal == null ? null : history[i].changes.tanggal.new;
-                // }
+                if (history[i].changes.length == 0) {
+                    fromValue = null;
+                    toValue = null;
+                    fromTanggal = null;
+                    toTanggal = null;
+                } else {
+                    fromValue = history[i].changes.value == null ? null : history[i].changes.value.old;
+                    toValue = history[i].changes.value == null ? null : history[i].changes.value.new;
+                    fromTanggal = history[i].changes.tanggal == null ? null : history[i].changes.tanggal.old;
+                    toTanggal = history[i].changes.tanggal == null ? null : history[i].changes.tanggal.new;
+                }
                 list.push({
                     action: history[i].action,
                     user_name: history[i].user_name,
                     date: moment(history[i].created_at).format('DD MMM YYYY - HH:mm:ss'),
-                    changesLokasi: fromValue == null && toValue == null ? [] : []
-                    // changesNama:
-                    //     fromTanggal == null && toTanggal == null
-                    //         ? []
-                    //         : [
-                    //               { icon: 'pi pi-arrow-up text-red-500', name: fromTanggal },
-                    //               { icon: 'pi pi-arrow-down text-green-500', name: toTanggal }
-                    //           ]
+                    changesLokasi:
+                        fromValue == null && toValue == null
+                            ? []
+                            : [
+                                  { icon: 'pi pi-arrow-up text-red-500', name: fromValue },
+                                  { icon: 'pi pi-arrow-down text-green-500', name: toValue }
+                              ],
+                    changesNama:
+                        fromTanggal == null && toTanggal == null
+                            ? []
+                            : [
+                                  { icon: 'pi pi-arrow-up text-red-500', name: fromTanggal },
+                                  { icon: 'pi pi-arrow-down text-green-500', name: toTanggal }
+                              ]
                 });
             }
-            // console.log(data);
             logFile.value = list;
             formData.value.id = data.id;
-            formData.value.uraian_id = data.uraian_id;
-            formData.value.jenis_id = data.jenis_id;
-            formData.value.packaging_id = data.packaging_id;
-            formData.value.tanggal = data.tanggal;
-            formData.value.value = Number(data.value);
+            formData.value.tanggal = response.tanggal;
+            formData.value.value = Number(response.value);
             statusForm.value = 'edit';
         } else {
-            router.push('/operation/packaging/laporan-packaging/create');
             logFile.value = [];
             formData.value.id = null;
-            formData.value.uraian_id = null;
-            formData.value.jenis_id = null;
-            formData.value.packaging_id = null;
             formData.value.tanggal = moment().format('YYYY-MM-DD');
             formData.value.value = null;
             statusForm.value = 'add';
         }
     } catch (error) {
-        router.push('/operation/packaging/laporan-packaging/create');
         messages.value = [];
         drawerCond.value = true;
         logFile.value = [];
         formData.value.id = null;
-        formData.value.uraian_id = null;
-        formData.value.jenis_id = null;
-        formData.value.packaging_id = null;
         formData.value.tanggal = moment().format('YYYY-MM-DD');
         formData.value.value = null;
         statusForm.value = 'add';
@@ -219,20 +205,17 @@ const showDrawer = async (data) => {
 
 const refreshForm = () => {
     messages.value = [];
-    formData.value.uraian_id = null;
-    formData.value.jenis_id = null;
-    formData.value.packaging_id = null;
     formData.value.tanggal = moment().format('YYYY-MM-DD');
     formData.value.value = null;
 };
 
 const submitData = async () => {
-    if (!formData.value.packaging_id || !formData.value.tanggal || !formData.value.uraian_id || !formData.value.value || !formData.value.jenis_id) {
+    if (!formData.value.tanggal || !formData.value.value) {
         messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     } else {
         formData.value.tanggal = moment(formData.value.tanggal).format('YYYY-MM-DD');
         if (statusForm.value == 'add') {
-            const response = await targetPackagingController.addPost(formData.value);
+            const response = await cpoKpbnController.addPost(formData.value);
             if (response.status == true) {
                 messages.value = [{ severity: 'success', content: 'Data berhasil di tambahkan', id: count.value++, icon: 'pi-check-circle' }];
                 loadingSave.value = true;
@@ -245,7 +228,7 @@ const submitData = async () => {
                 messages.value = [{ severity: 'error', content: response.msg, id: count.value++, icon: 'pi-times-circle' }];
             }
         } else {
-            const response = await targetPackagingController.updatePost(formData.value.id, formData.value);
+            const response = await cpoKpbnController.updatePost(formData.value.id, formData.value);
             // const load = response.data;
             if (response.status == true) {
                 messages.value = [{ severity: 'success', content: 'Data berhasil di simpan', id: count.value++, icon: 'pi-check-circle' }];
@@ -266,7 +249,7 @@ const submitData = async () => {
 <template>
     <div class="flex flex-col w-full gap-8">
         <div class="flex gap-2 items-center justify-between w-full font-bold">
-            <span class="text-4xl">Target Packaging (RKAP)</span>
+            <span class="text-3xl">Levy Duty & Market Routers</span>
             <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-emerald-500 hover:bg-emerald-700 text-white rounded-full flex gap-2">
                 <i class="pi pi-plus"></i>
                 <span>Add Data</span>
@@ -286,23 +269,11 @@ const submitData = async () => {
                     <Message v-for="msg of messages" :key="msg.id" :severity="msg.severity" class="mt-4"><i :class="`pi ${msg.icon}`"></i> {{ msg.content }}</Message>
                 </transition-group>
                 <div class="flex flex-col gap-1">
-                    <label for="date">Jenis Packaging <small class="text-red-500 font-bold">*</small></label>
-                    <Select v-model="formData.jenis_id" filter :options="listJenis" optionLabel="name" optionValue="id" placeholder="Select a Description" class="w-full" />
-                </div>
-                <div class="flex flex-col gap-1">
-                    <label for="date">Lokasi Packaging <small class="text-red-500 font-bold">*</small></label>
-                    <Select v-model="formData.packaging_id" :options="pmg" optionLabel="nama" optionValue="id" placeholder="Select a Region" class="w-full" />
-                </div>
-                <div class="flex flex-col gap-1">
-                    <label for="date">Uraian <small class="text-red-500 font-bold">*</small></label>
-                    <Select v-model="formData.uraian_id" :options="listUraian" optionLabel="nama" optionValue="id" placeholder="Select a Region" class="w-full" />
-                </div>
-                <div class="flex flex-col gap-1">
                     <label for="date">Tanggal <small class="text-red-500 font-bold">*</small></label>
                     <DatePicker v-model="formData.tanggal" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" />
                 </div>
                 <div class="flex flex-col gap-1">
-                    <label for="date">Quantity <small class="text-red-500 font-bold">*</small></label>
+                    <label for="value">Value <small class="text-red-500 font-bold">*</small></label>
                     <InputNumber v-model="formData.value" inputId="minmaxfraction" placeholder="1,000,000" :minFractionDigits="0" :maxFractionDigits="2" fluid />
                 </div>
                 <div class="flex flex-row-reverse w-full gap-3 mt-3">
@@ -349,8 +320,8 @@ const submitData = async () => {
             <div class="flex flex-col items-center gap-4 w-[25rem] py-2">
                 <div class="flex flex-col gap-2 w-full">
                     <div class="flex flex-col gap-1 w-full items-start">
-                        <label for="pmg" class="text-[0.8vw]">Select by Packaging</label>
-                        <Select v-model="selectedPmg" :options="pmg" optionLabel="nama" optionValue="id" placeholder="Select a Region" class="w-full" />
+                        <label for="pmg" class="text-[0.8vw]">Select by Currency</label>
+                        <Select v-model="selectedMataUang" :options="listMataUang" optionLabel="name" optionValue="id" placeholder="Select a Currency" class="w-full" />
                     </div>
                     <div class="flex flex-col gap-1 w-full items-start">
                         <label for="pmg" class="text-[0.8vw]">Select by Period</label>
@@ -372,71 +343,37 @@ const submitData = async () => {
                         </button>
                         <Chip :label="`${moment(beforeDate).format('DD MMM YYYY')} - ${moment(now).format('DD MMM YYYY')}`" icon="pi pi-calendar" style="font-size: 0.6vw" class="font-bold" />
                     </div>
-                    <InputGroup>
-                        <InputText placeholder="Search Components" v-model="search" />
-                        <InputGroupAddon>
-                            <i class="pi pi-search" />
-                        </InputGroupAddon>
-                    </InputGroup>
                 </div>
             </template>
             <template #content>
-                <ScrollPanel style="width: 100%; height: 40vw">
-                    <div class="flex w-full h-full items-center justify-center" v-if="loadingTable == true">
-                        <span>Loading Data...</span>
+                <div class="flex flex-col gap-4">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full border border-gray-200 bg-white">
+                            <thead>
+                                <!-- Header Utama -->
+                                <tr class="bg-gray-50">
+                                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-600 border border-gray-200" rowspan="2">Tanggal</th>
+                                    <th v-for="(item, index) in listProduct" :key="index" class="px-6 py-3 text-center text-sm font-medium text-gray-600 border border-gray-200" colspan="3">
+                                        {{ item.name }}
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-600 border border-gray-200" rowspan="2">Rate Jisdor</th>
+                                    <th class="px-6 py-3 text-sm font-medium text-center text-gray-600 border border-gray-200" :colspan="listProduct.length">Market (IDR)</th>
+                                </tr>
+                                <!-- Header Sub -->
+                                <tr class="bg-gray-100">
+                                    <template v-for="(item, index) in listProduct" :key="index">
+                                        <th class="px-6 py-3 text-center text-sm font-medium text-gray-600 border border-gray-200">Market Routers (USD)</th>
+                                        <th class="px-6 py-3 text-center text-sm font-medium text-gray-600 border border-gray-200">Levy + Duty</th>
+                                        <th class="px-6 py-3 text-center text-sm font-medium text-gray-600 border border-gray-200">Market Excld Levy & Duty (USD)</th>
+                                    </template>
+                                    <th v-for="(item, index) in listProduct" :key="index" class="px-6 py-3 text-center text-sm font-medium text-gray-600 border border-gray-200">
+                                        {{ item.name }}
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
                     </div>
-                    <DataTable v-else :value="filteredList" rowGroupMode="subheader" groupRowsBy="jenis.name" sortMode="single" sortField="jenis.name" :sortOrder="1" showGridlines>
-                        <Column field="tanggal" sortable header="Tanggal" style="width: 25%; font-size: 0.8vw" :globalFilterFields="['tanggal', 'uraian.nama', 'jenis.name', 'value', 'packaging.name']">
-                            <template #body="{ data }">
-                                <div class="flex w-full font-bold">
-                                    <span>{{ moment(data.tanggal).format('DD MMM YYYY') }}</span>
-                                </div>
-                            </template>
-                        </Column>
-                        <Column field="packaging_id" sortable header="Packaging" style="width: 25%; font-size: 0.8vw">
-                            <template #body="{ data }">
-                                <div class="flex w-full font-bold">
-                                    <span>{{ data.packaging.nama }}</span>
-                                </div>
-                            </template>
-                        </Column>
-                        <Column field="uraian.nama" sortable header="Uraian" style="width: 25%; font-size: 0.8vw">
-                            <template #body="{ data }">
-                                <div class="flex w-full font-bold">
-                                    <span>{{ data.uraian.nama }}</span>
-                                </div>
-                            </template>
-                        </Column>
-                        <Column field="jenis.name" sortable header="Jenis Packaging" style="width: 25%; font-size: 0.8vw">
-                            <template #body="{ data }">
-                                <div class="flex w-full font-bold">
-                                    <span>{{ data.jenis.name }}</span>
-                                </div>
-                            </template>
-                        </Column>
-                        <Column field="value" sortable header="Value" style="width: 25%; font-size: 0.8vw">
-                            <template #body="{ data }">
-                                <div class="flex w-full font-bold">
-                                    <span>{{ formatCurrency(data.value) }}</span>
-                                </div>
-                            </template>
-                        </Column>
-                        <Column field="value" style="width: 25%; font-size: 0.8vw">
-                            <template #body="{ data }">
-                                <div class="flex w-full items-center justify-end font-bold">
-                                    <button @click="showDrawer(data)" class="p-3 border rounded-full flex justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
-                                        <i class="pi pi-pencil" style="font-size: 0.6vw"></i>
-                                    </button>
-                                </div>
-                            </template>
-                        </Column>
-                        <template #groupheader="slotProps">
-                            <div class="flex items-center gap-2">
-                                <span>{{ slotProps.data.jenis.name }}</span>
-                            </div>
-                        </template>
-                    </DataTable>
-                </ScrollPanel>
+                </div>
             </template>
         </Card>
     </div>

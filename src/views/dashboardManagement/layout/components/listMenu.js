@@ -37,20 +37,14 @@ export const menuAllAccess = () => {
                         { label: 'Pay Status', to: '/finance/cash-flow-schedule/pay-status' }
                     ]
                 },
-                { label: 'Profitability', icon: 'pi pi-chart-line', to: '/finance/profitability' }
+                { label: 'Profitability', icon: 'pi pi-chart-line', to: '/finance/profitability' },
+                { label: 'Beban Produksi', icon: 'pi pi-bullseye', to: '/cost-prod/beban-prod' }
             ]
         },
         {
             label: 'Operation',
             items: [
-                {
-                    label: 'Cost Production',
-                    icon: 'pi pi-server',
-                    items: [
-                        { label: 'Beban Produksi', to: '/cost-prod/beban-prod' },
-                        { label: 'Target Produksi', to: '/cost-prod/target-prod' }
-                    ]
-                },
+                { label: 'Target Produksi', icon: 'pi pi-server', to: '/cost-prod/target-prod' },
                 {
                     label: 'Laporan Produksi',
                     icon: 'pi pi-fw pi-id-card',
@@ -86,7 +80,8 @@ export const menuAllAccess = () => {
             items: [
                 { label: 'Uraian Target Penjualan', icon: 'pi pi-fw pi-list-check', to: '/sales/uraian-target-penjualan' },
                 { label: 'Target Penjualan', icon: 'pi pi-fw pi-lightbulb', to: '/sales/target-penjualan' },
-                { label: 'Laporan Penjualan', icon: 'pi pi-fw pi-gauge', to: '/sales/laporan-penjualan' }
+                { label: 'Laporan Penjualan', icon: 'pi pi-fw pi-gauge', to: '/sales/laporan-penjualan' },
+                { label: 'Levy Duty & M. Routers', icon: 'pi pi-fw pi-briefcase', to: '/sales/levy-duty-proportion-cost' }
             ]
         },
         {

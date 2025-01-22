@@ -1,12 +1,13 @@
 <script setup>
-import { URL_WEB } from '@/api/http/dataVariable';
 import { formatCurrency } from '@/controller/dummyController';
+import jenisLaporanMaterialController from '@/controller/getApiFromThisApp/laporanMaterial/jenisLaporanMaterialController';
 import laporanMaterialController from '@/controller/getApiFromThisApp/laporanMaterial/laporanMaterialController';
-import jenisLaporanProduksiController from '@/controller/getApiFromThisApp/laporanProduksi/jenisLaporanProduksiController';
-import laporanProduksiController from '@/controller/getApiFromThisApp/laporanProduksi/laporanProduksiController';
 import pmgMasterController from '@/controller/getApiFromThisApp/master/pmgMasterController';
 import moment from 'moment';
 import { computed, onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const drawerCond = ref(false);
 const messages = ref([]);
@@ -37,7 +38,7 @@ let count = ref(0);
 
 const formData = ref({
     id: null,
-    item_produksi_id: null,
+    item_material_id: null,
     pmg_id: null,
     tanggal: moment().format('YYYY-MM-DD'),
     value: null
@@ -71,10 +72,10 @@ const loadData = async () => {
 
 const loadJenis = async () => {
     try {
-        const response = await jenisLaporanProduksiController.getAll();
+        const response = await jenisLaporanMaterialController.getAll();
         const list = [];
         for (let i = 0; i < response.length; i++) {
-            const items = response[i].item_produksi;
+            const items = response[i].items;
             for (let j = 0; j < items.length; j++) {
                 list.push({
                     id: items[j].id,
@@ -82,6 +83,7 @@ const loadJenis = async () => {
                 });
             }
         }
+        // console.log(list);
         listJenis.value = list;
     } catch (error) {
         return [];
@@ -138,7 +140,7 @@ const showDrawer = async (data) => {
         if (data != null) {
             drawerCond.value = true;
             messages.value = [];
-            const response = await laporanProduksiController.getByID(data.id);
+            const response = await laporanMaterialController.getByID(data.id);
             const history = response.history;
             const list = [];
             for (let i = 0; i < history.length; i++) {
@@ -173,28 +175,30 @@ const showDrawer = async (data) => {
             }
             logFile.value = list;
             formData.value.id = data.id;
-            formData.value.item_produksi_id = data.item_produksi_id;
+            formData.value.item_material_id = data.item_material_id;
             formData.value.pmg_id = data.pmg_id;
             formData.value.tanggal = data.tanggal;
             formData.value.qty = Number(data.qty);
             statusForm.value = 'edit';
         } else {
-            window.location.replace(`${URL_WEB}operation/laporan-material/create`);
+            router.push('/operation/laporan-material/create');
+            // window.location.replace(`${URL_WEB}operation/laporan-material/create`);
             logFile.value = [];
             formData.value.id = null;
-            formData.value.item_produksi_id = null;
+            formData.value.item_material_id = null;
             formData.value.pmg_id = null;
             formData.value.tanggal = moment().format('YYYY-MM-DD');
             formData.value.qty = null;
             statusForm.value = 'add';
         }
     } catch (error) {
-        window.location.replace(`${URL_WEB}operation/laporan-material/create`);
+        router.push('/operation/laporan-material/create');
+        // window.location.replace(`${URL_WEB}operation/laporan-material/create`);
         messages.value = [];
         drawerCond.value = true;
         logFile.value = [];
         formData.value.id = null;
-        formData.value.item_produksi_id = null;
+        formData.value.item_material_id = null;
         formData.value.pmg_id = null;
         formData.value.tanggal = moment().format('YYYY-MM-DD');
         formData.value.qty = null;
@@ -204,19 +208,19 @@ const showDrawer = async (data) => {
 
 const refreshForm = () => {
     messages.value = [];
-    formData.value.item_produksi_id = null;
+    formData.value.item_material_id = null;
     formData.value.pmg_id = null;
     formData.value.tanggal = moment().format('YYYY-MM-DD');
     formData.value.qty = null;
 };
 
 const submitData = async () => {
-    if (!formData.value.pmg_id || !formData.value.tanggal || !formData.value.item_produksi_id || !formData.value.qty) {
+    if (!formData.value.pmg_id || !formData.value.tanggal || !formData.value.item_material_id || !formData.value.qty) {
         messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     } else {
         formData.value.tanggal = moment(formData.value.tanggal).format('YYYY-MM-DD');
         if (statusForm.value == 'add') {
-            const response = await laporanProduksiController.addPost(formData.value);
+            const response = await laporanMaterialController.addPost(formData.value);
             if (response.status == true) {
                 messages.value = [{ severity: 'success', content: 'Data berhasil di tambahkan', id: count.value++, icon: 'pi-check-circle' }];
                 loadingSave.value = true;
@@ -229,7 +233,7 @@ const submitData = async () => {
                 messages.value = [{ severity: 'error', content: response.msg, id: count.value++, icon: 'pi-times-circle' }];
             }
         } else {
-            const response = await laporanProduksiController.updatePost(formData.value.id, formData.value);
+            const response = await laporanMaterialController.updatePost(formData.value.id, formData.value);
             // const load = response.data;
             if (response.status == true) {
                 messages.value = [{ severity: 'success', content: 'Data berhasil di simpan', id: count.value++, icon: 'pi-check-circle' }];
@@ -271,7 +275,7 @@ const submitData = async () => {
                 </transition-group>
                 <div class="flex flex-col gap-1">
                     <label for="date">Uraian <small class="text-red-500 font-bold">*</small></label>
-                    <Select v-model="formData.item_produksi_id" filter :options="listJenis" optionLabel="name" optionValue="id" placeholder="Select a Description" class="w-full" />
+                    <Select v-model="formData.item_material_id" filter :options="listJenis" optionLabel="name" optionValue="id" placeholder="Select a Description" class="w-full" />
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="date">PMG <small class="text-red-500 font-bold">*</small></label>
@@ -368,21 +372,46 @@ const submitData = async () => {
                                 <span class="text-[1vw] font-bold italic font-sans">{{ item.jenis_laporan }}</span>
                             </template>
                             <div class="flex flex-col gap-1">
-                                <Panel v-for="(items, dex) in item.items" :key="dex" :toggleable="items.detail.length > 0 ? true : false" :collapsed="true">
+                                <Panel v-for="(items, dex) in item.kategori_data" :key="dex" toggleable :collapsed="true">
                                     <template #header>
                                         <div class="flex items-center w-full gap-3">
-                                            <span class="text-[0.8vw] font-medium italic font-sans w-full">{{ items.name }}</span>
-                                            <div class="w-full flex justify-end pr-5">
-                                                <span class="text-[0.8vw] font-bold px-2 py-1 bg-cyan-200 text-black rounded-full" v-if="items.name.toLowerCase().includes('hari')">Total - {{ items.totalQty }}</span>
-                                                <span class="text-[0.8vw] font-bold px-2 py-1 bg-cyan-200 text-black rounded-full" v-else-if="items.name.toLowerCase().includes('%')">Total - {{ formatCurrency(items.totalQty.toFixed(2)) }}%</span>
-                                                <span class="text-[0.8vw] font-bold px-2 py-1 bg-cyan-200 text-black rounded-full" v-else>Total - {{ formatCurrency(items.totalQty.toFixed(2)) }}</span>
-                                            </div>
-                                            <div class="w-full"></div>
-                                            <i v-if="items.detail.length < 1" class="pi pi-circle-fill text-red-500 pr-3 opacity-0"></i>
+                                            <span class="text-[0.9vw] font-sans w-full uppercase font-bold">{{ items.kategori }}</span>
                                         </div>
                                     </template>
+                                    <div class="flex flex-col gap-3">
+                                        <div class="py-3 flex flex-col gap-2" v-for="(materials, ind) in items.materials" :key="ind">
+                                            <div class="flex items-center w-full gap-3">
+                                                <span class="text-[0.8vw] font-medium italic font-sans w-full uppercase">{{ materials.name }}</span>
+                                            </div>
+                                            <DataTable :value="materials.detail" showGridlines dataKey="id">
+                                                <Column field="tanggal" sortable header="Tanggal" style="width: 25%; font-size: 0.8vw">
+                                                    <template #body="{ data }">
+                                                        <div class="flex w-full font-bold">
+                                                            <span>{{ moment(data.tanggal).format('DD MMM YYYY') }}</span>
+                                                        </div>
+                                                    </template>
+                                                </Column>
+                                                <Column field="qty" sortable header="Quantity" style="width: 25%; font-size: 0.8vw">
+                                                    <template #body="{ data }">
+                                                        <div class="flex w-full justify-end font-bold">
+                                                            <span>{{ formatCurrency(Number(data.qty).toFixed(2)) }}</span>
+                                                        </div>
+                                                    </template>
+                                                </Column>
+                                                <Column field="qty" style="width: 25%; font-size: 0.8vw">
+                                                    <template #body="{ data }">
+                                                        <div class="flex w-full items-center justify-end font-bold">
+                                                            <button @click="showDrawer(data)" class="p-3 border rounded-full flex justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
+                                                                <i class="pi pi-pencil" style="font-size: 0.6vw"></i>
+                                                            </button>
+                                                        </div>
+                                                    </template>
+                                                </Column>
+                                            </DataTable>
+                                        </div>
+                                    </div>
                                     <div class="w-full">
-                                        <DataTable :value="items.detail" showGridlines dataKey="id">
+                                        <!-- <DataTable :value="items.detail" showGridlines dataKey="id">
                                             <Column field="tanggal" sortable header="Tanggal" style="width: 25%; font-size: 0.8vw">
                                                 <template #body="{ data }">
                                                     <div class="flex w-full font-bold">
@@ -420,7 +449,7 @@ const submitData = async () => {
                                                     </div>
                                                 </template>
                                             </Column>
-                                        </DataTable>
+                                        </DataTable> -->
                                     </div>
                                 </Panel>
                             </div>
