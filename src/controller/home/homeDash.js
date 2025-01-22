@@ -1,4 +1,4 @@
-import { cashBalance, cashFlowMovement, cffPaySchedule, ebitdaMargin, grossProfitMargin, hargaSpotInventoryBulky, hargaSpotInventoryRetail, netProfitMargin, revenue, transaction } from '@/controller/home/components/FinanceHome';
+import { cashBalance, cashFlowMovement, cffPaySchedule, hargaSpotInventoryBulky, hargaSpotInventoryRetail, netProfitMargin, transaction } from '@/controller/home/components/FinanceHome';
 import { cpoOlahVsRKAP, laporanProduksi, packagingPerformance, pemakaianMaterial } from '@/controller/home/components/OperationHome';
 import { actualIncommingCPO, balanceStockCPO, stockBulky, stockRetail } from '@/controller/home/components/SCMHome';
 import { QtyPenjualanBulky, QtyPenjualanRetail, avgCPOKpbn, outstandingCPo, proportionCost, saldoPe } from '@/controller/home/components/SalesHome';
@@ -10,7 +10,7 @@ export default new (class HomeDashboard {
         return list;
     };
     cardFinancial = async () => {
-        const list = [revenue(), grossProfitMargin(), ebitdaMargin(), netProfitMargin(), await cashBalance(), cashFlowMovement(), await cffPaySchedule(), avgCPOKpbn(), transaction()];
+        const list = [netProfitMargin(), await cashBalance(), cashFlowMovement(), await cffPaySchedule(), avgCPOKpbn(), transaction()];
         return list;
     };
 

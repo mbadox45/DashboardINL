@@ -1,5 +1,4 @@
 // import AppLayout from '@/layout/AppLayout.vue';
-import AppLayouts from '@/views/dashboard/layout/Index.vue';
 import DashManagement from '@/views/dashboardManagement/layout/Index.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 
@@ -8,15 +7,15 @@ const router = createRouter({
     routes: [
         {
             path: '/',
-            component: AppLayouts,
-            children: [
-                {
-                    path: '/',
-                    name: 'home',
-                    component: () => import('@/views/dashboard/report/home/Index.vue')
-                }
-            ]
+            name: 'home',
+            component: () => import('@/views/dashboard/report/home/Index.vue')
         },
+        // {
+        //     path: '/',
+        //     component: AppLayouts,
+        //     children: [
+        //     ]
+        // },
         {
             path: '/detail-dashboard',
             name: 'detail',

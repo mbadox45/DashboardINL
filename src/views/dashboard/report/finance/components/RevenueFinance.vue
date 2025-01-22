@@ -2,6 +2,7 @@
 import CryptoJS from 'crypto-js';
 import { defineProps, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
+import { valueColorPersenCondition } from '@/controller/dummyController';
 
 const router = useRouter();
 
@@ -12,11 +13,11 @@ const props = defineProps({
     }
 });
 
-const load = ref({ name: '', icon: '', nilai: 0, persen: 0, versus: '', color: '', link: null, colspan: null });
+const load = ref({ persen: 0, pendapatan: 0, rkap: 0 });
 
 const loadData = async () => {
     const data = props.datas;
-    load.value = { name: data.name, icon: data.icon, nilai: data.value, persen: null, versus: data.versus, color: data.color, link: data.link, colspan: data.colspan };
+    load.value = { persen: data.persenPendapatan, pendapatan: data.pendapatan, rkap: data.targetPendapatanRkap };
 };
 
 const routerLink = (path) => {
@@ -47,16 +48,16 @@ watch(() => props.datas, loadData, { immediate: true });
                 <div class="w-full h-full">
                     <div class="flex gap-1 items-center h-full">
                         <div class="flex gap-2 items-center mb-3">
-                            <span class="font-bold text-[2vw] text-amber-500">30%</span>
+                            <span class="font-bold text-[2vw]" :class="valueColorPersenCondition(load.persen)">{{ load.persen }}%</span>
                         </div>
                         <div class="flex flex-col gap-1 w-full items-end">
                             <div class="font-bold flex flex-col-reverse items-end">
                                 <span class="text-white text-[0.6vw]">Pendapatan</span>
-                                <span class="text-red-600 text-[0.8vw]">Rp 60</span>
+                                <span class="text-[0.8vw]" :class="valueColorPersenCondition(load.persen)">{{ load.pendapatan }}</span>
                             </div>
                             <div class="font-bold flex flex-col-reverse items-end">
                                 <span class="text-white text-[0.6vw]">RKAP Des 2024</span>
-                                <span class="text-green-600 text-[0.8vw]">Rp 200</span>
+                                <span class="text-amber-600 text-[0.8vw]">{{ load.rkap }}</span>
                             </div>
                         </div>
                     </div>

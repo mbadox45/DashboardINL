@@ -1,6 +1,8 @@
 <script setup>
+import pmgMasterController from '@/controller/getApiFromThisApp/master/pmgMasterController';
+import mataUangKursController from '@/controller/getApiFromThisApp/kurs/mataUangKursController';
 import moment from 'moment';
-import { onMounted, ref, provide } from 'vue';
+import { onMounted, ref, provide, defineProps } from 'vue';
 import { useRouter } from 'vue-router';
 
 const icon = ref(null);
@@ -8,18 +10,43 @@ const showMenu = ref(true);
 const visibleTop = ref(false);
 const router = useRouter();
 
-const selectedRegion = ref('pmg1');
-const region = ref([
-    { name: 'PMG 1', code: 'pmg1' },
-    { name: 'PMG 2', code: 'pmg2' }
-]);
+const selectedRegion = ref(1);
+const selectedMataUang = ref(1);
+const listPmg = ref([]);
+const listMatauang = ref([]);
 
-const beforeDate = ref(moment().format('YYYY-MM-01'));
-const now = ref(moment().format('YYYY-MM-DD'));
+// const beforeDate = ref(moment().format('YYYY-MM-01'));
+// const now = ref(moment().format('YYYY-MM-DD'));
+const beforeDate = ref('2023-01-01');
+const now = ref('2024-01-31');
 const dates = ref([moment(beforeDate.value).toDate(), moment(now.value).toDate()]);
 const getToken = ref(localStorage.getItem('usertoken'));
 
-onMounted(() => {});
+const { onDateChange } = defineProps({
+    onDateChange: Function // Make sure `onDateChange` is a function passed from the parent
+});
+
+onMounted(() => {
+    loadPmg();
+    loadCurrency();
+});
+
+const loadPmg = async () => {
+    const response = await pmgMasterController.getAll();
+    listPmg.value = response;
+};
+
+const loadCurrency = async () => {
+    const loadMataUang = await mataUangKursController.getAll();
+    const list = [];
+    for (let i = 0; i < loadMataUang.length; i++) {
+        list.push({
+            id: loadMataUang[i].id,
+            name: `${loadMataUang[i].symbol}_${loadMataUang[i].name} - ${loadMataUang[i].remark}`
+        });
+    }
+    listMatauang.value = list;
+};
 
 const test = () => {
     // showMenu.value = !showMenu.value;
@@ -28,32 +55,26 @@ const test = () => {
 
 const changeDate = () => {
     const list = dates.value;
-    const listdate = [];
-    let start, end;
+    let start = beforeDate.value;
+    let end = now.value;
 
-    if (list != null) {
-        if (list.length > 1) {
-            start = moment(list[0], 'YYYY-MM-DD').format('YYYY-MM-DD');
-            end = moment(list[1], 'YYYY-MM-DD').format('YYYY-MM-DD');
-        } else {
-            start = beforeDate.value;
-            end = now.value;
-        }
-    } else {
-        start = beforeDate.value;
-        end = now.value;
+    if (list?.length > 1) {
+        start = moment(list[0], 'YYYY-MM-DD').format('YYYY-MM-DD');
+        end = moment(list[1], 'YYYY-MM-DD').format('YYYY-MM-DD');
     }
-    listdate.push(convertDate(start), convertDate(end));
-    provide('beforeDate', start);
-    provide('now', end);
 
+    // Check if onDateChange is a function before calling it
+    if (typeof onDateChange === 'function') {
+        onDateChange({ beforeDate: start, now: end, pmg: selectedRegion.value, mataUang: selectedMataUang.value });
+    } else {
+        console.error('onDateChange is not a function or is undefined');
+    }
 };
 
 const convertDate = (dateString) => {
     const date = moment(dateString).toDate();
     return date;
 };
-
 
 const goToLogin = () => {
     const token = getToken.value;
@@ -68,7 +89,7 @@ const goToLogin = () => {
 
 <template>
     <div class="relative text-white">
-        <div class="justify-start px-4 fixed w-full z-20">
+        <div class="justify-start px-4 fixed w-1/2 z-20">
             <button class="bg-amber-500 px-3 py-4 rounded-b-xl hover:bg-amber-600 transition-all duration-300" @click="test">
                 <div class="p-1 bg-white rounded-lg animate-pulse">
                     <img src="/images/inl.png" alt="PT INL" width="60px" class="" />
@@ -93,10 +114,6 @@ const goToLogin = () => {
                         <span v-else>Login</span>
                         <i class="pi pi-sign-in"></i>
                     </button>
-                    <!-- <div class="flex w-full gap-2 text-white">
-                        <button class="py-2 px-3 w-full rounded-full border-2 hover:bg-white hover:text-black transition-all">Page 1</button>
-                        <button class="py-2 px-3 w-full rounded-full border-2 hover:bg-white hover:text-black transition-all">Page 2</button>
-                    </div> -->
                     <div class="flex gap-2 justify-center border-t-2 pt-3 text-white font-mono">
                         <span class="text-[0.7vw] text-teal-600 font-bold">Software Developer Team</span>
                         <span class="text-[0.7vw]">-</span>
@@ -108,7 +125,11 @@ const goToLogin = () => {
                 <div class="flex flex-col gap-2 border border-gray-900 p-4 rounded-xl">
                     <div class="flex flex-col gap-1">
                         <label for="PMG" class="text-[0.6vw]">Select by PMG</label>
-                        <Select v-model="selectedRegion" :options="region" optionLabel="name" optionValue="code" placeholder="Select a Region" class="w-full" />
+                        <Select v-model="selectedRegion" :options="listPmg" optionLabel="nama" optionValue="id" placeholder="Pilih PMG" class="w-full" />
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label for="PMG" class="text-[0.6vw]">Select by Mata Uang</label>
+                        <Select v-model="selectedMataUang" :options="listMatauang" optionLabel="name" optionValue="id" placeholder="Pilih Mata Uang" class="w-full" />
                     </div>
                     <div class="flex flex-col gap-1">
                         <label for="PMG" class="text-[0.6vw]">Select by PMG</label>

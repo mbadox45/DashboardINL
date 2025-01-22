@@ -1,5 +1,9 @@
 // import * as CryptoJS from 'crypto-js';
 
+export const valueToBilion = (val) => {
+    return (Number(val) / 1000000000).toFixed(2);
+};
+
 export const valueColorPersenCondition = (val) => {
     let result = '';
     if (val <= 35) {
@@ -17,7 +21,7 @@ export const valueColorIntCondition = (val) => {
     if (val < 0) {
         result = 'text-red-500';
     } else {
-        result = 'text-amber-500';
+        result = 'text-green-500';
     }
     return result;
 };
@@ -45,17 +49,3 @@ export const formatCurrency = (amount) => {
 
     return parts.join('.');
 };
-
-// // Encrypt Router
-// export const secretKey = 'mysecretkey';
-
-// // Fungsi untuk mengenkripsi teks
-// export const encryptQuery = (query) => {
-//     return CryptoJS.AES.encrypt(query, secretKey).toString();
-// };
-
-// // Fungsi untuk mendekripsi teks
-// export const decryptQuery = (encryptedQuery) => {
-//     const bytes = CryptoJS.AES.decrypt(encryptedQuery, secretKey);
-//     return bytes.toString(CryptoJS.enc.Utf8);
-// };

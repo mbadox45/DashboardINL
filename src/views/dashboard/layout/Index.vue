@@ -5,15 +5,11 @@
 import TopBar from '@/views/dashboard/layout/components/TopBar.vue';
 import { useLayout } from '@/views/dashboard/layout/components/layout';
 // import TopBar from '@/views/dashboard/layout/components/TopBar.vue';
-import { computed, ref, watch, inject, onMounted  } from 'vue';
+import { computed, ref, watch, onMounted } from 'vue';
 
 const { layoutConfig, layoutState, isSidebarActive } = useLayout();
 
 const outsideClickListener = ref(null);
-
-const beforeDate = inject('beforeDate');
-const now = inject('now');
-
 
 watch(isSidebarActive, (newVal) => {
     if (newVal) {
@@ -60,14 +56,16 @@ function isOutsideClicked(event) {
     return !(sidebarEl.isSameNode(event.target) || sidebarEl.contains(event.target) || topbarEl.isSameNode(event.target) || topbarEl.contains(event.target));
 }
 
-onMounted(() => {
-    console.log(beforeDate, now)
-})
+onMounted(() => {});
+
+const updateDates = (dates) => {
+    console.log('Updated Dates:', dates);
+};
 </script>
 
 <template>
     <div class="flex flex-col gap-2 layout-scroller bg-neutral-950 min-h-screen text-white app-dark" :class="containerClass">
-        <top-bar></top-bar>
+        <top-bar :onDateChange="updateDates"></top-bar>
         <div class="px-4 pt-2">
             <!-- <div class="layout-main-container"> -->
             <div class="layout-main">

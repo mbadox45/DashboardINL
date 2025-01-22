@@ -3,6 +3,7 @@
 import CryptoJS from 'crypto-js';
 import { defineProps, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
+// import
 
 const router = useRouter();
 
@@ -13,7 +14,7 @@ const props = defineProps({
     }
 });
 
-const load = ref({ name: '', icon: '', nilai: 0, persen: 0, versus: '', color: '', link: null, colspan: null });
+const load = ref({ value: 0, laba_kotor: '', nilai: 0, persen: 0, versus: '', color: '', link: null, colspan: null });
 
 const loadData = async () => {
     const data = props.datas;
@@ -45,22 +46,22 @@ watch(() => props.datas, loadData, { immediate: true });
             </div>
             <div class="flex h-full items-center gap-3">
                 <img src="/images/icon/financial/gross-profit.png" alt="Icon" class="w-[3vw] h-[3vw] mr-1" />
-                <div class="flex gap-1 items-center h-full mt-3">
-                    <div class="flex gap-2 items-center h-full">
+                <div class="flex gap-1 items-center h-full mt-3 w-full">
+                    <div class="flex gap-2 items-center h-full w-full">
                         <span class="font-bold text-[1vw]">79.5</span>
                     </div>
                     <div class="flex gap-1 w-full items-end">
                         <div class="font-bold flex w-full flex-col-reverse items-center">
                             <div class="flex gap-1 items-center text-green-600">
-                                <i class="pi pi-sort-up-fill" style="0.6vw"></i>
+                                <i class="pi pi-sort-up-fill" style="font-size: 0.6vw"></i>
                                 <span class="text-[0.6vw]">Rp 1.2</span>
                             </div>
                             <span class="text-white text-[0.6vw]">Laba Kotor</span>
                             <span class="text-green-600 text-[0.8vw]">Rp 11.8</span>
                         </div>
                         <div class="font-bold flex w-full flex-col-reverse items-center">
-                        <div class="flex gap-1 items-center text-red-600">
-                                <i class="pi pi-sort-down-fill" style="0.6vw"></i>
+                            <div class="flex gap-1 items-center text-red-600">
+                                <i class="pi pi-sort-down-fill" style="font-size: 0.6vw"></i>
                                 <span class="text-[0.6vw]">-0.58%</span>
                             </div>
                             <span class="text-white text-[0.6vw]">GPM</span>

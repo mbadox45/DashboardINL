@@ -1,5 +1,6 @@
 <script setup>
 import { onMounted, ref } from 'vue';
+import TopBar from '@/views/dashboard/layout/components/TopBar.vue';
 
 // Controller
 import financeHomeController from '@/controller/home/controllerHomePage/financeHomeController';
@@ -15,6 +16,7 @@ import CardScmValues from '@/views/dashboard/report/home/components/scm/CardSCMV
 import CardSdm from '@/views/dashboard/report/home/components/sdm/CardSdmValues.vue';
 
 import CardHomeFinance from '@/views/dashboard/report/finance/CardHomeFinance.vue';
+import moment from 'moment';
 
 const listCardFinancial = ref([]);
 const listCardHarga = ref([]);
@@ -27,12 +29,39 @@ const listCardSdm = ref([]);
 const listDelay = ref([]);
 const activePage = ref(0);
 
+const dataRevenue = ref({});
+
 onMounted(() => {
     loadData();
+    loadAllData();
 });
 
-const loadDataControllerFinance = async () => {
-    const response = await financeHomeController.revenue();
+const loadAllData = async () => {
+    const form = {
+        idPmg: 1,
+        idMataUang: 1,
+        // tanggalAwal: moment().format('YYYY-MM-01'),
+        // tanggalAkhir: moment().format('YYYY-MM-DD'),
+        tanggalAwal: '2023-01-01',
+        tanggalAkhir: '2025-01-31'
+    };
+    await loadDataControllerFinance(form);
+};
+
+const loadDataControllerFinance = async (form) => {
+    const response = await financeHomeController.revenue(form);
+    dataRevenue.value = response;
+    console.log(response);
+};
+
+const updateDates = async (dates) => {
+    const form = {
+        idPmg: dates.pmg,
+        idMataUang: dates.mataUang,
+        tanggalAwal: dates.beforeDate,
+        tanggalAkhir: dates.now
+    };
+    await loadDataControllerFinance(form);
 };
 
 const loadData = async () => {
@@ -200,65 +229,70 @@ const loadDelay = async () => {
 </script>
 
 <template>
-    <div class="flex flex-col gap-3 p-6 rounded-2xl w-full h-full bg-black text-white font-mono">
-        <div v-if="activePage == 0" class="grid grid-cols-3 gap-2">
-            <div class="col-span-1 flex flex-col gap-2">
-                <images-home />
-                <div class="flex flex-col gap-2">
-                    <div class="grid grid-cols-1 gap-2">
-                        <card-sdm v-for="(item, index) in listCardPackaging" :key="index" :datas="item" :style="`animation: fadein ${index}s ease-in-out`" />
+    <div class="flex flex-col gap-2 layout-scroller bg-neutral-950 min-h-screen text-white app-dark">
+        <top-bar :onDateChange="updateDates"></top-bar>
+        <div class="px-4 pt-2">
+            <div class="flex flex-col gap-3 p-6 rounded-2xl w-full h-full bg-black text-white font-mono">
+                <div v-if="activePage == 0" class="grid grid-cols-3 gap-2">
+                    <div class="col-span-1 flex flex-col gap-2">
+                        <images-home />
+                        <div class="flex flex-col gap-2">
+                            <div class="grid grid-cols-1 gap-2">
+                                <card-sdm v-for="(item, index) in listCardPackaging" :key="index" :datas="item" :style="`animation: fadein ${index}s ease-in-out`" />
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <div class="grid grid-cols-1 gap-2">
+                                <card-sales v-for="(item, index) in listCardSalesPerformance" :key="index" :datas="item" :style="`animation: fadein ${index}s ease-in-out`" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-2 flex flex-col gap-3">
+                        <card-home-finance :datarevenue="dataRevenue" />
+                        <div class="flex flex-col">
+                            <div class="grid grid-cols-3 gap-2">
+                                <card-values v-for="(item, index) in listCardFinancial" :key="index" :datas="item" :style="`animation: fadein 1s ease-in-out`" />
+                            </div>
+                        </div>
+                        <div class="flex flex-col">
+                            <div class="grid grid-cols-4 gap-2">
+                                <card-scm-spot-inventory v-for="(item, index) in listCardHarga" :key="index" :datas="item" :style="`animation: fadein 1s ease-in-out`" />
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <div class="grid grid-cols-2 gap-2">
+                                <card-operation-values v-for="(item, index) in listCardOperation" :key="index" :datas="item" :style="`animation: fadein ${index}s ease-in-out`" />
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="flex flex-col gap-2">
-                    <div class="grid grid-cols-1 gap-2">
-                        <card-sales v-for="(item, index) in listCardSalesPerformance" :key="index" :datas="item" :style="`animation: fadein ${index}s ease-in-out`" />
+                <div v-else class="grid grid-cols-3 gap-3 h-full">
+                    <div class="col-span-1 flex flex-col gap-3 h-full">
+                        <images-home class="h-full" />
                     </div>
+                    <div class="col-span-2 flex flex-col gap-3">
+                        <div class="flex flex-col gap-2">
+                            <div class="grid grid-cols-3 gap-2">
+                                <card-scm-values v-for="(item, index) in listCardSCM" :key="index" :datas="item" :style="`animation: fadein 1s ease-in-out`" />
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <div class="grid grid-cols-1 gap-2">
+                                <card-operation-values v-for="(item, index) in listCardMaterial" :key="index" :datas="item" :style="`animation: fadein ${index}s ease-in-out`" />
+                            </div>
+                        </div>
+                        <!-- <div class="flex flex-col gap-2">
+                            <div class="grid grid-cols-1 gap-2">
+                                <card-sdm v-for="(item, index) in listCardSdm" :key="index" :datas="item" :style="`animation: fadein ${index}s ease-in-out`" />
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+                <div class="flex gap-2 justify-center">
+                    <button class="py-2 px-3 rounded-full border-2 hover:bg-white hover:text-black transition-all" :class="activePage == 0 ? 'bg-white text-black' : 'bg-transparent'" @click="activePage = 0">Page 1</button>
+                    <button class="py-2 px-3 rounded-full border-2 hover:bg-white hover:text-black transition-all" :class="activePage == 1 ? 'bg-white text-black' : 'bg-transparent'" @click="activePage = 1">Page 2</button>
                 </div>
             </div>
-            <div class="col-span-2 flex flex-col gap-3">
-                <div class="flex flex-col">
-                    <div class="grid grid-cols-3 gap-2">
-                        <card-values v-for="(item, index) in listCardFinancial" :key="index" :datas="item" :style="`animation: fadein 1s ease-in-out`" />
-                    </div>
-                </div>
-                <card-home-finance />
-                <div class="flex flex-col">
-                    <div class="grid grid-cols-4 gap-2">
-                        <card-scm-spot-inventory v-for="(item, index) in listCardHarga" :key="index" :datas="item" :style="`animation: fadein 1s ease-in-out`" />
-                    </div>
-                </div>
-                <div class="flex flex-col gap-2">
-                    <div class="grid grid-cols-2 gap-2">
-                        <card-operation-values v-for="(item, index) in listCardOperation" :key="index" :datas="item" :style="`animation: fadein ${index}s ease-in-out`" />
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div v-else class="grid grid-cols-3 gap-3 h-full">
-            <div class="col-span-1 flex flex-col gap-3 h-full">
-                <images-home class="h-full" />
-            </div>
-            <div class="col-span-2 flex flex-col gap-3">
-                <div class="flex flex-col gap-2">
-                    <div class="grid grid-cols-3 gap-2">
-                        <card-scm-values v-for="(item, index) in listCardSCM" :key="index" :datas="item" :style="`animation: fadein 1s ease-in-out`" />
-                    </div>
-                </div>
-                <div class="flex flex-col gap-2">
-                    <div class="grid grid-cols-1 gap-2">
-                        <card-operation-values v-for="(item, index) in listCardMaterial" :key="index" :datas="item" :style="`animation: fadein ${index}s ease-in-out`" />
-                    </div>
-                </div>
-                <!-- <div class="flex flex-col gap-2">
-                    <div class="grid grid-cols-1 gap-2">
-                        <card-sdm v-for="(item, index) in listCardSdm" :key="index" :datas="item" :style="`animation: fadein ${index}s ease-in-out`" />
-                    </div>
-                </div> -->
-            </div>
-        </div>
-        <div class="flex gap-2 justify-center">
-            <button class="py-2 px-3 rounded-full border-2 hover:bg-white hover:text-black transition-all" :class="activePage == 0 ? 'bg-white text-black' : 'bg-transparent'" @click="activePage = 0">Page 1</button>
-            <button class="py-2 px-3 rounded-full border-2 hover:bg-white hover:text-black transition-all" :class="activePage == 1 ? 'bg-white text-black' : 'bg-transparent'" @click="activePage = 1">Page 2</button>
         </div>
     </div>
 </template>
