@@ -494,6 +494,20 @@ const router = createRouter({
                         // sdm: true
                     }
                 },
+                {
+                    path: '/sales/levy-duty-proportion-cost/create',
+                    name: 'sales-levy-duty-proportion-cost-create',
+                    component: () => import('@/views/dashboardManagement/sales/levyDutyPenjualan/CreateIndex.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        // finance: true,
+                        // operation: true
+                        sales: true
+                        // scm: true
+                        // sdm: true
+                    }
+                },
 
                 // Supply Chain
                 {

@@ -3,21 +3,28 @@ import { URL_WEB } from '@/api/http/dataVariable';
 import jenisLaporanProduksiController from '@/controller/getApiFromThisApp/laporanProduksi/jenisLaporanProduksiController';
 import laporanProduksiController from '@/controller/getApiFromThisApp/laporanProduksi/laporanProduksiController';
 import pmgMasterController from '@/controller/getApiFromThisApp/master/pmgMasterController';
+import productMasterController from '@/controller/getApiFromThisApp/master/productMasterController';
+import mataUangKursController from '@/controller/getApiFromThisApp/kurs/mataUangKursController';
+import levyRoutersPenjualanController from '@/controller/getApiFromThisApp/sales/levyRoutersPenjualanController';
 import moment from 'moment';
 import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 // import {}
 // import lev
+
+const router = useRouter();
 
 const messages = ref([]);
 const tanggal = ref(moment().format('YYYY-MM-DD'));
 const maxDate = ref(moment().format('YYYY-MM-DD'));
 const listJenis = ref([]);
 const jenisProduksi = ref([]);
-const listPmg = ref([]);
+const listMatauang = ref([]);
 const jenis = ref(null);
 const pmg = ref(null);
 const loadings = ref(false);
 const setTime = ref(3000);
+const listProduct = ref([]);
 
 const formData = ref([]);
 let count = ref(0);
@@ -28,9 +35,39 @@ onMounted(() => {
 
 const loadData = async () => {
     await loadJenis();
+    await loadProduct();
     // PMG
-    const dataPmg = await pmgMasterController.getAll();
-    listPmg.value = dataPmg;
+    await loadCurrency();
+};
+
+const loadCurrency = async () => {
+    const loadMataUang = await mataUangKursController.getAll();
+    const list = [];
+    for (let i = 0; i < loadMataUang.length; i++) {
+        list.push({
+            id: loadMataUang[i].id,
+            name: `${loadMataUang[i].symbol}_${loadMataUang[i].name} - ${loadMataUang[i].remark}`
+        });
+    }
+    listMatauang.value = list;
+};
+
+const loadProduct = async () => {
+    const response = await productMasterController.getAll();
+    const produk = response.filter((item) => item.jenis == 'bulk');
+    listProduct.value = produk;
+    const list = [];
+    for (let i = 0; i < produk.length; i++) {
+        list.push({
+            id_bulky: produk[i].id,
+            item_produksi: produk[i].name,
+            id_mata_uang: pmg.value,
+            tanggal: tanggal.value,
+            nilaiLevy: null,
+            nilaiRouters: null
+        });
+    }
+    formData.value = list;
 };
 
 const loadJenis = async () => {
@@ -84,15 +121,17 @@ const resetForm = () => {
 
 const postData = async (cond) => {
     if (cond == 'back') {
-        window.location.replace(`${URL_WEB}operation/laporan-produksi`);
+        router.push('/sales/levy-duty-proportion-cost');
+        // window.location.replace(`${URL_WEB}operation/laporan-produksi`);
     } else {
         loadings.value = true;
-        const response = await laporanProduksiController.postData(formData.value);
+        const response = await levyRoutersPenjualanController.postData(formData.value);
         messages.value = [{ severity: response.severity, content: response.content, id: count.value++, icon: response.icon }];
         if (response.severity == 'success') {
             setTimeout(function () {
                 loadings.value = false;
-                window.location.replace(`${URL_WEB}operation/laporan-produksi`);
+                router.push('/sales/levy-duty-proportion-cost');
+                // window.location.replace(`${URL_WEB}operation/laporan-produksi`);
             }, setTime.value);
         } else {
             loadings.value = false;
@@ -154,20 +193,32 @@ const postData = async (cond) => {
                             <DatePicker v-model="tanggal" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" />
                         </div>
                         <div class="flex flex-col gap-1 w-full">
-                            <label for="date" class="font-bold">PMG <small class="text-red-500 font-bold">*</small></label>
-                            <Select v-model="pmg" filter :options="listPmg" optionLabel="nama" optionValue="id" placeholder="Select a Description" class="w-full" />
+                            <label for="date" class="font-bold">Mata Uang <small class="text-red-500 font-bold">*</small></label>
+                            <Select v-model="pmg" filter :options="listMatauang" optionLabel="name" optionValue="id" placeholder="Pilih Mata Uang" class="w-full" />
                         </div>
                     </div>
-                    <div class="flex flex-col gap-1">
+                    <!-- <div class="flex flex-col gap-1">
                         <label for="date" class="font-bold">Jenis <small class="text-red-500 font-bold">*</small></label>
                         <Select v-model="jenis" filter :options="listJenis" optionLabel="name" optionValue="id" placeholder="Select a Description" class="w-full" @change="loadForm" />
-                    </div>
+                    </div> -->
                     <Divider align="left" type="solid"><b>Form Item</b></Divider>
                     <ScrollPanel style="width: 100%; height: 22rem">
                         <div class="grid grid-cols-2 gap-3">
-                            <div class="flex flex-col gap-1" v-for="(item, index) in formData" :key="index">
+                            <!-- <div class="flex flex-col gap-3" v-for="(item, index) in formData" :key="index">
+
+                            </div> -->
+                            <div class="flex flex-col gap-1 p-3 border rounded-xl" v-for="(item, index) in formData" :key="index">
                                 <label for="date" class="font-bold">{{ item.item_produksi }} <small class="text-red-500 font-bold">*</small></label>
-                                <InputNumber v-model="item.qty" inputId="minmaxfraction" placeholder="1,000" :minFractionDigits="0" :maxFractionDigits="2" fluid />
+                                <div class="flex gap-3">
+                                    <div class="flex flex-col gap-1 w-full">
+                                        <label for="date" class="font-bold">Levy Duty <small class="text-red-500 font-bold">*</small></label>
+                                        <InputNumber v-model="item.nilaiLevy" inputId="minmaxfraction" placeholder="1,000" :minFractionDigits="0" :maxFractionDigits="2" fluid />
+                                    </div>
+                                    <div class="flex flex-col gap-1 w-full">
+                                        <label for="date" class="font-bold">Market Routers <small class="text-red-500 font-bold">*</small></label>
+                                        <InputNumber v-model="item.nilaiRouters" inputId="minmaxfraction" placeholder="1,000" :minFractionDigits="0" :maxFractionDigits="2" fluid />
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </ScrollPanel>

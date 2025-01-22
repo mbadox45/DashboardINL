@@ -6,6 +6,9 @@ import levyRoutersPenjualanController from '@/controller/getApiFromThisApp/sales
 import { FilterMatchMode } from '@primevue/core/api';
 import moment from 'moment';
 import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const drawerCond = ref(false);
 const messages = ref([]);
@@ -26,10 +29,10 @@ const listMataUang = ref([]);
 
 const op = ref();
 
-// const beforeDate = ref(moment().format('YYYY-MM-01'));
-// const now = ref(moment().format('YYYY-MM-DD'));
-const beforeDate = ref('2023-01-01');
-const now = ref(moment().format('2025-01-28'));
+const beforeDate = ref(moment().format('YYYY-MM-01'));
+const now = ref(moment().format('YYYY-MM-DD'));
+// const beforeDate = ref('2023-01-01');
+// const now = ref(moment().format('2025-01-28'));
 const dates = ref([moment(beforeDate.value).toDate(), moment(now.value).toDate()]);
 
 const initFilters = () => {
@@ -137,9 +140,9 @@ const convertDate = (dateString) => {
 
 const showDrawer = async (data) => {
     try {
-        drawerCond.value = true;
-        messages.value = [];
         if (data != null) {
+            drawerCond.value = true;
+            messages.value = [];
             const response = await cpoKpbnController.getByID(data.id);
             const history = response.history;
             console.log(response);
@@ -186,6 +189,7 @@ const showDrawer = async (data) => {
             formData.value.value = Number(response.value);
             statusForm.value = 'edit';
         } else {
+            router.push('/sales/levy-duty-proportion-cost/create');
             logFile.value = [];
             formData.value.id = null;
             formData.value.tanggal = moment().format('YYYY-MM-DD');
@@ -193,6 +197,7 @@ const showDrawer = async (data) => {
             statusForm.value = 'add';
         }
     } catch (error) {
+        router.push('/sales/levy-duty-proportion-cost/create');
         messages.value = [];
         drawerCond.value = true;
         logFile.value = [];

@@ -1,7 +1,5 @@
 import levyRoutersPenjualanAPI from '@/api/thisAPI/sales/levyRoutersPenjualanAPI';
 import productMasterController from '../master/productMasterController';
-import levyDutyPenjualanController from './levyDutyPenjualanController';
-import marketRoutersPenjualanController from './marketRoutersPenjualanController';
 
 export default new (class levyRoutersPenjualanController {
     getByPeriod = async (form) => {
@@ -40,7 +38,53 @@ export default new (class levyRoutersPenjualanController {
         }
     };
     postData = async (form) => {
-        const levyduty = await levyDutyPenjualanController.addPost();
-        const routers = await marketRoutersPenjualanController.addPost();
+        try {
+            let msg = { severity: '', content: '', icon: '' };
+            const list = form;
+            let kondisi;
+            if (form.length > 0) {
+                for (let i = 0; i < list.length; i++) {
+                    if (list[i].id_bulky != null && list[i].tanggal != null && list[i].nilaiLevy != null && list[i] != null && list[i].nilaiRouters != null) {
+                        if (i < list.length - 1) {
+                            continue;
+                        }
+                        kondisi = true;
+                    } else {
+                        msg = { severity: 'warn', content: `Harap dilengkapi terlebih dahulu`, icon: 'pi-exclamation-triangle' };
+                        kondisi = false;
+                        break;
+                    }
+                }
+                if (kondisi == true) {
+                    for (let i = 0; i < list.length; i++) {
+                        const form = {
+                            id_bulky: list[i].id_bulky,
+                            tanggal: list[i].tanggal,
+                            nilai: list[i].nilaiLevy,
+                            id_mata_uang: list[i].id_mata_uang
+                        };
+                        await levyDutyPenjualanController.addPost(form);
+                    }
+                    for (let i = 0; i < list.length; i++) {
+                        const form = {
+                            id_bulky: list[i].id_bulky,
+                            tanggal: list[i].tanggal,
+                            nilai: list[i].nilaiLevy,
+                            id_mata_uang: list[i].id_mata_uang
+                        };
+                        await marketRoutersPenjualanController.addPost(form);
+                    }
+                    msg = { severity: 'success', content: 'Data berhasil di tambahkan', icon: 'pi-check-circle' };
+                    return msg;
+                } else {
+                    return msg;
+                }
+            } else {
+                msg = { severity: 'warn', content: `Harap dilengkapi terlebih dahulu`, icon: 'pi-exclamation-triangle' };
+                return msg;
+            }
+        } catch (error) {
+            return { severity: 'error', content: 'Proses gagal, silahkan hubungi tim IT', icon: 'pi-times-circle' };
+        }
     };
 })();
