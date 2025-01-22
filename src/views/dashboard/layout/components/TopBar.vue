@@ -1,6 +1,6 @@
 <script setup>
 import moment from 'moment';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, provide } from 'vue';
 import { useRouter } from 'vue-router';
 
 const icon = ref(null);
@@ -44,13 +44,16 @@ const changeDate = () => {
         end = now.value;
     }
     listdate.push(convertDate(start), convertDate(end));
-    console.log(listdate);
+    provide('beforeDate', start);
+    provide('now', end);
+
 };
 
 const convertDate = (dateString) => {
     const date = moment(dateString).toDate();
     return date;
 };
+
 
 const goToLogin = () => {
     const token = getToken.value;

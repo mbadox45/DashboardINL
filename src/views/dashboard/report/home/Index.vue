@@ -2,9 +2,10 @@
 import { onMounted, ref } from 'vue';
 
 // Controller
-import HomeDash from '@/controller/home/homeDash';
+import financeHomeController from '@/controller/home/controllerHomePage/financeHomeController';
 
 // Components
+import HomeDash from '@/controller/home/homeDash';
 import CardValues from '@/views/dashboard/report/home/components/financial/CardFinancialValues.vue';
 import ImagesHome from '@/views/dashboard/report/home/components/ImagesHome.vue';
 import CardOperationValues from '@/views/dashboard/report/home/components/operation/CardOperationValues.vue';
@@ -12,6 +13,8 @@ import CardSales from '@/views/dashboard/report/home/components/sales/CardSalesV
 import CardScmSpotInventory from '@/views/dashboard/report/home/components/scm/CardSCMSpotInventory.vue';
 import CardScmValues from '@/views/dashboard/report/home/components/scm/CardSCMValues.vue';
 import CardSdm from '@/views/dashboard/report/home/components/sdm/CardSdmValues.vue';
+
+import CardHomeFinance from '@/views/dashboard/report/finance/CardHomeFinance.vue';
 
 const listCardFinancial = ref([]);
 const listCardHarga = ref([]);
@@ -27,6 +30,10 @@ const activePage = ref(0);
 onMounted(() => {
     loadData();
 });
+
+const loadDataControllerFinance = async () => {
+    const response = await financeHomeController.revenue();
+};
 
 const loadData = async () => {
     await loadDataFinance();
@@ -214,6 +221,7 @@ const loadDelay = async () => {
                         <card-values v-for="(item, index) in listCardFinancial" :key="index" :datas="item" :style="`animation: fadein 1s ease-in-out`" />
                     </div>
                 </div>
+                <card-home-finance />
                 <div class="flex flex-col">
                     <div class="grid grid-cols-4 gap-2">
                         <card-scm-spot-inventory v-for="(item, index) in listCardHarga" :key="index" :datas="item" :style="`animation: fadein 1s ease-in-out`" />

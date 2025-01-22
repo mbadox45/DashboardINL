@@ -35,30 +35,36 @@ watch(() => props.datas, loadData, { immediate: true });
     <div class="bg-gray-800 p-2 rounded-xl shadow-xl min-h-[120px] flex h-full gap-3 items-start">
         <div class="flex flex-col h-full w-full">
             <div class="flex items-center gap-3">
-                <span class="font-bold w-full text-[0.8vw]">Penapatan (dlm IDR Miliar)</span>
+                <span class="font-bold w-full text-[0.8vw]">EBITDA Margin (dlm IDR Miliar)</span>
                 <button
-                    @click="routerLink('revenue')"
+                    @click="routerLink('ebitda-margin')"
                     class="animate-pulse hover:animate-none p-4 w-[1.5vw] h-[1.5vw] cursor-pointer bg-transparent text-emerald-500 rotate-180 hover:rotate-[-180] hover:bg-black hover:text-amber-500 rounded-full flex items-center justify-center transition-all duration-500"
                 >
                     <i class="pi pi-external-link" style="font-weight: 600; font-size: 0.9vw"></i>
                 </button>
             </div>
             <div class="flex h-full items-center gap-3">
-                <img src="/images/icon/financial/revenue.png" alt="Icon" class="w-[3vw] h-[3vw] mr-1" />
-                <div class="w-full h-full">
-                    <div class="flex gap-1 items-center h-full">
-                        <div class="flex gap-2 items-center mb-3 ${valueColorPersenCondition(30)}">
-                            <span class="font-bold text-[2vw]">30%</span>
+                <img src="/images/icon/financial/ebitda.png" alt="Icon" class="w-[3vw] h-[3vw] mr-1" />
+                <div class="flex gap-1 items-center h-full mt-3">
+                    <div class="flex gap-2 items-center h-full ${valueColorIntCondition(16.82)}">
+                        <span class="font-bold text-[1vw]">16.82</span>
+                    </div>
+                    <div class="flex gap-1 w-full items-end">
+                        <div class="font-bold flex w-full flex-col-reverse items-center">
+                            <div class="flex gap-1 items-center text-green-600">
+                                <i class="pi pi-sort-up-fill" style="0.6vw"></i>
+                                <span class="text-[0.6vw]">Rp 8.26</span>
+                            </div>
+                            <span class="text-white text-[0.6vw]">EBITDA</span>
+                            <span class="text-green-600 text-[0.8vw]">Rp 6.59</span>
                         </div>
-                        <div class="flex flex-col gap-1 w-full items-end">
-                            <div class="font-bold flex flex-col-reverse items-end">
-                                <span class="text-white text-[0.6vw]">Pendapatan</span>
-                                <span class="text-red-600 text-[0.8vw]">Rp 60</span>
+                        <div class="font-bold flex w-full flex-col-reverse items-center">
+                        <div class="flex gap-1 items-center text-green-600">
+                                <i class="pi pi-sort-up-fill" style="0.6vw"></i>
+                                <span class="text-[0.6vw]">3.57%</span>
                             </div>
-                            <div class="font-bold flex flex-col-reverse items-end">
-                                <span class="text-white text-[0.6vw]">RKAP Des 2024</span>
-                                <span class="text-green-600 text-[0.8vw]">Rp 200</span>
-                            </div>
+                            <span class="text-white text-[0.6vw]">EBITDA%</span>
+                            <span class="text-green-600 text-[0.8vw]">2.71%</span>
                         </div>
                     </div>
                 </div>
