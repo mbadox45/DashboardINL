@@ -3,6 +3,7 @@ import { formatCurrency } from '@/controller/dummyController';
 import hargaFinanceController from '@/controller/getApiFromThisApp/harga/hargaFinanceController';
 import mataUangKursController from '@/controller/getApiFromThisApp/kurs/mataUangKursController';
 import lokasiMasterController from '@/controller/getApiFromThisApp/master/lokasiMasterController';
+import productMasterController from '@/controller/getApiFromThisApp/master/productMasterController'
 import productStorageScmController from '@/controller/getApiFromThisApp/supplyChain/productStorageScmController';
 import { FilterMatchMode } from '@primevue/core/api';
 import moment from 'moment';
@@ -18,15 +19,16 @@ const loadingSave = ref(false);
 const logFile = ref([]);
 const listLokasi = ref([]);
 const allData = ref();
+const listProduct = ref([])
 
 let count = ref(0);
 
 const formData = ref({
     id: null,
-    name: null,
-    jenis: null,
-    id_lokasi: null,
-    kapasitas: null
+    inventory: null,
+    spot: null,
+    tanggal: moment().format('YYYY-MM-DD'),
+    id_product: null
 });
 
 const selectedMataUang = ref(1);
@@ -61,10 +63,13 @@ const loadData = async () => {
         };
         const data = await hargaFinanceController.loadTable(form);
         allData.value = data;
+        const produk = await loadProduct()
         if (optionButton.value == 1) {
             listTable.value = data.latestHargaRitel;
+            listProduct.value = produk.filter(item => item.jenis == 'ritel')
         } else {
             listTable.value = data.latestHargaBulk;
+            listProduct.value = produk.filter(item => item.jenis == 'bulk')
         }
 
         const lokasi = await lokasiMasterController.getAll();
@@ -75,6 +80,11 @@ const loadData = async () => {
         listTable.value = [];
     }
 };
+
+const loadProduct = async() => {
+    const response = await productMasterController.getAll()
+    return response
+}
 
 const loadCurrency = async () => {
     const loadMataUang = await mataUangKursController.getAll();
@@ -116,18 +126,18 @@ const showDrawer = async (data) => {
             }
             logFile.value = list;
             formData.value.id = data.id;
-            formData.value.name = data.name;
-            formData.value.jenis = data.jenis;
-            formData.value.kapasitas = Number(data.kapasitas);
-            formData.value.id_lokasi = data.id_lokasi;
+            formData.value.id_product = data.id_product;
+            formData.value.tanggal = data.tanggal;
+            formData.value.inventory = Number(data.inventory);
+            formData.value.spot = Number(data.spot);
             statusForm.value = 'edit';
         } else {
             logFile.value = [];
             formData.value.id = null;
-            formData.value.name = null;
-            formData.value.jenis = null;
-            formData.value.kapasitas = null;
-            formData.value.id_lokasi = null;
+            formData.value.id_product = null;
+            formData.value.tanggal = null;
+            formData.value.inventory = null;
+            formData.value.spot = null;
             statusForm.value = 'add';
         }
     } catch (error) {
@@ -135,19 +145,19 @@ const showDrawer = async (data) => {
         drawerCond.value = true;
         logFile.value = [];
         formData.value.id = null;
-        formData.value.name = null;
-        formData.value.jenis = null;
-        formData.value.kapasitas = null;
-        formData.value.id_lokasi = null;
+        formData.value.id_product = null;
+        formData.value.tanggal = null;
+        formData.value.inventory = null;
+        formData.value.spot = null;
         statusForm.value = 'add';
     }
 };
 
 const refreshForm = () => {
-    formData.value.name = null;
-    formData.value.jenis = null;
-    formData.value.kapasitas = null;
-    formData.value.id_lokasi = null;
+    formData.value.id_product = null;
+    formData.value.tanggal = null;
+    formData.value.inventory = null;
+    formData.value.spot = null;
 };
 
 const toggle = async (event) => {
@@ -193,7 +203,7 @@ const selectButton = async (val) => {
 };
 
 const submitData = async () => {
-    if (!formData.value.name || !formData.value.jenis || !formData.value.kapasitas || !formData.value.id_lokasi) {
+    if (!formData.value.id_product || !formData.value.tanggal || !formData.value.inventory || !formData.value.spot) {
         messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     } else {
         if (statusForm.value == 'add') {
@@ -253,21 +263,25 @@ const submitData = async () => {
                 <transition-group name="p-message" tag="div" class="flex flex-col">
                     <Message v-for="msg of messages" :key="msg.id" :severity="msg.severity" class="mt-4"><i :class="`pi ${msg.icon}`"></i> {{ msg.content }}</Message>
                 </transition-group>
-                <div class="flex flex-col gap-1">
+                <!-- <div class="flex flex-col gap-1">
                     <label for="name">Nama Produk <small class="text-red-500 font-bold">*</small></label>
                     <InputText v-model="formData.name" placeholder="Please input Product" />
-                </div>
-                <!-- <div class="flex flex-col gap-1">
-                    <label for="date">Jenis <small class="text-red-500 font-bold">*</small></label>
-                    <Select v-model="formData.jenis" :options="listJenis" optionLabel="name" optionValue="id" placeholder="Select a Type" class="w-full" @change="valueCondition" />
-                </div>
-                <div class="flex flex-col gap-1">
-                    <label for="lokasi">Lokasi <small class="text-red-500 font-bold">*</small></label>
-                    <Select v-model="formData.id_lokasi" :options="listLokasi" optionLabel="name" optionValue="id" placeholder="Select a Type" class="w-full" @change="valueCondition" />
                 </div> -->
                 <div class="flex flex-col gap-1">
-                    <label for="kapasitas">Kapasitas <small class="text-red-500 font-bold">*</small></label>
-                    <InputNumber v-model="formData.kapasitas" inputId="minmaxfraction" placeholder="1,000,000" :minFractionDigits="0" :maxFractionDigits="2" fluid />
+                    <label for="date">Product <small class="text-red-500 font-bold">*</small></label>
+                    <Select v-model="formData.id_product" :options="listProduct" optionLabel="name" optionValue="id" placeholder="Select a Product" class="w-full" />
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label for="date">Tanggal <small class="text-red-500 font-bold">*</small></label>
+                    <DatePicker v-model="formData.tanggal" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" />
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label for="kapasitas">Inventory <small class="text-red-500 font-bold">*</small></label>
+                    <InputNumber v-model="formData.inventory" inputId="minmaxfraction" placeholder="1,000,000" :minFractionDigits="0" :maxFractionDigits="2" fluid />
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label for="kapasitas">Spot <small class="text-red-500 font-bold">*</small></label>
+                    <InputNumber v-model="formData.spot" inputId="minmaxfraction" placeholder="1,000,000" :minFractionDigits="0" :maxFractionDigits="2" fluid />
                 </div>
                 <div class="flex flex-row-reverse w-full gap-3">
                     <button @click="refreshForm" class="px-3 py-2 w-full border rounded-lg hover:shadow-md hover:shadow-black transition-all duration-300 shadow-sm shadow-black flex items-center gap-2 justify-center">
