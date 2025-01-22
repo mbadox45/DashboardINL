@@ -18,12 +18,12 @@ export default new (class financeHomeController {
                         pendapatan: valueToBilion(latestMonth.pendapatan),
                         targetPendapatanRkap: valueToBilion(latestMonth.targetPendapatanRkap),
                         persenPendapatan: Number(latestMonth.targetPendapatanRkap) == 0 ? 0 : ((Number(latestMonth.pendapatan) / Number(latestMonth.targetPendapatanRkap)) * 100).toFixed(0),
-                        labaKotor: latestMonth.labaKotor,
-                        gpmPercent: latestMonth.gpmPercent,
-                        ebitda: latestMonth.ebitda,
-                        ebitdaPercent: latestMonth.ebitdaPercent,
-                        labaBersih: latestMonth.labaBersih,
-                        npmPercent: latestMonth.npmPercent,
+                        labaKotor: valueToBilion(latestMonth.labaKotor),
+                        gpmPercent: Number(latestMonth.gpmPercent).toFixed(2),
+                        ebitda: valueToBilion(latestMonth.ebitda),
+                        ebitdaPercent: Number(latestMonth.ebitdaPercent).toFixed(2),
+                        labaBersih: valueToBilion(latestMonth.labaBersih),
+                        npmPercent: Number(latestMonth.npmPercent).toFixed(2),
                         details: latestMonth.details
                     };
                     return thisYearLatestMonth;
@@ -37,12 +37,12 @@ export default new (class financeHomeController {
                         pendapatan: valueToBilion(latestMonth.pendapatan),
                         targetPendapatanRkap: valueToBilion(latestMonth.targetPendapatanRkap),
                         persenPendapatan: Number(latestMonth.targetPendapatanRkap) == 0 ? 0 : ((Number(latestMonth.pendapatan) / Number(latestMonth.targetPendapatanRkap)) * 100).toFixed(0),
-                        labaKotor: latestMonth.labaKotor,
-                        gpmPercent: latestMonth.gpmPercent,
-                        ebitda: latestMonth.ebitda,
-                        ebitdaPercent: latestMonth.ebitdaPercent,
-                        labaBersih: latestMonth.labaBersih,
-                        npmPercent: latestMonth.npmPercent,
+                        labaKotor: valueToBilion(latestMonth.labaKotor),
+                        gpmPercent: Number(latestMonth.gpmPercent).toFixed(2),
+                        ebitda: valueToBilion(latestMonth.ebitda),
+                        ebitdaPercent: Number(latestMonth.ebitdaPercent).toFixed(2),
+                        labaBersih: valueToBilion(latestMonth.labaBersih),
+                        npmPercent: Number(latestMonth.npmPercent).toFixed(2),
                         details: latestMonth.details
                     };
                     return thisYearLatestMonth;

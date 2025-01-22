@@ -13,11 +13,11 @@ const props = defineProps({
     }
 });
 
-const load = ref({ name: '', icon: '', nilai: 0, persen: 0, versus: '', color: '', link: null, colspan: null });
+const load = ref({ ebitda: 0, ebitdaPercent: 0, value: 0, });
 
 const loadData = async () => {
     const data = props.datas;
-    load.value = { name: data.name, icon: data.icon, nilai: data.value, persen: null, versus: data.versus, color: data.color, link: data.link, colspan: data.colspan };
+    load.value = { ebitda: data.ebitda, ebitdaPercent: data.ebitdaPercent, value: data.value,  };
 };
 
 const routerLink = (path) => {
@@ -43,28 +43,28 @@ watch(() => props.datas, loadData, { immediate: true });
                     <i class="pi pi-external-link" style="font-weight: 600; font-size: 0.9vw"></i>
                 </button>
             </div>
-            <div class="flex h-full items-center gap-3">
+            <div class="flex h-full items-center gap-3 w-full">
                 <img src="/images/icon/financial/ebitda.png" alt="Icon" class="w-[3vw] h-[3vw] mr-1" />
-                <div class="flex gap-1 items-center h-full mt-3">
+                <div class="flex gap-1 items-center h-full mt-3 w-full">
                     <div class="flex gap-2 items-center h-full ${valueColorIntCondition(16.82)}">
                         <span class="font-bold text-[1vw]">16.82</span>
                     </div>
                     <div class="flex gap-1 w-full items-end">
                         <div class="font-bold flex w-full flex-col-reverse items-center">
-                            <div class="flex gap-1 items-center text-green-600">
+                            <!-- <div class="flex gap-1 items-center text-green-600">
                                 <i class="pi pi-sort-up-fill" style="0.6vw"></i>
                                 <span class="text-[0.6vw]">Rp 8.26</span>
-                            </div>
+                            </div> -->
                             <span class="text-white text-[0.6vw]">EBITDA</span>
-                            <span class="text-green-600 text-[0.8vw]">Rp 6.59</span>
+                            <span class="text-green-600 text-[0.8vw]">{{load.ebitda}}</span>
                         </div>
                         <div class="font-bold flex w-full flex-col-reverse items-center">
-                        <div class="flex gap-1 items-center text-green-600">
+                            <!-- <div class="flex gap-1 items-center text-green-600">
                                 <i class="pi pi-sort-up-fill" style="0.6vw"></i>
                                 <span class="text-[0.6vw]">3.57%</span>
-                            </div>
+                            </div> -->
                             <span class="text-white text-[0.6vw]">EBITDA%</span>
-                            <span class="text-green-600 text-[0.8vw]">2.71%</span>
+                            <span class="text-green-600 text-[0.8vw]">{{load.ebitdaPercent}}%</span>
                         </div>
                     </div>
                 </div>

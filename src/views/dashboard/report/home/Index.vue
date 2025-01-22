@@ -1,6 +1,6 @@
 <script setup>
-import { onMounted, ref } from 'vue';
 import TopBar from '@/views/dashboard/layout/components/TopBar.vue';
+import { onMounted, ref } from 'vue';
 
 // Controller
 import financeHomeController from '@/controller/home/controllerHomePage/financeHomeController';
@@ -16,7 +16,7 @@ import CardScmValues from '@/views/dashboard/report/home/components/scm/CardSCMV
 import CardSdm from '@/views/dashboard/report/home/components/sdm/CardSdmValues.vue';
 
 import CardHomeFinance from '@/views/dashboard/report/finance/CardHomeFinance.vue';
-import moment from 'moment';
+// import moment from 'moment';
 
 const listCardFinancial = ref([]);
 const listCardHarga = ref([]);
@@ -43,7 +43,7 @@ const loadAllData = async () => {
         // tanggalAwal: moment().format('YYYY-MM-01'),
         // tanggalAkhir: moment().format('YYYY-MM-DD'),
         tanggalAwal: '2023-01-01',
-        tanggalAkhir: '2025-01-31'
+        tanggalAkhir: '2024-01-31'
     };
     await loadDataControllerFinance(form);
 };

@@ -12,11 +12,11 @@ const props = defineProps({
     }
 });
 
-const load = ref({ name: '', icon: '', nilai: 0, persen: 0, versus: '', color: '', link: null, colspan: null });
+const load = ref({ value: 0, laba_bersih: 0, npm: 0 });
 
 const loadData = async () => {
     const data = props.datas;
-    load.value = { name: data.name, icon: data.icon, nilai: data.value, persen: null, versus: data.versus, color: data.color, link: data.link, colspan: data.colspan };
+    load.value = { value: data.value, laba_bersih: data.laba_bersih, npm: data.npm };
 };
 
 const routerLink = (path) => {
@@ -50,20 +50,20 @@ watch(() => props.datas, loadData, { immediate: true });
                     </div>
                     <div class="flex gap-1 w-full items-end">
                         <div class="font-bold flex w-full flex-col-reverse items-center">
-                            <div class="flex gap-1 items-center text-red-600">
+                            <!-- <div class="flex gap-1 items-center text-red-600">
                                 <i class="pi pi-sort-down-fill" style="font-size: 0.6vw"></i>
                                 <span class="text-[0.6vw]">Rp -9.16</span>
-                            </div>
+                            </div> -->
                             <span class="text-white text-[0.6vw]">Laba Bersih</span>
-                            <span class="text-red-600 text-[0.8vw]">Rp -14.23</span>
+                            <span class="text-[0.8vw]">{{ load.laba_bersih }}</span>
                         </div>
                         <div class="font-bold flex w-full flex-col-reverse items-center">
-                            <div class="flex gap-1 items-center text-red-600">
+                            <!-- <div class="flex gap-1 items-center text-red-600">
                                 <i class="pi pi-sort-down-fill" style="font-size: 0.6vw"></i>
                                 <span class="text-[0.6vw]">-0.05%</span>
-                            </div>
+                            </div> -->
                             <span class="text-white text-[0.6vw]">NPM%</span>
-                            <span class="text-red-600 text-[0.8vw]">-0.07%</span>
+                            <span class="text-[0.8vw]">{{ load.npm }}%</span>
                         </div>
                     </div>
                 </div>

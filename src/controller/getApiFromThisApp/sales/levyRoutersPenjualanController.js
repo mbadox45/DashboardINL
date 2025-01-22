@@ -1,5 +1,7 @@
 import levyRoutersPenjualanAPI from '@/api/thisAPI/sales/levyRoutersPenjualanAPI';
 import productMasterController from '../master/productMasterController';
+import levyDutyPenjualanController from './levyDutyPenjualanController';
+import marketRoutersPenjualanController from './marketRoutersPenjualanController';
 
 export default new (class levyRoutersPenjualanController {
     getByPeriod = async (form) => {
@@ -36,5 +38,9 @@ export default new (class levyRoutersPenjualanController {
         } catch (error) {
             return [];
         }
+    };
+    postData = async (form) => {
+        const levyduty = await levyDutyPenjualanController.addPost();
+        const routers = await marketRoutersPenjualanController.addPost();
     };
 })();
