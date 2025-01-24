@@ -1,5 +1,5 @@
 export const balanceStockCPO = () => {
-    const name = 'Balance Stock CPO (in MT)';
+    const name = 'Stok CPO (dlm MT)';
     const colspan = null;
     const value = `<div class="flex flex-row-reverse justify-between items-center">
         <span class="font-bold text-[1.5vw] text-green-600">1,000</span>
@@ -20,7 +20,7 @@ export const balanceStockCPO = () => {
 };
 
 export const stockBulky = () => {
-    const name = 'Balance Stock Bulky (in MT)';
+    const name = 'Stok Bulky (dlm MT)';
     const colspan = null;
     const value = null;
     // Jika Pendapatan > RKAP warna jadi green 600, sesuai kan periode
@@ -76,7 +76,7 @@ export const stockBulky = () => {
 };
 
 export const stockRetail = () => {
-    const name = 'Balance Stock Retail (in MT)';
+    const name = 'Stok Ritel (dlm Box)';
     const colspan = null;
     const value = null;
     // Jika Pendapatan > RKAP warna jadi green 600, sesuai kan periode
@@ -156,16 +156,16 @@ export const stockRetail = () => {
 };
 
 export const actualIncommingCPO = () => {
-    const name = 'Actual Incoming CPO (in MT)';
+    const name = 'Aktual CPO Masuk (dlm Kg)';
     const colspan = null;
     const value = null;
     // Jika Pendapatan > RKAP warna jadi green 600, sesuai kan periode
     const versus = [
         `<div class="flex flex-col gap-2 w-full">
-        <div class="w-full flex flex-col items-end font-bold"><span class="text-[1vw] text-amber-500">601,167,461.00</span><div class="text-[0.6vw] flex justify-between w-full"><span class="text-white font-normal w-full text-end">09 Jan 2025</span><span class="text-cyan-500 w-full text-right">Total</span></div></div>
+        <div class="w-full flex flex-col items-end font-bold"><span class="text-[1vw] text-amber-500">601,167,461.00</span><div class="text-[0.6vw] flex justify-between w-full"><span class="text-white font-normal w-full text-end">09 Jan 2025</span><span class="text-cyan-500 w-full text-right">Total Harga</span></div></div>
         <div class="flex gap-1">
-            <div class="flex flex-col-reverse items-end w-full text-cyan-500 font-bold bg-black p-2 rounded-lg"><span class="text-[0.6vw]">QTY (in MTs)</span><span class="text-amber-500 text-[0.9vw]">48,380.00</span></div>
-            <div class="flex flex-col-reverse items-end w-full text-cyan-500 font-bold bg-black p-2 rounded-lg"><span class="text-[0.6vw]">Price (in IDR)</span><span class="text-amber-500 text-[0.9vw]">12,425.95</span></div>
+            <div class="flex flex-col-reverse items-end w-full text-cyan-500 font-bold bg-black p-2 rounded-lg"><span class="text-[0.6vw]">QTY (dlm Kg)</span><span class="text-amber-500 text-[0.9vw]">48,380.00</span></div>
+            <div class="flex flex-col-reverse items-end w-full text-cyan-500 font-bold bg-black p-2 rounded-lg"><span class="text-[0.6vw]">Harga Satuan (dlm IDR)</span><span class="text-amber-500 text-[0.9vw]">12,425.95</span></div>
         </div>
     </div>`
     ];

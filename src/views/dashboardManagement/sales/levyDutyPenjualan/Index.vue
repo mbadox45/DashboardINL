@@ -1,4 +1,5 @@
 <script setup>
+import { formatCurrency } from '@/controller/dummyController';
 import cpoKpbnController from '@/controller/getApiFromThisApp/cpoKpbn/cpoKpbnController';
 import mataUangKursController from '@/controller/getApiFromThisApp/kurs/mataUangKursController';
 import productMasterController from '@/controller/getApiFromThisApp/master/productMasterController';
@@ -33,6 +34,7 @@ const beforeDate = ref(moment().format('YYYY-MM-01'));
 const now = ref(moment().format('YYYY-MM-DD'));
 // const beforeDate = ref('2023-01-01');
 // const now = ref(moment().format('2025-01-28'));
+const dates2 = ref(moment().format('YYYY-MM'));
 const dates = ref([moment(beforeDate.value).toDate(), moment(now.value).toDate()]);
 
 const initFilters = () => {
@@ -66,17 +68,6 @@ const loadData = async () => {
         await loadProduk();
         const data = await levyRoutersPenjualanController.loadTable(form);
         console.log(data);
-        const list = [];
-        // for (let i = 0; i < data.length; i++) {
-        //     const uang = load.find((item) => item.id == data[i].id_mata_uang);
-        //     list.push({
-        //         id: data[i].id,
-        //         id_mata_uang: data[i].id_mata_uang,
-        //         mata_uang: uang.name,
-        //         tanggal: data[i].tanggal,
-        //         value: data[i].value
-        //     });
-        // }
         listTable.value = data;
     } catch (error) {
         listTable.value = [];
@@ -85,9 +76,20 @@ const loadData = async () => {
 
 const loadProduk = async () => {
     const response = await productMasterController.getAll();
-    const bulk = response.filter((item) => item.jenis == 'bulk');
+    const bulk = response
+        .filter((item) => item.jenis === 'bulk')
+        .map((item, index) => ({
+            ...item,
+            color: getColor(index), // Tambahkan warna berdasarkan logika
+        }));
+
     listProduct.value = bulk;
 };
+
+function getColor(index) {
+    const colors = ['red', 'blue', 'emerald', 'yellow', 'purple', 'pink', 'gray'];
+    return colors[index % colors.length]; // Warna berulang jika index lebih besar dari panjang array warna
+}
 
 const loadCurrency = async () => {
     const loadMataUang = await mataUangKursController.getAll();
@@ -106,32 +108,51 @@ const toggle = async (event) => {
 };
 
 const changeDate = async () => {
-    const list = dates.value;
-    const listdate = [];
-    let start, end;
+    const lastDate = await loopingPeriod()
+    // const listdate = [];
+    // let start, end;
 
-    if (list != null) {
-        if (list.length > 1) {
-            start = moment(list[0], 'YYYY-MM-DD').format('YYYY-MM-DD');
-            const lastDayOfMonth = moment(list[0], 'YYYY-MM-DD').endOf('month').format('YYYY-MM-DD');
-            end = moment(list[1] === null ? lastDayOfMonth : list[1], 'YYYY-MM-DD').format('YYYY-MM-DD');
-        } else {
-            start = beforeDate.value;
-            end = now.value;
-        }
-    } else {
-        start = beforeDate.value;
-        end = now.value;
-    }
-    listdate.push(convertDate(start), convertDate(end));
+    // if (list != null) {
+    //     if (list.length > 1) {
+    //         start = moment(list[0], 'YYYY-MM-DD').format('YYYY-MM-DD');
+    //         const lastDayOfMonth = moment(list[0], 'YYYY-MM-DD').endOf('month').format('YYYY-MM-DD');
+    //         end = moment(list[1] === null ? lastDayOfMonth : list[1], 'YYYY-MM-DD').format('YYYY-MM-DD');
+    //     } else {
+    //         start = beforeDate.value;
+    //         end = now.value;
+    //     }
+    // } else {
+    //     start = beforeDate.value;
+    //     end = now.value;
+    // }
+    // listdate.push(convertDate(start), convertDate(end));
 
-    beforeDate.value = start;
-    now.value = end;
-    dates.value = listdate;
+    beforeDate.value = moment(lastDate).format('YYYY-MM-01');
+    now.value = lastDate;
+    // dates.value = listdate;
 
     await loadData();
     await toggle();
 };
+
+const loopingPeriod = async () => {
+    const bulanTahun = dates2.value; // Contoh: "2023-01"
+    const today = moment(); // Tanggal hari ini
+    const inputDate = moment(bulanTahun, "YYYY-MM"); // Parse bulan dan tahun dari input
+
+    let lastDate;
+
+    // Cek apakah bulan dan tahun input sama dengan bulan dan tahun saat ini
+    if (inputDate.isSame(today, 'month')) {
+        lastDate = today.format("YYYY-MM-DD"); // Ambil tanggal hari ini
+    } else {
+        lastDate = inputDate.endOf('month').format("YYYY-MM-DD"); // Tanggal terakhir di bulan input
+    }
+
+    return lastDate
+
+};
+
 
 const convertDate = (dateString) => {
     const date = moment(dateString).toDate();
@@ -330,7 +351,7 @@ const submitData = async () => {
                     </div>
                     <div class="flex flex-col gap-1 w-full items-start">
                         <label for="pmg" class="text-[0.8vw]">Select by Period</label>
-                        <DatePicker v-model="dates" selectionMode="range" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :manualInput="false" placeholder="Select Date Range" class="w-full" />
+                        <DatePicker v-model="dates2" showIcon view="month" dateFormat="yy-mm" placeholder="Select Date Range" class="w-full" />
                     </div>
                 </div>
                 <Divider />
@@ -351,34 +372,81 @@ const submitData = async () => {
                 </div>
             </template>
             <template #content>
-                <div class="flex flex-col gap-4">
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full border border-gray-200 bg-white">
-                            <thead>
-                                <!-- Header Utama -->
-                                <tr class="bg-gray-50">
-                                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-600 border border-gray-200" rowspan="2">Tanggal</th>
-                                    <th v-for="(item, index) in listProduct" :key="index" class="px-6 py-3 text-center text-sm font-medium text-gray-600 border border-gray-200" colspan="3">
-                                        {{ item.name }}
-                                    </th>
-                                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-600 border border-gray-200" rowspan="2">Rate Jisdor</th>
-                                    <th class="px-6 py-3 text-sm font-medium text-center text-gray-600 border border-gray-200" :colspan="listProduct.length">Market (IDR)</th>
-                                </tr>
-                                <!-- Header Sub -->
-                                <tr class="bg-gray-100">
-                                    <template v-for="(item, index) in listProduct" :key="index">
-                                        <th class="px-6 py-3 text-center text-sm font-medium text-gray-600 border border-gray-200">Market Routers (USD)</th>
-                                        <th class="px-6 py-3 text-center text-sm font-medium text-gray-600 border border-gray-200">Levy + Duty</th>
-                                        <th class="px-6 py-3 text-center text-sm font-medium text-gray-600 border border-gray-200">Market Excld Levy & Duty (USD)</th>
-                                    </template>
-                                    <th v-for="(item, index) in listProduct" :key="index" class="px-6 py-3 text-center text-sm font-medium text-gray-600 border border-gray-200">
-                                        {{ item.name }}
-                                    </th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
+                <div class="overflow-auto h-[33vw] border border-gray-200">
+                    <table class="min-w-full border border-gray-200 bg-white">
+                        <thead class="sticky top-0 bg-gray-50 z-10">
+                            <!-- Header Utama -->
+                            <tr class="w-full">
+                                <th class="w-full px-6 py-3 text-left text-sm font-medium text-gray-600 border border-white" rowspan="2">Tanggal</th>
+                                <th v-for="(item, index) in listProduct" :key="index" class="w-full px-6 py-3 text-center text-sm font-medium text-black border border-white" :class="`bg-${item.color}-200`" colspan="3">
+                                    {{ item.name }}
+                                </th>
+                                <th class="w-full px-6 py-3 text-left text-sm font-medium text-gray-600 border border-white" rowspan="2">Rate Jisdor</th>
+                                <th class="w-full px-6 py-3 text-sm font-medium text-center text-gray-600 border border-white" :colspan="listProduct.length">Market (IDR)</th>
+                            </tr>
+                            <!-- Header Sub -->
+                            <tr class="bg-gray-100 w-full">
+                                <template v-for="(item, index) in listProduct" :key="index">
+                                    <th class="w-full px-6 py-3 text-center text-sm font-medium text-gray-600 border border-white" :class="`bg-${item.color}-200`">Market Routers (USD)</th>
+                                    <th class="w-full px-6 py-3 text-center text-sm font-medium text-gray-600 border border-white" :class="`bg-${item.color}-200`">Levy + Duty</th>
+                                    <th class="w-full px-6 py-3 text-center text-sm font-medium text-gray-600 border border-white" :class="`bg-${item.color}-200`">Market Excld Levy & Duty (USD)</th>
+                                </template>
+                                <th v-for="(item, index) in listProduct" :key="index" class="w-full px-6 py-3 text-center text-sm font-medium text-gray-600 border border-white">
+                                    {{ item.name }}
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="bg-gray-50" v-for="(item, index) in listTable" :key="index">
+                                <th class="px-6 py-3 text-left text-sm font-medium text-gray-600 border border-gray-200">{{item.tanggal}}</th>
+                                <template v-for="(prod, list) in listProduct" :key="list">
+                                    <th class="px-6 py-3 text-center text-sm font-medium text-gray-600 border border-gray-200">0</th>
+                                    <th class="px-6 py-3 text-center text-sm font-medium text-gray-600 border border-gray-200">0</th>
+                                    <th class="px-6 py-3 text-center text-sm font-medium text-gray-600 border border-gray-200">0</th>
+                                </template>
+                                <th class="px-6 py-3 text-left text-sm font-medium text-gray-600 border border-gray-200">{{formatCurrency(Number(item.kursValue))}}</th>
+                                <th v-for="(item, index) in listProduct" :key="index" class="px-6 py-3 text-center text-sm font-medium text-gray-600 border border-gray-200">0</th>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
+
+                <!-- <ScrollPanel style="width: 100%; height: 35vw">
+                    <table class="min-w-full border border-gray-200 bg-white">
+                        <thead>
+                            <tr class="bg-gray-50">
+                                <th class="px-6 py-3 text-left text-sm font-medium text-gray-600 border border-gray-200" rowspan="2">Tanggal</th>
+                                <th v-for="(item, index) in listProduct" :key="index" class="px-6 py-3 text-center text-sm font-medium text-gray-600 border border-gray-200" colspan="3">
+                                    {{ item.name }}
+                                </th>
+                                <th class="px-6 py-3 text-left text-sm font-medium text-gray-600 border border-gray-200" rowspan="2">Rate Jisdor</th>
+                                <th class="px-6 py-3 text-sm font-medium text-center text-gray-600 border border-gray-200" :colspan="listProduct.length">Market (IDR)</th>
+                            </tr>
+                            <tr class="bg-gray-100">
+                                <template v-for="(item, index) in listProduct" :key="index">
+                                    <th class="px-6 py-3 text-center text-sm font-medium text-gray-600 border border-gray-200">Market Routers (USD)</th>
+                                    <th class="px-6 py-3 text-center text-sm font-medium text-gray-600 border border-gray-200">Levy + Duty</th>
+                                    <th class="px-6 py-3 text-center text-sm font-medium text-gray-600 border border-gray-200">Market Excld Levy & Duty (USD)</th>
+                                </template>
+                                <th v-for="(item, index) in listProduct" :key="index" class="px-6 py-3 text-center text-sm font-medium text-gray-600 border border-gray-200">
+                                    {{ item.name }}
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="bg-gray-50" v-for="(item, index) in listTable" :key="index">
+                                <th class="px-6 py-3 text-left text-sm font-medium text-gray-600 border border-gray-200">{{item.tanggal}}</th>
+                                <template v-for="(prod, list) in listProduct" :key="list">
+                                    <th class="px-6 py-3 text-center text-sm font-medium text-gray-600 border border-gray-200">0</th>
+                                    <th class="px-6 py-3 text-center text-sm font-medium text-gray-600 border border-gray-200">0</th>
+                                    <th class="px-6 py-3 text-center text-sm font-medium text-gray-600 border border-gray-200">0</th>
+                                </template>
+                                <th class="px-6 py-3 text-left text-sm font-medium text-gray-600 border border-gray-200">{{formatCurrency(Number(item.kursValue))}}</th>
+                                <th v-for="(item, index) in listProduct" :key="index" class="px-6 py-3 text-center text-sm font-medium text-gray-600 border border-gray-200">0</th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </ScrollPanel> -->
             </template>
         </Card>
     </div>

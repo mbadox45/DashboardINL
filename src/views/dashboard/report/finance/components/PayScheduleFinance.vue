@@ -1,6 +1,5 @@
 <script setup>
 import CryptoJS from 'crypto-js';
-import moment from 'moment';
 import { defineProps, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -13,11 +12,11 @@ const props = defineProps({
     }
 });
 
-const load = ref({ total: 0, status: '', bulan: moment().format('MMMM YYYY') });
+const load = ref({ cff: 0, cfi: 0, period: '' });
 
 const loadData = async () => {
     const data = props.datas;
-    load.value = { total: data.value, status: data.status, bulan: moment().format('MMMM YYYY') };
+    load.value = { cff: data.cff, cfi: data.cfi, period: data.period };
 };
 
 const routerLink = (path) => {
@@ -35,7 +34,7 @@ watch(() => props.datas, loadData, { immediate: true });
     <div class="bg-gray-800 p-2 rounded-xl shadow-xl flex h-full gap-3 items-start">
         <div class="flex flex-col h-full w-full">
             <div class="flex items-center gap-3">
-                <span class="font-bold w-full text-[0.8vw]">Saldo Tunai (dlm IDR Miliar)</span>
+                <span class="font-bold w-full text-[0.8vw]">Jadwal Tagihan (dlm IDR Miliar)</span>
                 <button
                     @click="routerLink('revenue')"
                     class="animate-pulse hover:animate-none p-4 w-[1.5vw] h-[1.5vw] cursor-pointer bg-transparent text-emerald-500 rotate-180 hover:rotate-[-180] hover:bg-black hover:text-amber-500 rounded-full flex items-center justify-center transition-all duration-500"
@@ -44,14 +43,24 @@ watch(() => props.datas, loadData, { immediate: true });
                 </button>
             </div>
             <div class="flex h-full items-center gap-3">
-                <img src="/images/icon/financial/revenue.png" alt="Icon" class="w-[3vw] h-[3vw] mr-1" />
-                <div class="flex flex-col gap-2">
-                    <div class="flex gap-2 items-center" :class="load.status == 'up' ? 'text-green-500' : load.status == 'down' ? 'text-red-500' : 'text-amber-500'">
-                        <span class="font-bold text-[1.5vw]">{{ load.total }}</span>
-                        <i :class="`pi pi-sort-${load.status}-fill`" style="font-size: 1vw" />
+                <div class="flex gap-1 w-full h-full">
+                    <div class="flex flex-col gap-1 p-2 rounded-xl bg-black w-full">
+                        <div class="flex gap-2 justify-between items-center">
+                            <span class="font-bold text-[0.9vw]">CFF</span>
+                            <span class="text-cyan-500 font-bold text-[0.7vw]">s/d {{ load.period }}</span>
+                        </div>
+                        <div class="flex gap-2 items-center text-amber-500">
+                            <span class="font-bold text-[1.2vw]">{{ load.cff }}</span>
+                            <!-- <i class="pi pi-sort" style="font-size: 0.8vw"></i> -->
+                        </div>
                     </div>
-                    <div class="text-[0.8vw] flex flex-col w-full">
-                        <span class="text-cyan-500 font-bold">s/d {{ load.bulan }}</span>
+                    <div class="flex flex-col gap-1 p-2 rounded-xl bg-black w-full">
+                        <div class="flex gap-2 justify-between items-center">
+                            <span class="font-bold text-[0.9vw]">CFI</span>
+                        </div>
+                        <div class="flex gap-2 items-center text-amber-500">
+                            <span class="font-bold text-[1.2vw]">{{ load.cfi }}</span>
+                        </div>
                     </div>
                 </div>
             </div>

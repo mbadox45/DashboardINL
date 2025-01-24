@@ -21,15 +21,31 @@ export default new (class levyRoutersPenjualanController {
             if (months != null) {
                 const produk = await productMasterController.getAll();
                 const listProduct = produk.filter((item) => item.jenis == 'bulk');
-                console.log(listProduct);
-                return months[0].kurs.map((kurs) => ({
-                    tanggal: kurs.tanggal,
-                    marketReuters: listProduct.map((product) => product.marketReuters.find((m) => m.tanggal === kurs.tanggal)),
-                    levyduty: listProduct.map((product) => product.levyduty.find((l) => l.tanggal === kurs.tanggal)),
-                    marketReutersExcldLevyDuty: listProduct.map((product) => product.marketReutersExcldLevyDuty.find((m) => m.tanggal === kurs.tanggal)),
-                    marketIdr: listProduct.map((product) => product.marketIdr.find((m) => m.tanggal === kurs.tanggal))
-                }));
-                // return list;
+                const awal = new Date(form.tanggalAwal); // 2023-01-01
+                const akhir = new Date(form.tanggalAkhir); // 2025-01-28
+                const dates = [];
+                let currentDate = awal;
+                const loadkurs = months[0].kurs;
+
+                while (currentDate <= akhir) {
+                    const tgl = currentDate.toISOString().split('T')[0];
+                    const kurs = loadkurs.find((item) => item.tanggal == tgl);
+                    dates.push({
+                        tanggal: tgl,
+                        kursValue: kurs.value
+                    }); // Format YYYY-MM-DD
+
+                    // Tambah 1 hari
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+                // return months[0].kurs.map((kurs) => ({
+                //     tanggal: kurs.tanggal,
+                //     marketReuters: listProduct.map((product) => product.marketReuters.find((m) => m.tanggal === kurs.tanggal)),
+                //     levyduty: listProduct.map((product) => product.levyduty.find((l) => l.tanggal === kurs.tanggal)),
+                //     marketReutersExcldLevyDuty: listProduct.map((product) => product.marketReutersExcldLevyDuty.find((m) => m.tanggal === kurs.tanggal)),
+                //     marketIdr: listProduct.map((product) => product.marketIdr.find((m) => m.tanggal === kurs.tanggal))
+                // }));
+                return dates;
             } else {
                 return [];
             }

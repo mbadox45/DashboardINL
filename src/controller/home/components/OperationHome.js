@@ -17,7 +17,7 @@ export const cpoOlahVsRKAP = () => {
             <span class="items-center rounded-xl w-full font-bold bg-black flex py-1.5 px-3"><span class="text-green-500 w-full text-[0.8vw]">Utility</span><span class="text-pink-600 text-[0.9vw]"> 66,000,000</span> </span>
             <div class="flex gap-2 w-full">
                 <div class="w-full p-2 flex flex-row items-end justify-between font-bold bg-black rounded-xl">
-                    <span class="text-[0.7vw] text-cyan-600">Cost Production</span>
+                    <span class="text-[0.7vw] text-cyan-600">Beban Produksi</span>
                     <span class="text-[0.8vw] text-amber-600">119,147,342,712</span>
                 </div>
                 <div class="w-full p-2 flex flex-row items-end justify-between font-bold bg-black rounded-xl">
@@ -43,7 +43,7 @@ export const pemakaianMaterial = () => {
     const versus = [
         `<div class="w-full flex items-end gap-2 mt-2">
             <div class="flex flex-col w-full gap-2">
-                <span class="text-[0.8vw] font-bold text-green-500">Chemical Consumption</span>
+                <span class="text-[0.8vw] font-bold text-green-500">Pemakaian Bahan Kimia (Kg)</span>
                 <div class="grid grid-cols-2 gap-2 text-amber-500">
                     <div class="py-[0.9px] px-3 rounded-xl flex flex-col gap-1 bg-black">
                         <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-green-500">
@@ -54,7 +54,7 @@ export const pemakaianMaterial = () => {
                     <div class="py-[0.9px] px-3 rounded-xl flex flex-col gap-1 bg-black">
                         <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-amber-500">
                             <span class="text-[0.8vw] font-bold">159,041</span>
-                            <span class="font-bold text-[0.7vw] uppercase ">Spent Bleaching Earth (BE)</span>
+                            <span class="font-bold text-[0.7vw] uppercase ">Total Pemakaian</span>
                         </div>
                     </div>
                     <div class="col-span-2 py-[0.9px] px-3 rounded-xl flex flex-col gap-1 bg-black">
@@ -81,7 +81,7 @@ export const pemakaianMaterial = () => {
         </div>`,
         `<div class="w-full flex items-end gap-2 mt-2">
             <div class="flex flex-col w-full gap-2">
-                <span class="text-[0.8vw] font-bold text-green-500">Gas Consumption (mmbtu)</span>
+                <span class="text-[0.8vw] font-bold text-green-500">Pemakaian Gas (mmbtu)</span>
                 <div class="grid grid-cols-2 gap-2 text-amber-500">
                     <div class="py-[0.9px] px-3 rounded-xl flex flex-col gap-1 bg-black">
                         <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-green-500">
@@ -126,7 +126,7 @@ export const pemakaianMaterial = () => {
         </div>`,
         `<div class="w-full flex items-end gap-2 mt-2">
             <div class="flex flex-col w-full gap-2">
-                <span class="text-[0.8vw] font-bold text-green-500">Steam Consumption (Kg)</span>
+                <span class="text-[0.8vw] font-bold text-green-500">Pemakaian Steam (Kg)</span>
                 <div class="grid grid-cols-2 gap-2 text-amber-500">
                     <div class="py-[0.9px] px-3 rounded-xl flex flex-col gap-1 bg-black">
                         <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-green-500">
@@ -171,7 +171,7 @@ export const pemakaianMaterial = () => {
         </div>`,
         `<div class="w-full flex items-end gap-2 mt-2">
             <div class="flex flex-col w-full gap-2">
-                <span class="text-[0.8vw] font-bold text-green-500">Water Consumption (m³)</span>
+                <span class="text-[0.8vw] font-bold text-green-500">Pemakaian Air (m³)</span>
                 <div class="grid grid-cols-2 gap-2 text-amber-500">
                     <div class="py-[0.9px] px-3 rounded-xl flex flex-col gap-1 bg-black">
                         <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-green-500">
@@ -224,7 +224,7 @@ export const pemakaianMaterial = () => {
         </div>`,
         `<div class="w-full flex items-end gap-2 mt-2">
             <div class="flex flex-col w-full gap-2">
-                <span class="text-[0.8vw] font-bold text-green-500">Power Consumption (kWh)</span>
+                <span class="text-[0.8vw] font-bold text-green-500">Pemakaian Listrik (kWh)</span>
                 <div class="grid grid-cols-2 gap-2 text-amber-500">
                     <div class="py-[0.9px] px-3 rounded-xl flex flex-col gap-1 bg-black">
                         <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-green-500">

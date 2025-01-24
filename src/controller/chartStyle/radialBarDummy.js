@@ -213,7 +213,7 @@ export const pieChartApex = (label, qty) => {
             background: 'transparent',
             foreColor: '#ffffff',
             toolbar: {
-                show: true
+                show: false
             }
         },
         labels: label,

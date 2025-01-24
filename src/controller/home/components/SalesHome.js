@@ -3,7 +3,7 @@ import { pieChartApex } from '@/controller/chartStyle/radialBarDummy';
 export const QtyPenjualanBulky = () => {
     const qty = [10000, 15000, 50000, 25000];
     const label = ['PFAD', 'RBDPO', 'RBD Stearin', 'RBD Olein'];
-    const name = 'Qty Penjualan Bulky (in MT)';
+    const name = 'Qty Penjualan Bulky (dlm MT)';
     const chartData = pieChartApex(label, qty); // Pass qty as an additional parameter
     const colspan = 'col-span-2';
     const value = null;
@@ -31,7 +31,7 @@ export const QtyPenjualanBulky = () => {
 export const QtyPenjualanRetail = () => {
     const qty = [10000, 15000, 50000, 25000];
     const label = ['PFAD', 'RBDPO', 'RBD Stearin', 'RBD Olein'];
-    const name = 'Qty Penjualan Retail (in Box)';
+    const name = 'Qty Penjualan Retail (dlm Box)';
     const options = pieChartApex(label, qty);
     const colspan = 'col-span-2';
     const value = null;
@@ -57,7 +57,7 @@ export const QtyPenjualanRetail = () => {
 };
 
 export const outstandingCPo = () => {
-    const name = 'Outstanding CPO (in MT)';
+    const name = 'CPO yang belum dikirim (in MT)';
     const colspan = null;
     const options = null;
     const value = null;
@@ -113,12 +113,12 @@ export const saldoPe = () => {
 };
 
 export const avgCPOKpbn = () => {
-    const name = 'Avg CPO KPBN';
+    const name = 'CPO KPBN';
     const options = null;
     const colspan = null;
     const value = `<div class="flex justify-between gap-2 items-center">
-        <span class="font-bold text-[0.7vw] text-cyan-600">Average</span>
-        <span class="font-bold text-[0.7vw] text-cyan-600">Today</span>
+        <span class="font-bold text-[0.7vw] text-cyan-600">Rata - Rata</span>
+        <span class="font-bold text-[0.7vw] text-cyan-600">Nilai Terakhir</span>
     </div>`;
     // Jika Pendapatan > RKAP warna jadi green 600, sesuai kan periode
     const versus = [
@@ -132,7 +132,7 @@ export const avgCPOKpbn = () => {
     </div>
     <div class="flex flex-col items-center">
         <span class="text-[0.6vw] text-cyan-500 font-bold">31 Dec 2024</span>
-        <span class="text-[0.6vw] text-cyan-500 font-bold">Jisdor : 15,000</span>
+        <span class="text-[0.6vw] text-cyan-500 font-bold">Kurs : 15,000</span>
     </div>`
     ];
     const color = 'text-red-500';

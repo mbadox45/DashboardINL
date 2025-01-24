@@ -16,12 +16,36 @@ export const valueColorPersenCondition = (val) => {
     return result;
 };
 
+export const valueColorPerbandinganCondition = (val1, val2) => {
+    const total = (Number(val1) - Number(val2)).toFixed(2);
+    let result = 0;
+    let color = '';
+    let icon = '';
+    if (Number(val1) < Number(val2)) {
+        color = 'text-red-500';
+        result = total * -1;
+        icon = 'pi pi-sort-down-fill';
+    } else if (Number(val2) == Number(val1)) {
+        color = 'text-amber-500';
+        result = total;
+    } else {
+        color = 'text-green-500';
+        result = total;
+        icon = 'pi pi-sort-up-fill';
+    }
+    return {
+        color: color,
+        result: result,
+        icon: icon
+    };
+};
+
 export const valueColorIntCondition = (val) => {
     let result = '';
     if (val < 0) {
         result = 'text-red-500';
     } else {
-        result = 'text-green-500';
+        result = 'text-amber-500';
     }
     return result;
 };

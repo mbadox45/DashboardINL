@@ -1,49 +1,399 @@
-import { valueToBilion } from '@/controller/dummyController';
+import { formatCurrency, valueToBilion } from '@/controller/dummyController';
+import cashFlowMovementController from '@/controller/getApiFromThisApp/cashFlowMovement/cashFlowMovementController';
+import cashFlowScheduleController from '@/controller/getApiFromThisApp/cashFlowSchedule/cashFlowScheduleController';
+import cpoKpbnController from '@/controller/getApiFromThisApp/cpoKpbn/cpoKpbnController';
+import hargaFinanceController from '@/controller/getApiFromThisApp/harga/hargaFinanceController';
+import kursController from '@/controller/getApiFromThisApp/kurs/kursController';
+import productMasterController from '@/controller/getApiFromThisApp/master/productMasterController';
 import profitabilityController from '@/controller/getApiFromThisApp/profitability/profitabilityController';
+import moment from 'moment';
 
 export default new (class financeHomeController {
+    hargaSpotInvRitel = async (form) => {
+        try {
+            const response = await hargaFinanceController.getByPeriod(form);
+            const list = [];
+            const produk = await productMasterController.getAll();
+            const produkRitel = produk.filter((item) => item.jenis == 'ritel');
+            if (response != null) {
+                const bulk = response.latestHargaRitel;
+                if (bulk != null) {
+                    for (let i = 0; i < produkRitel.length; i++) {
+                        const dataHarga = bulk.find((item) => item.id_product == produkRitel[i].id);
+                        list.push({
+                            produk: produkRitel[i].name,
+                            spotRp: formatCurrency(Number(dataHarga.spot).toFixed(2)),
+                            spotUsd: formatCurrency(Number(dataHarga.hargaAsingSpot).toFixed(2)),
+                            invRp: formatCurrency(Number(dataHarga.inventory).toFixed(2)),
+                            invUsd: formatCurrency(Number(dataHarga.hargaAsingInventory).toFixed(2)),
+                            tanggal: moment(dataHarga.tanggal).format('DD MMMM YYYY')
+                        });
+                    }
+                } else {
+                    for (let i = 0; i < produkRitel.length; i++) {
+                        list.push({
+                            produk: produkRitel[i].name,
+                            spotRp: 0,
+                            spotUsd: 0,
+                            invRp: 0,
+                            invUsd: 0,
+                            tanggal: ''
+                        });
+                    }
+                }
+            } else {
+                for (let i = 0; i < produkRitel.length; i++) {
+                    list.push({
+                        produk: produkRitel[i].name,
+                        spotRp: 0,
+                        spotUsd: 0,
+                        invRp: 0,
+                        invUsd: 0,
+                        tanggal: ''
+                    });
+                }
+            }
+            return list;
+        } catch (error) {
+            const produk = await productMasterController.getAll();
+            const produkRitel = produk.filter((item) => item.jenis == 'bulk');
+            const list = [];
+            for (let i = 0; i < produkRitel.length; i++) {
+                list.push({
+                    produk: produkRitel[i].name,
+                    spotRp: 0,
+                    spotUsd: 0,
+                    invRp: 0,
+                    invUsd: 0,
+                    tanggal: ''
+                });
+            }
+            return list;
+        }
+    };
+    hargaSpotInvBulk = async (form) => {
+        try {
+            const response = await hargaFinanceController.getByPeriod(form);
+            const list = [];
+            const produk = await productMasterController.getAll();
+            const produkBulk = produk.filter((item) => item.jenis == 'bulk');
+            if (response != null) {
+                const bulk = response.latestHargaBulk;
+                if (bulk != null) {
+                    for (let i = 0; i < produkBulk.length; i++) {
+                        const dataHarga = bulk.find((item) => item.id_product == produkBulk[i].id);
+                        list.push({
+                            produk: produkBulk[i].name,
+                            spotRp: formatCurrency(Number(dataHarga.spot).toFixed(2)),
+                            spotUsd: formatCurrency(Number(dataHarga.hargaAsingSpot).toFixed(2)),
+                            invRp: formatCurrency(Number(dataHarga.inventory).toFixed(2)),
+                            invUsd: formatCurrency(Number(dataHarga.hargaAsingInventory).toFixed(2)),
+                            tanggal: moment(dataHarga.tanggal).format('DD MMMM YYYY')
+                        });
+                    }
+                } else {
+                    for (let i = 0; i < produkBulk.length; i++) {
+                        list.push({
+                            produk: produkBulk[i].name,
+                            spotRp: 0,
+                            spotUsd: 0,
+                            invRp: 0,
+                            invUsd: 0,
+                            tanggal: ''
+                        });
+                    }
+                }
+            } else {
+                for (let i = 0; i < produkBulk.length; i++) {
+                    list.push({
+                        produk: produkBulk[i].name,
+                        spotRp: 0,
+                        spotUsd: 0,
+                        invRp: 0,
+                        invUsd: 0,
+                        tanggal: ''
+                    });
+                }
+            }
+            return list;
+        } catch (error) {
+            const produk = await productMasterController.getAll();
+            const produkBulk = produk.filter((item) => item.jenis == 'bulk');
+            const list = [];
+            for (let i = 0; i < produkBulk.length; i++) {
+                list.push({
+                    produk: produkBulk[i].name,
+                    spotRp: 0,
+                    spotUsd: 0,
+                    invRp: 0,
+                    invUsd: 0,
+                    tanggal: ''
+                });
+            }
+            return list;
+        }
+    };
+    kursMataUang = async (form) => {
+        try {
+            const response = await kursController.getByPeriod(form);
+            if (response != null) {
+                const load = response[response.length - 1];
+                const kurs = {
+                    tanggal: moment(load.tanggal).format('DD MMMM YYYY'),
+                    value: formatCurrency(Number(load.value).toFixed(2)),
+                    matauang: load.mata_uang.name,
+                    symbol: load.mata_uang.symbol,
+                    remark: load.mata_uang.remark
+                };
+                return kurs;
+            } else {
+                const kurs = {
+                    tanggal: moment(form.tanggalAkhir).format('DD MMMM YYYY'),
+                    value: '-',
+                    matauang: '-',
+                    symbol: '-',
+                    remark: '-'
+                };
+                return kurs;
+            }
+        } catch (error) {
+            const kurs = {
+                tanggal: moment(form.tanggalAkhir).format('DD MMMM YYYY'),
+                value: '-',
+                matauang: '-',
+                symbol: '-',
+                remark: '-'
+            };
+            return kurs;
+        }
+    };
+    cpoKpbn = async (form) => {
+        try {
+            const response = await cpoKpbnController.getByPeriod(form);
+            if (response != null) {
+                return {
+                    averageAsingTotal: formatCurrency(Number(response.averageAsingTotal).toFixed(2)),
+                    averageKurs: formatCurrency(Number(response.averageKurs).toFixed(2)),
+                    averageTotal: formatCurrency(Number(response.averageTotal).toFixed(2)),
+                    latestCpoDate: moment(response.latestCpoDate).format('DD MMMM YYYY'),
+                    latestCpoValue: formatCurrency(Number(response.latestCpoValue).toFixed(2)),
+                    latestKursDate: moment(response.latestKursDate).format('DD MMMM YYYY'),
+                    latestKursValue: formatCurrency(Number(response.latestKursValue).toFixed(2)),
+                    latestAsingTotal: formatCurrency(((Number(response.latestCpoValue) / Number(response.latestKursValue)) * 1000).toFixed(2))
+                };
+            } else {
+                return {
+                    averageAsingTotal: 0,
+                    averageKurs: 0,
+                    averageTotal: 0,
+                    latestCpoDate: '',
+                    latestCpoValue: 0,
+                    latestKursDate: '',
+                    latestKursValue: 0
+                };
+            }
+        } catch (error) {
+            return {
+                averageAsingTotal: 0,
+                averageKurs: 0,
+                averageTotal: 0,
+                latestCpoDate: '',
+                latestCpoValue: 0,
+                latestKursDate: '',
+                latestKursValue: 0
+            };
+        }
+    };
+    paySchedule = async (form) => {
+        try {
+            const response = await cashFlowScheduleController.getByPeriod(form);
+            const cff = response.kategori.find((item) => item.name.toLowerCase().includes('funding'));
+            const cfi = response.kategori.find((item) => item.name.toLowerCase().includes('investment'));
+            const last = cff.period[cff.period.length - 1];
+
+            const result = {
+                cff: valueToBilion(Number(cff.total)),
+                cfi: valueToBilion(Number(cfi.total)),
+                period: moment(last.month > 9 ? `${last.year.toString()}-${last.month.toString()}-01` : `${last.year.toString()}-0${last.month.toString()}-01`).format('MMMM YYYY')
+            };
+            return result;
+        } catch (error) {
+            return {
+                cff: 0,
+                cfi: 0,
+                period: '-'
+            };
+        }
+    };
+    cashBalance = async (form) => {
+        try {
+            const response = await cashFlowMovementController.getByPeriod(form);
+            let balance;
+            let cashFlowMovement;
+            if (response != null) {
+                // Cash Balance
+                if (response?.latestCashBalance) {
+                    const dataCashBalance = response?.latestCashBalance;
+                    balance = {
+                        value: valueToBilion(Number(dataCashBalance.value)),
+                        status: dataCashBalance.status,
+                        difference: valueToBilion(Number(dataCashBalance.difference))
+                    };
+                } else {
+                    balance = {
+                        value: 0,
+                        status: 'none',
+                        difference: 0
+                    };
+                }
+
+                // Cash Flow Movement
+                if (response?.thisYear?.data) {
+                    const dataCashFlowMovement = response?.thisYear?.data;
+                    const thisMonth = dataCashFlowMovement[dataCashFlowMovement.length - 1];
+                    if (thisMonth.detail.length > 0) {
+                        const starting = thisMonth.detail.find((item) => item.name.toLowerCase().includes('starting'));
+                        const cfoIn = thisMonth.detail.find((item) => item.name.toLowerCase().includes('operating in'));
+                        const cfoOut = thisMonth.detail.find((item) => item.name.toLowerCase().includes('operating out'));
+                        const cfi = thisMonth.detail.find((item) => item.name.toLowerCase().includes('investment'));
+                        const cff = thisMonth.detail.find((item) => item.name.toLowerCase().includes('funding'));
+                        let total = 0;
+                        const detail = thisMonth.detail;
+                        const totalPositive = detail
+                            .filter((item) => item.nilai === 'positive' && item.name !== 'Starting Cash Balanced') // Ambil item dengan nilai "positive"
+                            .map((item) => item.value) // Ambil hanya nilai `value`
+                            .reduce((acc, val) => acc + val, 0); // Jumlahkan nilai
+
+                        const totalNegative = detail
+                            .filter((item) => item.nilai === 'negative' && item.name !== 'Starting Cash Balanced') // Ambil item dengan nilai "negative"
+                            .map((item) => item.value) // Ambil hanya nilai `value`
+                            .reduce((acc, val) => acc + val, 0);
+
+                        total = totalPositive - totalNegative;
+                        cashFlowMovement = {
+                            starting: valueToBilion(Number(starting.value)),
+                            startingStatus: starting.nilai,
+                            cfoIn: valueToBilion(Number(cfoIn.value)),
+                            cfoInStatus: cfoIn.nilai,
+                            cfoOut: valueToBilion(Number(cfoOut.value)),
+                            cfoOutStatus: cfoOut.nilai,
+                            cfi: valueToBilion(Number(cfi.value)),
+                            cfiStatus: cfi.nilai,
+                            cff: valueToBilion(Number(cff.value)),
+                            cffStatus: cff.nilai,
+                            total: valueToBilion(Number(total))
+                        };
+                    } else {
+                        cashFlowMovement = {
+                            cfoIn: 0,
+                            cfoInStatus: 'negative',
+                            cfoOut: 0,
+                            cfoOutStatus: 'negative',
+                            cfi: 0,
+                            cfiStatus: 'negative',
+                            cff: 0,
+                            cffStatus: 'negative',
+                            total: 0
+                        };
+                    }
+                } else {
+                    balance = {
+                        value: 0,
+                        status: 'none',
+                        difference: 0
+                    };
+                    cashFlowMovement = {
+                        cfoIn: 0,
+                        cfoInStatus: 'negative',
+                        cfoOut: 0,
+                        cfoOutStatus: 'negative',
+                        cfi: 0,
+                        cfiStatus: 'negative',
+                        cff: 0,
+                        cffStatus: 'negative',
+                        total: 0
+                    };
+                }
+
+                const result = {
+                    cashBalance: balance,
+                    cashFlowMovement: cashFlowMovement
+                };
+                return result;
+            } else {
+                const balance = {
+                    value: 0,
+                    status: 'none',
+                    difference: 0
+                };
+                const cashFlowMovement = {
+                    cfoIn: 0,
+                    cfoInStatus: 'equals',
+                    cfoOut: 0,
+                    cfoOutStatus: 'equals',
+                    cfi: 0,
+                    cfiStatus: 'equals',
+                    cff: 0,
+                    cffStatus: 'equals',
+                    total: 0
+                };
+                const result = {
+                    cashBalance: balance,
+                    cashFlowMovement: cashFlowMovement
+                };
+                return result;
+            }
+        } catch (error) {
+            const balance = {
+                value: 0,
+                status: 'none',
+                difference: 0
+            };
+            const cashFlowMovement = {
+                cfoIn: 0,
+                cfoInStatus: 'equals',
+                cfoOut: 0,
+                cfoOutStatus: 'equals',
+                cfi: 0,
+                cfiStatus: 'equals',
+                cff: 0,
+                cffStatus: 'equals',
+                total: 0
+            };
+            const result = {
+                cashBalance: balance,
+                cashFlowMovement: cashFlowMovement
+            };
+            return result;
+        }
+    };
     revenue = async (form) => {
         try {
             const response = await profitabilityController.getByPeriod(form);
             if (response != null) {
-                const monthsThisYear = response.thisYear.months;
-                const monthsLastYear = response.lastYear.months;
-
+                const monthsThisYear = response.latestMonth;
                 // If thisYear has data, get the latest month
-                if (monthsThisYear.length > 0) {
-                    const latestMonth = monthsThisYear.reduce((prev, current) => (prev.month > current.month ? prev : current));
-
+                if (monthsThisYear != null) {
                     const thisYearLatestMonth = {
-                        month: latestMonth.month,
-                        pendapatan: valueToBilion(latestMonth.pendapatan),
-                        targetPendapatanRkap: valueToBilion(latestMonth.targetPendapatanRkap),
-                        persenPendapatan: Number(latestMonth.targetPendapatanRkap) == 0 ? 0 : ((Number(latestMonth.pendapatan) / Number(latestMonth.targetPendapatanRkap)) * 100).toFixed(0),
-                        labaKotor: valueToBilion(latestMonth.labaKotor),
-                        gpmPercent: Number(latestMonth.gpmPercent).toFixed(2),
-                        ebitda: valueToBilion(latestMonth.ebitda),
-                        ebitdaPercent: Number(latestMonth.ebitdaPercent).toFixed(2),
-                        labaBersih: valueToBilion(latestMonth.labaBersih),
-                        npmPercent: Number(latestMonth.npmPercent).toFixed(2),
-                        details: latestMonth.details
-                    };
-                    return thisYearLatestMonth;
-                }
-                // If thisYear has no data, use last year's data
-                else if (monthsThisYear.length === 0 && monthsLastYear.length > 0) {
-                    const latestMonth = monthsLastYear.reduce((prev, current) => (prev.month > current.month ? prev : current));
-
-                    const thisYearLatestMonth = {
-                        month: latestMonth.month,
-                        pendapatan: valueToBilion(latestMonth.pendapatan),
-                        targetPendapatanRkap: valueToBilion(latestMonth.targetPendapatanRkap),
-                        persenPendapatan: Number(latestMonth.targetPendapatanRkap) == 0 ? 0 : ((Number(latestMonth.pendapatan) / Number(latestMonth.targetPendapatanRkap)) * 100).toFixed(0),
-                        labaKotor: valueToBilion(latestMonth.labaKotor),
-                        gpmPercent: Number(latestMonth.gpmPercent).toFixed(2),
-                        ebitda: valueToBilion(latestMonth.ebitda),
-                        ebitdaPercent: Number(latestMonth.ebitdaPercent).toFixed(2),
-                        labaBersih: valueToBilion(latestMonth.labaBersih),
-                        npmPercent: Number(latestMonth.npmPercent).toFixed(2),
-                        details: latestMonth.details
+                        month: monthsThisYear.month,
+                        pendapatan: valueToBilion(monthsThisYear.pendapatan),
+                        targetPendapatanRkap: valueToBilion(monthsThisYear.targetPendapatanRkap),
+                        persenPendapatan: Number(monthsThisYear.targetPendapatanRkap) == 0 ? 0 : ((Number(monthsThisYear.pendapatan) / Number(monthsThisYear.targetPendapatanRkap)) * 100).toFixed(0),
+                        labaKotor: valueToBilion(monthsThisYear.labaKotor),
+                        labaKotorLastMonth: valueToBilion(monthsThisYear.labaKotorLastMonth),
+                        gpmPercent: Number(monthsThisYear.gpmPercent).toFixed(2),
+                        gpmPercentLastMonth: Number(monthsThisYear.gpmPercentLastMonth).toFixed(2),
+                        ebitda: valueToBilion(monthsThisYear.ebitda),
+                        ebitdaLastMonth: valueToBilion(monthsThisYear.ebitdaLastMonth),
+                        ebitdaPercent: Number(monthsThisYear.ebitdaPercent).toFixed(2),
+                        ebitdaPercentLastMonth: Number(monthsThisYear.ebitdaPercentLastMonth).toFixed(2),
+                        labaBersih: valueToBilion(monthsThisYear.labaBersih),
+                        labaBersihLastMonth: valueToBilion(monthsThisYear.labaBersihLastMonth),
+                        npmPercent: Number(monthsThisYear.npmPercent).toFixed(2),
+                        npmPercentLastMonth: Number(monthsThisYear.npmPercentLastMonth).toFixed(2),
+                        totalEbitda: valueToBilion(monthsThisYear.totalEbitda),
+                        totalLabaKotor: valueToBilion(monthsThisYear.totalLabaKotor),
+                        totallabaBersih: valueToBilion(monthsThisYear.totallabaBersih)
                     };
                     return thisYearLatestMonth;
                 }
@@ -55,20 +405,61 @@ export default new (class financeHomeController {
                         targetPendapatanRkap: 0,
                         persenPendapatan: 0,
                         labaKotor: 0,
+                        labaKotorLastMonth: 0,
                         gpmPercent: 0,
                         ebitda: 0,
+                        ebitdaLastMonth: 0,
                         ebitdaPercent: 0,
                         labaBersih: 0,
+                        labaBersihLastMonth: 0,
                         npmPercent: 0,
-                        details: 0
+                        totalEbitda: 0,
+                        totalLabaKotor: 0,
+                        totallabaBersih: 0
                     };
                     return thisYearLatestMonth;
                 }
             } else {
-                return [];
+                const thisYearLatestMonth = {
+                    month: 0,
+                    pendapatan: 0,
+                    targetPendapatanRkap: 0,
+                    persenPendapatan: 0,
+                    labaKotor: 0,
+                    labaKotorLastMonth: 0,
+                    gpmPercent: 0,
+                    ebitda: 0,
+                    ebitdaLastMonth: 0,
+                    ebitdaPercent: 0,
+                    labaBersih: 0,
+                    labaBersihLastMonth: 0,
+                    npmPercent: 0,
+                    totalEbitda: 0,
+                    totalLabaKotor: 0,
+                    totallabaBersih: 0
+                };
+                return thisYearLatestMonth;
             }
         } catch (error) {
-            return [];
+            const thisYearLatestMonth = {
+                month: 0,
+                pendapatan: 0,
+                targetPendapatanRkap: 0,
+                persenPendapatan: 0,
+                labaKotor: 0,
+                labaKotorLastMonth: 0,
+                gpmPercent: 0,
+                ebitda: 0,
+                ebitdaLastMonth: 0,
+                ebitdaPercent: 0,
+                labaBersih: 0,
+                labaBersihLastMonth: 0,
+                npmPercent: 0,
+                totalEbitda: 0,
+                totalLabaKotor: 0,
+                totallabaBersih: 0
+            };
+            return thisYearLatestMonth;
         }
     };
 })();

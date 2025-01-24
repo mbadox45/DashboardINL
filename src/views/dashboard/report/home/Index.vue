@@ -7,15 +7,14 @@ import financeHomeController from '@/controller/home/controllerHomePage/financeH
 
 // Components
 import HomeDash from '@/controller/home/homeDash';
-import CardValues from '@/views/dashboard/report/home/components/financial/CardFinancialValues.vue';
 import ImagesHome from '@/views/dashboard/report/home/components/ImagesHome.vue';
 import CardOperationValues from '@/views/dashboard/report/home/components/operation/CardOperationValues.vue';
 import CardSales from '@/views/dashboard/report/home/components/sales/CardSalesValues.vue';
-import CardScmSpotInventory from '@/views/dashboard/report/home/components/scm/CardSCMSpotInventory.vue';
 import CardScmValues from '@/views/dashboard/report/home/components/scm/CardSCMValues.vue';
 import CardSdm from '@/views/dashboard/report/home/components/sdm/CardSdmValues.vue';
 
 import CardHomeFinance from '@/views/dashboard/report/finance/CardHomeFinance.vue';
+import HargaSpotFinance from '@/views/dashboard/report/harga/HargaSpotFinance.vue';
 // import moment from 'moment';
 
 const listCardFinancial = ref([]);
@@ -30,6 +29,12 @@ const listDelay = ref([]);
 const activePage = ref(0);
 
 const dataRevenue = ref({});
+const dataCbDanCfm = ref({});
+const dataPaySchedule = ref({});
+const dataCpoKpbn = ref({});
+const dataKurs = ref({});
+const dataHargaSpotInvBulk = ref([]);
+const dataHargaSpotInvRitel = ref([]);
 
 onMounted(() => {
     loadData();
@@ -43,15 +48,35 @@ const loadAllData = async () => {
         // tanggalAwal: moment().format('YYYY-MM-01'),
         // tanggalAkhir: moment().format('YYYY-MM-DD'),
         tanggalAwal: '2023-01-01',
-        tanggalAkhir: '2024-01-31'
+        tanggalAkhir: '2024-02-28'
     };
     await loadDataControllerFinance(form);
 };
 
 const loadDataControllerFinance = async (form) => {
-    const response = await financeHomeController.revenue(form);
-    dataRevenue.value = response;
-    console.log(response);
+    // Profitability
+    const revenue = await financeHomeController.revenue(form);
+    dataRevenue.value = revenue;
+
+    // Cash Balance & Cash Flow Movement
+    const cashBalance = await financeHomeController.cashBalance(form);
+    dataCbDanCfm.value = cashBalance;
+
+    // Pay Schedule
+    const paySchedule = await financeHomeController.paySchedule(form);
+    dataPaySchedule.value = paySchedule;
+
+    const cpoKpbn = await financeHomeController.cpoKpbn(form);
+    dataCpoKpbn.value = cpoKpbn;
+
+    const kursMataUang = await financeHomeController.kursMataUang(form);
+    dataKurs.value = kursMataUang;
+
+    const hargaSpotInvBulk = await financeHomeController.hargaSpotInvBulk(form);
+    dataHargaSpotInvBulk.value = hargaSpotInvBulk;
+
+    const hargaSpotInvRitel = await financeHomeController.hargaSpotInvRitel(form);
+    dataHargaSpotInvRitel.value = hargaSpotInvRitel;
 };
 
 const updateDates = async (dates) => {
@@ -241,6 +266,7 @@ const loadDelay = async () => {
                                 <card-sdm v-for="(item, index) in listCardPackaging" :key="index" :datas="item" :style="`animation: fadein ${index}s ease-in-out`" />
                             </div>
                         </div>
+                        <span class="font-bold w-full text-[0.8vw]">Sales & Marketing</span>
                         <div class="flex flex-col gap-2">
                             <div class="grid grid-cols-1 gap-2">
                                 <card-sales v-for="(item, index) in listCardSalesPerformance" :key="index" :datas="item" :style="`animation: fadein ${index}s ease-in-out`" />
@@ -248,17 +274,10 @@ const loadDelay = async () => {
                         </div>
                     </div>
                     <div class="col-span-2 flex flex-col gap-3">
-                        <card-home-finance :datarevenue="dataRevenue" />
-                        <div class="flex flex-col">
-                            <div class="grid grid-cols-3 gap-2">
-                                <card-values v-for="(item, index) in listCardFinancial" :key="index" :datas="item" :style="`animation: fadein 1s ease-in-out`" />
-                            </div>
-                        </div>
-                        <div class="flex flex-col">
-                            <div class="grid grid-cols-4 gap-2">
-                                <card-scm-spot-inventory v-for="(item, index) in listCardHarga" :key="index" :datas="item" :style="`animation: fadein 1s ease-in-out`" />
-                            </div>
-                        </div>
+                        <span class="font-bold w-full text-[0.8vw]">Financial</span>
+                        <card-home-finance :datarevenue="dataRevenue" :datacash="dataCbDanCfm" :datapayschedule="dataPaySchedule" :datacpokpbn="dataCpoKpbn" :datakurs="dataKurs" />
+                        <harga-spot-finance :databulky="dataHargaSpotInvBulk" :dataretail="dataHargaSpotInvRitel" />
+                        <span class="font-bold w-full text-[0.8vw]">Production</span>
                         <div class="flex flex-col gap-2">
                             <div class="grid grid-cols-2 gap-2">
                                 <card-operation-values v-for="(item, index) in listCardOperation" :key="index" :datas="item" :style="`animation: fadein ${index}s ease-in-out`" />
@@ -272,11 +291,13 @@ const loadDelay = async () => {
                     </div>
                     <div class="col-span-2 flex flex-col gap-3">
                         <div class="flex flex-col gap-2">
+                            <span class="font-bold w-full text-[0.8vw]">Supply Chain</span>
                             <div class="grid grid-cols-3 gap-2">
                                 <card-scm-values v-for="(item, index) in listCardSCM" :key="index" :datas="item" :style="`animation: fadein 1s ease-in-out`" />
                             </div>
                         </div>
                         <div class="flex flex-col gap-2">
+                            <span class="font-bold w-full text-[0.8vw]">Production</span>
                             <div class="grid grid-cols-1 gap-2">
                                 <card-operation-values v-for="(item, index) in listCardMaterial" :key="index" :datas="item" :style="`animation: fadein ${index}s ease-in-out`" />
                             </div>

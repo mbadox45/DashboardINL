@@ -1,9 +1,9 @@
 <script setup>
 // import { encryptQuery } from '@/controller/dummyController';
+import { valueColorIntCondition, valueColorPerbandinganCondition } from '@/controller/dummyController';
 import CryptoJS from 'crypto-js';
 import { defineProps, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
-import {valueColorPersenCondition} from '@/controller/dummyController'
 
 const router = useRouter();
 
@@ -14,11 +14,11 @@ const props = defineProps({
     }
 });
 
-const load = ref({ value: 0, laba_kotor: 0, gpm: 0});
+const load = ref({ value: 0, labaKotor: 0, labaKotorLastMonth: 0, gpmPercent: 0, gpmPercentLastMonth: 0, totalLabaKotor: 0 });
 
 const loadData = async () => {
     const data = props.datas;
-    load.value = { value: 0, laba_kotor: data.labaKotor, gpm: data.gpmPercent};
+    load.value = { value: 0, labaKotor: data.labaKotor, labaKotorLastMonth: data.labaKotorLastMonth, totalLabaKotor: data.totalLabaKotor, gpmPercent: data.gpmPercent, gpmPercentLastMonth: data.gpmPercentLastMonth };
 };
 
 const routerLink = (path) => {
@@ -48,24 +48,24 @@ watch(() => props.datas, loadData, { immediate: true });
                 <img src="/images/icon/financial/gross-profit.png" alt="Icon" class="w-[3vw] h-[3vw] mr-1" />
                 <div class="flex gap-1 items-center h-full mt-3 w-full">
                     <div class="flex gap-2 items-center h-full w-full">
-                        <span class="font-bold text-[1vw] text-amber-500">79.5</span>
+                        <span class="font-bold text-[2vw]" :class="valueColorIntCondition(load.totalLabaKotor)">{{ load.totalLabaKotor }}</span>
                     </div>
-                    <div class="flex gap-1 w-full items-end">
+                    <div class="flex gap-1 w-full items-center">
                         <div class="font-bold flex w-full flex-col-reverse items-center">
-                            <!-- <div class="flex gap-1 items-center text-green-600">
-                                <i class="pi pi-sort-up-fill" style="font-size: 0.6vw"></i>
-                                <span class="text-[0.6vw]">Rp 1.2</span>
-                            </div> -->
+                            <div class="flex gap-1 items-center" :class="valueColorPerbandinganCondition(load.labaKotor, load.labaKotorLastMonth).color">
+                                <i :class="valueColorPerbandinganCondition(load.labaKotor, load.labaKotorLastMonth).icon" style="font-size: 0.6vw"></i>
+                                <span class="text-[0.7vw]">{{ valueColorPerbandinganCondition(load.labaKotor, load.labaKotorLastMonth).result }}</span>
+                            </div>
                             <span class="text-white text-[0.6vw]">Laba Kotor</span>
-                            <span class="text-green-600 text-[0.8vw]">{{load.laba_kotor}}</span>
+                            <span class="text-[0.9vw]" :class="valueColorPerbandinganCondition(load.labaKotor, load.labaKotorLastMonth).color">{{ load.labaKotor }}</span>
                         </div>
                         <div class="font-bold flex w-full flex-col-reverse items-center">
-                            <!-- <div class="flex gap-1 items-center text-red-600">
-                                <i class="pi pi-sort-down-fill" style="font-size: 0.6vw"></i>
-                                <span class="text-[0.6vw]">-0.58%</span>
-                            </div> -->
+                            <div class="flex gap-1 items-center" :class="valueColorPerbandinganCondition(load.gpmPercent, load.gpmPercentLastMonth).color">
+                                <i :class="valueColorPerbandinganCondition(load.gpmPercent, load.gpmPercentLastMonth).icon" style="font-size: 0.6vw"></i>
+                                <span class="text-[0.7vw]">{{ valueColorPerbandinganCondition(load.gpmPercent, load.gpmPercentLastMonth).result }}%</span>
+                            </div>
                             <span class="text-white text-[0.6vw]">GPM</span>
-                            <span class="text-[0.8vw]" :class="valueColorPersenCondition(load.gpm)">{{load.gpm}}%</span>
+                            <span class="text-[0.9vw]" :class="valueColorPerbandinganCondition(load.gpmPercent, load.gpmPercentLastMonth).color">{{ load.gpmPercent }}%</span>
                         </div>
                     </div>
                 </div>

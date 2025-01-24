@@ -1,4 +1,6 @@
 <script setup>
+// import { encryptQuery } from '@/controller/dummyController';
+import { valueColorIntCondition, valueColorPerbandinganCondition } from '@/controller/dummyController';
 import CryptoJS from 'crypto-js';
 import { defineProps, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
@@ -12,11 +14,11 @@ const props = defineProps({
     }
 });
 
-const load = ref({ value: 0, laba_bersih: 0, npm: 0 });
+const load = ref({ total: 0, nilai1: 0, nilai2: 0, nilaiPercen1: 0, nilaiPercen2: 0 });
 
 const loadData = async () => {
     const data = props.datas;
-    load.value = { value: data.value, laba_bersih: data.laba_bersih, npm: data.npm };
+    load.value = { total: data.totallabaBersih, nilai1: data.labaBersih, nilai2: data.labaBersihLastMonth, nilaiPercen1: data.npmPercent, nilaiPercen2: data.npmPercentLastMonth };
 };
 
 const routerLink = (path) => {
@@ -36,34 +38,34 @@ watch(() => props.datas, loadData, { immediate: true });
             <div class="flex items-center gap-3">
                 <span class="font-bold w-full text-[0.8vw]">Margin Laba Bersih (dlm IDR Miliar)</span>
                 <button
-                    @click="routerLink('net-profit-margin')"
+                    @click="routerLink('gross-profit')"
                     class="animate-pulse hover:animate-none p-4 w-[1.5vw] h-[1.5vw] cursor-pointer bg-transparent text-emerald-500 rotate-180 hover:rotate-[-180] hover:bg-black hover:text-amber-500 rounded-full flex items-center justify-center transition-all duration-500"
                 >
                     <i class="pi pi-external-link" style="font-weight: 600; font-size: 0.9vw"></i>
                 </button>
             </div>
             <div class="flex h-full items-center gap-3">
-                <img src="/images/icon/financial/net-profit.png" alt="Icon" class="w-[3vw] h-[3vw] mr-1" />
-                <div class="flex gap-1 items-center h-full mt-3">
-                    <div class="flex gap-2 items-center h-full ${valueColorIntCondition(-23.34)}">
-                        <span class="font-bold text-[1vw]">-23.34</span>
+                <img src="/images/icon/financial/ebitda.png" alt="Icon" class="w-[3vw] h-[3vw] mr-1" />
+                <div class="flex gap-1 items-center h-full mt-3 w-full">
+                    <div class="flex gap-2 items-center h-full">
+                        <span class="font-bold text-[1.5vw]" :class="valueColorIntCondition(load.total)">{{ load.total }}</span>
                     </div>
-                    <div class="flex gap-1 w-full items-end">
+                    <div class="flex gap-1 w-full items-center">
                         <div class="font-bold flex w-full flex-col-reverse items-center">
-                            <!-- <div class="flex gap-1 items-center text-red-600">
-                                <i class="pi pi-sort-down-fill" style="font-size: 0.6vw"></i>
-                                <span class="text-[0.6vw]">Rp -9.16</span>
-                            </div> -->
+                            <div class="flex gap-1 items-center" :class="valueColorPerbandinganCondition(load.nilai1, load.nilai2).color">
+                                <i :class="valueColorPerbandinganCondition(load.nilai1, load.nilai2).icon" style="font-size: 0.6vw"></i>
+                                <span class="text-[0.7vw]">{{ valueColorPerbandinganCondition(load.nilai1, load.nilai2).result }}</span>
+                            </div>
                             <span class="text-white text-[0.6vw]">Laba Bersih</span>
-                            <span class="text-[0.8vw]">{{ load.laba_bersih }}</span>
+                            <span class="text-[0.9vw]" :class="valueColorPerbandinganCondition(load.nilai1, load.nilai2).color">{{ load.nilai1 }}</span>
                         </div>
                         <div class="font-bold flex w-full flex-col-reverse items-center">
-                            <!-- <div class="flex gap-1 items-center text-red-600">
-                                <i class="pi pi-sort-down-fill" style="font-size: 0.6vw"></i>
-                                <span class="text-[0.6vw]">-0.05%</span>
-                            </div> -->
+                            <div class="flex gap-1 items-center" :class="valueColorPerbandinganCondition(load.nilaiPercen1, load.nilaiPercen2).color">
+                                <i :class="valueColorPerbandinganCondition(load.nilaiPercen1, load.nilaiPercen2).icon" style="font-size: 0.6vw"></i>
+                                <span class="text-[0.7vw]">{{ valueColorPerbandinganCondition(load.nilaiPercen1, load.nilaiPercen2).result }}%</span>
+                            </div>
                             <span class="text-white text-[0.6vw]">NPM%</span>
-                            <span class="text-[0.8vw]">{{ load.npm }}%</span>
+                            <span class="text-[0.9vw]" :class="valueColorPerbandinganCondition(load.nilaiPercen1, load.nilaiPercen2).color">{{ load.nilaiPercen1 }}%</span>
                         </div>
                     </div>
                 </div>

@@ -1,6 +1,5 @@
 <script setup>
 import CryptoJS from 'crypto-js';
-import moment from 'moment';
 import { defineProps, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -13,11 +12,11 @@ const props = defineProps({
     }
 });
 
-const load = ref({ total: 0, status: '', bulan: moment().format('MMMM YYYY') });
+const load = ref({ matauang: 0, remark: '', symbol: '', tanggal: '', value: 0 });
 
 const loadData = async () => {
     const data = props.datas;
-    load.value = { total: data.value, status: data.status, bulan: moment().format('MMMM YYYY') };
+    load.value = { matauang: data.matauang, remark: data.remark, symbol: data.symbol, tanggal: data.tanggal, value: data.value };
 };
 
 const routerLink = (path) => {
@@ -35,7 +34,7 @@ watch(() => props.datas, loadData, { immediate: true });
     <div class="bg-gray-800 p-2 rounded-xl shadow-xl flex h-full gap-3 items-start">
         <div class="flex flex-col h-full w-full">
             <div class="flex items-center gap-3">
-                <span class="font-bold w-full text-[0.8vw]">Saldo Tunai (dlm IDR Miliar)</span>
+                <span class="font-bold w-full text-[0.8vw]">Kurs</span>
                 <button
                     @click="routerLink('revenue')"
                     class="animate-pulse hover:animate-none p-4 w-[1.5vw] h-[1.5vw] cursor-pointer bg-transparent text-emerald-500 rotate-180 hover:rotate-[-180] hover:bg-black hover:text-amber-500 rounded-full flex items-center justify-center transition-all duration-500"
@@ -44,15 +43,17 @@ watch(() => props.datas, loadData, { immediate: true });
                 </button>
             </div>
             <div class="flex h-full items-center gap-3">
-                <img src="/images/icon/financial/revenue.png" alt="Icon" class="w-[3vw] h-[3vw] mr-1" />
-                <div class="flex flex-col gap-2">
-                    <div class="flex gap-2 items-center" :class="load.status == 'up' ? 'text-green-500' : load.status == 'down' ? 'text-red-500' : 'text-amber-500'">
-                        <span class="font-bold text-[1.5vw]">{{ load.total }}</span>
-                        <i :class="`pi pi-sort-${load.status}-fill`" style="font-size: 1vw" />
+                <img src="/images/icon/financial/kurs.png" alt="Icon" class="w-[3vw] h-[3vw] mr-1" />
+                <div class="flex flex-col items-center h-full w-full">
+                    <div class="flex gap-3 justify-between w-full h-full items-center">
+                        <span class="font-bold text-[1vw] text-amber-600">{{ load.value }}</span>
+                        <div class="flex flex-col items-end">
+                            <span class="font-bold text-[0.7vw] text-cyan-600">{{ load.matauang }} ({{ load.symbol }})</span>
+                            <span class="font-bold text-[0.7vw] text-cyan-600">{{ load.remark }}</span>
+                            <!-- <span class="font-bold text-[0.7vw] text-cyan-600">Nilai Terakhir</span> -->
+                        </div>
                     </div>
-                    <div class="text-[0.8vw] flex flex-col w-full">
-                        <span class="text-cyan-500 font-bold">s/d {{ load.bulan }}</span>
-                    </div>
+                    <span class="font-bold text-[0.7vw] text-cyan-600">{{ load.tanggal }}</span>
                 </div>
             </div>
         </div>
