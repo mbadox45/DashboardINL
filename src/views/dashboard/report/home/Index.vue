@@ -4,6 +4,7 @@ import { onMounted, ref } from 'vue';
 
 // Controller
 import financeHomeController from '@/controller/home/controllerHomePage/financeHomeController';
+import operationHomeController from '@/controller/home/controllerHomePage/operationHomeController';
 
 // Components
 import HomeDash from '@/controller/home/homeDash';
@@ -15,6 +16,8 @@ import CardSdm from '@/views/dashboard/report/home/components/sdm/CardSdmValues.
 
 import CardHomeFinance from '@/views/dashboard/report/finance/CardHomeFinance.vue';
 import HargaSpotFinance from '@/views/dashboard/report/harga/HargaSpotFinance.vue';
+import CardHomeOperation from '@/views/dashboard/report/operation/CardHomeOperation.vue';
+
 // import moment from 'moment';
 
 const listCardFinancial = ref([]);
@@ -28,6 +31,7 @@ const listCardSdm = ref([]);
 const listDelay = ref([]);
 const activePage = ref(0);
 
+// Finance Var Data
 const dataRevenue = ref({});
 const dataCbDanCfm = ref({});
 const dataPaySchedule = ref({});
@@ -35,6 +39,10 @@ const dataCpoKpbn = ref({});
 const dataKurs = ref({});
 const dataHargaSpotInvBulk = ref([]);
 const dataHargaSpotInvRitel = ref([]);
+
+// Operation Var Data
+const dataCpoOlah = ref({});
+const dataLaporanProduksi = ref([]);
 
 onMounted(() => {
     loadData();
@@ -51,6 +59,7 @@ const loadAllData = async () => {
         tanggalAkhir: '2024-02-28'
     };
     await loadDataControllerFinance(form);
+    await loadDataControllerOperation(form);
 };
 
 const loadDataControllerFinance = async (form) => {
@@ -77,6 +86,16 @@ const loadDataControllerFinance = async (form) => {
 
     const hargaSpotInvRitel = await financeHomeController.hargaSpotInvRitel(form);
     dataHargaSpotInvRitel.value = hargaSpotInvRitel;
+};
+
+const loadDataControllerOperation = async (form) => {
+    const cpoOlah = await operationHomeController.cpoOlah(form);
+    dataCpoOlah.value = cpoOlah;
+    console.log(cpoOlah);
+
+    const laporanProduksi = await operationHomeController.laporanProduksi(form);
+    dataLaporanProduksi.value = laporanProduksi;
+    console.log(laporanProduksi);
 };
 
 const updateDates = async (dates) => {
@@ -277,6 +296,7 @@ const loadDelay = async () => {
                         <span class="font-bold w-full text-[0.8vw]">Financial</span>
                         <card-home-finance :datarevenue="dataRevenue" :datacash="dataCbDanCfm" :datapayschedule="dataPaySchedule" :datacpokpbn="dataCpoKpbn" :datakurs="dataKurs" />
                         <harga-spot-finance :databulky="dataHargaSpotInvBulk" :dataretail="dataHargaSpotInvRitel" />
+                        <card-home-operation :datacpo="dataCpoOlah" />
                         <span class="font-bold w-full text-[0.8vw]">Production</span>
                         <div class="flex flex-col gap-2">
                             <div class="grid grid-cols-2 gap-2">
