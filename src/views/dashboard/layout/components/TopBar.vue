@@ -1,8 +1,9 @@
 <script setup>
-import pmgMasterController from '@/controller/getApiFromThisApp/master/pmgMasterController';
 import mataUangKursController from '@/controller/getApiFromThisApp/kurs/mataUangKursController';
+import pmgMasterController from '@/controller/getApiFromThisApp/master/pmgMasterController';
+import packagingController from '@/controller/getApiFromThisApp/packaging/packagingController';
 import moment from 'moment';
-import { onMounted, ref, provide, defineProps } from 'vue';
+import { defineProps, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 const icon = ref(null);
@@ -12,8 +13,10 @@ const router = useRouter();
 
 const selectedRegion = ref(1);
 const selectedMataUang = ref(1);
+const selectedPackaging = ref(1);
 const listPmg = ref([]);
 const listMatauang = ref([]);
+const listPackaging = ref([]);
 
 // const beforeDate = ref(moment().format('YYYY-MM-01'));
 // const now = ref(moment().format('YYYY-MM-DD'));
@@ -29,6 +32,7 @@ const { onDateChange } = defineProps({
 onMounted(() => {
     loadPmg();
     loadCurrency();
+    loadPackaging();
 });
 
 const loadPmg = async () => {
@@ -48,6 +52,11 @@ const loadCurrency = async () => {
     listMatauang.value = list;
 };
 
+const loadPackaging = async () => {
+    const response = await packagingController.getAll();
+    listPackaging.value = response;
+};
+
 const test = () => {
     // showMenu.value = !showMenu.value;
     visibleTop.value = true;
@@ -65,7 +74,7 @@ const changeDate = () => {
 
     // Check if onDateChange is a function before calling it
     if (typeof onDateChange === 'function') {
-        onDateChange({ beforeDate: start, now: end, pmg: selectedRegion.value, mataUang: selectedMataUang.value });
+        onDateChange({ beforeDate: start, now: end, pmg: selectedRegion.value, mataUang: selectedMataUang.value, packaging: selectedPackaging.value });
     } else {
         console.error('onDateChange is not a function or is undefined');
     }
@@ -130,6 +139,10 @@ const goToLogin = () => {
                     <div class="flex flex-col gap-1">
                         <label for="PMG" class="text-[0.6vw]">Select by Mata Uang</label>
                         <Select v-model="selectedMataUang" :options="listMatauang" optionLabel="name" optionValue="id" placeholder="Pilih Mata Uang" class="w-full" />
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label for="packaging" class="text-[0.6vw]">Select by Packaging</label>
+                        <Select v-model="selectedPackaging" :options="listPackaging" optionLabel="nama" optionValue="id" placeholder="Pilih Packaging" class="w-full" />
                     </div>
                     <div class="flex flex-col gap-1">
                         <label for="PMG" class="text-[0.6vw]">Select by PMG</label>

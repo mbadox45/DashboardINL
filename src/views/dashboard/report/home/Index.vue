@@ -43,6 +43,8 @@ const dataHargaSpotInvRitel = ref([]);
 // Operation Var Data
 const dataCpoOlah = ref({});
 const dataLaporanProduksi = ref([]);
+const dataLaporanMaterial = ref([]);
+const dataLaporanPackaging = ref([]);
 
 onMounted(() => {
     loadData();
@@ -53,6 +55,7 @@ const loadAllData = async () => {
     const form = {
         idPmg: 1,
         idMataUang: 1,
+        idPackaging: 1,
         // tanggalAwal: moment().format('YYYY-MM-01'),
         // tanggalAkhir: moment().format('YYYY-MM-DD'),
         tanggalAwal: '2023-01-01',
@@ -91,21 +94,29 @@ const loadDataControllerFinance = async (form) => {
 const loadDataControllerOperation = async (form) => {
     const cpoOlah = await operationHomeController.cpoOlah(form);
     dataCpoOlah.value = cpoOlah;
-    console.log(cpoOlah);
+    // console.log(cpoOlah);
 
     const laporanProduksi = await operationHomeController.laporanProduksi(form);
     dataLaporanProduksi.value = laporanProduksi;
-    console.log(laporanProduksi);
+
+    const laporanMaterial = await operationHomeController.laporanMaterial(form);
+    dataLaporanMaterial.value = laporanMaterial;
+    console.log(laporanMaterial);
+
+    const laporanPackaging = await operationHomeController.laporanPackaging(form);
+    dataLaporanPackaging.value = laporanPackaging;
 };
 
 const updateDates = async (dates) => {
     const form = {
         idPmg: dates.pmg,
         idMataUang: dates.mataUang,
+        idPackaging: dates.packaging,
         tanggalAwal: dates.beforeDate,
         tanggalAkhir: dates.now
     };
     await loadDataControllerFinance(form);
+    await loadDataControllerOperation(form);
 };
 
 const loadData = async () => {
