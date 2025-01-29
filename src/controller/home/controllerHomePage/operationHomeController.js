@@ -1,12 +1,12 @@
 import { formatCurrency } from '@/controller/dummyController';
 import bebanProdCpoOlahController from '@/controller/getApiFromThisApp/cpoOlah/bebanProdCpoOlahController';
 import targetProdCpoOlahController from '@/controller/getApiFromThisApp/cpoOlah/targetProdCpoOlahController';
-// Laporan Produksi
-import jenisLaporanProduksiController from '@/controller/getApiFromThisApp/laporanProduksi/jenisLaporanProduksiController';
-import laporanProduksiController from '@/controller/getApiFromThisApp/laporanProduksi/laporanProduksiController';
 // Laporan Material
 import jenisLaporanMaterialController from '@/controller/getApiFromThisApp/laporanMaterial/jenisLaporanMaterialController';
 import laporanMaterialController from '@/controller/getApiFromThisApp/laporanMaterial/laporanMaterialController';
+// Laporan Produksi
+import jenisLaporanProduksiController from '@/controller/getApiFromThisApp/laporanProduksi/jenisLaporanProduksiController';
+import laporanProduksiController from '@/controller/getApiFromThisApp/laporanProduksi/laporanProduksiController';
 // Packaging
 import targetPackagingController from '@/controller/getApiFromThisApp/packaging/targetPackagingController';
 
@@ -102,22 +102,22 @@ export default new (class operationHomeController {
                     for (let j = 0; j < normaNilai.length; j++) {
                         const material = laporanNilai.find((item) => item.materialsName.toLowerCase().includes(normaNilai[j].materialsName.toLowerCase()));
                         outgoing.push({
-                            name: normaNilai[j].jenisLaporan,
+                            name: normaNilai[j].materialsName,
                             value: formatCurrency(Number(material.value).toFixed(2)),
                             norma: formatCurrency(Number(normaNilai[j].value).toFixed(2))
                         });
                     }
-                    console.log(laporanNilai);
-                    // const incoming = laporanNilai.filter((item) => item.kategori.toLowerCase().includes('incoming'));
                     const listIncoming = [];
-                    // if (incoming != null) {
-                    //     for (let j = 0; j < incoming.length; j++) {
-                    //         listIncoming.push({
-                    //             name: incoming[j].jenisLaporan,
-                    //             value: formatCurrency(Number(material.value).toFixed(2))
-                    //         });
-                    //     }
-                    // }
+                    if (laporanNilai.filter((item) => item.kategori.toLowerCase().includes('incoming')).length > 0) {
+                        const incoming = laporanNilai.filter((item) => item.kategori.toLowerCase().includes('incoming'));
+                        // console.log(incoming);
+                        for (let j = 0; j < incoming.length; j++) {
+                            listIncoming.push({
+                                name: incoming[j].materialsName,
+                                value: formatCurrency(Number(incoming[j].value).toFixed(2))
+                            });
+                        }
+                    }
                     list.push({
                         jenisMaterial: jenis[i].name,
                         outgoing: outgoing,
@@ -125,7 +125,7 @@ export default new (class operationHomeController {
                         totalPemakaian: laporanNilai[0].totalPemakaian
                     });
                 }
-                console.log(list);
+                // console.log(list);
                 result = list;
             }
             return result;

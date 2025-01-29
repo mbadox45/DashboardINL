@@ -5,6 +5,7 @@ import { onMounted, ref } from 'vue';
 // Controller
 import financeHomeController from '@/controller/home/controllerHomePage/financeHomeController';
 import operationHomeController from '@/controller/home/controllerHomePage/operationHomeController';
+import supplyChainHomeController from '@/controller/home/controllerHomePage/supplyChainHomeController';
 
 // Components
 import HomeDash from '@/controller/home/homeDash';
@@ -46,6 +47,13 @@ const dataLaporanProduksi = ref([]);
 const dataLaporanMaterial = ref([]);
 const dataLaporanPackaging = ref([]);
 
+// SCM Var Data
+const dataSaldoPe = ref({})
+const dataStockBulk = ref([])
+const dataStockRetail = ref([])
+const dataActualIncoming = ref({})
+const dataOutstanding = ref({})
+
 onMounted(() => {
     loadData();
     loadAllData();
@@ -63,6 +71,7 @@ const loadAllData = async () => {
     };
     await loadDataControllerFinance(form);
     await loadDataControllerOperation(form);
+    await loadDataControllerSCM(form)
 };
 
 const loadDataControllerFinance = async (form) => {
@@ -94,18 +103,36 @@ const loadDataControllerFinance = async (form) => {
 const loadDataControllerOperation = async (form) => {
     const cpoOlah = await operationHomeController.cpoOlah(form);
     dataCpoOlah.value = cpoOlah;
-    // console.log(cpoOlah);
 
     const laporanProduksi = await operationHomeController.laporanProduksi(form);
     dataLaporanProduksi.value = laporanProduksi;
+    console.log(laporanProduksi);
 
     const laporanMaterial = await operationHomeController.laporanMaterial(form);
     dataLaporanMaterial.value = laporanMaterial;
-    console.log(laporanMaterial);
+    // console.log(laporanMaterial);
 
     const laporanPackaging = await operationHomeController.laporanPackaging(form);
     dataLaporanPackaging.value = laporanPackaging;
 };
+
+const loadDataControllerSCM = async (form) => {
+    const saldoPe = await supplyChainHomeController.saldoPe(form)
+    dataSaldoPe.value = saldoPe
+
+    const stokBulky = await supplyChainHomeController.stokBulky(form)
+    dataStockBulk.value = stokBulky
+
+    const stokRitel = await supplyChainHomeController.stokRitel(form)
+    dataStockRetail.value = stokRitel
+
+    const actualIncoming = await supplyChainHomeController.actualIncomingCpo(form)
+    dataActualIncoming.value = actualIncoming
+
+    const outstanding = await supplyChainHomeController.outstandingCpo()
+    dataOutstanding.value = outstanding
+    // console.log(outstanding)
+}
 
 const updateDates = async (dates) => {
     const form = {
@@ -117,6 +144,7 @@ const updateDates = async (dates) => {
     };
     await loadDataControllerFinance(form);
     await loadDataControllerOperation(form);
+    await loadDataControllerSCM(form)
 };
 
 const loadData = async () => {
@@ -307,7 +335,7 @@ const loadDelay = async () => {
                         <span class="font-bold w-full text-[0.8vw]">Financial</span>
                         <card-home-finance :datarevenue="dataRevenue" :datacash="dataCbDanCfm" :datapayschedule="dataPaySchedule" :datacpokpbn="dataCpoKpbn" :datakurs="dataKurs" />
                         <harga-spot-finance :databulky="dataHargaSpotInvBulk" :dataretail="dataHargaSpotInvRitel" />
-                        <card-home-operation :datacpo="dataCpoOlah" />
+                        <card-home-operation :datacpo="dataCpoOlah" :laporanproduksi="dataLaporanProduksi"/>
                         <span class="font-bold w-full text-[0.8vw]">Production</span>
                         <div class="flex flex-col gap-2">
                             <div class="grid grid-cols-2 gap-2">
