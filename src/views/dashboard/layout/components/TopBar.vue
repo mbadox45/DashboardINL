@@ -4,12 +4,13 @@ import pmgMasterController from '@/controller/getApiFromThisApp/master/pmgMaster
 import packagingController from '@/controller/getApiFromThisApp/packaging/packagingController';
 import moment from 'moment';
 import { defineProps, onMounted, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 const icon = ref(null);
 const showMenu = ref(true);
 const visibleTop = ref(false);
 const router = useRouter();
+const route = useRoute();
 
 const selectedRegion = ref(1);
 const selectedMataUang = ref(1);
@@ -17,6 +18,7 @@ const selectedPackaging = ref(1);
 const listPmg = ref([]);
 const listMatauang = ref([]);
 const listPackaging = ref([]);
+const routeName = ref(route.name);
 
 // const beforeDate = ref(moment().format('YYYY-MM-01'));
 // const now = ref(moment().format('YYYY-MM-DD'));
@@ -94,6 +96,10 @@ const goToLogin = () => {
         window.open('http://36.92.181.10:8585/', '_blank');
     }
 };
+
+const goBack = () => {
+    router.back();
+};
 </script>
 
 <template>
@@ -115,6 +121,14 @@ const goToLogin = () => {
             </template>
             <template #footer>
                 <div class="flex flex-col gap-5">
+                    <button
+                        v-if="routeName == 'detail'"
+                        @click="goBack"
+                        class="pl-5 pr-10 hover:pr-5 py-3 border-2 w-full flex justify-between items-center gap-3 font-bold bg-amber-600 text-white rounded-full hover:bg-white hover:text-amber-600 uppercase shadow-none hover:shadow-sm shadow-gray-800 transition-all duration-300"
+                    >
+                        <span>Back</span>
+                        <i class="pi pi-undo"></i>
+                    </button>
                     <button
                         @click="goToLogin"
                         class="pl-5 pr-10 hover:pr-5 py-3 border-2 w-full flex justify-between items-center gap-3 font-bold bg-gray-950 text-white rounded-full hover:bg-white hover:text-black uppercase shadow-none hover:shadow-sm shadow-gray-800 transition-all duration-300"

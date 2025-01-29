@@ -13,11 +13,11 @@ import ImagesHome from '@/views/dashboard/report/home/components/ImagesHome.vue'
 import CardOperationValues from '@/views/dashboard/report/home/components/operation/CardOperationValues.vue';
 import CardSales from '@/views/dashboard/report/home/components/sales/CardSalesValues.vue';
 import CardScmValues from '@/views/dashboard/report/home/components/scm/CardSCMValues.vue';
-import CardSdm from '@/views/dashboard/report/home/components/sdm/CardSdmValues.vue';
 
 import CardHomeFinance from '@/views/dashboard/report/finance/CardHomeFinance.vue';
 import HargaSpotFinance from '@/views/dashboard/report/harga/HargaSpotFinance.vue';
 import CardHomeOperation from '@/views/dashboard/report/operation/CardHomeOperation.vue';
+import CardHomePackaging from '@/views/dashboard/report/packaging/CardHomePackaging.vue';
 
 // import moment from 'moment';
 
@@ -48,11 +48,11 @@ const dataLaporanMaterial = ref([]);
 const dataLaporanPackaging = ref([]);
 
 // SCM Var Data
-const dataSaldoPe = ref({})
-const dataStockBulk = ref([])
-const dataStockRetail = ref([])
-const dataActualIncoming = ref({})
-const dataOutstanding = ref({})
+const dataSaldoPe = ref({});
+const dataStockBulk = ref([]);
+const dataStockRetail = ref([]);
+const dataActualIncoming = ref({});
+const dataOutstanding = ref({});
 
 onMounted(() => {
     loadData();
@@ -71,7 +71,7 @@ const loadAllData = async () => {
     };
     await loadDataControllerFinance(form);
     await loadDataControllerOperation(form);
-    await loadDataControllerSCM(form)
+    await loadDataControllerSCM(form);
 };
 
 const loadDataControllerFinance = async (form) => {
@@ -106,7 +106,6 @@ const loadDataControllerOperation = async (form) => {
 
     const laporanProduksi = await operationHomeController.laporanProduksi(form);
     dataLaporanProduksi.value = laporanProduksi;
-    console.log(laporanProduksi);
 
     const laporanMaterial = await operationHomeController.laporanMaterial(form);
     dataLaporanMaterial.value = laporanMaterial;
@@ -114,25 +113,26 @@ const loadDataControllerOperation = async (form) => {
 
     const laporanPackaging = await operationHomeController.laporanPackaging(form);
     dataLaporanPackaging.value = laporanPackaging;
+    console.log(laporanPackaging);
 };
 
 const loadDataControllerSCM = async (form) => {
-    const saldoPe = await supplyChainHomeController.saldoPe(form)
-    dataSaldoPe.value = saldoPe
+    const saldoPe = await supplyChainHomeController.saldoPe(form);
+    dataSaldoPe.value = saldoPe;
 
-    const stokBulky = await supplyChainHomeController.stokBulky(form)
-    dataStockBulk.value = stokBulky
+    const stokBulky = await supplyChainHomeController.stokBulky(form);
+    dataStockBulk.value = stokBulky;
 
-    const stokRitel = await supplyChainHomeController.stokRitel(form)
-    dataStockRetail.value = stokRitel
+    const stokRitel = await supplyChainHomeController.stokRitel(form);
+    dataStockRetail.value = stokRitel;
 
-    const actualIncoming = await supplyChainHomeController.actualIncomingCpo(form)
-    dataActualIncoming.value = actualIncoming
+    const actualIncoming = await supplyChainHomeController.actualIncomingCpo(form);
+    dataActualIncoming.value = actualIncoming;
 
-    const outstanding = await supplyChainHomeController.outstandingCpo()
-    dataOutstanding.value = outstanding
+    const outstanding = await supplyChainHomeController.outstandingCpo();
+    dataOutstanding.value = outstanding;
     // console.log(outstanding)
-}
+};
 
 const updateDates = async (dates) => {
     const form = {
@@ -144,7 +144,7 @@ const updateDates = async (dates) => {
     };
     await loadDataControllerFinance(form);
     await loadDataControllerOperation(form);
-    await loadDataControllerSCM(form)
+    await loadDataControllerSCM(form);
 };
 
 const loadData = async () => {
@@ -319,11 +319,7 @@ const loadDelay = async () => {
                 <div v-if="activePage == 0" class="grid grid-cols-3 gap-2">
                     <div class="col-span-1 flex flex-col gap-2">
                         <images-home />
-                        <div class="flex flex-col gap-2">
-                            <div class="grid grid-cols-1 gap-2">
-                                <card-sdm v-for="(item, index) in listCardPackaging" :key="index" :datas="item" :style="`animation: fadein ${index}s ease-in-out`" />
-                            </div>
-                        </div>
+                        <card-home-packaging :laporanpackaging="dataLaporanPackaging" />
                         <span class="font-bold w-full text-[0.8vw]">Sales & Marketing</span>
                         <div class="flex flex-col gap-2">
                             <div class="grid grid-cols-1 gap-2">
@@ -335,13 +331,8 @@ const loadDelay = async () => {
                         <span class="font-bold w-full text-[0.8vw]">Financial</span>
                         <card-home-finance :datarevenue="dataRevenue" :datacash="dataCbDanCfm" :datapayschedule="dataPaySchedule" :datacpokpbn="dataCpoKpbn" :datakurs="dataKurs" />
                         <harga-spot-finance :databulky="dataHargaSpotInvBulk" :dataretail="dataHargaSpotInvRitel" />
-                        <card-home-operation :datacpo="dataCpoOlah" :laporanproduksi="dataLaporanProduksi"/>
                         <span class="font-bold w-full text-[0.8vw]">Production</span>
-                        <div class="flex flex-col gap-2">
-                            <div class="grid grid-cols-2 gap-2">
-                                <card-operation-values v-for="(item, index) in listCardOperation" :key="index" :datas="item" :style="`animation: fadein ${index}s ease-in-out`" />
-                            </div>
-                        </div>
+                        <card-home-operation :datacpo="dataCpoOlah" :laporanproduksi="dataLaporanProduksi" />
                     </div>
                 </div>
                 <div v-else class="grid grid-cols-3 gap-3 h-full">

@@ -4,7 +4,7 @@ import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 // Components
-import AppTopbar from '@/views/dashboard/layout/components/AppTopbar.vue';
+import TopBar from '@/views/dashboard/layout/components/TopBar.vue';
 // Financial
 import CashBalanceFinance from '@/views/dashboard/report/detailPage/components/financial/CashBalanceFinance.vue';
 import CashFlowMovementFinance from '@/views/dashboard/report/detailPage/components/financial/CashFlowMovementFinance.vue';
@@ -25,6 +25,13 @@ const route = useRoute();
 const router = useRouter();
 const routeName = ref('');
 const routeType = ref('');
+const formData = ref({
+    idPmg: 1,
+    idMataUang: 1,
+    idPackaging: 1,
+    tanggalAwal: '2023-01-01',
+    tanggalAkhir: '2024-02-28'
+});
 
 onMounted(() => {
     funcCondition();
@@ -44,15 +51,22 @@ const funcCondition = () => {
     }
 };
 
-const routerLink = () => {
-    // const encryptedQuery = encryptQuery(JSON.stringify(path));
-    window.history.back();
+const updateDates = async (dates) => {
+    const form = {
+        idPmg: dates.pmg,
+        idMataUang: dates.mataUang,
+        idPackaging: dates.packaging,
+        tanggalAwal: dates.beforeDate,
+        tanggalAkhir: dates.now
+    };
+    formData.value = form;
 };
 </script>
 
 <template>
-    <div class="p-3 bg-neutral-950 min-h-screen text-white">
-        <app-topbar></app-topbar>
+    <div class="flex flex-col gap-2 layout-scroller bg-neutral-950 min-h-screen text-white app-dark">
+        <top-bar :onDateChange="updateDates"></top-bar>
+        <!-- <app-topbar></app-topbar> -->
         <div class="bg-black w-full min-h-[30rem] p-6 rounded-xl" v-if="routeType == 'financial'">
             <revenue-detail-finance v-if="routeName == 'revenue'" />
             <gross-profit-detail-finance v-else-if="routeName == 'gross-profit'" />
@@ -73,9 +87,16 @@ const routerLink = () => {
                 <span>404 Not Found</span>
             </div>
         </div>
-        <button class="fixed top-[1.5vw] left-[1.5vw] p-3 z-50 bg-amber-500 rounded-full font-extrabold border-2 hover:bg-amber-600 transition-all duration-200 flex gap-2 justify-center items-center" @click="routerLink">
-            <i class="pi pi-arrow-left" style="font-size: 0.7vw"></i>
-            <span class="" style="font-size: 0.7vw">Back</span>
-        </button>
     </div>
 </template>
+
+<style>
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+</style>

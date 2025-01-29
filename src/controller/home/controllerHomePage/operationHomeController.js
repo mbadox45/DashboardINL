@@ -152,8 +152,8 @@ export default new (class operationHomeController {
                     if (laporan == null) {
                         continue;
                     } else {
-                        const losses = laporan.losses; //untuk refinery
-                        const lossesPercentage = laporan.lossesPercentage; //untuk refinery
+                        const losses = formatCurrency(Number(laporan.losses).toFixed(2)); //untuk refinery
+                        const lossesPercentage = formatCurrency(Number(laporan.lossesPercentage).toFixed(2)); //untuk refinery
                         // Kategori Bahan Olah
                         const kategori = laporan.kategori_data.find((item) => item.kategori.toLowerCase().includes('bahan_olah'));
                         const bahanKategori = kategori.items;

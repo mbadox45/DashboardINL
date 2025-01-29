@@ -1,4 +1,5 @@
 <script setup>
+import { valueColorPersenCondition } from '@/controller/dummyController';
 import CryptoJS from 'crypto-js';
 import { defineProps, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
@@ -19,7 +20,7 @@ const load = ref({
     kapasitasUtility: 0,
     rkap: 0,
     totalCost: 0,
-    totalHargaSatuan: 0,
+    totalHargaSatuan: 0
 });
 
 const loadData = async () => {
@@ -31,7 +32,7 @@ const loadData = async () => {
         kapasitasUtility: data.kapasitasUtility || 0,
         rkap: data.rkap || 0,
         totalCost: data.totalCost || 0,
-        totalHargaSatuan: data.totalHargaSatuan || 0,
+        totalHargaSatuan: data.totalHargaSatuan || 0
     };
 };
 
@@ -40,7 +41,7 @@ const routerLink = (path) => {
     const encryptedPath = CryptoJS.AES.encrypt(data, 'your-secret-key').toString();
     router.push({
         path: '/detail-dashboard',
-        query: { component: encryptedPath },
+        query: { component: encryptedPath }
     });
 };
 
@@ -65,17 +66,11 @@ watch(() => props.datas, loadData, { immediate: true });
                 <div class="flex flex-col h-full w-full justify-between gap-3">
                     <!-- Percentages Section -->
                     <div class="flex gap-2 items-center w-full h-full">
-                        <span
-                            class="font-bold w-full flex flex-col"
-                            :class="{ 'text-green-500': load.rkapPercentage > 15, 'text-red-500': load.rkapPercentage <= 15 }"
-                        >
+                        <span class="font-bold w-full flex flex-col" :class="valueColorPersenCondition(load.rkapPercentage)">
                             <span class="text-[1.3vw]">{{ load.rkapPercentage }}%</span>
                             <small class="text-[0.6vw]">RKAP</small>
                         </span>
-                        <span
-                            class="font-bold w-full flex flex-col"
-                            :class="{ 'text-green-500': load.kapasitasUtilityPercentage > 12, 'text-red-500': load.kapasitasUtilityPercentage <= 12 }"
-                        >
+                        <span class="font-bold w-full flex flex-col" :class="valueColorPersenCondition(load.kapasitasUtilityPercentage)">
                             <span class="text-[1.3vw]">{{ load.kapasitasUtilityPercentage }}%</span>
                             <small class="text-[0.6vw]">Utility</small>
                         </span>
