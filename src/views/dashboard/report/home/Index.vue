@@ -10,14 +10,15 @@ import supplyChainHomeController from '@/controller/home/controllerHomePage/supp
 // Components
 import HomeDash from '@/controller/home/homeDash';
 import ImagesHome from '@/views/dashboard/report/home/components/ImagesHome.vue';
-import CardOperationValues from '@/views/dashboard/report/home/components/operation/CardOperationValues.vue';
 import CardSales from '@/views/dashboard/report/home/components/sales/CardSalesValues.vue';
 import CardScmValues from '@/views/dashboard/report/home/components/scm/CardSCMValues.vue';
 
 import CardHomeFinance from '@/views/dashboard/report/finance/CardHomeFinance.vue';
 import HargaSpotFinance from '@/views/dashboard/report/harga/HargaSpotFinance.vue';
+import CardHomeMaterial from '@/views/dashboard/report/operation/CardHomeMaterial.vue';
 import CardHomeOperation from '@/views/dashboard/report/operation/CardHomeOperation.vue';
 import CardHomePackaging from '@/views/dashboard/report/packaging/CardHomePackaging.vue';
+import CardHomeSupplyChain from '@/views/dashboard/report/scm/CardHomeSupplyChain.vue';
 
 // import moment from 'moment';
 
@@ -109,16 +110,17 @@ const loadDataControllerOperation = async (form) => {
 
     const laporanMaterial = await operationHomeController.laporanMaterial(form);
     dataLaporanMaterial.value = laporanMaterial;
-    // console.log(laporanMaterial);
+    console.log(laporanMaterial);
 
     const laporanPackaging = await operationHomeController.laporanPackaging(form);
     dataLaporanPackaging.value = laporanPackaging;
-    console.log(laporanPackaging);
+    // console.log(laporanPackaging);
 };
 
 const loadDataControllerSCM = async (form) => {
     const saldoPe = await supplyChainHomeController.saldoPe(form);
     dataSaldoPe.value = saldoPe;
+    // console.log(saldoPe);
 
     const stokBulky = await supplyChainHomeController.stokBulky(form);
     dataStockBulk.value = stokBulky;
@@ -131,7 +133,7 @@ const loadDataControllerSCM = async (form) => {
 
     const outstanding = await supplyChainHomeController.outstandingCpo();
     dataOutstanding.value = outstanding;
-    // console.log(outstanding)
+    // console.log(outstanding);
 };
 
 const updateDates = async (dates) => {
@@ -340,18 +342,14 @@ const loadDelay = async () => {
                         <images-home class="h-full" />
                     </div>
                     <div class="col-span-2 flex flex-col gap-3">
+                        <span class="font-bold w-full text-[0.8vw]">Supply Chain</span>
+                        <card-home-supply-chain :stokbulk="dataStockBulk" :stokritel="dataStockRetail" :actualincoming="dataActualIncoming" :outstanding="dataOutstanding" :saldope="dataSaldoPe" />
                         <div class="flex flex-col gap-2">
-                            <span class="font-bold w-full text-[0.8vw]">Supply Chain</span>
                             <div class="grid grid-cols-3 gap-2">
                                 <card-scm-values v-for="(item, index) in listCardSCM" :key="index" :datas="item" :style="`animation: fadein 1s ease-in-out`" />
                             </div>
                         </div>
-                        <div class="flex flex-col gap-2">
-                            <span class="font-bold w-full text-[0.8vw]">Production</span>
-                            <div class="grid grid-cols-1 gap-2">
-                                <card-operation-values v-for="(item, index) in listCardMaterial" :key="index" :datas="item" :style="`animation: fadein ${index}s ease-in-out`" />
-                            </div>
-                        </div>
+                        <card-home-material :laporanmaterial="dataLaporanMaterial" />
                         <!-- <div class="flex flex-col gap-2">
                             <div class="grid grid-cols-1 gap-2">
                                 <card-sdm v-for="(item, index) in listCardSdm" :key="index" :datas="item" :style="`animation: fadein ${index}s ease-in-out`" />

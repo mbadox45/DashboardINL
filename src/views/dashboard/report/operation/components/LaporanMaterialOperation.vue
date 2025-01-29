@@ -18,11 +18,11 @@ const load = ref([]);
 
 const loadData = async () => {
     load.value = props.datas.map((data) => ({
-        jenisProduksi: data.jenisProduksi || '',
-        losses: data.losses || 0,
-        lossesPercentage: data.lossesPercentage || 0,
-        bahanOlah: data.bahanOlah || [],
-        items: data.items || []
+        name: data.jenisMaterial || 'No Name',
+        incoming: data.incoming || [],
+        outgoing: data.outgoing || [],
+        totalPemakaian: data.totalPemakaian || 0,
+        selisih: data.selisih || 0
     }));
 };
 
@@ -102,7 +102,7 @@ watch(
         <div class="flex flex-col h-full w-full">
             <!-- Header -->
             <div class="flex items-center gap-3">
-                <span class="font-bold w-full text-[0.8vw]">Laporan Produksi (in Kg)</span>
+                <span class="font-bold w-full text-[0.8vw]">Pemakaian Material</span>
                 <button
                     @click="routerLink('packaging-operation')"
                     class="animate-pulse hover:animate-none p-4 w-[1.5vw] h-[1.5vw] cursor-pointer bg-transparent text-emerald-500 rotate-180 hover:rotate-[-180] hover:bg-black hover:text-amber-500 rounded-full flex items-center justify-center transition-all duration-500"
@@ -114,37 +114,50 @@ watch(
             <!-- Card Container -->
             <div class="flex items-start gap-4 h-full relative overflow-hidden">
                 <div v-if="displayedCard" :class="animationClass" class="flex gap-2 transition-all duration-500 w-full">
+                    <!-- Format Laporan Material -->
                     <div class="w-full flex items-end gap-2 mt-2">
                         <div class="flex flex-col w-full gap-2">
-                            <span class="text-[0.8vw] font-bold text-green-500">{{ displayedCard.jenisProduksi }}</span>
+                            <span class="text-[0.8vw] font-bold text-green-500">{{ displayedCard.name }}</span>
                             <div class="flex flex-col w-full gap-2 text-amber-500">
-                                <div class="flex w-full items-center gap-2">
-                                    <div v-if="displayedCard.bahanOlah.length > 0" v-for="(item, index) in displayedCard.bahanOlah" :key="index" class="py-[0.9px] px-3 rounded-xl flex w-full items-center justify-between bg-black">
-                                        <span class="font-bold text-[0.8vw]">{{ item.name }} Produksi</span>
-                                        <span class="text-[0.9vw] font-bold">{{ item.totalQty }}</span>
+                                <div class="py-[0.9px] px-3 rounded-xl flex flex-col gap-1 bg-black">
+                                    <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-red-500">
+                                        <span class="text-[0.8vw] font-bold">{{ displayedCard.totalPemakaian }}</span>
+                                        <span class="font-bold text-[0.7vw] uppercase">Total Pemakaian</span>
                                     </div>
                                 </div>
-                                <div class="flex w-full items-center gap-2">
-                                    <div v-if="displayedCard.items.length > 0" v-for="(item, index) in displayedCard.items" :key="index" class="py-[0.9px] px-3 rounded-xl flex flex-col w-full gap-1 items-end bg-black">
-                                        <div class="flex flex-col items-end">
-                                            <span class="text-[0.9vw] font-bold">{{ item.totalQty }}</span>
-                                            <span class="text-[0.8vw]">{{ item.name }}</span>
-                                        </div>
-                                        <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
-                                            <span class="text-[0.8vw]">Yield</span>
-                                            <span class="text-[0.9vw] font-bold">{{ item.yieldPercentage }}%</span>
+                                <div class="flex gap-2 w-full">
+                                    <div v-if="displayedCard.incoming.length > 0" class="py-[0.9px] px-3 rounded-xl flex flex-col w-full gap-1 bg-black">
+                                        <span class="text-[0.7vw]">Incoming</span>
+                                        <div v-for="(item, index) in displayedCard.incoming" :key="index" class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
+                                            <span class="text-[0.8vw] font-bold">{{ item.value }}</span>
+                                            <span class="text-[0.7vw]">{{ item.name }}</span>
                                         </div>
                                     </div>
+                                    <div v-if="displayedCard.outgoing.length > 0" class="py-[0.9px] px-3 rounded-xl flex flex-col w-full gap-1 bg-black">
+                                        <div class="flex items-center justify-between w-full text-amber-600">
+                                            <div class="flex flex-col gap-1 w-full">
+                                                <span class="text-[0.7vw] w-full border-b pb-1 border-neutral-800">{{ displayedCard.incoming.length > 0 ? 'Outgoing' : 'Detail' }}</span>
+                                                <span class="text-[0.7vw] w-full text-cyan-500" v-for="(item, index) in displayedCard.outgoing" :key="index">{{ item.name }}</span>
+                                            </div>
+                                            <div class="flex flex-col gap-1 w-1/2">
+                                                <span class="text-[0.7vw] w-full text-right border-b pb-1 border-neutral-800">Quantity</span>
+                                                <span class="text-[0.7vw] w-full text-right font-bold text-cyan-500" v-for="(item, index) in displayedCard.outgoing" :key="index">{{ item.value }}</span>
+                                            </div>
+                                            <div class="flex flex-col gap-1 w-1/2">
+                                                <span class="text-[0.7vw] w-full text-right border-b pb-1 border-neutral-800">Norma</span>
+                                                <span class="text-[0.7vw] w-full text-right font-bold text-cyan-500" v-for="(item, index) in displayedCard.outgoing" :key="index">{{ item.norma }}</span>
+                                            </div>
+                                        </div>
+                                        <!-- <div v-for="(item, index) in displayedCard.outgoing" :key="index" class="flex items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
+                                            <span class="text-[0.7vw]">{{ item.name }}</span>
+                                            <span class="text-[0.8vw] font-bold">{{ item.value }}</span>
+                                            <span class="text-[0.8vw] font-bold">{{ item.norma }}</span>
+                                        </div> -->
+                                    </div>
                                 </div>
-                            </div>
-                            <div v-if="displayedCard.jenisProduksi == 'Refinery'" class="flex flex-col gap-3 justify-start h-full">
-                                <div class="px-3 py-1 flex flex-row-reverse justify-between w-full font-bold items-end bg-cyan-500 text-black rounded-xl">
-                                    <span class="text-[0.7vw]">{{ displayedCard.losses }}</span>
-                                    <span class="text-[0.65vw]">Losses</span>
-                                </div>
-                                <div class="px-3 py-1 flex flex-row-reverse justify-between w-full font-bold items-end bg-cyan-500 text-black rounded-xl">
-                                    <span class="text-[0.7vw]">{{ displayedCard.lossesPercentage }}%</span>
-                                    <span class="text-[0.65vw]">Losses (%)</span>
+                                <div class="col-span-2 py-[0.9px] px-3 rounded-xl flex items-center justify-between bg-black">
+                                    <span class="font-bold text-[0.7vw] uppercase">Selisih</span>
+                                    <span class="text-[0.8vw] font-bold">{{ displayedCard.selisih }}</span>
                                 </div>
                             </div>
                         </div>

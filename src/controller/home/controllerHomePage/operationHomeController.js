@@ -56,13 +56,15 @@ export default new (class operationHomeController {
                     jenisMaterial: '',
                     outgoing: [],
                     incoming: [],
-                    totalPemakaian: 0
+                    totalPemakaian: 0,
+                    selisih: 0
                 }
             ];
             const jenis = await jenisLaporanMaterialController.getAll();
             const response = await laporanMaterialController.getByPeriod(form);
             const norma = response.norma;
             const laporan = response.laporan_material;
+            console.log(laporan);
             if (norma != null && laporan != null) {
                 const list = [];
                 const nilaiNorma = [];
@@ -74,7 +76,8 @@ export default new (class operationHomeController {
                             materialsName: material[j].name,
                             kategori: material[j].kategori,
                             value: material[j].totalQty,
-                            totalPemakaian: null
+                            totalPemakaian: null,
+                            selisih: null
                         });
                     }
                 }
@@ -89,7 +92,8 @@ export default new (class operationHomeController {
                                 materialsName: material[k].name,
                                 kategori: kategori[j].kategori,
                                 value: material[k].totalQty,
-                                totalPemakaian: formatCurrency(Number(laporan[i].totalPemakaian).toFixed(2))
+                                totalPemakaian: formatCurrency(Number(laporan[i].totalPemakaian).toFixed(2)),
+                                selisih: formatCurrency(Number(laporan[i].selisih).toFixed(2))
                             });
                         }
                     }
@@ -122,7 +126,8 @@ export default new (class operationHomeController {
                         jenisMaterial: jenis[i].name,
                         outgoing: outgoing,
                         incoming: listIncoming,
-                        totalPemakaian: laporanNilai[0].totalPemakaian
+                        totalPemakaian: laporanNilai[0].totalPemakaian,
+                        selisih: laporanNilai[0].selisih
                     });
                 }
                 // console.log(list);
@@ -135,7 +140,8 @@ export default new (class operationHomeController {
                     jenisMaterial: '',
                     outgoing: [],
                     incoming: [],
-                    totalPemakaian: 0
+                    totalPemakaian: 0,
+                    selisih: 0
                 }
             ];
             return result;
