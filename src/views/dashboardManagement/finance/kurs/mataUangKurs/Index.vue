@@ -140,15 +140,15 @@ const submitData = async () => {
 <template>
     <div class="flex flex-col w-full gap-8">
         <div class="flex gap-2 items-center justify-between w-full font-bold">
-            <span class="text-3xl">Master Konversi Mata Uang</span>
+            <span class="text-3xl">Mata Uang</span>
             <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-emerald-500 hover:bg-emerald-700 text-white rounded-full flex gap-2">
                 <i class="pi pi-plus"></i>
-                <span>Add Component</span>
+                <span>Tambah Mata Uang</span>
             </button>
         </div>
         <Drawer v-model:visible="drawerCond" position="right" class="!w-full md:!w-[30rem]">
             <template #header>
-                <span class="text-[1vw] font-bold">Form Component</span>
+                <span class="text-[1vw] font-bold">Form Mata Uang</span>
             </template>
             <template #footer>
                 <div class="flex w-full justify-end pt-3 border-t">
@@ -160,16 +160,16 @@ const submitData = async () => {
                     <Message v-for="msg of messages" :key="msg.id" :severity="msg.severity" class="mt-4"><i :class="`pi ${msg.icon}`"></i> {{ msg.content }}</Message>
                 </transition-group>
                 <div class="flex flex-col gap-1">
-                    <label for="nama">Name <small class="text-red-500 font-bold">*</small></label>
-                    <InputText v-model="formData.name" placeholder="Please input Name" />
+                    <label for="nama">Nama<small class="text-red-500 font-bold">*</small></label>
+                    <InputText v-model="formData.name" placeholder="USD" />
                 </div>
                 <div class="flex flex-col gap-1">
-                    <label for="symbol">Symbol <small class="text-red-500 font-bold">*</small></label>
-                    <InputText v-model="formData.symbol" placeholder="Please input Symbol" />
+                    <label for="symbol">Simbol <small class="text-red-500 font-bold">*</small></label>
+                    <InputText v-model="formData.symbol" placeholder="$" />
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="remark">Remark <small class="text-red-500 font-bold">*</small></label>
-                    <InputText v-model="formData.remark" placeholder="Please input Remark" />
+                    <InputText v-model="formData.remark" placeholder="Kurs BI" />
                 </div>
                 <div class="flex flex-row-reverse w-full gap-3">
                     <button @click="refreshForm" class="px-3 py-2 w-full border rounded-lg hover:shadow-md hover:shadow-black transition-all duration-300 shadow-sm shadow-black flex items-center gap-2 justify-center">
@@ -181,10 +181,10 @@ const submitData = async () => {
                         :class="loadingSave == true ? 'opacity-50' : 'opacity-100'"
                         class="px-3 py-2 w-full border rounded-lg border-transparent hover:shadow-md hover:shadow-black hover:bg-emerald-800 transition-all duration-300 shadow-sm text-white shadow-black flex items-center gap-2 justify-center bg-emerald-700"
                     >
-                        <i class="pi pi-save"></i><span>{{ loadingSave == true ? 'Saving..' : 'Save' }}</span>
+                        <i class="pi pi-save"></i><span>{{ loadingSave == true ? 'Menyimpan..' : 'Simpan' }}</span>
                     </button>
                 </div>
-                <span class="mt-3 px-3" v-if="statusForm == 'edit'">Log Activity</span>
+                <span class="mt-3 px-3" v-if="statusForm == 'edit'">Log Aktifitas</span>
                 <ScrollPanel v-if="statusForm == 'edit'" style="width: 100%; height: 22rem">
                     <div class="flex flex-col gap-2 w-full p-3">
                         <div class="flex flex-col pb-2 px-2" v-for="(item, index) in logFile" :key="index" :class="index < logFile.length ? 'border-b' : 'border-none'">
@@ -213,22 +213,14 @@ const submitData = async () => {
         </Drawer>
         <Card>
             <template #title>
-                <div class="flex gap-2 items-center mb-5">
-                    <span class="text-xl font-bold w-full">List Component</span>
-                    <InputGroup>
-                        <InputText placeholder="Search Components" v-model="search" />
-                        <InputGroupAddon>
-                            <i class="pi pi-search" />
-                        </InputGroupAddon>
-                    </InputGroup>
-                </div>
+                <div class="flex gap-2 items-center mb-5"></div>
             </template>
             <template #content>
                 <DataTable :value="listTable" showGridlines paginator :rows="10">
-                    <Column field="name" sortable style="width: 15%; font-size: 0.9vw">
+                    <Column field="name" sortable style="width: 15%; font-size: 0.9vw" headerStyle="background-color:rgb(251 207 232)">
                         <template #header>
-                            <div class="flex w-full justify-start">
-                                <span>Name</span>
+                            <div class="flex w-full justify-start text-black">
+                                <span>Nama</span>
                             </div>
                         </template>
                         <template #body="{ data }">
@@ -237,10 +229,10 @@ const submitData = async () => {
                             </div>
                         </template>
                     </Column>
-                    <Column field="symbol" sortable style="width: 6%; font-size: 0.9vw">
+                    <Column field="symbol" sortable style="width: 6%; font-size: 0.9vw" headerStyle="background-color:rgb(251 207 232)">
                         <template #header>
-                            <div class="flex w-full justify-start">
-                                <span>Symbol</span>
+                            <div class="flex w-full justify-start text-black">
+                                <span>Simbol</span>
                             </div>
                         </template>
                         <template #body="{ data }">
@@ -249,9 +241,9 @@ const submitData = async () => {
                             </div>
                         </template>
                     </Column>
-                    <Column field="remark" sortable style="width: 25%; font-size: 0.9vw">
+                    <Column field="remark" sortable style="width: 25%; font-size: 0.9vw" headerStyle="background-color:rgb(251 207 232)">
                         <template #header>
-                            <div class="flex w-full justify-start">
+                            <div class="flex w-full justify-start text-black">
                                 <span>Remark</span>
                             </div>
                         </template>
@@ -261,10 +253,10 @@ const submitData = async () => {
                             </div>
                         </template>
                     </Column>
-                    <Column field="remark" style="width: 5%; font-size: 0.7vw">
+                    <Column field="remark" style="width: 5%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                         <template #body="{ data }">
                             <div class="flex items-center justify-center w-full">
-                                <button @click="showDrawer(data)" class="p-3 border rounded-full flex bg-gray-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
+                                <button @click="showDrawer(data)" class="p-3 border rounded-full flex bg-teal-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
                                     <i class="pi pi-pencil" style="font-size: 0.7vw"></i>
                                 </button>
                             </div>

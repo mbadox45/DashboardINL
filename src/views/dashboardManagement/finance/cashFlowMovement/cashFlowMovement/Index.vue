@@ -45,7 +45,7 @@ let count = ref(0);
 const formData = ref({
     id: null,
     kategori_id: null,
-    pmg_id: null,
+    // pmg_id: null,
     tanggal: moment().format('YYYY-MM-DD'),
     value: null
 });
@@ -170,7 +170,7 @@ const showDrawer = async (data) => {
             logFile.value = list;
             formData.value.id = data.id;
             formData.value.kategori_id = response.kategori_id;
-            formData.value.pmg_id = response.pmg_id;
+            // formData.value.pmg_id = response.pmg_id;
             formData.value.tanggal = response.tanggal;
             formData.value.value = Number(response.value);
             statusForm.value = 'edit';
@@ -179,7 +179,7 @@ const showDrawer = async (data) => {
             logFile.value = [];
             formData.value.id = null;
             formData.value.kategori_id = null;
-            formData.value.pmg_id = null;
+            // formData.value.pmg_id = null;
             formData.value.tanggal = moment().format('YYYY-MM-DD');
             formData.value.value = null;
             statusForm.value = 'add';
@@ -191,7 +191,7 @@ const showDrawer = async (data) => {
         logFile.value = [];
         formData.value.id = null;
         formData.value.kategori_id = null;
-        formData.value.pmg_id = null;
+        // formData.value.pmg_id = null;
         formData.value.tanggal = moment().format('YYYY-MM-DD');
         formData.value.value = null;
         statusForm.value = 'add';
@@ -201,13 +201,14 @@ const showDrawer = async (data) => {
 const refreshForm = () => {
     messages.value = [];
     formData.value.kategori_id = null;
-    formData.value.pmg_id = null;
+    // formData.value.pmg_id = null;
     formData.value.tanggal = moment().format('YYYY-MM-DD');
     formData.value.value = null;
 };
 
 const submitData = async () => {
-    if (!formData.value.pmg_id || !formData.value.tanggal || !formData.value.kategori_id || !formData.value.value) {
+    // if (!formData.value.pmg_id || !formData.value.tanggal || !formData.value.kategori_id || !formData.value.value) {
+    if (!formData.value.tanggal || !formData.value.kategori_id || !formData.value.value) {
         messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     } else {
         formData.value.tanggal = moment(formData.value.tanggal).format('YYYY-MM-DD');
@@ -249,7 +250,7 @@ const submitData = async () => {
             <span class="text-3xl">Cash Flow Movement & Cash Balance</span>
             <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-emerald-500 hover:bg-emerald-700 text-white rounded-full flex gap-2">
                 <i class="pi pi-plus"></i>
-                <span>Add Data</span>
+                <span>Tambah Data</span>
             </button>
         </div>
         <Drawer v-model:visible="drawerCond" position="right" class="!w-full md:!w-[30rem]">
@@ -269,10 +270,10 @@ const submitData = async () => {
                     <label for="kategori">Kategori <small class="text-red-500 font-bold">*</small></label>
                     <Select v-model="formData.kategori_id" filter :options="listUraian" optionLabel="name" optionValue="id" placeholder="Select a Description" class="w-full" />
                 </div>
-                <div class="flex flex-col gap-1">
+                <!-- <div class="flex flex-col gap-1">
                     <label for="pmg">PMG <small class="text-red-500 font-bold">*</small></label>
                     <Select v-model="formData.pmg_id" :options="pmg" optionLabel="nama" optionValue="id" placeholder="Select a Region" class="w-full" />
-                </div>
+                </div> -->
                 <div class="flex flex-col gap-1">
                     <label for="date">Tanggal <small class="text-red-500 font-bold">*</small></label>
                     <DatePicker v-model="formData.tanggal" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" />
@@ -324,10 +325,10 @@ const submitData = async () => {
         <Popover ref="op">
             <div class="flex flex-col items-center gap-4 w-[25rem] py-2">
                 <div class="flex flex-col gap-2 w-full">
-                    <div class="flex flex-col gap-1 w-full items-start">
+                    <!-- <div class="flex flex-col gap-1 w-full items-start">
                         <label for="pmg" class="text-[0.8vw]">Select by PMG</label>
                         <Select v-model="selectedPmg" :options="pmg" optionLabel="nama" optionValue="id" placeholder="Select a Region" class="w-full" />
-                    </div>
+                    </div> -->
                     <div class="flex flex-col gap-1 w-full items-start">
                         <label for="pmg" class="text-[0.8vw]">Select by Period</label>
                         <DatePicker v-model="dates" selectionMode="range" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :manualInput="false" placeholder="Select Date Range" class="w-full" />
@@ -344,7 +345,7 @@ const submitData = async () => {
                 <div class="flex gap-5 items-center mb-5">
                     <div class="flex items-center justify-between gap-3 w-full">
                         <button @click="toggle" class="py-2 px-3 text-black text-[0.8vw] flex gap-3 items-center bg-pink-200 shadow-md rounded-lg shadow-gray-200 font-bold hover:bg-pink-300 transition-all duration-300">
-                            <i class="pi pi-calendar" style="font-size: 0.8vw"></i><span>Select Data</span>
+                            <i class="pi pi-calendar" style="font-size: 0.8vw"></i><span>Periode</span>
                         </button>
                         <Chip :label="`${moment(beforeDate).format('DD MMM YYYY')} - ${moment(now).format('DD MMM YYYY')}`" icon="pi pi-calendar" style="font-size: 0.6vw" class="font-bold" />
                     </div>

@@ -2,7 +2,6 @@
 import { URL_WEB } from '@/api/http/dataVariable';
 import cashFlowMovementController from '@/controller/getApiFromThisApp/cashFlowMovement/cashFlowMovementController';
 import kategoriCashFlowMovementController from '@/controller/getApiFromThisApp/cashFlowMovement/kategoriCashFlowMovementController';
-import pmgMasterController from '@/controller/getApiFromThisApp/master/pmgMasterController';
 import moment from 'moment';
 import { onMounted, ref } from 'vue';
 
@@ -13,7 +12,7 @@ const listJenis = ref([]);
 const jenisProduksi = ref([]);
 const listPmg = ref([]);
 const jenis = ref(null);
-const pmg = ref(null);
+// const pmg = ref(null);
 const loadings = ref(false);
 const setTime = ref(3000);
 
@@ -24,13 +23,13 @@ onMounted(() => {
     loadData();
 });
 
-const loadData = async () => {
-    // PMG
-    const dataPmg = await pmgMasterController.getAll();
-    listPmg.value = dataPmg;
+// const loadData = async () => {
+//     // PMG
+//     const dataPmg = await pmgMasterController.getAll();
+//     listPmg.value = dataPmg;
 
-    // await loadJenis();
-};
+//     // await loadJenis();
+// };
 
 const loadJenis = async () => {
     try {
@@ -40,7 +39,7 @@ const loadJenis = async () => {
             list.push({
                 kategori_id: response[i].id,
                 item_produksi: response[i].name,
-                pmg_id: pmg.value,
+                // pmg_id: pmg.value,
                 tanggal: tanggal.value,
                 value: null
             });
@@ -69,7 +68,7 @@ const loadJenis = async () => {
 const resetForm = () => {
     formData.value = [];
     jenis.value = null;
-    pmg.value = null;
+    // pmg.value = null;
     tanggal.value = moment().format('YYYY-MM-DD');
 };
 

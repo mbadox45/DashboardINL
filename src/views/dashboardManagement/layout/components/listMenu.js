@@ -12,14 +12,14 @@ export const menuAllAccess = () => {
             items: [
                 {
                     label: 'Kurs',
-                    icon: 'pi pi-euro',
+                    icon: 'pi pi-arrow-right-arrow-left',
                     items: [
-                        { label: 'Kurs', to: '/finance/kurs' },
-                        { label: 'Mata Uang', to: '/finance/kurs/mata-uang' }
+                        { label: 'Mata Uang', to: '/finance/kurs/mata-uang' },
+                        { label: 'Kurs', to: '/finance/kurs' }
                     ]
                 },
-                { label: 'CPO KPBN', icon: 'pi pi-truck', to: '/finance/cpo-kpbn' },
-                { label: 'Harga', icon: 'pi pi-ticket', to: '/finance/harga' },
+                { label: 'CPO KPBN', icon: 'pi pi-chart-bar', to: '/finance/cpo-kpbn' },
+                { label: 'Harga Spot & Inv.', icon: 'pi pi-tags', to: '/finance/harga' },
                 {
                     label: 'Cash Flow Movement',
                     icon: 'pi pi-dollar',
@@ -30,7 +30,7 @@ export const menuAllAccess = () => {
                 },
                 {
                     label: 'Cash Flow Schedule',
-                    icon: 'pi pi-hourglass',
+                    icon: 'pi pi-calendar-clock',
                     items: [
                         { label: 'Cash Flow Schedule', to: '/finance/cash-flow-schedule' },
                         { label: 'Kategori', to: '/finance/cash-flow-schedule/kategori' },
@@ -38,39 +38,52 @@ export const menuAllAccess = () => {
                     ]
                 },
                 { label: 'Profitability', icon: 'pi pi-chart-line', to: '/finance/profitability' },
-                { label: 'Beban Produksi', icon: 'pi pi-bullseye', to: '/cost-prod/beban-prod' }
+                {
+                    label: 'Beban Produksi',
+                    icon: 'pi pi pi-receipt',
+                    items: [
+                        { label: 'Uraian Beban Produksi', to: '/master/uraian/beban-produksi' },
+                        { label: 'Beban Produksi', to: '/cost-prod/beban-prod' }
+                    ]
+                }
             ]
         },
         {
             label: 'Operation',
             items: [
-                { label: 'Target Produksi', icon: 'pi pi-server', to: '/cost-prod/target-prod' },
+                {
+                    label: 'Target Produksi',
+                    icon: 'pi pi-fw pi-bullseye',
+                    items: [
+                        { label: 'Uraian Target Produksi', to: '/master/uraian/target-produksi' },
+                        { label: 'Target Produksi', to: '/cost-prod/target-prod' }
+                    ]
+                },
                 {
                     label: 'Laporan Produksi',
-                    icon: 'pi pi-fw pi-id-card',
+                    icon: 'pi pi-fw pi-cog',
                     items: [
-                        { label: 'Jenis Produksi', to: '/master/jenis-produksi' },
+                        { label: 'Jenis Laporan', to: '/master/jenis-produksi' },
                         { label: 'Laporan', to: '/operation/laporan-produksi' }
                     ]
                 },
                 {
                     label: 'Laporan Material',
-                    icon: 'pi pi-fw pi-building',
+                    icon: 'pi pi-fw pi-list-check',
                     items: [
                         { label: 'Jenis Material', to: '/master/jenis-material' },
-                        { label: 'Norma', to: '/operation/norma-material' },
+                        { label: 'Norma Material', to: '/operation/norma-material' },
                         { label: 'Laporan', to: '/operation/laporan-material' }
                     ]
                 },
                 {
-                    label: 'Packaging',
+                    label: 'Laporan Packaging',
                     icon: 'pi pi-fw pi-box',
                     items: [
-                        { label: 'Packaging', to: '/operation/packaging' },
                         { label: 'Uraian Target Packaging', to: '/operation/packaging/uraian-target' },
                         { label: 'Target Packaging', to: '/operation/packaging/target' },
                         { label: 'Jenis Laporan', to: '/operation/packaging/jenis-laporan' },
-                        { label: 'Laporan Packaging', to: '/operation/packaging/laporan-packaging' }
+                        { label: 'Laporan', to: '/operation/packaging/laporan-packaging' }
                     ]
                 }
             ]
@@ -78,22 +91,34 @@ export const menuAllAccess = () => {
         {
             label: 'Sales',
             items: [
-                { label: 'Uraian Target Penjualan', icon: 'pi pi-fw pi-list-check', to: '/sales/uraian-target-penjualan' },
-                { label: 'Target Penjualan', icon: 'pi pi-fw pi-lightbulb', to: '/sales/target-penjualan' },
-                { label: 'Laporan Penjualan', icon: 'pi pi-fw pi-gauge', to: '/sales/laporan-penjualan' },
-                { label: 'Levy Duty & M. Routers', icon: 'pi pi-fw pi-briefcase', to: '/sales/levy-duty-proportion-cost' }
+                {
+                    label: 'Target Penjualan',
+                    icon: 'pi pi-fw pi-bullseye',
+                    items: [
+                        { label: 'Uraian Target Penjualan', to: '/sales/uraian-target-penjualan' },
+                        { label: 'Target Penjualan', to: '/sales/target-penjualan' }
+                    ]
+                },
+                { label: 'Laporan Penjualan', icon: 'pi pi-fw pi-shop', to: '/sales/laporan-penjualan' },
+                { label: 'Levy Duty & M. Routers', icon: 'pi pi-fw pi-shopping-bag', to: '/sales/levy-duty-proportion-cost' }
             ]
         },
         {
             label: 'Supply Chain',
             items: [
-                { label: 'Source CPO', icon: 'pi pi-fw pi-building-columns', to: '/scm/source-cpo' },
-                { label: 'Target Incoming', icon: 'pi pi-fw pi-thumbtack', to: '/scm/target-incoming' },
-                { label: 'Incoming CPO', icon: 'pi pi-fw pi-tag', to: '/scm/incoming-cpo' },
-                { label: 'Saldo PE', icon: 'pi pi-fw pi-shop', to: '/scm/saldo-pe' },
-                { label: 'Outstanding CPO', icon: 'pi pi-fw pi-cart-arrow-down', to: '/scm/outstanding-cpo' },
                 {
-                    label: 'Stock',
+                    label: 'CPO',
+                    icon: 'pi pi-fw pi-bullseye',
+                    items: [
+                        { label: 'Source CPO', to: '/scm/source-cpo' },
+                        { label: 'Target Incoming CPO', to: '/scm/target-incoming' },
+                        { label: 'Incoming CPO', to: '/scm/incoming-cpo' },
+                        { label: 'Outstanding CPO', to: '/scm/outstanding-cpo' }
+                    ]
+                },
+                { label: 'Saldo PE', icon: 'pi pi-fw pi-arrow-down-left-and-arrow-up-right-to-center', to: '/scm/saldo-pe' },
+                {
+                    label: 'Stok',
                     icon: 'pi pi-fw pi-warehouse',
                     items: [
                         { label: 'CPO', to: '/scm/stock/cpo' },
@@ -106,32 +131,19 @@ export const menuAllAccess = () => {
         {
             label: 'Master',
             items: [
-                { label: 'PMG Master', icon: 'pi pi-fw pi-building-columns', to: '/master/pmg' },
-                {
-                    label: 'Produk',
-                    icon: 'pi pi-fw pi-book',
-                    items: [
-                        { label: 'Produk', to: '/master/produk' },
-                        { label: 'Produk Storage', to: '/master/produk-storage' }
-                    ]
-                },
-                {
-                    label: 'Uraian Master',
-                    icon: 'pi pi-fw pi-hammer',
-                    items: [
-                        { label: 'Beban Produksi', to: '/master/uraian/beban-produksi' },
-                        { label: 'Target Produksi', to: '/master/uraian/target-produksi' }
-                    ]
-                },
-                { label: 'Lokasi', icon: 'pi pi-fw pi-map-marker', to: '/master/lokasi' },
+                { label: 'PMG Master', icon: 'pi pi-fw pi-building', to: '/master/pmg' },
+                { label: 'Packaging Master', icon: 'pi pi-fw pi-warehouse', to: '/operation/packaging' },
+                { label: 'Produk', icon: 'pi pi-fw pi-box', to: '/master/produk' },
+                { label: 'Stok Penyimpanan', icon: 'pi pi-fw pi-database', to: '/master/produk-storage' },
                 {
                     label: 'Partner',
-                    icon: 'pi pi-fw pi-sitemap',
+                    icon: 'pi pi-fw pi-users',
                     items: [
                         { label: 'Supplier', to: '/master/partner/supplier' },
                         { label: 'Customer', to: '/master/partner/customer' }
                     ]
-                }
+                },
+                { label: 'Lokasi', icon: 'pi pi-fw pi-map-marker', to: '/master/lokasi' }
             ]
         }
     ];

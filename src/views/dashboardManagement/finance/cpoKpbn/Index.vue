@@ -242,12 +242,12 @@ const submitData = async () => {
             <span class="text-3xl">CPO KPBN</span>
             <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-emerald-500 hover:bg-emerald-700 text-white rounded-full flex gap-2">
                 <i class="pi pi-plus"></i>
-                <span>Add Data</span>
+                <span>Tambah Data</span>
             </button>
         </div>
         <Drawer v-model:visible="drawerCond" position="right" class="!w-full md:!w-[30rem]">
             <template #header>
-                <span class="text-[1vw] font-bold">Form Data</span>
+                <span class="text-[1vw] font-bold">Form CPO KPBN</span>
             </template>
             <template #footer>
                 <div class="flex w-full justify-end pt-3 border-t">
@@ -263,7 +263,7 @@ const submitData = async () => {
                     <DatePicker v-model="formData.tanggal" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" />
                 </div>
                 <div class="flex flex-col gap-1">
-                    <label for="value">Value <small class="text-red-500 font-bold">*</small></label>
+                    <label for="value">Nilai (IDR) <small class="text-red-500 font-bold">*</small></label>
                     <InputNumber v-model="formData.value" inputId="minmaxfraction" placeholder="1,000,000" :minFractionDigits="0" :maxFractionDigits="2" fluid />
                 </div>
                 <div class="flex flex-row-reverse w-full gap-3 mt-3">
@@ -276,10 +276,10 @@ const submitData = async () => {
                         :class="loadingSave == true ? 'opacity-50' : 'opacity-100'"
                         class="px-3 py-2 w-full border rounded-lg border-transparent hover:shadow-md hover:shadow-black hover:bg-emerald-800 transition-all duration-300 shadow-sm text-white shadow-black flex items-center gap-2 justify-center bg-emerald-700"
                     >
-                        <i class="pi pi-save"></i><span>{{ loadingSave == true ? 'Saving..' : 'Save' }}</span>
+                        <i class="pi pi-save"></i><span>{{ loadingSave == true ? 'Menyimpan..' : 'Simpan' }}</span>
                     </button>
                 </div>
-                <span class="mt-3 px-3" v-if="statusForm == 'edit'">Log Activity</span>
+                <span class="mt-3 px-3" v-if="statusForm == 'edit'">Log Aktifitas</span>
                 <ScrollPanel v-if="statusForm == 'edit'" style="width: 100%; height: 22rem">
                     <div class="flex flex-col gap-2 w-full p-3">
                         <div class="flex flex-col pb-2 px-2" v-for="(item, index) in logFile" :key="index" :class="index < logFile.length ? 'border-b' : 'border-none'">
@@ -310,11 +310,11 @@ const submitData = async () => {
             <div class="flex flex-col items-center gap-4 w-[25rem] py-2">
                 <div class="flex flex-col gap-2 w-full">
                     <div class="flex flex-col gap-1 w-full items-start">
-                        <label for="pmg" class="text-[0.8vw]">Select by Currency</label>
+                        <label for="pmg" class="text-[0.8vw]">Mata Uang Asing</label>
                         <Select v-model="selectedMataUang" :options="listMataUang" optionLabel="name" optionValue="id" placeholder="Select a Currency" class="w-full" />
                     </div>
                     <div class="flex flex-col gap-1 w-full items-start">
-                        <label for="pmg" class="text-[0.8vw]">Select by Period</label>
+                        <label for="pmg" class="text-[0.8vw]">Pilih Periode</label>
                         <DatePicker v-model="dates" selectionMode="range" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :manualInput="false" placeholder="Select Date Range" class="w-full" />
                     </div>
                 </div>
@@ -329,7 +329,7 @@ const submitData = async () => {
                 <div class="flex gap-5 items-center mb-5">
                     <div class="flex items-center justify-between gap-3 w-full">
                         <button @click="toggle" class="py-2 px-3 text-black text-[0.8vw] flex gap-3 items-center bg-pink-200 shadow-md rounded-lg shadow-gray-200 font-bold hover:bg-pink-300 transition-all duration-300">
-                            <i class="pi pi-calendar" style="font-size: 0.8vw"></i><span>Select Data</span>
+                            <i class="pi pi-calendar" style="font-size: 0.8vw"></i><span>Filter</span>
                         </button>
                         <Chip :label="`${moment(beforeDate).format('DD MMM YYYY')} - ${moment(now).format('DD MMM YYYY')}`" icon="pi pi-calendar" style="font-size: 0.6vw" class="font-bold" />
                     </div>
@@ -339,7 +339,7 @@ const submitData = async () => {
                 <div class="flex flex-col gap-4">
                     <Panel v-for="(item, index) in listTable" :key="index" toggleable class="w-full">
                         <template #header>
-                            <span class="text-[0.9vw] font-bold italic">Tahun Periode {{ item.year }}</span>
+                            <span class="text-[0.9vw] font-bold italic">Tahun {{ item.year }}</span>
                         </template>
                         <div class="flex flex-col gap-3">
                             <Panel v-for="(months, index) in item.months" :key="index" toggleable :collapsed="true" class="w-full">
@@ -347,15 +347,15 @@ const submitData = async () => {
                                     <div class="flex w-full items-center justify-between gap-3 pr-2">
                                         <span class="text-[0.9vw] font-bold italic">{{ moment(months.month > 9 ? `2024-${months.month.toString()}-01` : `2024-0${months.month.toString()}-01`).format('MMMM') }}</span>
                                         <div class="flex gap-3 text-[0.8vw]">
-                                            <span class="px-3 py-1 rounded-full bg-teal-200 text-black"><span class="font-bold">Avg Kurs (USD)</span> - {{ formatCurrency(months.averageAsing.toFixed(2)) }}</span>
-                                            <span class="px-3 py-1 rounded-full bg-teal-200 text-black"><span class="font-bold">Avg Kurs (IDR)</span> - {{ formatCurrency(months.average.toFixed(2)) }}</span>
+                                            <span class="px-3 py-1 rounded-full bg-teal-200 text-black"><span class="font-bold">Rata - Rata (Asing)</span> - {{ formatCurrency(months.averageAsing.toFixed(2)) }}</span>
+                                            <span class="px-3 py-1 rounded-full bg-teal-200 text-black"><span class="font-bold">Rata - Rata (IDR)</span> - {{ formatCurrency(months.average.toFixed(2)) }}</span>
                                         </div>
                                     </div>
                                 </template>
                                 <DataTable :value="months.detail" showGridlines paginator :rows="10">
-                                    <Column field="tanggal" sortable style="width: 15%; font-size: 0.9vw">
+                                    <Column field="tanggal" sortable style="width: 15%; font-size: 0.9vw" headerStyle="background-color:rgb(251 207 232)">
                                         <template #header>
-                                            <div class="flex w-full justify-center">
+                                            <div class="flex w-full justify-center text-black">
                                                 <span>Tanggal</span>
                                             </div>
                                         </template>
@@ -365,10 +365,10 @@ const submitData = async () => {
                                             </div>
                                         </template>
                                     </Column>
-                                    <Column field="kurs" sortable style="width: 25%; font-size: 0.7vw">
+                                    <Column field="kurs" sortable style="width: 25%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                                         <template #header>
-                                            <div class="flex w-full justify-center">
-                                                <span>Kurs (IDR)</span>
+                                            <div class="flex w-full justify-center text-black">
+                                                <span>Kurs</span>
                                             </div>
                                         </template>
                                         <template #body="{ data }">
@@ -377,10 +377,10 @@ const submitData = async () => {
                                             </div>
                                         </template>
                                     </Column>
-                                    <Column field="valueAsing" sortable style="width: 25%; font-size: 0.7vw">
+                                    <Column field="valueAsing" sortable style="width: 25%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                                         <template #header>
-                                            <div class="flex w-full justify-center">
-                                                <span>Kurs (IDR)</span>
+                                            <div class="flex w-full justify-center text-black">
+                                                <span>Nilai Asing / Ton</span>
                                             </div>
                                         </template>
                                         <template #body="{ data }">
@@ -389,10 +389,10 @@ const submitData = async () => {
                                             </div>
                                         </template>
                                     </Column>
-                                    <Column field="value" sortable style="width: 25%; font-size: 0.7vw">
+                                    <Column field="value" sortable style="width: 25%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                                         <template #header>
-                                            <div class="flex w-full justify-center">
-                                                <span>Value</span>
+                                            <div class="flex w-full justify-center text-black">
+                                                <span>Nilai IDR / Kg</span>
                                             </div>
                                         </template>
                                         <template #body="{ data }">
@@ -401,10 +401,10 @@ const submitData = async () => {
                                             </div>
                                         </template>
                                     </Column>
-                                    <Column field="id" style="width: 5%; font-size: 0.7vw">
+                                    <Column field="id" style="width: 5%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                                         <template #body="{ data }">
                                             <div class="flex items-center justify-center w-full">
-                                                <button @click="showDrawer(data)" class="p-3 border rounded-full flex text-black bg-gray-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
+                                                <button @click="showDrawer(data)" class="p-3 border rounded-full flex text-black bg-teal-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
                                                     <i class="pi pi-pencil" style="font-size: 0.7vw"></i>
                                                 </button>
                                             </div>
@@ -415,53 +415,6 @@ const submitData = async () => {
                         </div>
                     </Panel>
                 </div>
-                <!-- <DataTable :value="listTable" showGridlines paginator :rows="10">
-                    <Column field="tanggal" sortable style="width: 15%; font-size: 0.9vw">
-                        <template #header>
-                            <div class="flex w-full justify-center">
-                                <span>Tanggal</span>
-                            </div>
-                        </template>
-                        <template #body="{ data }">
-                            <div class="flex w-full justify-start">
-                                <span>{{ moment(data.tanggal).format('DD MMM YYYY') }}</span>
-                            </div>
-                        </template>
-                    </Column>
-                    <Column field="id_mata_uang" sortable style="width: 15%; font-size: 0.9vw">
-                        <template #header>
-                            <div class="flex w-full justify-center">
-                                <span>Mata Uang</span>
-                            </div>
-                        </template>
-                        <template #body="{ data }">
-                            <div class="flex w-full justify-center">
-                                <span>{{ data.mata_uang }}</span>
-                            </div>
-                        </template>
-                    </Column>
-                    <Column field="value" sortable style="width: 25%; font-size: 0.9vw">
-                        <template #header>
-                            <div class="flex w-full justify-center">
-                                <span>Value</span>
-                            </div>
-                        </template>
-                        <template #body="{ data }">
-                            <div class="flex w-full justify-end">
-                                <span>{{ formatCurrency(Number(data.value).toFixed(2)) }}</span>
-                            </div>
-                        </template>
-                    </Column>
-                    <Column field="value" style="width: 5%; font-size: 0.7vw">
-                        <template #body="{ data }">
-                            <div class="flex items-center justify-center w-full">
-                                <button @click="showDrawer(data)" class="p-3 border rounded-full flex bg-gray-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
-                                    <i class="pi pi-pencil" style="font-size: 0.7vw"></i>
-                                </button>
-                            </div>
-                        </template>
-                    </Column>
-                </DataTable> -->
             </template>
         </Card>
     </div>
