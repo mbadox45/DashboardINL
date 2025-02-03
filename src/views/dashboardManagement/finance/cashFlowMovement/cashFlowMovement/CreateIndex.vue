@@ -155,7 +155,7 @@ const postData = async (cond) => {
                     <ScrollPanel style="width: 100%; height: 22rem">
                         <div class="grid grid-cols-2 gap-3">
                             <div class="flex flex-col gap-1" v-for="(item, index) in formData" :key="index">
-                                <label for="date" class="font-bold">{{ item.item_produksi }} <small class="text-red-500 font-bold">*</small></label>
+                                <label for="date" class="font-bold">{{ item.item_produksi }} (IDR) <small class="text-red-500 font-bold">*</small></label>
                                 <InputNumber v-model="item.value" inputId="minmaxfraction" placeholder="1,000" :minFractionDigits="0" :maxFractionDigits="2" fluid />
                             </div>
                         </div>

@@ -1,6 +1,5 @@
 import cashFlowMovementAPI from '@/api/thisAPI/cashFlowMovement/cashFlowMovementAPI';
 import { msg_error, msg_success, msg_warning } from '@/controller/getApiFromThisApp/dummy/notificationDummy';
-import { bulanKalendar } from '@/controller/getApiFromThisApp/dummy/variableDummy';
 import moment from 'moment';
 
 export default new (class cashFlowMovementController {
@@ -77,12 +76,46 @@ export default new (class cashFlowMovementController {
             if (response != null) {
                 const list = [];
                 // Last Year
-                const bulan = bulanKalendar;
-                const lastYear = response.lastYear;
-                const thisYear = response.thisYear;
+                // const lastYear = response.lastYear.data;
+                // const thisYear = response.thisYear.data;
+                const latestCashBalance = response.latestCashBalance;
 
-                list.push({ name: `Last Year ${Number(years) - 1}`, items: lastYear.data }, { name: `This Year ${Number(years)}`, items: thisYear.data });
-                return list;
+                const lastYearData = response.lastYear.data.map((monthData) => ({
+                    month: monthData.month,
+                    items: [
+                        ...monthData.detail,
+                        {
+                            id: 0,
+                            name: 'Ending Cash Balance',
+                            value: monthData.ending_cash_balanced,
+                            nilai: 'positive'
+                        }
+                    ]
+                }));
+
+                const thisYearData = response.thisYear.data.map((monthData) => ({
+                    month: monthData.month,
+                    items: [
+                        ...monthData.detail,
+                        {
+                            id: 0,
+                            name: 'Ending Cash Balance',
+                            value: monthData.ending_cash_balanced,
+                            nilai: 'positive'
+                        }
+                    ]
+                }));
+
+                // console.log(lastYearData);
+                // console.log(thisYearData);
+
+                list.push({ name: `Last Year ${Number(years) - 1}`, items: lastYearData }, { name: `This Year ${Number(years)}`, items: thisYearData });
+
+                const result = {
+                    latestCashBalance: latestCashBalance,
+                    listTable: list
+                };
+                return result;
             } else {
                 return [];
             }

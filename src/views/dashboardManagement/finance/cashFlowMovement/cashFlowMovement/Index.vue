@@ -19,11 +19,12 @@ const logFile = ref([]);
 const optionPage = ref(0);
 
 const listTable = ref([]);
+const latestCashBalance = ref({});
 const totalTable = ref({ cpoOlah: 0, totalCost: 0, totalHargaSatuan: 0 });
 const search = ref();
 const expandedRows = ref([]);
 
-const selectedPmg = ref(1);
+// const selectedPmg = ref(1);
 const pmg = ref([]);
 const listUraian = ref([]);
 
@@ -60,12 +61,16 @@ const loadData = async () => {
     try {
         // Change Picker
         const form = {
-            idPmg: selectedPmg.value,
+            // idPmg: selectedPmg.value,
             tanggalAwal: beforeDate.value,
             tanggalAkhir: now.value
         };
+
         const data = await cashFlowMovementController.loadTable(form);
-        listTable.value = data;
+        listTable.value = data.listTable;
+        latestCashBalance.value = data.latestCashBalance;
+
+        console.log(latestCashBalance.value);
         totalTable.value = {
             cpoOlah: 0,
             totalCost: 0,
@@ -131,7 +136,6 @@ const showDrawer = async (data) => {
             messages.value = [];
             const response = await cashFlowMovementController.getByID(data.id);
             const history = response.history;
-            console.log(response);
             const list = [];
             for (let i = 0; i < history.length; i++) {
                 let fromValue,
@@ -270,7 +274,7 @@ const submitData = async () => {
                 </transition-group>
                 <div class="flex flex-col gap-1">
                     <label for="kategori">Kategori <small class="text-red-500 font-bold">*</small></label>
-                    <Select v-model="formData.kategori_id" filter :options="listUraian" optionLabel="name" optionValue="id" placeholder="Select a Description" class="w-full" />
+                    <Select v-model="formData.kategori_id" filter :options="listUraian" optionLabel="name" optionValue="id" placeholder="Select a Description" class="w-full" disabled />
                 </div>
                 <!-- <div class="flex flex-col gap-1">
                     <label for="pmg">PMG <small class="text-red-500 font-bold">*</small></label>
@@ -358,6 +362,7 @@ const submitData = async () => {
                         </InputGroupAddon>
                     </InputGroup> -->
                 </div>
+                <div class="text-xl font-bold">Cash Balance: {{ formatCurrency(latestCashBalance?.value || 0) }}</div>
             </template>
             <template #content>
                 <ScrollPanel style="width: 100%; height: 35vw">
@@ -371,7 +376,7 @@ const submitData = async () => {
                                     <template #header>
                                         <span class="text-[0.8vw] font-bold italic">{{ moment(items.month > 9 ? `2024-${items.month.toString()}-01` : `2024-0${items.month.toString()}-01`).format('MMMM') }}</span>
                                     </template>
-                                    <DataTable :value="items.detail" showGridlines paginator :rows="5">
+                                    <DataTable :value="items.items" showGridlines>
                                         <Column field="name" sortable style="width: 25%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                                             <template #header>
                                                 <div class="flex w-full justify-center">
@@ -412,7 +417,7 @@ const submitData = async () => {
                                         </Column>
                                         <Column field="value" style="width: 5%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                                             <template #body="{ data }">
-                                                <div class="flex items-center justify-center w-full">
+                                                <div class="flex items-center justify-center w-full" v-show="data.name != 'Ending Cash Balance'">
                                                     <button @click="showDrawer(data)" class="p-3 border rounded-full flex bg-teal-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
                                                         <i class="pi pi-pencil" style="font-size: 0.6vw"></i>
                                                     </button>

@@ -29,10 +29,10 @@ const listUraian = ref([]);
 
 const op = ref();
 
-// const beforeDate = ref(moment().format('YYYY-MM-01'));
-// const now = ref(moment().format('YYYY-MM-DD'));
-const beforeDate = ref('2024-01-01');
-const now = ref(moment().format('2024-01-31'));
+const beforeDate = ref(moment().format('YYYY-MM-01'));
+const now = ref(moment().format('YYYY-MM-DD'));
+// const beforeDate = ref('2024-01-01');
+// const now = ref(moment().format('2024-01-31'));
 const dates = ref([moment(beforeDate.value).toDate(), moment(now.value).toDate()]);
 
 const initFilters = () => {
@@ -252,7 +252,7 @@ const submitData = async () => {
             <span class="text-3xl">Profitability</span>
             <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-emerald-500 hover:bg-emerald-700 text-white rounded-full flex gap-2">
                 <i class="pi pi-plus"></i>
-                <span>Add Data</span>
+                <span>Tambah Data</span>
             </button>
         </div>
         <Drawer v-model:visible="drawerCond" position="right" class="!w-full md:!w-[30rem]">
@@ -270,7 +270,7 @@ const submitData = async () => {
                 </transition-group>
                 <div class="flex flex-col gap-1">
                     <label for="kategori">Kategori <small class="text-red-500 font-bold">*</small></label>
-                    <Select v-model="formData.kategori_id" filter :options="listUraian" optionLabel="name" optionValue="id" placeholder="Select a Description" class="w-full" />
+                    <Select v-model="formData.kategori_id" filter :options="listUraian" optionLabel="name" optionValue="id" placeholder="Select a Description" class="w-full" disabled />
                 </div>
                 <!-- <div class="flex flex-col gap-1">
                     <label for="pmg">PMG <small class="text-red-500 font-bold">*</small></label>
@@ -281,7 +281,7 @@ const submitData = async () => {
                     <DatePicker v-model="formData.tanggal" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" />
                 </div>
                 <div class="flex flex-col gap-1">
-                    <label for="value">Value <small class="text-red-500 font-bold">*</small></label>
+                    <label for="value">Nilai (IDR) <small class="text-red-500 font-bold">*</small></label>
                     <InputNumber v-model="formData.value" inputId="minmaxfraction" placeholder="1,000,000" :minFractionDigits="0" :maxFractionDigits="2" fluid />
                 </div>
                 <div class="flex flex-row-reverse w-full gap-3 mt-3">
