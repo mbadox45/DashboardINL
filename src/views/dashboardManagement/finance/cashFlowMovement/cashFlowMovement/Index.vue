@@ -348,21 +348,17 @@ const submitData = async () => {
         </Popover>
         <Card>
             <template #title>
-                <div class="flex gap-5 items-center mb-5">
+                <div class="flex flex-col gap-5 items-center mb-5">
                     <div class="flex items-center justify-between gap-3 w-full">
                         <button @click="toggle" class="py-2 px-3 text-black text-[0.8vw] flex gap-3 items-center bg-pink-200 shadow-md rounded-lg shadow-gray-200 font-bold hover:bg-pink-300 transition-all duration-300">
                             <i class="pi pi-calendar" style="font-size: 0.8vw"></i><span>Periode</span>
                         </button>
                         <Chip :label="`${moment(beforeDate).format('DD MMM YYYY')} - ${moment(now).format('DD MMM YYYY')}`" icon="pi pi-calendar" style="font-size: 0.6vw" class="font-bold" />
                     </div>
-                    <!-- <InputGroup>
-                        <InputText placeholder="Search Components" v-model="search['global'].value" />
-                        <InputGroupAddon>
-                            <i class="pi pi-search" />
-                        </InputGroupAddon>
-                    </InputGroup> -->
+                    <div class="w-full flex justify-end">
+                        <div class="text-md font-bold px-4 py-2 justify-center items-center bg-cyan-200 rounded-full">Cash Balance: {{ formatCurrency(latestCashBalance?.value || 0) }}</div>
+                    </div>
                 </div>
-                <div class="text-xl font-bold">Cash Balance: {{ formatCurrency(latestCashBalance?.value || 0) }}</div>
             </template>
             <template #content>
                 <ScrollPanel style="width: 100%; height: 35vw">

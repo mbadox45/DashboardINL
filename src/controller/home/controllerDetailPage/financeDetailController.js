@@ -17,45 +17,58 @@ export default new (class financeDetailController {
                 const kategori = response.kategori;
                 const listChart = [];
                 const listTable = [];
-                for (let i = 0; i < kategori.length; i++) {
+                const cffKategori = kategori.find((item) => item.name.toLowerCase().includes('cash flow funding'));
+                if (cffKategori != null) {
+                    const period = cffKategori.period;
                     const list = [];
-                    if (kategori[i].name === 'Cash Flow Funding') {
-                        const period = kategori[i].period;
-                        if (period.length > 0) {
-                            for (let j = 0; j < period.length; j++) {
-                                const data = period[j].data[0];
-                                const bulan = months.find((item) => item.id == period[j].month);
-                                list.push({
-                                    periode: bulan.name + ' ' + period[j].year,
-                                    name: data.name,
-                                    value: valueToBilion(data.value),
-                                    pay_status: data.pay_status.name
-                                });
-                            }
+                    for (let i = 0; i < period.length; i++) {
+                        const data = period[i].data;
+                        const bulan = months.find((item) => item.id == period[i].month);
+                        for (let j = 0; j < data.length; j++) {
+                            list.push({
+                                periode: bulan.name + ' ' + period[i].year,
+                                name: data[j].name,
+                                value: valueToBilion(data[j].value),
+                                pay_status: data[j].pay_status.name
+                            });
                         }
-                    } else {
-                        const period = kategori[i].period;
-                        const load = [];
-                        console.log(period);
-                        if (period.length > 0) {
-                            for (let j = 0; j < period.length; j++) {
-                                const data = period[i].data;
-                                for (let k = 0; k < data.length; k++) {
-                                    load.push({
-                                        name: data[k].name
-                                    });
-                                }
-                            }
-                        }
-                        console.log(load);
                     }
-
-                    listTable.push({
-                        kategori: kategori[i].name,
-                        data: list
+                    // console.log(list);
+                }
+                const cfiKategori = kategori.find((item) => item.name.toLowerCase().includes('cash flow investment'));
+                if (cfiKategori != null) {
+                    const period = cfiKategori.period;
+                    const listName = [];
+                    const listChart = [];
+                    for (let i = 0; i < period.length; i++) {
+                        const data = period[i].data;
+                        for (let j = 0; j < data.length; j++) {
+                            listName.push({ name: data[j].name });
+                        }
+                    }
+                    const uniqueDataName = Array.from(new Map(listName.map((item) => [item.name, item])).values());
+                    for (let i = 0; i < uniqueDataName.length; i++) {
+                        const dataArray = [];
+                        for (let j = 0; j < months.length; j++) {
+                            const dataPeriod = period.find((item) => item.month == months[j].id);
+                            if (dataPeriod != null) {
+                                const data = dataPeriod.data;
+                                const total = data.filter((item) => item.name === uniqueDataName[i].name).reduce((sum, item) => sum + (Number(item.value) || 0), 0);
+                                dataArray.push(Number(valueToBilion(total)));
+                            } else {
+                                dataArray.push(0);
+                            }
+                        }
+                        listChart.push({
+                            name: uniqueDataName[i].name,
+                            data: dataArray
+                        });
+                    }
+                    result.chart.push({
+                        name: cfiKategori.name,
+                        dataChart: listChart
                     });
                 }
-                result.tabel = listTable;
             }
             return result;
         } catch (error) {
