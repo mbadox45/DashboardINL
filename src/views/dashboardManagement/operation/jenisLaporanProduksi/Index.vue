@@ -138,16 +138,16 @@ const filteredList = computed(() => {
 <template>
     <div class="flex flex-col w-full gap-8">
         <div class="flex gap-2 items-center justify-between w-full font-bold">
-            <span class="text-3xl">Master Jenis Produksi</span>
+            <span class="text-3xl">Jenis Laporan Produksi</span>
             <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-emerald-500 hover:bg-emerald-700 text-white rounded-full flex gap-2">
                 <i class="pi pi-plus"></i>
-                <span>Add Component</span>
+                <span>Tambah Jenis Laporan</span>
             </button>
         </div>
         <Drawer v-model:visible="drawerCond" position="right" class="!w-full md:!w-[30rem]">
             <template #header>
                 <div class="flex flex-col gap-3">
-                    <span class="text-[1vw] font-bold">Form Component</span>
+                    <span class="text-[1vw] font-bold">Form Jenis</span>
                     <transition-group name="p-message" tag="div" class="flex flex-col w-full">
                         <Message v-for="msg of messages" :key="msg.id" :severity="msg.severity" class="mt-4 w-full"><i :class="`pi ${msg.icon}`"></i> {{ msg.content }}</Message>
                     </transition-group>
@@ -161,27 +161,27 @@ const filteredList = computed(() => {
             <div class="flex flex-col gap-4 text-[1vw]">
                 <div class="flex flex-col gap-1">
                     <label for="nama">Nama <small class="text-red-500 font-bold">*</small></label>
-                    <InputText type="text" v-model="formData.name" placeholder="Please input Name" size="small" />
+                    <InputText type="text" v-model="formData.name" placeholder="Input Nama Laporan" size="small" />
                 </div>
                 <div class="flex flex-col gap-1">
-                    <label for="nama">Kondisi Olah <small class="text-red-500 font-bold">*</small></label>
-                    <Select v-model="formData.condition_olah" :options="listCondition" optionLabel="name" size="small" optionValue="id" placeholder="Select a Condition" class="w-full" />
+                    <label for="nama">Penggunaan Bahan Olah <small class="text-red-500 font-bold">*jika bahan olah > 1</small></label>
+                    <Select v-model="formData.condition_olah" :options="listCondition" optionLabel="name" size="small" optionValue="id" placeholder="Pilih Kondisi" class="w-full" />
                 </div>
                 <div class="flex flex-col gap-3">
                     <div class="flex gap-3 items-center justify-between">
                         <span class="font-bold">Items</span>
                         <button @click="addItems" class="flex gap-2 px-3 py-1 shadow bg-cyan-600 rounded-lg items-center font-bold hover:bg-cyan-700 text-white transition-all duration-300">
-                            <i class="pi pi-plus" style="font-size: 0.8vw"></i><span>Add item</span>
+                            <i class="pi pi-plus" style="font-size: 0.8vw"></i><span>Tambah item</span>
                         </button>
                     </div>
                     <div class="flex flex-col gap-2 p-4 border rounded-lg" v-for="(items, index) in formData.items" :key="index">
                         <div class="flex flex-col gap-1">
                             <label for="nama">Nama Item <small class="text-red-500 font-bold">*</small></label>
-                            <InputText type="text" v-model="items.name" placeholder="Please input Name" size="small" />
+                            <InputText type="text" v-model="items.name" placeholder="Input Nama Item" size="small" />
                         </div>
                         <div class="flex flex-col gap-1">
                             <label for="nama">Kategori Item <small class="text-red-500 font-bold">*</small></label>
-                            <Select v-model="items.kategori" :options="listKategori" optionLabel="name" optionValue="id" size="small" placeholder="Select a Condition" class="w-full" />
+                            <Select v-model="items.kategori" :options="listKategori" optionLabel="name" optionValue="id" size="small" placeholder="Pilih Jenis Item" class="w-full" />
                         </div>
                         <button v-if="index && statusForm == 'add'" @click="removeItems(index)" class="flex gap-2 px-3 py-2 shadow bg-red-600 justify-center rounded-lg items-center font-bold hover:bg-red-700 text-white transition-all duration-300">
                             <i class="pi pi-times" style="font-size: 0.8vw"></i><span>Remove Item</span>
@@ -234,9 +234,9 @@ const filteredList = computed(() => {
         <Card>
             <template #title>
                 <div class="flex gap-2 items-center mb-5">
-                    <span class="text-xl font-bold w-full">List Component</span>
+                    <span class="text-xl font-bold w-full">List Jenis Laporan</span>
                     <InputGroup>
-                        <InputText placeholder="Search Components" v-model="search" />
+                        <InputText placeholder="Cari" v-model="search" />
                         <InputGroupAddon>
                             <i class="pi pi-search" />
                         </InputGroupAddon>
@@ -249,12 +249,12 @@ const filteredList = computed(() => {
                         <Panel v-for="(item, index) in filteredList" :key="index" toggleable :collapsed="true" class="w-full">
                             <template #header>
                                 <div class="flex items-center gap-3">
-                                    <button @click="showDrawer(item)" class="p-3 border rounded-lg flex bg-gray-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
+                                    <button @click="showDrawer(item)" class="p-3 border rounded-lg flex bg-teal-500 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
                                         <i class="pi pi-pencil" style="font-size: 0.6vw"></i>
                                     </button>
                                     <div class="flex flex-col items-start">
                                         <span class="text-[0.9vw] font-bold italic">{{ item.name }}</span>
-                                        <small class="px-2 py-1 text-[0.6vw] flex items-center rounded-full bg-gray-200 shadow font-bold">{{ condFunction(item.condition_olah) }}</small>
+                                        <small class="px-2 py-1 text-[0.6vw] flex items-center rounded-full bg-teal-500 shadow font-bold">{{ condFunction(item.condition_olah) }}</small>
                                     </div>
                                 </div>
                             </template>

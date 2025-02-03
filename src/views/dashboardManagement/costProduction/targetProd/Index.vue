@@ -277,18 +277,18 @@ const submitData = async () => {
                 </transition-group>
                 <div class="flex flex-col gap-1">
                     <label for="date">Uraian <small class="text-red-500 font-bold">*</small></label>
-                    <Select v-model="formData.uraian_id" filter :options="listUraian" optionLabel="nama" optionValue="id" placeholder="Select a Description" class="w-full" />
+                    <Select v-model="formData.uraian_id" filter :options="listUraian" optionLabel="nama" optionValue="id" placeholder="Pilih Uraian" class="w-full" />
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="date">PMG <small class="text-red-500 font-bold">*</small></label>
-                    <Select v-model="formData.pmg_id" :options="pmg" optionLabel="nama" optionValue="id" placeholder="Select a Region" class="w-full" />
+                    <Select v-model="formData.pmg_id" :options="pmg" optionLabel="nama" optionValue="id" placeholder="Pilih PMG" class="w-full" />
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="date">Tanggal <small class="text-red-500 font-bold">*</small></label>
                     <DatePicker v-model="formData.tanggal" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" />
                 </div>
                 <div class="flex flex-col gap-1">
-                    <label for="date">Biaya Produksi (Rp) <small class="text-red-500 font-bold">*</small></label>
+                    <label for="date">Target CPO Olah (Kg) <small class="text-red-500 font-bold">*</small></label>
                     <InputNumber v-model="formData.value" inputId="minmaxfraction" placeholder="1,000,000" :minFractionDigits="0" :maxFractionDigits="2" fluid />
                 </div>
                 <div class="flex flex-row-reverse w-full gap-3 mt-3">
@@ -335,11 +335,11 @@ const submitData = async () => {
             <div class="flex flex-col items-center gap-4 w-[25rem] py-2">
                 <div class="flex flex-col gap-2 w-full">
                     <div class="flex flex-col gap-1 w-full items-start">
-                        <label for="pmg" class="text-[0.8vw]">Select by PMG</label>
+                        <label for="pmg" class="text-[0.8vw]">Pilih PMG</label>
                         <Select v-model="selectedPmg" :options="pmg" optionLabel="nama" optionValue="id" placeholder="Select a Region" class="w-full" />
                     </div>
                     <div class="flex flex-col gap-1 w-full items-start">
-                        <label for="pmg" class="text-[0.8vw]">Select by Period</label>
+                        <label for="pmg" class="text-[0.8vw]">Pilih Periode</label>
                         <DatePicker v-model="dates" selectionMode="range" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :manualInput="false" placeholder="Select Date Range" class="w-full" />
                     </div>
                 </div>
@@ -354,12 +354,12 @@ const submitData = async () => {
                 <div class="flex gap-5 items-center mb-5">
                     <div class="flex items-center justify-between gap-3 w-full">
                         <button @click="toggle" class="py-2 px-3 text-black text-[0.8vw] flex gap-3 items-center bg-pink-200 shadow-md rounded-lg shadow-gray-200 font-bold hover:bg-pink-300 transition-all duration-300">
-                            <i class="pi pi-calendar" style="font-size: 0.8vw"></i><span>Select Data</span>
+                            <i class="pi pi-calendar" style="font-size: 0.8vw"></i><span>Filter</span>
                         </button>
                         <Chip :label="`${moment(beforeDate).format('DD MMM YYYY')} - ${moment(now).format('DD MMM YYYY')}`" icon="pi pi-calendar" style="font-size: 0.6vw" class="font-bold" />
                     </div>
                     <InputGroup>
-                        <InputText placeholder="Search Components" v-model="search['global'].value" />
+                        <InputText placeholder="Cari" v-model="search['global'].value" />
                         <InputGroupAddon>
                             <i class="pi pi-search" />
                         </InputGroupAddon>
@@ -389,7 +389,7 @@ const submitData = async () => {
                             </div>
                         </template>
                     </Column>
-                    <Column field="value" sortable header="Biaya Produksi" style="width: 25%">
+                    <Column field="value" sortable header="Target CPO Olah (Kg)" style="width: 25%">
                         <template #body="{ data }">
                             <div class="flex w-full justify-end text-sm font-bold">
                                 <span>{{ formatCurrency(data.value.toFixed(2)) }}</span>

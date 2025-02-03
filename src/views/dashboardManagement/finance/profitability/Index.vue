@@ -332,7 +332,7 @@ const submitData = async () => {
                         <Select v-model="selectedPmg" :options="pmg" optionLabel="nama" optionValue="id" placeholder="Select a Region" class="w-full" />
                     </div> -->
                     <div class="flex flex-col gap-1 w-full items-start">
-                        <label for="tgl" class="text-[0.8vw]">Select by Period</label>
+                        <label for="tgl" class="text-[0.8vw]">Pilih Periode</label>
                         <DatePicker v-model="dates" selectionMode="range" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :manualInput="false" placeholder="Select Date Range" class="w-full" />
                     </div>
                 </div>
@@ -347,7 +347,7 @@ const submitData = async () => {
                 <div class="flex gap-5 items-center mb-5">
                     <div class="flex items-center justify-between gap-3 w-full">
                         <button @click="toggle" class="py-2 px-3 text-black text-[0.8vw] flex gap-3 items-center bg-pink-200 shadow-md rounded-lg shadow-gray-200 font-bold hover:bg-pink-300 transition-all duration-300">
-                            <i class="pi pi-calendar" style="font-size: 0.8vw"></i><span>Select Data</span>
+                            <i class="pi pi-calendar" style="font-size: 0.8vw"></i><span>Filter</span>
                         </button>
                         <Chip :label="`${moment(beforeDate).format('DD MMM YYYY')} - ${moment(now).format('DD MMM YYYY')}`" icon="pi pi-calendar" style="font-size: 0.6vw" class="font-bold" />
                     </div>
@@ -366,10 +366,10 @@ const submitData = async () => {
                                         <span class="text-[0.8vw] font-bold italic">{{ moment(items.month > 9 ? `2024-${items.month.toString()}-01` : `2024-0${items.month.toString()}-01`).format('MMMM') }}</span>
                                     </template>
                                     <DataTable :value="items.details" showGridlines paginator :rows="5">
-                                        <Column field="name" sortable style="width: 25%; font-size: 0.7vw">
+                                        <Column field="name" sortable style="width: 25%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                                             <template #header>
-                                                <div class="flex w-full justify-center">
-                                                    <span>Name</span>
+                                                <div class="flex w-full justify-center text-black">
+                                                    <span>Nama</span>
                                                 </div>
                                             </template>
                                             <template #body="{ data }">
@@ -378,10 +378,10 @@ const submitData = async () => {
                                                 </div>
                                             </template>
                                         </Column>
-                                        <Column field="value" sortable style="width: 25%; font-size: 0.7vw">
+                                        <Column field="value" sortable style="width: 25%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                                             <template #header>
-                                                <div class="flex w-full justify-center">
-                                                    <span>Value</span>
+                                                <div class="flex w-full justify-center text-black">
+                                                    <span>Nilai (IDR)</span>
                                                 </div>
                                             </template>
                                             <template #body="{ data }">
@@ -390,9 +390,9 @@ const submitData = async () => {
                                                 </div>
                                             </template>
                                         </Column>
-                                        <Column field="value" sortable style="width: 5%; font-size: 0.7vw">
+                                        <Column field="value" style="width: 5%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                                             <template #body="{ data }">
-                                                <button @click="showDrawer(data)" class="p-3 border rounded-full flex bg-gray-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
+                                                <button @click="showDrawer(data)" class="p-3 border rounded-full flex bg-teal-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
                                                     <i class="pi pi-pencil" style="font-size: 0.6vw"></i>
                                                 </button>
                                             </template>

@@ -88,9 +88,9 @@ export default new (class cashFlowMovementController {
                             id: 0,
                             name: 'Ending Cash Balance',
                             value: monthData.ending_cash_balanced,
-                            nilai: 'positive'
+                            nilai: 'neutral'
                         }
-                    ]
+                    ].sort((a, b) => (a.name === 'Starting Cash Balanced' ? -1 : b.name === 'Starting Cash Balanced' ? 1 : 0))
                 }));
 
                 const thisYearData = response.thisYear.data.map((monthData) => ({
@@ -101,9 +101,9 @@ export default new (class cashFlowMovementController {
                             id: 0,
                             name: 'Ending Cash Balance',
                             value: monthData.ending_cash_balanced,
-                            nilai: 'positive'
+                            nilai: 'neutral'
                         }
-                    ]
+                    ].sort((a, b) => (a.name === 'Starting Cash Balanced' ? -1 : b.name === 'Starting Cash Balanced' ? 1 : 0))
                 }));
 
                 // console.log(lastYearData);
