@@ -165,15 +165,15 @@ const submitData = async () => {
 <template>
     <div class="flex flex-col w-full gap-8">
         <div class="flex gap-2 items-center justify-between w-full font-bold">
-            <span class="text-3xl">Master Pay Status (Cash Flow Movement)</span>
+            <span class="text-3xl">Pay Status (Cash Flow Movement)</span>
             <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-emerald-500 hover:bg-emerald-700 text-white rounded-full flex gap-2">
                 <i class="pi pi-plus"></i>
-                <span>Add Component</span>
+                <span>Tambah Status</span>
             </button>
         </div>
         <Drawer v-model:visible="drawerCond" position="right" class="!w-full md:!w-[30rem]">
             <template #header>
-                <span class="text-[1vw] font-bold">Form Component</span>
+                <span class="text-[1vw] font-bold">Form Data</span>
             </template>
             <template #footer>
                 <div class="flex w-full justify-end pt-3 border-t">
@@ -186,15 +186,15 @@ const submitData = async () => {
                 </transition-group>
                 <div class="flex flex-col gap-1">
                     <label for="nama">Kategori <small class="text-red-500 font-bold">*</small></label>
-                    <InputText type="text" v-model="formData.name" placeholder="Please input Name" />
+                    <InputText type="text" v-model="formData.name" placeholder="Input Kategori" />
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="nama">Status <small class="text-red-500 font-bold">*</small></label>
-                    <Select v-model="formData.state" :options="listNilai" optionLabel="nama" optionValue="id" placeholder="Select a State" class="w-full" />
+                    <Select v-model="formData.state" :options="listNilai" optionLabel="nama" optionValue="id" placeholder="Input Status" class="w-full" />
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="nama">Remark <small class="text-red-500 font-bold">*</small></label>
-                    <InputText type="text" v-model="formData.remark" placeholder="Please input Remark" />
+                    <InputText type="text" v-model="formData.remark" placeholder="Input Remark" />
                 </div>
                 <div class="flex flex-row-reverse w-full gap-3">
                     <button @click="refreshForm" class="px-3 py-2 w-full border rounded-lg hover:shadow-md hover:shadow-black transition-all duration-300 shadow-sm shadow-black flex items-center gap-2 justify-center">

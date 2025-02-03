@@ -160,7 +160,7 @@ const submitData = async () => {
                     <Message v-for="msg of messages" :key="msg.id" :severity="msg.severity" class="mt-4"><i :class="`pi ${msg.icon}`"></i> {{ msg.content }}</Message>
                 </transition-group>
                 <div class="flex flex-col gap-1">
-                    <label for="nama">Nama<small class="text-red-500 font-bold">*</small></label>
+                    <label for="nama">Nama <small class="text-red-500 font-bold">*</small></label>
                     <InputText v-model="formData.name" placeholder="USD" />
                 </div>
                 <div class="flex flex-col gap-1">

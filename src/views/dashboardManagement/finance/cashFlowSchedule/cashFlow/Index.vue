@@ -4,7 +4,7 @@ import cashFlowScheduleController from '@/controller/getApiFromThisApp/cashFlowS
 import kategoriCashFlowScheduleController from '@/controller/getApiFromThisApp/cashFlowSchedule/kategoriCashFlowScheduleController';
 import payStatusCashFlowScheduleController from '@/controller/getApiFromThisApp/cashFlowSchedule/payStatusCashFlowScheduleController';
 import bebanProdCpoOlahController from '@/controller/getApiFromThisApp/cpoOlah/bebanProdCpoOlahController';
-import pmgMasterController from '@/controller/getApiFromThisApp/master/pmgMasterController';
+// import pmgMasterController from '@/controller/getApiFromThisApp/master/pmgMasterController';
 import { FilterMatchMode } from '@primevue/core/api';
 import moment from 'moment';
 import { onMounted, ref } from 'vue';
@@ -23,7 +23,7 @@ const search = ref();
 const expandedRows = ref([]);
 
 const selectedPmg = ref(1);
-const pmg = ref([]);
+// const pmg = ref([]);
 const listPayment = ref([]);
 const listKategori = ref([]);
 
@@ -48,7 +48,7 @@ const formData = ref({
     id: null,
     kategori_id: null,
     pay_status_id: null,
-    pmg_id: null,
+    // pmg_id: null,
     name: null,
     tanggal: moment().format('YYYY-MM-DD'),
     value: null
@@ -75,12 +75,12 @@ const loadData = async () => {
         };
 
         // get Select Option
-        const loadPMG = await pmgMasterController.getAll();
+        // const loadPMG = await pmgMasterController.getAll();
         const pay = await payStatusCashFlowScheduleController.getAll();
         const kategori = await kategoriCashFlowScheduleController.getAll();
         listKategori.value = kategori;
         listPayment.value = pay;
-        pmg.value = loadPMG;
+        // pmg.value = loadPMG;
     } catch (error) {
         listTable.value = [];
         totalTable.value = {
@@ -178,7 +178,7 @@ const showDrawer = async (data) => {
             formData.value.pay_status_id = data.pay_status_id;
             formData.value.kategori_id = data.kategori_id;
             formData.value.name = data.name;
-            formData.value.pmg_id = data.pmg_id;
+            // formData.value.pmg_id = data.pmg_id;
             formData.value.tanggal = data.tanggal;
             formData.value.value = data.value;
             statusForm.value = 'edit';
@@ -188,7 +188,7 @@ const showDrawer = async (data) => {
             formData.value.pay_status_id = null;
             formData.value.kategori_id = null;
             formData.value.name = null;
-            formData.value.pmg_id = null;
+            // formData.value.pmg_id = null;
             formData.value.tanggal = moment().format('YYYY-MM-DD');
             formData.value.value = null;
             statusForm.value = 'add';
@@ -201,7 +201,7 @@ const showDrawer = async (data) => {
         formData.value.pay_status_id = null;
         formData.value.kategori_id = null;
         formData.value.name = null;
-        formData.value.pmg_id = null;
+        // formData.value.pmg_id = null;
         formData.value.tanggal = moment().format('YYYY-MM-DD');
         formData.value.value = null;
         statusForm.value = 'add';
@@ -213,7 +213,7 @@ const refreshForm = () => {
     formData.value.pay_status_id = null;
     formData.value.kategori_id = null;
     formData.value.name = null;
-    formData.value.pmg_id = null;
+    // formData.value.pmg_id = null;
     formData.value.tanggal = moment().format('YYYY-MM-DD');
     formData.value.value = null;
 };
@@ -261,7 +261,7 @@ const submitData = async () => {
             <span class="text-3xl">Cash Flow Schedule</span>
             <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-emerald-500 hover:bg-emerald-700 text-white rounded-full flex gap-2">
                 <i class="pi pi-plus"></i>
-                <span>Add Data</span>
+                <span>Tambah Data</span>
             </button>
         </div>
         <Drawer v-model:visible="drawerCond" position="right" class="!w-full md:!w-[30rem]">
@@ -279,15 +279,15 @@ const submitData = async () => {
                 </transition-group>
                 <div class="flex flex-col gap-1">
                     <label for="nama">Nama <small class="text-red-500 font-bold">*</small></label>
-                    <InputText type="text" v-model="formData.name" placeholder="Please input Kategori" />
+                    <InputText type="text" v-model="formData.name" placeholder="Silahkan Input Nama" />
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="kategori">Kategori <small class="text-red-500 font-bold">*</small></label>
-                    <Select v-model="formData.kategori_id" filter :options="listKategori" optionLabel="name" optionValue="id" placeholder="Select a Description" class="w-full" />
+                    <Select v-model="formData.kategori_id" filter :options="listKategori" optionLabel="name" optionValue="id" placeholder="Pilih Kategori" class="w-full" />
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="pay">Status Pembayaran <small class="text-red-500 font-bold">*</small></label>
-                    <Select v-model="formData.pay_status_id" filter :options="listPayment" optionLabel="name" optionValue="id" placeholder="Select a Description" class="w-full" />
+                    <Select v-model="formData.pay_status_id" filter :options="listPayment" optionLabel="name" optionValue="id" placeholder="Pilih Status" class="w-full" />
                 </div>
                 <!-- <div class="flex flex-col gap-1">
                     <label for="pmg">PMG <small class="text-red-500 font-bold">*</small></label>
@@ -298,7 +298,7 @@ const submitData = async () => {
                     <DatePicker v-model="formData.tanggal" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" />
                 </div>
                 <div class="flex flex-col gap-1">
-                    <label for="date">Biaya Produksi (Rp) <small class="text-red-500 font-bold">*</small></label>
+                    <label for="date">Nilai (Rp) <small class="text-red-500 font-bold">*</small></label>
                     <InputNumber v-model="formData.value" inputId="minmaxfraction" placeholder="1,000,000" :minFractionDigits="0" :maxFractionDigits="2" fluid />
                 </div>
                 <div class="flex flex-row-reverse w-full gap-3 mt-3">
@@ -314,7 +314,7 @@ const submitData = async () => {
                         <i class="pi pi-save"></i><span>{{ loadingSave == true ? 'Saving..' : 'Save' }}</span>
                     </button>
                 </div>
-                <span class="mt-3 px-3" v-if="statusForm == 'edit'">Log Activity</span>
+                <span class="mt-3 px-3" v-if="statusForm == 'edit'">Log Aktifitas</span>
                 <ScrollPanel v-if="statusForm == 'edit'" style="width: 100%; height: 22rem">
                     <div class="flex flex-col gap-2 w-full p-3">
                         <div class="flex flex-col pb-2 px-2" v-for="(item, index) in logFile" :key="index" :class="index < logFile.length ? 'border-b' : 'border-none'">
@@ -344,12 +344,12 @@ const submitData = async () => {
         <Popover ref="op">
             <div class="flex flex-col items-center gap-4 w-[25rem] py-2">
                 <div class="flex flex-col gap-2 w-full">
-                    <div class="flex flex-col gap-1 w-full items-start">
+                    <!-- <div class="flex flex-col gap-1 w-full items-start">
                         <label for="pmg" class="text-[0.8vw]">Select by PMG</label>
                         <Select v-model="selectedPmg" :options="pmg" optionLabel="nama" optionValue="id" placeholder="Select a Region" class="w-full" />
-                    </div>
+                    </div> -->
                     <div class="flex flex-col gap-1 w-full items-start">
-                        <label for="pmg" class="text-[0.8vw]">Select by Period</label>
+                        <label for="pmg" class="text-[0.8vw]">Pilih Periode</label>
                         <DatePicker v-model="dates" selectionMode="range" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :manualInput="false" placeholder="Select Date Range" class="w-full" />
                     </div>
                 </div>
@@ -364,7 +364,7 @@ const submitData = async () => {
                 <div class="flex gap-5 items-center mb-5">
                     <div class="flex items-center justify-between gap-3 w-full">
                         <button @click="toggle" class="py-2 px-3 text-black text-[0.8vw] flex gap-3 items-center bg-pink-200 shadow-md rounded-lg shadow-gray-200 font-bold hover:bg-pink-300 transition-all duration-300">
-                            <i class="pi pi-calendar" style="font-size: 0.8vw"></i><span>Select Data</span>
+                            <i class="pi pi-calendar" style="font-size: 0.8vw"></i><span>Filter</span>
                         </button>
                         <Chip :label="`${moment(beforeDate).format('DD MMM YYYY')} - ${moment(now).format('DD MMM YYYY')}`" icon="pi pi-calendar" style="font-size: 0.6vw" class="font-bold" />
                     </div>
@@ -389,9 +389,9 @@ const submitData = async () => {
                                         <span class="text-[0.7vw] font-bold">{{ items.name }}</span>
                                     </template>
                                     <DataTable :value="items.data" showGridlines paginator :rows="5">
-                                        <Column field="name" sortable style="width: 25%; font-size: 0.7vw">
+                                        <Column field="name" sortable style="width: 25%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                                             <template #header>
-                                                <div class="flex w-full justify-center">
+                                                <div class="flex w-full justify-center text-black">
                                                     <span>Nama</span>
                                                 </div>
                                             </template>
@@ -401,9 +401,9 @@ const submitData = async () => {
                                                 </div>
                                             </template>
                                         </Column>
-                                        <Column field="tanggal" sortable style="width: 10%; font-size: 0.7vw">
+                                        <Column field="tanggal" sortable style="width: 10%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                                             <template #header>
-                                                <div class="flex w-full justify-center">
+                                                <div class="flex w-full justify-center text-black">
                                                     <span>Tanggal</span>
                                                 </div>
                                             </template>
@@ -413,9 +413,9 @@ const submitData = async () => {
                                                 </div>
                                             </template>
                                         </Column>
-                                        <Column field="pay_status.name" sortable style="width: 10%; font-size: 0.7vw">
+                                        <Column field="pay_status.name" sortable style="width: 10%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                                             <template #header>
-                                                <div class="flex w-full justify-center">
+                                                <div class="flex w-full justify-center text-black">
                                                     <span>Status</span>
                                                 </div>
                                             </template>
@@ -428,10 +428,10 @@ const submitData = async () => {
                                                 </div>
                                             </template>
                                         </Column>
-                                        <Column field="value" sortable style="width: 25%; font-size: 0.7vw">
+                                        <Column field="value" sortable style="width: 25%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                                             <template #header>
-                                                <div class="flex w-full justify-center">
-                                                    <span>Value</span>
+                                                <div class="flex w-full justify-center text-black">
+                                                    <span>Nilai (IDR)</span>
                                                 </div>
                                             </template>
                                             <template #body="{ data }">
@@ -440,9 +440,9 @@ const submitData = async () => {
                                                 </div>
                                             </template>
                                         </Column>
-                                        <Column field="value" sortable style="width: 5%; font-size: 0.7vw">
+                                        <Column field="value" style="width: 5%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                                             <template #body="{ data }">
-                                                <button @click="showDrawer(data)" class="p-3 border rounded-full flex bg-gray-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
+                                                <button @click="showDrawer(data)" class="p-3 border rounded-full flex bg-teal-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
                                                     <i class="pi pi-pencil" style="font-size: 0.6vw"></i>
                                                 </button>
                                             </template>

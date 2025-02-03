@@ -160,15 +160,15 @@ const submitData = async () => {
 <template>
     <div class="flex flex-col w-full gap-8">
         <div class="flex gap-2 items-center justify-between w-full font-bold">
-            <span class="text-3xl">Master Kategori (Cash Flow Movement)</span>
+            <span class="text-3xl">Kategori Cash Flow Movement</span>
             <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-emerald-500 hover:bg-emerald-700 text-white rounded-full flex gap-2">
                 <i class="pi pi-plus"></i>
-                <span>Add Component</span>
+                <span>Tambah Kategori</span>
             </button>
         </div>
         <Drawer v-model:visible="drawerCond" position="right" class="!w-full md:!w-[30rem]">
             <template #header>
-                <span class="text-[1vw] font-bold">Form Component</span>
+                <span class="text-[1vw] font-bold">Form Data</span>
             </template>
             <template #footer>
                 <div class="flex w-full justify-end pt-3 border-t">
@@ -180,12 +180,12 @@ const submitData = async () => {
                     <Message v-for="msg of messages" :key="msg.id" :severity="msg.severity" class="mt-4"><i :class="`pi ${msg.icon}`"></i> {{ msg.content }}</Message>
                 </transition-group>
                 <div class="flex flex-col gap-1">
-                    <label for="nama">Kategori <small class="text-red-500 font-bold">*</small></label>
-                    <InputText type="text" v-model="formData.name" placeholder="Please input Name" />
+                    <label for="nama">Nama Kategori <small class="text-red-500 font-bold">*</small></label>
+                    <InputText type="text" v-model="formData.name" placeholder="Silahkan Input Kategori" />
                 </div>
                 <div class="flex flex-col gap-1">
-                    <label for="nama">Kategori <small class="text-red-500 font-bold">*</small></label>
-                    <Select v-model="formData.nilai" :options="listNilai" optionLabel="nama" optionValue="id" placeholder="Select a Value" class="w-full" />
+                    <label for="nilai">Nilai <small class="text-red-500 font-bold">*</small></label>
+                    <Select v-model="formData.nilai" :options="listNilai" optionLabel="nama" optionValue="id" placeholder="Pilih Nilai" class="w-full" />
                 </div>
                 <div class="flex flex-row-reverse w-full gap-3">
                     <button @click="refreshForm" class="px-3 py-2 w-full border rounded-lg hover:shadow-md hover:shadow-black transition-all duration-300 shadow-sm shadow-black flex items-center gap-2 justify-center">
@@ -200,7 +200,7 @@ const submitData = async () => {
                         <i class="pi pi-save"></i><span>{{ loadingSave == true ? 'Saving..' : 'Save' }}</span>
                     </button>
                 </div>
-                <span class="mt-3 px-3" v-if="statusForm == 'edit'">Log Activity</span>
+                <span class="mt-3 px-3" v-if="statusForm == 'edit'">Log Aktifitas</span>
                 <ScrollPanel v-if="statusForm == 'edit'" style="width: 100%; height: 22rem">
                     <div class="flex flex-col gap-2 w-full p-3">
                         <div class="flex flex-col pb-2 px-2" v-for="(item, index) in logFile" :key="index" :class="index < logFile.length ? 'border-b' : 'border-none'">
@@ -233,9 +233,9 @@ const submitData = async () => {
         <Card>
             <template #title>
                 <div class="flex gap-2 items-center mb-5">
-                    <span class="text-xl font-bold w-full">List Component</span>
+                    <span class="text-xl font-bold w-full">List Data</span>
                     <InputGroup>
-                        <InputText placeholder="Search Components" v-model="search" />
+                        <InputText placeholder="Cari" v-model="search" />
                         <InputGroupAddon>
                             <i class="pi pi-search" />
                         </InputGroupAddon>
@@ -245,9 +245,9 @@ const submitData = async () => {
             <template #content>
                 <div class="flex flex-col gap-3">
                     <div class="flex gap-3 items-center p-3 shadow rounded-lg" v-for="(item, index) in filteredList" :key="index">
-                        <i class="pi px-3 py-3 rounded-lg" :class="item.nilai == 'positive' ? 'pi-minus bg-red-300' : 'pi-plus bg-emerald-300'"></i>
+                        <i class="pi px-3 py-3 rounded-lg" :class="item.nilai == 'negative' ? 'pi-minus bg-red-300' : 'pi-plus bg-emerald-300'"></i>
                         <span class="w-full text-[1.3vw] font-bold">{{ item.name }}</span>
-                        <button @click="showDrawer(item)" class="p-3 border rounded-full flex bg-gray-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
+                        <button @click="showDrawer(item)" class="p-3 border rounded-full flex bg-teal-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
                             <i class="pi pi-pencil" style="font-size: 0.6vw"></i>
                         </button>
                     </div>

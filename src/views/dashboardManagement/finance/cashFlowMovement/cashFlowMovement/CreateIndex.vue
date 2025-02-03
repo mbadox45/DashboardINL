@@ -24,13 +24,13 @@ onMounted(() => {
     loadData();
 });
 
-// const loadData = async () => {
-//     // PMG
-//     const dataPmg = await pmgMasterController.getAll();
-//     listPmg.value = dataPmg;
+const loadData = async () => {
+    // PMG
+    // const dataPmg = await pmgMasterController.getAll();
+    // listPmg.value = dataPmg;
 
-//     // await loadJenis();
-// };
+    await loadJenis();
+};
 
 const loadJenis = async () => {
     try {

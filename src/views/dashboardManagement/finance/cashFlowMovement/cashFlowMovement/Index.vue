@@ -297,7 +297,7 @@ const submitData = async () => {
                         <i class="pi pi-save"></i><span>{{ loadingSave == true ? 'Saving..' : 'Save' }}</span>
                     </button>
                 </div>
-                <span class="mt-3 px-3" v-if="statusForm == 'edit'">Log Activity</span>
+                <span class="mt-3 px-3" v-if="statusForm == 'edit'">Log Aktivitas</span>
                 <ScrollPanel v-if="statusForm == 'edit'" style="width: 100%; height: 22rem">
                     <div class="flex flex-col gap-2 w-full p-3">
                         <div class="flex flex-col pb-2 px-2" v-for="(item, index) in logFile" :key="index" :class="index < logFile.length ? 'border-b' : 'border-none'">
@@ -372,10 +372,10 @@ const submitData = async () => {
                                         <span class="text-[0.8vw] font-bold italic">{{ moment(items.month > 9 ? `2024-${items.month.toString()}-01` : `2024-0${items.month.toString()}-01`).format('MMMM') }}</span>
                                     </template>
                                     <DataTable :value="items.detail" showGridlines paginator :rows="5">
-                                        <Column field="name" sortable style="width: 25%; font-size: 0.7vw">
+                                        <Column field="name" sortable style="width: 25%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                                             <template #header>
                                                 <div class="flex w-full justify-center">
-                                                    <span>Name</span>
+                                                    <span>Nama</span>
                                                 </div>
                                             </template>
                                             <template #body="{ data }">
@@ -384,7 +384,7 @@ const submitData = async () => {
                                                 </div>
                                             </template>
                                         </Column>
-                                        <Column field="nilai" sortable style="width: 10%; font-size: 0.7vw">
+                                        <Column field="nilai" sortable style="width: 10%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                                             <template #header>
                                                 <div class="flex w-full justify-center">
                                                     <span>Status</span>
@@ -398,10 +398,10 @@ const submitData = async () => {
                                                 </div>
                                             </template>
                                         </Column>
-                                        <Column field="value" sortable style="width: 25%; font-size: 0.7vw">
+                                        <Column field="value" sortable style="width: 25%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                                             <template #header>
                                                 <div class="flex w-full justify-center">
-                                                    <span>Value</span>
+                                                    <span>Nilai (IDR)</span>
                                                 </div>
                                             </template>
                                             <template #body="{ data }">
@@ -410,10 +410,10 @@ const submitData = async () => {
                                                 </div>
                                             </template>
                                         </Column>
-                                        <Column field="value" style="width: 5%; font-size: 0.7vw">
+                                        <Column field="value" style="width: 5%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                                             <template #body="{ data }">
                                                 <div class="flex items-center justify-center w-full">
-                                                    <button @click="showDrawer(data)" class="p-3 border rounded-full flex bg-gray-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
+                                                    <button @click="showDrawer(data)" class="p-3 border rounded-full flex bg-teal-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
                                                         <i class="pi pi-pencil" style="font-size: 0.6vw"></i>
                                                     </button>
                                                 </div>
