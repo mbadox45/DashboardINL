@@ -1,7 +1,7 @@
 <script setup>
 import { URL_WEB } from '@/api/http/dataVariable';
 import { formatCurrency } from '@/controller/dummyController';
-import pmgMasterController from '@/controller/getApiFromThisApp/master/pmgMasterController';
+// import pmgMasterController from '@/controller/getApiFromThisApp/master/pmgMasterController';
 import kategoriProfitabilityController from '@/controller/getApiFromThisApp/profitability/kategoriProfitabilityController';
 import profitabilityController from '@/controller/getApiFromThisApp/profitability/profitabilityController';
 import { FilterMatchMode } from '@primevue/core/api';
@@ -22,7 +22,7 @@ const search = ref();
 const expandedRows = ref([]);
 
 const selectedPmg = ref(1);
-const pmg = ref([]);
+// const pmg = ref([]);
 const listUraian = ref([]);
 
 const op = ref();
@@ -45,7 +45,7 @@ let count = ref(0);
 const formData = ref({
     id: null,
     kategori_id: null,
-    pmg_id: null,
+    // pmg_id: null,
     tanggal: moment().format('YYYY-MM-DD'),
     value: null
 });
@@ -71,10 +71,10 @@ const loadData = async () => {
         };
 
         // get Select Option
-        const loadPMG = await pmgMasterController.getAll();
+        // const loadPMG = await pmgMasterController.getAll();
         const uraian = await kategoriProfitabilityController.getAll();
-        listUraian.value = uraian;
-        pmg.value = loadPMG;
+        // listUraian.value = uraian;
+        // pmg.value = loadPMG;
     } catch (error) {
         listTable.value = [];
         totalTable.value = {
@@ -170,7 +170,7 @@ const showDrawer = async (data) => {
             logFile.value = list;
             formData.value.id = data.id;
             formData.value.kategori_id = response.kategori_id;
-            formData.value.pmg_id = response.pmg_id;
+            // formData.value.pmg_id = response.pmg_id;
             formData.value.tanggal = response.tanggal;
             formData.value.value = Number(response.value);
             statusForm.value = 'edit';
@@ -179,7 +179,7 @@ const showDrawer = async (data) => {
             logFile.value = [];
             formData.value.id = null;
             formData.value.kategori_id = null;
-            formData.value.pmg_id = null;
+            // formData.value.pmg_id = null;
             formData.value.tanggal = moment().format('YYYY-MM-DD');
             formData.value.value = null;
             statusForm.value = 'add';
@@ -191,7 +191,7 @@ const showDrawer = async (data) => {
         logFile.value = [];
         formData.value.id = null;
         formData.value.kategori_id = null;
-        formData.value.pmg_id = null;
+        // formData.value.pmg_id = null;
         formData.value.tanggal = moment().format('YYYY-MM-DD');
         formData.value.value = null;
         statusForm.value = 'add';
@@ -201,13 +201,14 @@ const showDrawer = async (data) => {
 const refreshForm = () => {
     messages.value = [];
     formData.value.kategori_id = null;
-    formData.value.pmg_id = null;
+    // formData.value.pmg_id = null;
     formData.value.tanggal = moment().format('YYYY-MM-DD');
     formData.value.value = null;
 };
 
 const submitData = async () => {
-    if (!formData.value.pmg_id || !formData.value.tanggal || !formData.value.kategori_id || !formData.value.value) {
+    // if (!formData.value.pmg_id || !formData.value.tanggal || !formData.value.kategori_id || !formData.value.value) {
+    if (!formData.value.tanggal || !formData.value.kategori_id || !formData.value.value) {
         messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     } else {
         formData.value.tanggal = moment(formData.value.tanggal).format('YYYY-MM-DD');
@@ -269,10 +270,10 @@ const submitData = async () => {
                     <label for="kategori">Kategori <small class="text-red-500 font-bold">*</small></label>
                     <Select v-model="formData.kategori_id" filter :options="listUraian" optionLabel="name" optionValue="id" placeholder="Select a Description" class="w-full" />
                 </div>
-                <div class="flex flex-col gap-1">
+                <!-- <div class="flex flex-col gap-1">
                     <label for="pmg">PMG <small class="text-red-500 font-bold">*</small></label>
                     <Select v-model="formData.pmg_id" :options="pmg" optionLabel="nama" optionValue="id" placeholder="Select a Region" class="w-full" />
-                </div>
+                </div> -->
                 <div class="flex flex-col gap-1">
                     <label for="date">Tanggal <small class="text-red-500 font-bold">*</small></label>
                     <DatePicker v-model="formData.tanggal" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" />
@@ -329,7 +330,7 @@ const submitData = async () => {
                         <Select v-model="selectedPmg" :options="pmg" optionLabel="nama" optionValue="id" placeholder="Select a Region" class="w-full" />
                     </div> -->
                     <div class="flex flex-col gap-1 w-full items-start">
-                        <label for="pmg" class="text-[0.8vw]">Select by Period</label>
+                        <label for="tgl" class="text-[0.8vw]">Select by Period</label>
                         <DatePicker v-model="dates" selectionMode="range" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :manualInput="false" placeholder="Select Date Range" class="w-full" />
                     </div>
                 </div>

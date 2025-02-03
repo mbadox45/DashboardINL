@@ -1,6 +1,6 @@
 <script setup>
 import { URL_WEB } from '@/api/http/dataVariable';
-import pmgMasterController from '@/controller/getApiFromThisApp/master/pmgMasterController';
+// import pmgMasterController from '@/controller/getApiFromThisApp/master/pmgMasterController';
 import kategoriProfitabilityController from '@/controller/getApiFromThisApp/profitability/kategoriProfitabilityController';
 import profitabilityController from '@/controller/getApiFromThisApp/profitability/profitabilityController';
 import moment from 'moment';
@@ -13,7 +13,7 @@ const listJenis = ref([]);
 const jenisProduksi = ref([]);
 const listPmg = ref([]);
 const jenis = ref(null);
-const pmg = ref(null);
+// const pmg = ref(null);
 const loadings = ref(false);
 const setTime = ref(3000);
 
@@ -26,10 +26,10 @@ onMounted(() => {
 
 const loadData = async () => {
     // PMG
-    const dataPmg = await pmgMasterController.getAll();
-    listPmg.value = dataPmg;
+    // const dataPmg = await pmgMasterController.getAll();
+    // listPmg.value = dataPmg;
 
-    // await loadJenis();
+    await loadJenis();
 };
 
 const loadJenis = async () => {
@@ -40,7 +40,7 @@ const loadJenis = async () => {
             list.push({
                 kategori_id: response[i].id,
                 item_produksi: response[i].name,
-                pmg_id: pmg.value,
+                // pmg_id: pmg.value,
                 tanggal: tanggal.value,
                 value: null
             });
@@ -69,7 +69,7 @@ const loadJenis = async () => {
 const resetForm = () => {
     formData.value = [];
     jenis.value = null;
-    pmg.value = null;
+    // pmg.value = null;
     tanggal.value = moment().format('YYYY-MM-DD');
 };
 

@@ -81,7 +81,7 @@ export default new (class cashFlowMovementController {
                 const lastYear = response.lastYear;
                 const thisYear = response.thisYear;
 
-                list.push({ name: 'Last Year', items: lastYear.data }, { name: 'This Year', items: thisYear.data });
+                list.push({ name: `Last Year ${Number(years) - 1}`, items: lastYear.data }, { name: `This Year ${Number(years)}`, items: thisYear.data });
                 return list;
             } else {
                 return [];
