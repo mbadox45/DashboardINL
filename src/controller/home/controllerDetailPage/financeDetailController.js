@@ -1,10 +1,254 @@
-import { barChartOptionsApex, combo3ChartOptionsApex, comboChartOptionsApex } from '@/controller/chartStyle/chartDummy';
+import { barChartOptionsApex, combo3ChartOptionsApex, comboChartOptionsApex, stackedChartOptionsApex } from '@/controller/chartStyle/chartDummy';
 import { formatCurrency, months, valueToBilion } from '@/controller/dummyController';
 import cashFlowMovementController from '@/controller/getApiFromThisApp/cashFlowMovement/cashFlowMovementController';
+import cashFlowScheduleController from '@/controller/getApiFromThisApp/cashFlowSchedule/cashFlowScheduleController';
 import profitabilityController from '@/controller/getApiFromThisApp/profitability/profitabilityController';
 import moment from 'moment';
 
 export default new (class financeDetailController {
+    paySchedule = async (form) => {
+        try {
+            let result = {
+                chart: [],
+                tabel: []
+            };
+            const response = await cashFlowScheduleController.getByPeriod(form);
+            if (response != null) {
+                const kategori = response.kategori;
+                const listChart = [];
+                const listTable = [];
+                for (let i = 0; i < kategori.length; i++) {
+                    const list = [];
+                    if (kategori[i].name === 'Cash Flow Funding') {
+                        const period = kategori[i].period;
+                        if (period.length > 0) {
+                            for (let j = 0; j < period.length; j++) {
+                                const data = period[j].data[0];
+                                const bulan = months.find((item) => item.id == period[j].month);
+                                list.push({
+                                    periode: bulan.name + ' ' + period[j].year,
+                                    name: valueToBilion(data.name),
+                                    pay_status: data.pay_status.name
+                                });
+                            }
+                        }
+                    }
+
+                    listTable.push({
+                        kategori: kategori[i].name,
+                        data: list
+                    });
+                }
+                result.tabel = listTable;
+            }
+            return result;
+        } catch (error) {
+            const result = {
+                chart: [],
+                tabel: []
+            };
+            return result;
+        }
+    };
+    cashFlowMovement = async (form) => {
+        try {
+            let result = {
+                chart: [],
+                tabel: []
+            };
+            const response = await cashFlowMovementController.getByPeriod(form);
+            if (response != null) {
+                const monthsThisYear = response.thisYear;
+                if (monthsThisYear != null) {
+                    const data = monthsThisYear.data;
+                    const dataTable = [];
+                    const chartCfoIn = [];
+                    const chartCfoOut = [];
+                    const chartCfi = [];
+                    const chartCff = [];
+                    for (let i = 0; i < months.length; i++) {
+                        const month = data.find((item) => item.month == months[i].id);
+                        // console.log(month);
+                        if (month !== undefined && month !== null) {
+                            const detail = month.detail;
+                            if (detail.length > 0) {
+                                const cfoIn = detail.find((item) => item.name.toLowerCase().includes('net cash flow operating in'));
+                                const cfoOut = detail.find((item) => item.name.toLowerCase().includes('net cash flow operating out'));
+                                const cfi = detail.find((item) => item.name.toLowerCase().includes('net cash flow investment'));
+                                const cff = detail.find((item) => item.name.toLowerCase().includes('net cash flow funding'));
+                                chartCfoIn.push(cfoIn.nilai == 'positive' ? Number(valueToBilion(cfoIn.value)) : valueToBilion(cfoIn.value) * -1);
+                                chartCfoOut.push(cfoOut.nilai == 'positive' ? Number(valueToBilion(cfoOut.value)) : valueToBilion(cfoOut.value) * -1);
+                                chartCfi.push(cfi.nilai == 'positive' ? Number(valueToBilion(cfi.value)) : valueToBilion(cfi.value) * -1);
+                                chartCff.push(cff.nilai == 'positive' ? Number(valueToBilion(cff.value)) : valueToBilion(cff.value) * -1);
+                                dataTable.push({
+                                    periode: months[i].name,
+                                    cfoIn: `${cfoIn.nilai == 'positive' ? '' : '-'}${formatCurrency(valueToBilion(cfoIn.value))}`,
+                                    cfoOut: `${cfoOut.nilai == 'positive' ? '' : '-'}${formatCurrency(valueToBilion(cfoOut.value))}`,
+                                    cfi: `${cfi.nilai == 'positive' ? '' : '-'}${formatCurrency(valueToBilion(cfi.value))}`,
+                                    cff: `${cff.nilai == 'positive' ? '' : '-'}${formatCurrency(valueToBilion(cff.value))}`
+                                });
+                            } else {
+                                chartCfoIn.push(0);
+                                chartCfoOut.push(0);
+                                chartCfi.push(0);
+                                chartCff.push(0);
+                                dataTable.push({
+                                    periode: months[i].name,
+                                    cfoIn: 0,
+                                    cfoOut: 0,
+                                    cfi: 0,
+                                    cff: 0
+                                });
+                            }
+                        } else {
+                            chartCfoIn.push(0);
+                            chartCfoOut.push(0);
+                            chartCfi.push(0);
+                            chartCff.push(0);
+                            dataTable.push({
+                                periode: months[i].name,
+                                cfoIn: 0,
+                                cfoOut: 0,
+                                cfi: 0,
+                                cff: 0
+                            });
+                        }
+                    }
+                    result.tabel.push({
+                        year: monthsThisYear.year,
+                        data: dataTable,
+                        color: '#f59e0b'
+                    });
+                    result.chart.push({
+                        year: monthsThisYear.year,
+                        cfoIn: chartCfoIn,
+                        cfoOut: chartCfoOut,
+                        cfi: chartCfi,
+                        cff: chartCff
+                    });
+                }
+
+                const monthsLastMonth = response.lastYear;
+                if (monthsLastMonth != null) {
+                    const data = monthsLastMonth.data;
+                    const dataTable = [];
+                    const chartCfoIn = [];
+                    const chartCfoOut = [];
+                    const chartCfi = [];
+                    const chartCff = [];
+                    for (let i = 0; i < months.length; i++) {
+                        const month = data.find((item) => item.month == months[i].id);
+                        // console.log(month);
+                        if (month !== undefined && month !== null) {
+                            const detail = month.detail;
+                            if (detail.length > 0) {
+                                const cfoIn = detail.find((item) => item.name.toLowerCase().includes('net cash flow operating in'));
+                                const cfoOut = detail.find((item) => item.name.toLowerCase().includes('net cash flow operating out'));
+                                const cfi = detail.find((item) => item.name.toLowerCase().includes('net cash flow investment'));
+                                const cff = detail.find((item) => item.name.toLowerCase().includes('net cash flow funding'));
+                                chartCfoIn.push(cfoIn.nilai == 'positive' ? Number(valueToBilion(cfoIn.value)) : valueToBilion(cfoIn.value) * -1);
+                                chartCfoOut.push(cfoOut.nilai == 'positive' ? Number(valueToBilion(cfoOut.value)) : valueToBilion(cfoOut.value) * -1);
+                                chartCfi.push(cfi.nilai == 'positive' ? Number(valueToBilion(cfi.value)) : valueToBilion(cfi.value) * -1);
+                                chartCff.push(cff.nilai == 'positive' ? Number(valueToBilion(cff.value)) : valueToBilion(cff.value) * -1);
+                                dataTable.push({
+                                    periode: months[i].name,
+                                    cfoIn: `${cfoIn.nilai == 'positive' ? '' : '-'}${formatCurrency(valueToBilion(cfoIn.value))}`,
+                                    cfoOut: `${cfoOut.nilai == 'positive' ? '' : '-'}${formatCurrency(valueToBilion(cfoOut.value))}`,
+                                    cfi: `${cfi.nilai == 'positive' ? '' : '-'}${formatCurrency(valueToBilion(cfi.value))}`,
+                                    cff: `${cff.nilai == 'positive' ? '' : '-'}${formatCurrency(valueToBilion(cff.value))}`
+                                });
+                            } else {
+                                chartCfoIn.push(0);
+                                chartCfoOut.push(0);
+                                chartCfi.push(0);
+                                chartCff.push(0);
+                                dataTable.push({
+                                    periode: months[i].name,
+                                    cfoIn: 0,
+                                    cfoOut: 0,
+                                    cfi: 0,
+                                    cff: 0
+                                });
+                            }
+                        } else {
+                            chartCfoIn.push(0);
+                            chartCfoOut.push(0);
+                            chartCfi.push(0);
+                            chartCff.push(0);
+                            dataTable.push({
+                                periode: months[i].name,
+                                cfoIn: 0,
+                                cfoOut: 0,
+                                cfi: 0,
+                                cff: 0
+                            });
+                        }
+                    }
+                    result.tabel.push({
+                        year: monthsLastMonth.year,
+                        data: dataTable,
+                        color: '#84cc16'
+                    });
+                    result.chart.push({
+                        year: monthsLastMonth.year,
+                        cfoIn: chartCfoIn,
+                        cfoOut: chartCfoOut,
+                        cfi: chartCfi,
+                        cff: chartCff
+                    });
+                }
+            }
+            return result;
+        } catch (error) {
+            const result = {
+                chart: [],
+                tabel: []
+            };
+            return result;
+        }
+    };
+    resultCashFlowMovement = async (form) => {
+        const response = await this.cashFlowMovement(form);
+        const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+        // Chart
+        const chart = response.chart;
+        const listChart = [];
+        if (chart.length > 0) {
+            for (let i = 0; i < chart.length; i++) {
+                const dataSeries = [
+                    { label: 'CFO in', data: chart[i].cfoIn },
+                    { label: 'CFO out', data: chart[i].cfoOut },
+                    { label: 'CFI', data: chart[i].cfi },
+                    { label: 'CFF', data: chart[i].cff }
+                ];
+
+                const typeChart = 'bar';
+                const total = '*';
+
+                const listLabels = [];
+                for (let i = 0; i < labels.length; i++) {
+                    listLabels.push(moment(labels[i], 'MMMM').format('MMM'));
+                }
+                // Generating the series dynamically using a loop
+                const series = dataSeries.map((dataItem) => ({
+                    name: dataItem.label,
+                    data: dataItem.data
+                }));
+
+                listChart.push({
+                    name: 'Cash Flow Movement (YTD Jun-24; in IDR Bn)',
+                    type: typeChart,
+                    chartOptions: stackedChartOptionsApex(total, listLabels, null),
+                    series: series
+                });
+            }
+        }
+        return {
+            table: response.tabel,
+            chart: listChart
+        };
+    };
     cashBalance = async (form) => {
         try {
             let result = {

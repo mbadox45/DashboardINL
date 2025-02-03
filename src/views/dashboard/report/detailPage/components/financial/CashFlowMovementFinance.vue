@@ -1,25 +1,17 @@
 <script setup>
-import { cashFlow, cashFlowData, cashFlowLastYear, currentYear } from '@/controller/report/FinancialReport';
-import { onMounted, ref } from 'vue';
+import { defineProps, onMounted, ref, watch } from 'vue';
 import VueApexCharts from 'vue3-apexcharts';
 
-const listdata = ref({
-    type: null,
-    series: [],
-    options: {},
-    name: null
-});
-
-const listdata2 = ref({
-    type: null,
-    series: [],
-    options: {},
-    name: null
-});
-
 const isLoading = ref(true);
-const dataCashFlowThisYear = ref([]);
-const dataCashFlowLastYear = ref([]);
+const listTable = ref([]);
+const listChart = ref([]);
+
+const props = defineProps({
+    datas: {
+        type: Object,
+        default: () => {}
+    }
+});
 
 onMounted(() => {
     loadData();
@@ -27,26 +19,25 @@ onMounted(() => {
 
 const loadData = async () => {
     try {
-        const data = await cashFlow();
-        const data2 = await cashFlowLastYear();
+        const response = props.datas || null;
+        console.log(response);
 
-        listdata.value = {
-            type: data.type || 'line',
-            series: data.series || [],
-            options: data.chartOptions || {},
-            name: data.name || 'Cash Flow Movement (YTD Jun-24; in IDR Bn)'
-        };
-
-        listdata2.value = {
-            type: data2.type || 'line',
-            series: data2.series || [],
-            options: data2.chartOptions || {},
-            name: data2.name || 'EBITDA Margin (in IDR BN)'
-        };
-
-        const { cashFlowThisYear: thisYearData, cashFlowLastYear: lastYearData } = cashFlowData();
-        dataCashFlowThisYear.value = thisYearData;
-        dataCashFlowLastYear.value = lastYearData;
+        if (response != null) {
+            const chart = response.chart || [];
+            const list = [];
+            if (chart.length > 0) {
+                for (let i = 0; i < chart.length; i++) {
+                    list.push({
+                        type: chart[i].type || 'line',
+                        series: chart[i].series || [],
+                        options: chart[i].chartOptions || {},
+                        name: chart[i].name || 'Gross Profit Margin (in IDR Bn)'
+                    });
+                }
+            }
+            listChart.value = list;
+            listTable.value = response.table;
+        }
     } catch (error) {
         console.error('Error loading data:', error);
     } finally {
@@ -58,119 +49,72 @@ const editRow = (row) => {
     //fungsi edit
     console.log('Editing row:', row);
 };
+
+watch(() => props.datas, loadData, { immediate: true });
 </script>
 
 <template>
     <div class="flex flex-col w-full items-center gap-4">
         <!-- Chart Title -->
-        <span class="text-[1vw] font-bold">
-            {{ listdata.name || 'Loading...' }}
-        </span>
+        <span class="text-[1vw] font-bold"> Pergerakan Arus Kas (dlm IDR Miliar) </span>
 
         <!-- Loading Indicator -->
-        <div v-if="isLoading" class="flex justify-center items-center w-full h-[380px]">
+        <div v-if="isLoading == true" class="flex justify-center items-center w-full h-[380px]">
             <span>Loading chart...</span>
         </div>
 
         <div v-else class="w-full flex flex-col gap-4">
             <!-- Vue Apex Chart -->
             <div class="w-full flex gap-16">
-                <VueApexCharts :type="listdata.type" :series="listdata.series" :options="listdata.options" class="w-full" height="400vw" style="z-index: 1 !important" />
-                <VueApexCharts :type="listdata2.type" :series="listdata2.series" :options="listdata2.options" class="w-full" height="400vw" style="z-index: 1 !important" />
+                <VueApexCharts v-for="(item, index) in listChart" :key="index" :type="item.type" :series="item.series" :options="item.options" class="w-full" height="400vw" style="z-index: 1 !important" />
             </div>
 
             <div class="flex gap-20">
-                <div class="w-full flex flex-col gap-2">
-                    <span class="text-lg text-amber-300 font-semibold">Cash Flow Movement Tahun {{ currentYear }}</span>
-                    <DataTable :value="dataCashFlowThisYear" showGridlines removableSort tableStyle="background-color:#00000;">
-                        <Column field="periode" headerStyle="background-color: #f59e0b;" style="background-color: black; color: white">
+                <div class="w-full flex flex-col gap-2" v-for="(item, index) in listTable" :key="index">
+                    <span class="text-lg font-semibold" :style="`color: ${item.color};`">Cash Flow Movement Tahun {{ item.year }}</span>
+                    <DataTable :value="item.data" showGridlines removableSort tableStyle="background-color:#00000;">
+                        <Column field="periode" sortable :headerStyle="`background-color: ${item.color};`" style="background-color: black; color: white">
                             <template #header>
                                 <span class="flex justify-center items-center w-full text-center">Periode</span>
                             </template>
-                            <template #body="{ data }">
-                                <div class="w-full flex justify-center items-center">
-                                    <span>{{ data.periode }}</span>
-                                </div>
-                            </template>
                         </Column>
-                        <Column field="cfoin" sortable headerStyle="background-color: #f59e0b;" style="background-color: black; color: white">
+                        <Column field="cfoIn" sortable :headerStyle="`background-color: ${item.color};`" style="background-color: black; color: white">
                             <template #header>
                                 <span class="flex justify-center items-center w-full text-center">CFO In</span>
                             </template>
-                        </Column>
-                        <Column field="cfoout" sortable headerStyle="background-color: #f59e0b;" style="background-color: black; color: white">
-                            <template #header>
-                                <span class="flex justify-center items-center w-full text-center">CFO Out</span>
-                            </template>
-                        </Column>
-                        <Column field="cfi" sortable headerStyle="background-color: #f59e0b;" style="background-color: black; color: white">
-                            <template #header>
-                                <span class="flex justify-center items-center w-full text-center">CFI</span>
-                            </template>
-                        </Column>
-                        <Column field="cff" sortable headerStyle="background-color: #f59e0b;" style="background-color: black; color: white">
-                            <template #header>
-                                <span class="flex justify-center items-center w-full text-center">CFF</span>
-                            </template>
-                        </Column>
-                        <Column field="periode" headerStyle="background-color: #f59e0b; text-align: center;" style="background-color: black; color: white">
-                            <template #header>
-                                <span class="flex justify-center items-center w-full text-center">Action</span>
-                            </template>
                             <template #body="{ data }">
                                 <div class="w-full flex justify-center items-center">
-                                    <button @click="editRow(data)" class="hover:opacity-80 flex justify-center items-center p-2 rounded-full w-[1.3vw] h-[1.3vw] bg-cyan-900">
-                                        <i class="pi pi-pencil" style="font-size: 0.7vw"></i>
-                                        <!-- <img src="/images/button-icon/pen.png" alt="Edit Icon" class="w-4 h-4 inline" /> -->
-                                    </button>
+                                    <span>{{ data.cfoIn }}</span>
                                 </div>
                             </template>
                         </Column>
-                    </DataTable>
-                </div>
-                <div class="w-full flex flex-col gap-2">
-                    <span class="text-lg text-lime-500 font-semibold">Cash Flow Movement Tahun {{ currentYear - 1 }}</span>
-                    <DataTable :value="dataCashFlowLastYear" showGridlines removableSort tableStyle="background-color:#00000;">
-                        <Column field="periode" headerStyle="background-color: #84cc16;" style="background-color: black; color: white">
-                            <template #header>
-                                <span class="flex justify-center items-center w-full text-center">Periode</span>
-                            </template>
-                            <template #body="{ data }">
-                                <div class="w-full flex justify-center items-center">
-                                    <span>{{ data.periode }}</span>
-                                </div>
-                            </template>
-                        </Column>
-                        <Column field="cfoin" sortable headerStyle="background-color: #84cc16;" style="background-color: black; color: white">
-                            <template #header>
-                                <span class="flex justify-center items-center w-full text-center">CFO In</span>
-                            </template>
-                        </Column>
-                        <Column field="cfoout" sortable headerStyle="background-color: #84cc16;" style="background-color: black; color: white">
+                        <Column field="cfoOut" sortable :headerStyle="`background-color: ${item.color};`" style="background-color: black; color: white">
                             <template #header>
                                 <span class="flex justify-center items-center w-full text-center">CFO Out</span>
                             </template>
-                        </Column>
-                        <Column field="cfi" sortable headerStyle="background-color: #84cc16;" style="background-color: black; color: white">
-                            <template #header>
-                                <span class="flex justify-center items-center w-full text-center">CFI</span>
+                            <template #body="{ data }">
+                                <div class="w-full flex justify-center items-center">
+                                    <span>{{ data.cfoOut }}</span>
+                                </div>
                             </template>
                         </Column>
-                        <Column field="cff" sortable headerStyle="background-color: #84cc16;" style="background-color: black; color: white">
+                        <Column field="cff" sortable :headerStyle="`background-color: ${item.color};`" style="background-color: black; color: white">
                             <template #header>
                                 <span class="flex justify-center items-center w-full text-center">CFF</span>
                             </template>
+                            <template #body="{ data }">
+                                <div class="w-full flex justify-center items-center">
+                                    <span>{{ data.cff }}</span>
+                                </div>
+                            </template>
                         </Column>
-                        <Column field="periode" headerStyle="background-color: #84cc16; text-align: center;" style="background-color: black; color: white">
+                        <Column field="cfi" sortable :headerStyle="`background-color: ${item.color};`" style="background-color: black; color: white">
                             <template #header>
-                                <span class="flex justify-center items-center w-full text-center">Action</span>
+                                <span class="flex justify-center items-center w-full text-center">CFI</span>
                             </template>
                             <template #body="{ data }">
                                 <div class="w-full flex justify-center items-center">
-                                    <button @click="editRow(data)" class="hover:opacity-80 flex justify-center items-center p-2 rounded-full w-[1.3vw] h-[1.3vw] bg-cyan-900">
-                                        <i class="pi pi-pencil" style="font-size: 0.7vw"></i>
-                                        <!-- <img src="/images/button-icon/pen.png" alt="Edit Icon" class="w-4 h-4 inline" /> -->
-                                    </button>
+                                    <span>{{ data.cfi }}</span>
                                 </div>
                             </template>
                         </Column>

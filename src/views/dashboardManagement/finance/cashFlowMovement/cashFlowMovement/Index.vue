@@ -1,5 +1,4 @@
 <script setup>
-import { URL_WEB } from '@/api/http/dataVariable';
 import { formatCurrency } from '@/controller/dummyController';
 import cashFlowMovementController from '@/controller/getApiFromThisApp/cashFlowMovement/cashFlowMovementController';
 import kategoriCashFlowMovementController from '@/controller/getApiFromThisApp/cashFlowMovement/kategoriCashFlowMovementController';
@@ -7,6 +6,9 @@ import pmgMasterController from '@/controller/getApiFromThisApp/master/pmgMaster
 import { FilterMatchMode } from '@primevue/core/api';
 import moment from 'moment';
 import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const drawerCond = ref(false);
 const messages = ref([]);
@@ -175,7 +177,7 @@ const showDrawer = async (data) => {
             formData.value.value = Number(response.value);
             statusForm.value = 'edit';
         } else {
-            window.location.replace(`${URL_WEB}finance/cash-flow-movement/create`);
+            router.push('/finance/cash-flow-movement/create');
             logFile.value = [];
             formData.value.id = null;
             formData.value.kategori_id = null;
@@ -185,7 +187,7 @@ const showDrawer = async (data) => {
             statusForm.value = 'add';
         }
     } catch (error) {
-        window.location.replace(`${URL_WEB}finance/cash-flow-movement/create`);
+        router.push('/finance/cash-flow-movement/create');
         messages.value = [];
         drawerCond.value = true;
         logFile.value = [];

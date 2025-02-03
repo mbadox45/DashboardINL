@@ -1,10 +1,11 @@
 <script setup>
-import { URL_WEB } from '@/api/http/dataVariable';
 import cashFlowMovementController from '@/controller/getApiFromThisApp/cashFlowMovement/cashFlowMovementController';
 import kategoriCashFlowMovementController from '@/controller/getApiFromThisApp/cashFlowMovement/kategoriCashFlowMovementController';
 import moment from 'moment';
 import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const messages = ref([]);
 const tanggal = ref(moment().format('YYYY-MM-DD'));
 const maxDate = ref(moment().format('YYYY-MM-DD'));
@@ -74,7 +75,8 @@ const resetForm = () => {
 
 const postData = async (cond) => {
     if (cond == 'back') {
-        window.location.replace(`${URL_WEB}finance/cash-flow-movement`);
+        router.push('/finance/cash-flow-movement');
+        // window.location.replace(`${URL_WEB}finance/cash-flow-movement`);
     } else {
         loadings.value = true;
         console.log(formData.value);
@@ -83,7 +85,7 @@ const postData = async (cond) => {
         if (response.severity == 'success') {
             setTimeout(function () {
                 loadings.value = false;
-                window.location.replace(`${URL_WEB}finance/cash-flow-movement`);
+                router.push('/finance/cash-flow-movement');
             }, setTime.value);
         } else {
             loadings.value = false;

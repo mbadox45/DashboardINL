@@ -85,7 +85,7 @@ watch(() => props.datas, loadData, { immediate: true });
             <Divider />
             <div class="flex gap-20">
                 <div class="w-full flex flex-col gap-2" v-for="(item, index) in listTable" :key="index">
-                    <span class="text-lg font-semibold" :style="`color:${item.color};`">Revenue Tahun {{ item.tahun }}</span>
+                    <span class="text-lg font-semibold" :style="`color:${item.color};`">Saldo Tahun {{ item.tahun }}</span>
                     <DataTable :value="item.data" showGridlines removableSort>
                         <Column field="periode" sortable :headerStyle="`background-color: ${item.color};`" style="background-color: black; color: white">
                             <template #header>
