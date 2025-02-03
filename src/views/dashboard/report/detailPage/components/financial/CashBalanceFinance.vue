@@ -1,6 +1,6 @@
 <script setup>
-import { cashBalance, cashBalanceData, currentYear } from '@/controller/report/FinancialReport';
-import { onMounted, ref } from 'vue';
+import { revenueData, revenueYtd } from '@/controller/report/FinancialReport';
+import { defineProps, onMounted, ref, watch } from 'vue';
 import VueApexCharts from 'vue3-apexcharts';
 
 const listdata = ref({
@@ -10,47 +10,69 @@ const listdata = ref({
     name: null
 });
 
+const revenueThisYear = ref([]);
+const revenueLastYear = ref([]);
+const listTable = ref([]);
 const isLoading = ref(true);
-const cashBalanceThisYear = ref([]);
-const cashBalanceLastYear = ref([]);
+
+const props = defineProps({
+    datas: {
+        type: Object,
+        default: () => {}
+    }
+});
 
 onMounted(() => {
     loadData();
 });
 
+// Watch untuk memantau perubahan pada props.datas
+
 const loadData = async () => {
     try {
-        const data = await cashBalance();
+        isLoading.value = true; // Set loading state true sebelum data dimuat
+        const data = await revenueYtd();
+        const response = props.datas;
 
-        listdata.value = {
-            type: data.type || 'line',
-            series: data.series || [],
-            options: data.chartOptions || {},
-            name: data.name || 'EBITDA Margin (in IDR BN)'
-        };
+        const chart = response.chart || null;
+        if (chart != null) {
+            listdata.value = {
+                type: chart.type || 'line',
+                series: chart.series || [],
+                options: chart.chartOptions || {},
+                name: chart.name || 'Revenue YTD'
+            };
+        } else {
+            listdata.value = {
+                type: 'line',
+                series: [],
+                options: {},
+                name: ''
+            };
+        }
 
-        const { cashBalanceThisYear: thisYearData, cashBalanceLastYear: lastYearData } = cashBalanceData();
-        cashBalanceThisYear.value = thisYearData;
-        cashBalanceLastYear.value = lastYearData;
+        listTable.value = response.table;
+        const { revenueThisYear: thisYearData, revenueLastYear: lastYearData } = revenueData();
+        revenueThisYear.value = thisYearData;
+        revenueLastYear.value = lastYearData;
     } catch (error) {
         console.error('Error loading data:', error);
     } finally {
-        isLoading.value = false; // Turn off the loading state after the data has loaded
+        isLoading.value = false; // Set loading state false setelah data dimuat
     }
 };
 
 const editRow = (row) => {
-    //fungsi edit
     console.log('Editing row:', row);
 };
+
+watch(() => props.datas, loadData, { immediate: true });
 </script>
 
 <template>
     <div class="flex flex-col w-full items-center gap-4">
         <!-- Chart Title -->
-        <span class="text-[1vw] font-bold">
-            {{ listdata.name || 'Loading...' }}
-        </span>
+        <span class="text-[1vw] font-bold"> Saldo Tunai (dlm IDR Miliar) </span>
 
         <!-- Loading Indicator -->
         <div v-if="isLoading" class="flex justify-center items-center w-full h-[380px]">
@@ -62,57 +84,21 @@ const editRow = (row) => {
             <VueApexCharts :type="listdata.type" :series="listdata.series" :options="listdata.options" class="w-full" height="400vw" style="z-index: 1 !important" />
             <Divider />
             <div class="flex gap-20">
-                <div class="w-full flex flex-col gap-2">
-                    <span class="text-lg text-sky-500 font-semibold">Cash Balance Tahun {{ currentYear }}</span>
-                    <DataTable :value="cashBalanceThisYear" showGridlines removableSort tableStyle="background-color:#00000;">
-                        <Column field="periode" sortable headerStyle="background-color: #1a5276;" style="background-color: black; color: white">
+                <div class="w-full flex flex-col gap-2" v-for="(item, index) in listTable" :key="index">
+                    <span class="text-lg font-semibold" :style="`color:${item.color};`">Revenue Tahun {{ item.tahun }}</span>
+                    <DataTable :value="item.data" showGridlines removableSort>
+                        <Column field="periode" sortable :headerStyle="`background-color: ${item.color};`" style="background-color: black; color: white">
                             <template #header>
                                 <span class="flex justify-center items-center w-full text-center">Periode</span>
                             </template>
                         </Column>
-                        <Column field="labaBersih" sortable headerStyle="background-color: #1a5276;" style="background-color: black; color: white">
+                        <Column field="pendapatan" sortable :headerStyle="`background-color: ${item.color};`" style="background-color: black; color: white">
                             <template #header>
-                                <span class="flex justify-center items-center w-full text-center">Laba Bersih (Bn)</span>
-                            </template>
-                        </Column>
-                        <Column field="quantity" sortable headerStyle="background-color: #1a5276; text-align: center;" style="background-color: black; color: white">
-                            <template #header>
-                                <span class="flex justify-center items-center w-full text-center">Action</span>
+                                <span class="flex justify-center items-center w-full text-center">Saldo Tunai (Bn)</span>
                             </template>
                             <template #body="{ data }">
                                 <div class="w-full flex justify-center items-center">
-                                    <button @click="editRow(data)" class="hover:opacity-80 flex justify-center items-center p-2 rounded-full w-[1.3vw] h-[1.3vw] bg-cyan-900">
-                                        <i class="pi pi-pencil" style="font-size: 0.7vw"></i>
-                                        <!-- <img src="/images/button-icon/pen.png" alt="Edit Icon" class="w-4 h-4 inline" /> -->
-                                    </button>
-                                </div>
-                            </template>
-                        </Column>
-                    </DataTable>
-                </div>
-                <div class="w-full flex flex-col gap-2">
-                    <span class="text-lg text-green-500 font-semibold">Cash Balance Tahun {{ currentYear - 1 }}</span>
-                    <DataTable :value="cashBalanceLastYear" showGridlines removableSort tableStyle="background-color:#00000;">
-                        <Column field="periode" sortable headerStyle="background-color: #22C55E;" style="background-color: black; color: white">
-                            <template #header>
-                                <span class="flex justify-center items-center w-full text-center">Periode</span>
-                            </template>
-                        </Column>
-                        <Column field="labaBersih" sortable headerStyle="background-color: #22C55E;" style="background-color: black; color: white">
-                            <template #header>
-                                <span class="flex justify-center items-center w-full text-center">Laba Bersih (Bn)</span>
-                            </template>
-                        </Column>
-                        <Column field="quantity" sortable headerStyle="background-color: #22C55E; text-align: center;" style="background-color: black; color: white">
-                            <template #header>
-                                <span class="flex justify-center items-center w-full text-center">Action</span>
-                            </template>
-                            <template #body="{ data }">
-                                <div class="w-full flex justify-center items-center">
-                                    <button @click="editRow(data)" class="hover:opacity-80 flex justify-center items-center p-2 rounded-full w-[1.3vw] h-[1.3vw] bg-cyan-900">
-                                        <i class="pi pi-pencil" style="font-size: 0.7vw"></i>
-                                        <!-- <img src="/images/button-icon/pen.png" alt="Edit Icon" class="w-4 h-4 inline" /> -->
-                                    </button>
+                                    <span>{{ data.pendapatan }}</span>
                                 </div>
                             </template>
                         </Column>

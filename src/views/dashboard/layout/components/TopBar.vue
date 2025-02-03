@@ -20,10 +20,10 @@ const listMatauang = ref([]);
 const listPackaging = ref([]);
 const routeName = ref(route.name);
 
-// const beforeDate = ref(moment().format('YYYY-MM-01'));
-// const now = ref(moment().format('YYYY-MM-DD'));
-const beforeDate = ref('2023-01-01');
-const now = ref('2024-01-31');
+const beforeDate = ref(moment().format('YYYY-MM-01'));
+const now = ref(moment().format('YYYY-MM-DD'));
+// const beforeDate = ref('2023-01-01');
+// const now = ref('2024-01-31');
 const dates = ref([moment(beforeDate.value).toDate(), moment(now.value).toDate()]);
 const getToken = ref(localStorage.getItem('usertoken'));
 

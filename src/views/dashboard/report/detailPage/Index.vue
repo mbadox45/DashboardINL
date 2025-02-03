@@ -1,5 +1,6 @@
 <script setup>
 import CryptoJS from 'crypto-js';
+import moment from 'moment';
 import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -21,23 +22,29 @@ import CpoOlahVsRkapOperation from '@/views/dashboard/report/detailPage/componen
 import LaporanProduksiOperation from '@/views/dashboard/report/detailPage/components/operation/LaporanProduksiOperation.vue';
 import PackagingOperation from '@/views/dashboard/report/detailPage/components/operation/PackagingOperation.vue';
 
+// Controller
+import financeDetailController from '@/controller/home/controllerDetailPage/financeDetailController';
+
 const route = useRoute();
 const router = useRouter();
 const routeName = ref('');
 const routeType = ref('');
+const listData = ref({});
 const formData = ref({
     idPmg: 1,
     idMataUang: 1,
     idPackaging: 1,
-    tanggalAwal: '2023-01-01',
-    tanggalAkhir: '2024-02-28'
+    tanggalAwal: moment('2023-01-01').format('YYYY-MM-DD'),
+    tanggalAkhir: moment('2024-02-28').format('YYYY-MM-DD')
+    // tanggalAwal: moment().format('YYYY-MM-01'),
+    // tanggalAkhir: moment().format('YYYY-MM-DD')
 });
 
 onMounted(() => {
     funcCondition();
 });
 
-const funcCondition = () => {
+const funcCondition = async () => {
     const query = route.query.component;
     if (query == null || query == '') {
         router.push({ path: '/not-found' });
@@ -47,8 +54,28 @@ const funcCondition = () => {
         const hasil = JSON.parse(jsonString);
         routeName.value = hasil.path;
         routeType.value = hasil.type;
-        console.log(hasil);
+        console.log(hasil.path + '-' + hasil.type);
+        const pathName = hasil.path + '-' + hasil.type;
+        const response = await loadFinance(pathName);
+        console.log(response);
+        listData.value = response;
     }
+};
+
+const loadFinance = async (path) => {
+    let result;
+    if (path.toLowerCase().includes('revenue-financial')) {
+        result = await financeDetailController.resultRevenue(formData.value);
+    } else if (path.toLowerCase().includes('ebitda-margin-financial')) {
+        result = await financeDetailController.resultEbitda(formData.value);
+    } else if (path.toLowerCase().includes('net-profit-margin-financial')) {
+        result = await financeDetailController.resultNetProfit(formData.value);
+    } else if (path.toLowerCase().includes('cash-balance-financial')) {
+        result = await financeDetailController.resultCashBalanced(formData.value);
+    } else {
+        result = await financeDetailController.resultGrossProfit(formData.value);
+    }
+    return result;
 };
 
 const updateDates = async (dates) => {
@@ -60,6 +87,8 @@ const updateDates = async (dates) => {
         tanggalAkhir: dates.now
     };
     formData.value = form;
+    const response = await loadFinance(routeName.value + '-' + routeType.value);
+    listData.value = response;
 };
 </script>
 
@@ -67,12 +96,12 @@ const updateDates = async (dates) => {
     <div class="flex flex-col gap-2 layout-scroller bg-neutral-950 min-h-screen text-white app-dark">
         <top-bar :onDateChange="updateDates"></top-bar>
         <!-- <app-topbar></app-topbar> -->
-        <div class="bg-black w-full min-h-[30rem] p-6 rounded-xl" v-if="routeType == 'financial'">
-            <revenue-detail-finance v-if="routeName == 'revenue'" />
-            <gross-profit-detail-finance v-else-if="routeName == 'gross-profit'" />
-            <ebitda-margin-finance v-else-if="routeName == 'ebitda-margin'" />
-            <net-profit-margin-finance v-else-if="routeName == 'net-profit-margin'" />
-            <cash-balance-finance v-else-if="routeName == 'cash-balance'" />
+        <div class="bg-black w-full p-6 rounded-xl" v-if="routeType == 'financial'">
+            <revenue-detail-finance v-if="routeName == 'revenue'" :datas="listData" />
+            <gross-profit-detail-finance v-else-if="routeName == 'gross-profit'" :datas="listData" />
+            <ebitda-margin-finance v-else-if="routeName == 'ebitda-margin'" :datas="listData" />
+            <net-profit-margin-finance v-else-if="routeName == 'net-profit-margin'" :datas="listData" />
+            <cash-balance-finance v-else-if="routeName == 'cash-balance'" :datas="listData" />
             <cash-flow-movement-finance v-else-if="routeName == 'cash-flow-movement'" />
             <cff-pay-schedule-finance v-else-if="routeName == 'cff-pay-schedule'" />
             <cfi-pay-schedule-finance v-else-if="routeName == 'cfi-pay-schedule'" />

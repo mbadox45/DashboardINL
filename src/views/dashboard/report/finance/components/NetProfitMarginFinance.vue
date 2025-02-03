@@ -38,7 +38,7 @@ watch(() => props.datas, loadData, { immediate: true });
             <div class="flex items-center gap-3">
                 <span class="font-bold w-full text-[0.8vw]">Margin Laba Bersih (dlm IDR Miliar)</span>
                 <button
-                    @click="routerLink('gross-profit')"
+                    @click="routerLink('net-profit-margin')"
                     class="animate-pulse hover:animate-none p-4 w-[1.5vw] h-[1.5vw] cursor-pointer bg-transparent text-emerald-500 rotate-180 hover:rotate-[-180] hover:bg-black hover:text-amber-500 rounded-full flex items-center justify-center transition-all duration-500"
                 >
                     <i class="pi pi-external-link" style="font-weight: 600; font-size: 0.9vw"></i>

@@ -86,5 +86,5 @@ export const months = [
     { id: 9, name: 'September' },
     { id: 10, name: 'October' },
     { id: 11, name: 'November' },
-    { id: 12, name: 'Desember' }
+    { id: 12, name: 'December' }
 ];

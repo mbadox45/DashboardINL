@@ -110,7 +110,6 @@ const loadDataControllerOperation = async (form) => {
 
     const laporanMaterial = await operationHomeController.laporanMaterial(form);
     dataLaporanMaterial.value = laporanMaterial;
-    console.log(laporanMaterial);
 
     const laporanPackaging = await operationHomeController.laporanPackaging(form);
     dataLaporanPackaging.value = laporanPackaging;

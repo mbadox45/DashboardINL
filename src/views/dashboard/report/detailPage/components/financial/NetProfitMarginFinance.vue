@@ -1,25 +1,17 @@
 <script setup>
-import { currentYear, netProfitMargin, netProfitMarginData, netProfitMarginLastYear } from '@/controller/report/FinancialReport';
-import { onMounted, ref } from 'vue';
+import { defineProps, onMounted, ref, watch } from 'vue';
 import VueApexCharts from 'vue3-apexcharts';
 
-const listdata = ref({
-    type: null,
-    series: [],
-    options: {},
-    name: null
-});
-
-const listdata2 = ref({
-    type: null,
-    series: [],
-    options: {},
-    name: null
-});
-
 const isLoading = ref(true);
-const dataNetProfitMarginThisYear = ref([]);
-const dataNetProfitMarginLastYear = ref([]);
+const listTable = ref([]);
+const listChart = ref([]);
+
+const props = defineProps({
+    datas: {
+        type: Object,
+        default: () => {}
+    }
+});
 
 onMounted(() => {
     loadData();
@@ -27,26 +19,25 @@ onMounted(() => {
 
 const loadData = async () => {
     try {
-        const data = await netProfitMargin();
-        const data2 = await netProfitMarginLastYear();
+        const response = props.datas || null;
+        console.log(response);
 
-        listdata.value = {
-            type: data.type || 'line',
-            series: data.series || [],
-            options: data.chartOptions || {},
-            name: data.name || 'NET Profit Margin (in IDR BN)'
-        };
-
-        listdata2.value = {
-            type: data2.type || 'line',
-            series: data2.series || [],
-            options: data2.chartOptions || {},
-            name: data2.name || 'NET Profit Margin (in IDR BN)'
-        };
-
-        const { netProfitMarginThisYear: thisYearData, netProfitMarginLastYear: lastYearData } = netProfitMarginData();
-        dataNetProfitMarginThisYear.value = thisYearData;
-        dataNetProfitMarginLastYear.value = lastYearData;
+        if (response != null) {
+            const chart = response.chart || [];
+            const list = [];
+            if (chart.length > 0) {
+                for (let i = 0; i < chart.length; i++) {
+                    list.push({
+                        type: chart[i].type || 'line',
+                        series: chart[i].series || [],
+                        options: chart[i].chartOptions || {},
+                        name: chart[i].name || 'Gross Profit Margin (in IDR Bn)'
+                    });
+                }
+            }
+            listChart.value = list;
+            listTable.value = response.table;
+        }
     } catch (error) {
         console.error('Error loading data:', error);
     } finally {
@@ -58,99 +49,52 @@ const editRow = (row) => {
     //fungsi edit
     console.log('Editing row:', row);
 };
+
+watch(() => props.datas, loadData, { immediate: true });
 </script>
 
 <template>
     <div class="flex flex-col w-full items-center gap-4">
         <!-- Chart Title -->
-        <span class="text-[1vw] font-bold">
-            {{ listdata.name || 'Loading...' }}
-        </span>
+        <span class="text-[1vw] font-bold"> NET Profit Margin & Amount (in % & IDR Bn) </span>
 
         <!-- Loading Indicator -->
-        <div v-if="isLoading" class="flex justify-center items-center w-full h-[380px]">
+        <div v-if="isLoading == true" class="flex justify-center items-center w-full h-[380px]">
             <span>Loading chart...</span>
         </div>
 
         <div v-else class="w-full flex flex-col gap-4">
             <!-- Vue Apex Chart -->
             <div class="w-full flex gap-16">
-                <VueApexCharts :type="listdata.type" :series="listdata.series" :options="listdata.options" class="w-full" height="400vw" style="z-index: 1 !important" />
-                <VueApexCharts :type="listdata2.type" :series="listdata2.series" :options="listdata2.options" class="w-full" height="400vw" style="z-index: 1 !important" />
+                <VueApexCharts v-for="(item, index) in listChart" :key="index" :type="item.type" :series="item.series" :options="item.options" class="w-full" height="400vw" style="z-index: 1 !important" />
             </div>
 
             <div class="flex gap-20">
-                <div class="w-full flex flex-col gap-2">
-                    <span class="text-lg text-cyan-300 font-semibold">NET Profit Margin Tahun {{ currentYear }}</span>
-                    <DataTable :value="dataNetProfitMarginThisYear" showGridlines removableSort tableStyle="background-color:#00000;">
-                        <Column field="periode" sortable headerStyle="background-color: #047857;" style="background-color: black; color: white">
+                <div class="w-full flex flex-col gap-2" v-for="(item, index) in listTable" :key="index">
+                    <span class="text-lg font-semibold" :style="`color: ${item.color};`">NET Profit Margin Tahun {{ item.year }}</span>
+                    <DataTable :value="item.data" showGridlines removableSort tableStyle="background-color:#00000;">
+                        <Column field="periode" sortable :headerStyle="`background-color: ${item.color};`" style="background-color: black; color: white">
                             <template #header>
                                 <span class="flex justify-center items-center w-full text-center">Periode</span>
                             </template>
                         </Column>
-                        <Column field="lababersih" sortable headerStyle="background-color: #047857;" style="background-color: black; color: white">
+                        <Column field="labaBersih" sortable :headerStyle="`background-color: ${item.color};`" style="background-color: black; color: white">
                             <template #header>
-                                <span class="flex justify-center items-center w-full text-center">Laba Bersih</span>
+                                <span class="flex justify-center items-center w-full text-center">Laba Bersih (Bn)</span>
+                            </template>
+                            <template #body="{ data }">
+                                <div class="w-full flex justify-center items-center">
+                                    <span>{{ data.labaBersih }}</span>
+                                </div>
                             </template>
                         </Column>
-                        <Column field="npm" sortable headerStyle="background-color: #047857;" style="background-color: black; color: white">
+                        <Column field="npmPercent" sortable :headerStyle="`background-color: ${item.color};`" style="background-color: black; color: white">
                             <template #header>
                                 <span class="flex justify-center items-center w-full text-center">NPM (%)</span>
                             </template>
                             <template #body="{ data }">
                                 <div class="w-full flex justify-center items-center">
-                                    <span>{{ data.npm }}%</span>
-                                </div>
-                            </template>
-                        </Column>
-                        <Column field="periode" sortable headerStyle="background-color: #047857; text-align: center;" style="background-color: black; color: white">
-                            <template #header>
-                                <span class="flex justify-center items-center w-full text-center">Action</span>
-                            </template>
-                            <template #body="{ data }">
-                                <div class="w-full flex justify-center items-center">
-                                    <button @click="editRow(data)" class="hover:opacity-80 flex justify-center items-center p-2 rounded-full w-[1.3vw] h-[1.3vw] bg-cyan-900">
-                                        <i class="pi pi-pencil" style="font-size: 0.7vw"></i>
-                                        <!-- <img src="/images/button-icon/pen.png" alt="Edit Icon" class="w-4 h-4 inline" /> -->
-                                    </button>
-                                </div>
-                            </template>
-                        </Column>
-                    </DataTable>
-                </div>
-                <div class="w-full flex flex-col gap-2">
-                    <span class="text-lg text-amber-400 font-semibold">NET Profit Margin Tahun {{ currentYear - 1 }}</span>
-                    <DataTable :value="dataNetProfitMarginLastYear" showGridlines removableSort tableStyle="background-color:#00000;">
-                        <Column field="periode" sortable headerStyle="background-color: #84cc16;" style="background-color: black; color: white">
-                            <template #header>
-                                <span class="flex justify-center items-center w-full text-center">Periode</span>
-                            </template>
-                        </Column>
-                        <Column field="lababersih" sortable headerStyle="background-color: #84cc16;" style="background-color: black; color: white">
-                            <template #header>
-                                <span class="flex justify-center items-center w-full text-center">Laba Bersih</span>
-                            </template>
-                        </Column>
-                        <Column field="npm" sortable headerStyle="background-color: #84cc16;" style="background-color: black; color: white">
-                            <template #header>
-                                <span class="flex justify-center items-center w-full text-center">NPM (%)</span>
-                            </template>
-                            <template #body="{ data }">
-                                <div class="w-full flex justify-center items-center">
-                                    <span>{{ data.npm }}%</span>
-                                </div>
-                            </template>
-                        </Column>
-                        <Column field="periode" sortable headerStyle="background-color: #84cc16; text-align: center;" style="background-color: black; color: white">
-                            <template #header>
-                                <span class="flex justify-center items-center w-full text-center">Action</span>
-                            </template>
-                            <template #body="{ data }">
-                                <div class="w-full flex justify-center items-center">
-                                    <button @click="editRow(data)" class="hover:opacity-80 flex justify-center items-center p-2 rounded-full w-[1.3vw] h-[1.3vw] bg-cyan-900">
-                                        <i class="pi pi-pencil" style="font-size: 0.7vw"></i>
-                                        <!-- <img src="/images/button-icon/pen.png" alt="Edit Icon" class="w-4 h-4 inline" /> -->
-                                    </button>
+                                    <span>{{ data.npmPercent }}%</span>
                                 </div>
                             </template>
                         </Column>

@@ -64,7 +64,6 @@ export default new (class operationHomeController {
             const response = await laporanMaterialController.getByPeriod(form);
             const norma = response.norma;
             const laporan = response.laporan_material;
-            console.log(laporan);
             if (norma != null && laporan != null) {
                 const list = [];
                 const nilaiNorma = [];

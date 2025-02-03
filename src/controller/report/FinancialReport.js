@@ -53,7 +53,8 @@ export const revenueYtd = async () => {
     };
 };
 
-export const revenueData = () => {
+export const revenueData = async () => {
+    // const response = await financeDetailController.revenue()
     const revenueThisYear = [
         { periode: 'January', pendapatan: 378.46, rkap: 353.32 },
         { periode: 'February', pendapatan: 187.77, rkap: 802 },

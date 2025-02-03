@@ -1,6 +1,576 @@
+import { barChartOptionsApex, combo3ChartOptionsApex, comboChartOptionsApex } from '@/controller/chartStyle/chartDummy';
+import { formatCurrency, months, valueToBilion } from '@/controller/dummyController';
+import cashFlowMovementController from '@/controller/getApiFromThisApp/cashFlowMovement/cashFlowMovementController';
 import profitabilityController from '@/controller/getApiFromThisApp/profitability/profitabilityController';
+import moment from 'moment';
 
 export default new (class financeDetailController {
+    cashBalance = async (form) => {
+        try {
+            let result = {
+                chart: {
+                    dataNow: [],
+                    dataLast: []
+                },
+                tabel: {
+                    tahunNow: 0,
+                    tahunLast: 0,
+                    dataNow: [],
+                    dataLast: []
+                }
+            };
+            const response = await cashFlowMovementController.getByPeriod(form);
+            if (response != null) {
+                const dataNowChart = [];
+                const dataNowTable = [];
+                const dataLastChart = [];
+                const dataLastTable = [];
+                const monthsThisYear = response.thisYear;
+                if (monthsThisYear != null) {
+                    result.tabel.tahunNow = monthsThisYear.year;
+                    const data = monthsThisYear.data;
+                    for (let i = 0; i < months.length; i++) {
+                        const month = data.find((item) => item.month == months[i].id);
+                        if (month != null) {
+                            dataNowChart.push(valueToBilion(month.ending_cash_balanced));
+                            dataNowTable.push({
+                                bulan: months[i].name,
+                                value: formatCurrency(valueToBilion(Number(month.ending_cash_balanced)))
+                            });
+                        } else {
+                            dataNowChart.push(0);
+                            dataNowTable.push({
+                                bulan: months[i].name,
+                                value: formatCurrency(Number(0).toFixed(2))
+                            });
+                        }
+                    }
+                    result.chart.dataNow = dataNowChart;
+                    result.tabel.dataNow = dataNowTable;
+                }
+
+                const monthsLastMonth = response.lastYear;
+                if (monthsLastMonth != null) {
+                    result.tabel.tahunLast = monthsLastMonth.year;
+                    const data = monthsLastMonth.data;
+                    for (let i = 0; i < months.length; i++) {
+                        const month = data.find((item) => item.month == months[i].id);
+                        if (month != null) {
+                            dataLastChart.push(valueToBilion(month.ending_cash_balanced));
+                            dataLastTable.push({
+                                bulan: months[i].name,
+                                value: formatCurrency(valueToBilion(Number(month.ending_cash_balanced)))
+                            });
+                        } else {
+                            dataLastChart.push(0);
+                            dataLastTable.push({
+                                bulan: months[i].name,
+                                value: formatCurrency(Number(0).toFixed(2))
+                            });
+                        }
+                    }
+                    result.chart.dataLast = dataLastChart;
+                    result.tabel.dataLast = dataLastTable;
+                }
+            }
+            return result;
+        } catch (error) {
+            const result = {
+                chart: {
+                    dataNow: [],
+                    dataLast: [],
+                    dataTarget: []
+                },
+                tabel: {
+                    tahunNow: 0,
+                    tahunLast: 0,
+                    dataNow: [],
+                    dataLast: []
+                }
+            };
+            return result;
+        }
+    };
+    resultCashBalanced = async (form) => {
+        const response = await this.cashBalance(form);
+
+        // Tabel
+        const thisYear = [];
+        const lastYear = [];
+        const tableNow = response.tabel.dataNow;
+        for (let i = 0; i < tableNow.length; i++) {
+            thisYear.push({
+                periode: tableNow[i].bulan,
+                pendapatan: tableNow[i].value,
+                rkap: tableNow[i].rkap
+            });
+        }
+        const tableLast = response.tabel.dataLast;
+        for (let i = 0; i < tableLast.length; i++) {
+            lastYear.push({
+                periode: tableLast[i].bulan,
+                pendapatan: tableLast[i].value,
+                rkap: tableLast[i].rkap
+            });
+        }
+
+        // Chart
+        const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        const data1 = response.chart.dataNow;
+        const data2 = response.chart.dataLast;
+        const label1 = `Saldo Tunai ${response.tabel.tahunNow}`;
+        const label2 = `Saldo Tunai ${response.tabel.tahunLast}`;
+        const type = 'bar';
+        const color = ['rgba(6, 130, 212, 0.6)', 'rgba(34, 197, 94, 0.6)']; // Second bar color is Green-500
+        const strokeColor = ['rgba(6, 130, 212, 1)', 'rgba(34, 197, 94, 1)']; // Stroke for second bar
+        const dataLabelStat = true;
+        const total = '';
+        const listLabels = [];
+        for (let i = 0; i < labels.length; i++) {
+            listLabels.push(moment(labels[i], 'MMMM').format('MMM'));
+        }
+        return {
+            table: [
+                { tahun: response.tabel.tahunNow, data: thisYear, color: '#1a5276' },
+                { tahun: response.tabel.tahunLast, data: lastYear, color: '#22C55E' }
+            ],
+            chart: {
+                name: `Cash Balance (in IDR Bn) ${response.tabel.tahunNow}`,
+                type: type,
+                chartOptions: barChartOptionsApex(listLabels, color, strokeColor, dataLabelStat, total),
+                series: [
+                    {
+                        name: label1,
+                        type: type,
+                        data: data1
+                    },
+                    {
+                        name: label2,
+                        type: type,
+                        data: data2
+                    }
+                ]
+            }
+        };
+    };
+    netProfit = async (form) => {
+        try {
+            let result = {
+                chart: [],
+                table: []
+            };
+            const response = await profitabilityController.getByPeriod(form);
+            if (response != null) {
+                const listChart = [];
+                const listTable = [];
+                const monthsThisYear = response.thisYear;
+                if (monthsThisYear != null) {
+                    const month = monthsThisYear.months;
+                    const list = [];
+                    const dataLaba = [];
+                    const dataGpm = [];
+                    for (let i = 0; i < months.length; i++) {
+                        const data = month.find((item) => item.month == months[i].id);
+                        if (data != null) {
+                            dataLaba.push(Number(valueToBilion(data.labaBersih)));
+                            dataGpm.push(Number(Number(data.npmPercent).toFixed(2)));
+                            list.push({
+                                periode: months[i].name,
+                                labaBersih: formatCurrency(valueToBilion(data.labaBersih)),
+                                npmPercent: formatCurrency(Number(data.npmPercent).toFixed(2))
+                            });
+                        } else {
+                            dataLaba.push(0);
+                            dataGpm.push(0);
+                            list.push({
+                                periode: months[i].name,
+                                labaBersih: 0,
+                                npmPercent: 0
+                            });
+                        }
+                    }
+                    listChart.push({ laba: dataLaba, gpm: dataGpm, year: monthsThisYear.year });
+                    listTable.push({ year: monthsThisYear.year, data: list, color: '#047857' });
+                }
+
+                const monthsLastMonth = response.lastYear;
+                if (monthsLastMonth != null) {
+                    const month = monthsLastMonth.months;
+                    const list = [];
+                    const dataLaba = [];
+                    const dataGpm = [];
+                    for (let i = 0; i < months.length; i++) {
+                        const data = month.find((item) => item.month == months[i].id);
+                        if (data != null) {
+                            dataLaba.push(Number(valueToBilion(data.labaBersih)));
+                            dataGpm.push(Number(Number(data.npmPercent).toFixed(2)));
+                            list.push({
+                                periode: months[i].name,
+                                labaBersih: formatCurrency(valueToBilion(data.labaBersih)),
+                                npmPercent: formatCurrency(Number(data.npmPercent).toFixed(2))
+                            });
+                        } else {
+                            dataLaba.push(0);
+                            dataGpm.push(0);
+                            list.push({
+                                periode: months[i].name,
+                                labaBersih: 0,
+                                npmPercent: 0
+                            });
+                        }
+                    }
+                    listChart.push({ laba: dataLaba, gpm: dataGpm, year: monthsLastMonth.year });
+                    listTable.push({ year: monthsLastMonth.year, data: list, color: '#84cc16' });
+                }
+                result.chart = listChart;
+                result.table = listTable;
+            }
+            return result;
+        } catch (error) {
+            let result = {
+                chart: [],
+                table: []
+            };
+            return result;
+        }
+    };
+    resultNetProfit = async (form) => {
+        const response = await this.netProfit(form);
+
+        // Chart
+        const chart = response.chart;
+        const color = [
+            { colorChart: ['rgba(6, 95, 70, 0.6)', 'rgba(34, 211, 238, 1)'], colorLabel: ['#15803d', '#0891b2'] },
+            { colorChart: ['rgba(245, 158, 11, 0.6)', 'rgba(101, 163, 13, 1)'], colorLabel: ['#754c07', '#2b4506'] }
+        ];
+        const listChart = [];
+        if (chart.length > 0) {
+            for (let i = 0; i < chart.length; i++) {
+                const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                const data1 = chart[i].gpm;
+                const data2 = chart[i].laba;
+                const sum = parseFloat(data2.reduce((accumulator, currentValue) => accumulator + currentValue, 0).toFixed(2));
+                const total = sum + `Bn IDR of Net Profit (YTD) ${chart[i].year}`;
+                const label1 = 'NPM%';
+                const label2 = 'Laba Bersih';
+                const type1 = 'line';
+                const type2 = 'column';
+                const colors = color[i].colorChart;
+                const colorsLabel = color[i].colorLabel;
+                const scale1 = 'percent';
+                const scale2 = 'number';
+                const typeChart = 'line';
+
+                const listLabels = [];
+                for (let i = 0; i < labels.length; i++) {
+                    listLabels.push(moment(labels[i], 'MMMM').format('MMM'));
+                }
+
+                listChart.push({
+                    name: 'NET Profit Margin & Amount (in % & IDR Bn)',
+                    total: total,
+                    type: typeChart,
+                    chartOptions: comboChartOptionsApex(total, label1, label2, listLabels, colors, colorsLabel, scale1, scale2),
+                    series: [
+                        {
+                            name: label2,
+                            type: type2,
+                            data: data2
+                        },
+                        {
+                            name: label1,
+                            type: type1,
+                            data: data1
+                        }
+                    ]
+                });
+            }
+        }
+        console.log(response.table, listChart);
+        return {
+            table: response.table,
+            chart: listChart
+        };
+    };
+    ebitda = async (form) => {
+        try {
+            let result = {
+                chart: [],
+                table: []
+            };
+            const response = await profitabilityController.getByPeriod(form);
+            if (response != null) {
+                const listChart = [];
+                const listTable = [];
+                const monthsThisYear = response.thisYear;
+                if (monthsThisYear != null) {
+                    const month = monthsThisYear.months;
+                    const list = [];
+                    const dataLaba = [];
+                    const dataGpm = [];
+                    for (let i = 0; i < months.length; i++) {
+                        const data = month.find((item) => item.month == months[i].id);
+                        if (data != null) {
+                            dataLaba.push(Number(valueToBilion(data.ebitda)));
+                            dataGpm.push(Number(Number(data.ebitdaPercent).toFixed(2)));
+                            list.push({
+                                periode: months[i].name,
+                                ebitda: formatCurrency(valueToBilion(data.ebitda)),
+                                ebitdaPersen: formatCurrency(Number(data.ebitdaPercent).toFixed(2))
+                            });
+                        } else {
+                            dataLaba.push(0);
+                            dataGpm.push(0);
+                            list.push({
+                                periode: months[i].name,
+                                ebitda: 0,
+                                ebitdaPersen: 0
+                            });
+                        }
+                    }
+                    listChart.push({ laba: dataLaba, gpm: dataGpm, year: monthsThisYear.year });
+                    listTable.push({ year: monthsThisYear.year, data: list, color: '#6366f1' });
+                }
+
+                const monthsLastMonth = response.lastYear;
+                if (monthsLastMonth != null) {
+                    const month = monthsLastMonth.months;
+                    const list = [];
+                    const dataLaba = [];
+                    const dataGpm = [];
+                    for (let i = 0; i < months.length; i++) {
+                        const data = month.find((item) => item.month == months[i].id);
+                        if (data != null) {
+                            dataLaba.push(Number(valueToBilion(data.ebitda)));
+                            dataGpm.push(Number(Number(data.ebitdaPercent).toFixed(2)));
+                            list.push({
+                                periode: months[i].name,
+                                ebitda: formatCurrency(valueToBilion(data.ebitda)),
+                                ebitdaPersen: formatCurrency(Number(data.ebitdaPercent).toFixed(2))
+                            });
+                        } else {
+                            dataLaba.push(0);
+                            dataGpm.push(0);
+                            list.push({
+                                periode: months[i].name,
+                                ebitda: 0,
+                                ebitdaPersen: 0
+                            });
+                        }
+                    }
+                    listChart.push({ laba: dataLaba, gpm: dataGpm, year: monthsLastMonth.year });
+                    listTable.push({ year: monthsLastMonth.year, data: list, color: '#10b981' });
+                }
+                result.chart = listChart;
+                result.table = listTable;
+            }
+            return result;
+        } catch (error) {
+            let result = {
+                chart: [],
+                table: []
+            };
+            return result;
+        }
+    };
+    resultEbitda = async (form) => {
+        const response = await this.ebitda(form);
+
+        // Chart
+        const chart = response.chart;
+        const color = [
+            { colorChart: ['rgba(251, 191, 36, 0.6)', 'rgba(99, 102, 241, 1)'], colorLabel: ['#c9971c', '#4f52c9'] },
+            { colorChart: ['rgba(16, 185, 129, 0.6)', 'rgba(139, 92, 246, 1)'], colorLabel: ['#a21caf', '#6d28d9'] }
+        ];
+        const listChart = [];
+        if (chart.length > 0) {
+            for (let i = 0; i < chart.length; i++) {
+                const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                const data1 = chart[i].gpm;
+                const data2 = chart[i].laba;
+                const sum = parseFloat(data2.reduce((accumulator, currentValue) => accumulator + currentValue, 0).toFixed(2));
+                const total = sum + `B IDR of Gross Profit (YTD) ${chart[i].year}`;
+                const label1 = 'EBITDA%';
+                const label2 = 'EBITDA';
+                const type1 = 'line';
+                const type2 = 'column';
+                const colors = color[i].colorChart;
+                const colorsLabel = color[i].colorLabel;
+                const scale1 = 'percent';
+                const scale2 = 'number';
+                const typeChart = 'line';
+
+                const listLabels = [];
+                for (let i = 0; i < labels.length; i++) {
+                    listLabels.push(moment(labels[i], 'MMMM').format('MMM'));
+                }
+
+                listChart.push({
+                    name: 'Gross Profit Margin & Amount (in % & IDR Bn)',
+                    total: total,
+                    type: typeChart,
+                    chartOptions: comboChartOptionsApex(total, label1, label2, listLabels, colors, colorsLabel, scale1, scale2),
+                    series: [
+                        {
+                            name: label2,
+                            type: type2,
+                            data: data2
+                        },
+                        {
+                            name: label1,
+                            type: type1,
+                            data: data1
+                        }
+                    ]
+                });
+            }
+        }
+        console.log(response.table, listChart);
+        return {
+            table: response.table,
+            chart: listChart
+        };
+    };
+    grossProfit = async (form) => {
+        try {
+            let result = {
+                chart: [],
+                table: []
+            };
+            const response = await profitabilityController.getByPeriod(form);
+            if (response != null) {
+                const listChart = [];
+                const listTable = [];
+                const monthsThisYear = response.thisYear;
+                if (monthsThisYear != null) {
+                    const month = monthsThisYear.months;
+                    const list = [];
+                    const dataLaba = [];
+                    const dataGpm = [];
+                    for (let i = 0; i < months.length; i++) {
+                        const data = month.find((item) => item.month == months[i].id);
+                        if (data != null) {
+                            dataLaba.push(Number(valueToBilion(data.labaKotor)));
+                            dataGpm.push(Number(Number(data.gpmPercent).toFixed(2)));
+                            list.push({
+                                periode: months[i].name,
+                                labakotor: formatCurrency(valueToBilion(data.labaKotor)),
+                                gpm: formatCurrency(Number(data.gpmPercent).toFixed(2))
+                            });
+                        } else {
+                            dataLaba.push(0);
+                            dataGpm.push(0);
+                            list.push({
+                                periode: months[i].name,
+                                labakotor: 0,
+                                gpm: 0
+                            });
+                        }
+                    }
+                    listChart.push({ laba: dataLaba, gpm: dataGpm, year: monthsThisYear.year });
+                    listTable.push({ year: monthsThisYear.year, data: list, color: '#d946ef' });
+                }
+
+                const monthsLastMonth = response.lastYear;
+                if (monthsLastMonth != null) {
+                    const month = monthsLastMonth.months;
+                    const list = [];
+                    const dataLaba = [];
+                    const dataGpm = [];
+                    for (let i = 0; i < months.length; i++) {
+                        const data = month.find((item) => item.month == months[i].id);
+                        if (data != null) {
+                            dataLaba.push(Number(valueToBilion(data.labaKotor)));
+                            dataGpm.push(Number(Number(data.gpmPercent).toFixed(2)));
+                            list.push({
+                                periode: months[i].name,
+                                labakotor: formatCurrency(valueToBilion(data.labaKotor)),
+                                gpm: formatCurrency(Number(data.gpmPercent).toFixed(2))
+                            });
+                        } else {
+                            dataLaba.push(0);
+                            dataGpm.push(0);
+                            list.push({
+                                periode: months[i].name,
+                                labakotor: 0,
+                                gpm: 0
+                            });
+                        }
+                    }
+                    listChart.push({ laba: dataLaba, gpm: dataGpm, year: monthsLastMonth.year });
+                    listTable.push({ year: monthsLastMonth.year, data: list, color: '#2d3748' });
+                }
+                result.chart = listChart;
+                result.table = listTable;
+            }
+            return result;
+        } catch (error) {
+            let result = {
+                chart: [],
+                table: []
+            };
+            return result;
+        }
+    };
+    resultGrossProfit = async (form) => {
+        const response = await this.grossProfit(form);
+
+        // Chart
+        const chart = response.chart;
+        console.log(chart);
+        const color = [
+            { colorChart: ['rgba(217, 70, 239, 0.6)', 'rgba(0, 188, 212, 1)'], colorLabel: ['#a21caf', '#1a5276'] },
+            { colorChart: ['rgba(105, 115, 132, 0.6)', 'rgba(251, 191, 36, 1)'], colorLabel: ['#2d3748', '#b45309'] }
+        ];
+        const listChart = [];
+        if (chart.length > 0) {
+            for (let i = 0; i < chart.length; i++) {
+                const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                const data1 = chart[i].gpm;
+                const data2 = chart[i].laba;
+                const sum = parseFloat(data2.reduce((accumulator, currentValue) => accumulator + currentValue, 0).toFixed(2));
+                const total = sum + `B IDR of Gross Profit (YTD) ${chart[i].year}`;
+                const label1 = 'GPM%';
+                const label2 = 'Laba Kotor';
+                const type1 = 'line';
+                const type2 = 'column';
+                const colors = color[i].colorChart;
+                const colorsLabel = color[i].colorLabel;
+                const scale1 = 'percent';
+                const scale2 = 'number';
+                const typeChart = 'line';
+
+                const listLabels = [];
+                for (let i = 0; i < labels.length; i++) {
+                    listLabels.push(moment(labels[i], 'MMMM').format('MMM'));
+                }
+
+                listChart.push({
+                    name: 'Gross Profit Margin & Amount (in % & IDR Bn)',
+                    total: total,
+                    type: typeChart,
+                    chartOptions: comboChartOptionsApex(total, label1, label2, listLabels, colors, colorsLabel, scale1, scale2),
+                    series: [
+                        {
+                            name: label2,
+                            type: type2,
+                            data: data2
+                        },
+                        {
+                            name: label1,
+                            type: type1,
+                            data: data1
+                        }
+                    ]
+                });
+            }
+        }
+        console.log(response.table, listChart);
+        return {
+            table: response.table,
+            chart: listChart
+        };
+    };
     revenue = async (form) => {
         try {
             let result = {
@@ -10,14 +580,73 @@ export default new (class financeDetailController {
                     dataTarget: []
                 },
                 tabel: {
+                    tahunNow: 0,
+                    tahunLast: 0,
                     dataNow: [],
                     dataLast: []
                 }
             };
             const response = await profitabilityController.getByPeriod(form);
             if (response != null) {
+                const dataNowChart = [];
+                const dataTargetChart = [];
+                const dataNowTable = [];
+                const dataLastChart = [];
+                const dataLastTable = [];
                 const monthsThisYear = response.thisYear;
+                if (monthsThisYear != null) {
+                    const month = monthsThisYear.months;
+                    result.tabel.tahunNow = monthsThisYear.year;
+                    for (let i = 0; i < months.length; i++) {
+                        const data = month.find((item) => item.month == months[i].id);
+                        if (data != null) {
+                            dataNowChart.push(valueToBilion(data.pendapatan));
+                            dataTargetChart.push(valueToBilion(Number(data.targetPendapatanRkap)));
+                            dataNowTable.push({
+                                bulan: months[i].name,
+                                value: formatCurrency(valueToBilion(Number(data.pendapatan))),
+                                rkap: formatCurrency(valueToBilion(Number(data.targetPendapatanRkap)))
+                            });
+                        } else {
+                            dataNowChart.push(0);
+                            dataTargetChart.push(0);
+                            dataNowTable.push({
+                                bulan: months[i].name,
+                                value: formatCurrency(Number(0).toFixed(2)),
+                                rkap: formatCurrency(Number(0).toFixed(2))
+                            });
+                        }
+                    }
+                    result.chart.dataNow = dataNowChart;
+                    result.chart.dataTarget = dataTargetChart;
+                    result.tabel.dataNow = dataNowTable;
+                    // console.log(dataNowChart, dataTargetChart, dataNowTable);
+                }
                 const monthsLasttMonth = response.lastYear;
+                if (monthsLasttMonth != null) {
+                    result.tabel.tahunLast = monthsLasttMonth.year;
+                    const month = monthsLasttMonth.months;
+                    for (let i = 0; i < months.length; i++) {
+                        const data = month.find((item) => item.month == months[i].id);
+                        if (data != null) {
+                            dataLastChart.push(valueToBilion(data.pendapatan));
+                            dataLastTable.push({
+                                bulan: months[i].name,
+                                value: formatCurrency(valueToBilion(Number(data.pendapatan))),
+                                rkap: formatCurrency(valueToBilion(Number(data.targetPendapatanRkap)))
+                            });
+                        } else {
+                            dataLastChart.push(0);
+                            dataLastTable.push({
+                                bulan: months[i].name,
+                                value: formatCurrency(Number(0).toFixed(2)),
+                                rkap: formatCurrency(Number(0).toFixed(2))
+                            });
+                        }
+                    }
+                    result.chart.dataLast = dataLastChart;
+                    result.tabel.dataLast = dataLastTable;
+                }
             }
             return result;
         } catch (error) {
@@ -28,11 +657,82 @@ export default new (class financeDetailController {
                     dataTarget: []
                 },
                 tabel: {
+                    tahunNow: 0,
+                    tahunLast: 0,
                     dataNow: [],
                     dataLast: []
                 }
             };
             return result;
         }
+    };
+    resultRevenue = async (form) => {
+        const response = await this.revenue(form);
+
+        // Tabel
+        const thisYear = [];
+        const lastYear = [];
+        const tableNow = response.tabel.dataNow;
+        for (let i = 0; i < tableNow.length; i++) {
+            thisYear.push({
+                periode: tableNow[i].bulan,
+                pendapatan: tableNow[i].value,
+                rkap: tableNow[i].rkap
+            });
+        }
+        const tableLast = response.tabel.dataLast;
+        for (let i = 0; i < tableLast.length; i++) {
+            lastYear.push({
+                periode: tableLast[i].bulan,
+                pendapatan: tableLast[i].value,
+                rkap: tableLast[i].rkap
+            });
+        }
+
+        // Chart
+        const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        const label1 = `Target RKAP ${response.tabel.tahunNow}`;
+        const label2 = `Pendapatan ${response.tabel.tahunNow}`;
+        const label3 = `Pendapatan ${response.tabel.tahunLast}`;
+        // Data*
+        const data1 = response.chart.dataTarget;
+        const data2 = response.chart.dataNow;
+        const data3 = response.chart.dataLast;
+        // Colors*
+        const colors = ['rgba(217, 119, 6, 1)', 'rgba(26, 82, 118, 0.6)', 'rgba(76, 165, 138, 0.6)']; // Add new color for last year's data
+        const colorsLabel = ['#b15d05', '#1a3e58', '#3b8e77'];
+        const listLabels = [];
+        for (let i = 0; i < labels.length; i++) {
+            listLabels.push(moment(labels[i], 'MMMM').format('MMM'));
+        }
+        return {
+            table: [
+                { tahun: response.tabel.tahunNow, data: thisYear },
+                { tahun: response.tabel.tahunLast, data: lastYear }
+            ],
+            chart: {
+                name: 'Revenue (in IDR Bn)',
+                type: 'line',
+                chartOptions: combo3ChartOptionsApex('', label1, label2, label3, listLabels, colors, colorsLabel, 'number', 'number', 'number'),
+                series: [
+                    {
+                        name: label1,
+                        type: 'line',
+                        data: data1
+                    },
+                    {
+                        name: label2,
+                        type: 'bar',
+                        data: data2
+                    },
+
+                    {
+                        name: label3,
+                        type: 'bar',
+                        data: data3
+                    }
+                ]
+            }
+        };
     };
 })();
