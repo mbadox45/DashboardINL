@@ -27,11 +27,27 @@ export default new (class financeDetailController {
                                 const bulan = months.find((item) => item.id == period[j].month);
                                 list.push({
                                     periode: bulan.name + ' ' + period[j].year,
-                                    name: valueToBilion(data.name),
+                                    name: data.name,
+                                    value: valueToBilion(data.value),
                                     pay_status: data.pay_status.name
                                 });
                             }
                         }
+                    } else {
+                        const period = kategori[i].period;
+                        const load = [];
+                        console.log(period);
+                        if (period.length > 0) {
+                            for (let j = 0; j < period.length; j++) {
+                                const data = period[i].data;
+                                for (let k = 0; k < data.length; k++) {
+                                    load.push({
+                                        name: data[k].name
+                                    });
+                                }
+                            }
+                        }
+                        console.log(load);
                     }
 
                     listTable.push({

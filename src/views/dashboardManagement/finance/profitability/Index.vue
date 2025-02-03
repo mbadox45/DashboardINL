@@ -1,5 +1,4 @@
 <script setup>
-import { URL_WEB } from '@/api/http/dataVariable';
 import { formatCurrency } from '@/controller/dummyController';
 // import pmgMasterController from '@/controller/getApiFromThisApp/master/pmgMasterController';
 import kategoriProfitabilityController from '@/controller/getApiFromThisApp/profitability/kategoriProfitabilityController';
@@ -7,6 +6,9 @@ import profitabilityController from '@/controller/getApiFromThisApp/profitabilit
 import { FilterMatchMode } from '@primevue/core/api';
 import moment from 'moment';
 import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const drawerCond = ref(false);
 const messages = ref([]);
@@ -27,10 +29,10 @@ const listUraian = ref([]);
 
 const op = ref();
 
-const beforeDate = ref(moment().format('YYYY-MM-01'));
-const now = ref(moment().format('YYYY-MM-DD'));
-// const beforeDate = ref('2024-01-01');
-// const now = ref(moment().format('2024-01-01'));
+// const beforeDate = ref(moment().format('YYYY-MM-01'));
+// const now = ref(moment().format('YYYY-MM-DD'));
+const beforeDate = ref('2024-01-01');
+const now = ref(moment().format('2024-01-31'));
 const dates = ref([moment(beforeDate.value).toDate(), moment(now.value).toDate()]);
 
 const initFilters = () => {
@@ -73,7 +75,7 @@ const loadData = async () => {
         // get Select Option
         // const loadPMG = await pmgMasterController.getAll();
         const uraian = await kategoriProfitabilityController.getAll();
-        // listUraian.value = uraian;
+        listUraian.value = uraian;
         // pmg.value = loadPMG;
     } catch (error) {
         listTable.value = [];
@@ -175,7 +177,7 @@ const showDrawer = async (data) => {
             formData.value.value = Number(response.value);
             statusForm.value = 'edit';
         } else {
-            window.location.replace(`${URL_WEB}finance/profitability/create`);
+            router.push('/finance/profitability/create');
             logFile.value = [];
             formData.value.id = null;
             formData.value.kategori_id = null;
@@ -185,7 +187,7 @@ const showDrawer = async (data) => {
             statusForm.value = 'add';
         }
     } catch (error) {
-        window.location.replace(`${URL_WEB}finance/profitability/create`);
+        router.push('/finance/profitability/create');
         messages.value = [];
         drawerCond.value = true;
         logFile.value = [];
@@ -363,7 +365,7 @@ const submitData = async () => {
                                     <template #header>
                                         <span class="text-[0.8vw] font-bold italic">{{ moment(items.month > 9 ? `2024-${items.month.toString()}-01` : `2024-0${items.month.toString()}-01`).format('MMMM') }}</span>
                                     </template>
-                                    <DataTable :value="items.detail" showGridlines paginator :rows="5">
+                                    <DataTable :value="items.details" showGridlines paginator :rows="5">
                                         <Column field="name" sortable style="width: 25%; font-size: 0.7vw">
                                             <template #header>
                                                 <div class="flex w-full justify-center">

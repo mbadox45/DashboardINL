@@ -73,7 +73,7 @@ export default new (class profitabilityController {
         try {
             const response = await this.getByPeriod(form);
             const years = moment(form.tanggalAwal).format('YYYY');
-            // console.log(response);
+            console.log(response);
             if (response != null) {
                 const list = [];
                 // Last Year

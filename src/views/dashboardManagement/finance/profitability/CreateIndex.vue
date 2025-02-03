@@ -1,10 +1,12 @@
 <script setup>
-import { URL_WEB } from '@/api/http/dataVariable';
 // import pmgMasterController from '@/controller/getApiFromThisApp/master/pmgMasterController';
 import kategoriProfitabilityController from '@/controller/getApiFromThisApp/profitability/kategoriProfitabilityController';
 import profitabilityController from '@/controller/getApiFromThisApp/profitability/profitabilityController';
 import moment from 'moment';
 import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const messages = ref([]);
 const tanggal = ref(moment().format('YYYY-MM-DD'));
@@ -75,7 +77,7 @@ const resetForm = () => {
 
 const postData = async (cond) => {
     if (cond == 'back') {
-        window.location.replace(`${URL_WEB}finance/profitability`);
+        router.push('/finance/profitability');
     } else {
         loadings.value = true;
         console.log(formData.value);
@@ -84,7 +86,7 @@ const postData = async (cond) => {
         if (response.severity == 'success') {
             setTimeout(function () {
                 loadings.value = false;
-                window.location.replace(`${URL_WEB}finance/profitability`);
+                router.push('/finance/profitability');
             }, setTime.value);
         } else {
             loadings.value = false;
