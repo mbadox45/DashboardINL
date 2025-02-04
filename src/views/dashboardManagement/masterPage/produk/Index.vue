@@ -203,7 +203,7 @@ const submitData = async () => {
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="konversi_ton">Konversi Ton <small class="text-red-500 font-bold">*</small></label>
-                    <InputNumber :disabled="formData.jenis == 'bulk' ? true : false" v-model="formData.konversi_ton" inputId="minmaxfraction" placeholder="1,000,000" :minFractionDigits="0" :maxFractionDigits="2" fluid />
+                    <InputNumber :disabled="formData.jenis == 'bulk' ? true : false" v-model="formData.konversi_ton" inputId="minmaxfraction" placeholder="1,000,000" :minFractionDigits="0" :maxFractionDigits="20" fluid />
                 </div>
                 <div class="flex flex-row-reverse w-full gap-3">
                     <button @click="refreshForm" class="px-3 py-2 w-full border rounded-lg hover:shadow-md hover:shadow-black transition-all duration-300 shadow-sm shadow-black flex items-center gap-2 justify-center">
@@ -291,7 +291,7 @@ const submitData = async () => {
                         </template>
                         <template #body="{ data }">
                             <div class="flex w-full justify-end">
-                                <span class="capitalize">{{ formatCurrency(Number(data.konversi_ton).toFixed(2)) }}</span>
+                                <span class="capitalize">{{ data.konversi_ton }}</span>
                             </div>
                         </template>
                     </Column>
