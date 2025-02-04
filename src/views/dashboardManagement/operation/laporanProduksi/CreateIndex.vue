@@ -1,10 +1,12 @@
 <script setup>
-import { URL_WEB } from '@/api/http/dataVariable';
 import jenisLaporanProduksiController from '@/controller/getApiFromThisApp/laporanProduksi/jenisLaporanProduksiController';
 import laporanProduksiController from '@/controller/getApiFromThisApp/laporanProduksi/laporanProduksiController';
 import pmgMasterController from '@/controller/getApiFromThisApp/master/pmgMasterController';
 import moment from 'moment';
 import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const messages = ref([]);
 const tanggal = ref(moment().format('YYYY-MM-DD'));
@@ -82,7 +84,8 @@ const resetForm = () => {
 
 const postData = async (cond) => {
     if (cond == 'back') {
-        window.location.replace(`${URL_WEB}operation/laporan-produksi`);
+        router.push('/operation/laporan-produksi');
+        // window.location.replace(`${URL_WEB}operation/laporan-produksi`);
     } else {
         loadings.value = true;
         const response = await laporanProduksiController.postData(formData.value);
@@ -90,7 +93,8 @@ const postData = async (cond) => {
         if (response.severity == 'success') {
             setTimeout(function () {
                 loadings.value = false;
-                window.location.replace(`${URL_WEB}operation/laporan-produksi`);
+                router.push('/operation/laporan-produksi');
+                // window.location.replace(`${URL_WEB}operation/laporan-produksi`);
             }, setTime.value);
         } else {
             loadings.value = false;

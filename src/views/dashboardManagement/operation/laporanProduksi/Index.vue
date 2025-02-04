@@ -1,11 +1,13 @@
 <script setup>
-import { URL_WEB } from '@/api/http/dataVariable';
 import { formatCurrency } from '@/controller/dummyController';
 import jenisLaporanProduksiController from '@/controller/getApiFromThisApp/laporanProduksi/jenisLaporanProduksiController';
 import laporanProduksiController from '@/controller/getApiFromThisApp/laporanProduksi/laporanProduksiController';
 import pmgMasterController from '@/controller/getApiFromThisApp/master/pmgMasterController';
 import moment from 'moment';
 import { computed, onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const drawerCond = ref(false);
 const messages = ref([]);
@@ -179,7 +181,8 @@ const showDrawer = async (data) => {
             formData.value.qty = Number(data.qty);
             statusForm.value = 'edit';
         } else {
-            window.location.replace(`${URL_WEB}operation/laporan-produksi/create`);
+            router.push('/operation/laporan-produksi/create');
+            // window.location.replace(`${URL_WEB}operation/laporan-produksi/create`);
             logFile.value = [];
             formData.value.id = null;
             formData.value.item_produksi_id = null;
@@ -189,8 +192,9 @@ const showDrawer = async (data) => {
             statusForm.value = 'add';
         }
     } catch (error) {
+        router.push('/operation/laporan-produksi/create');
         messages.value = [];
-        drawerCond.value = true;
+        // drawerCond.value = true;
         logFile.value = [];
         formData.value.id = null;
         formData.value.item_produksi_id = null;

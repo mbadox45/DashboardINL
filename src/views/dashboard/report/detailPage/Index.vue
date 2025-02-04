@@ -75,7 +75,7 @@ const loadFinance = async (path) => {
     } else if (path.toLowerCase().includes('cash-flow-movement-financial')) {
         result = await financeDetailController.resultCashFlowMovement(formData.value);
     } else if (path.toLowerCase().includes('cff-pay-schedule-financial')) {
-        result = await financeDetailController.paySchedule(formData.value);
+        result = await financeDetailController.resultPaySchedule(formData.value);
     } else {
         result = await financeDetailController.resultGrossProfit(formData.value);
     }
@@ -107,7 +107,7 @@ const updateDates = async (dates) => {
             <net-profit-margin-finance v-else-if="routeName == 'net-profit-margin'" :datas="listData" />
             <cash-balance-finance v-else-if="routeName == 'cash-balance'" :datas="listData" />
             <cash-flow-movement-finance v-else-if="routeName == 'cash-flow-movement'" :datas="listData" />
-            <cff-pay-schedule-finance v-else-if="routeName == 'cff-pay-schedule'" />
+            <cff-pay-schedule-finance v-else-if="routeName == 'cff-pay-schedule'" :datas="listData" />
             <cfi-pay-schedule-finance v-else-if="routeName == 'cfi-pay-schedule'" />
             <harga-spot-inventory-bulky-finance v-else-if="routeName == 'harga-spot-inventory-bulky'" />
             <harga-spot-inventory-retail-finance v-else-if="routeName == 'harga-spot-inventory-retail'" />

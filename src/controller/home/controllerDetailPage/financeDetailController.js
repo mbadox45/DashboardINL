@@ -13,32 +13,61 @@ export default new (class financeDetailController {
                 tabel: []
             };
             const response = await cashFlowScheduleController.getByPeriod(form);
+            const year = moment(form.tanggalAkhir).format('YYYY');
+            console.log(year);
             if (response != null) {
                 const kategori = response.kategori;
-                const listChart = [];
-                const listTable = [];
                 const cffKategori = kategori.find((item) => item.name.toLowerCase().includes('cash flow funding'));
                 if (cffKategori != null) {
+                    const listChart = [];
+                    const listName = [];
+                    const listTable = [];
                     const period = cffKategori.period;
                     const list = [];
                     for (let i = 0; i < period.length; i++) {
                         const data = period[i].data;
-                        const bulan = months.find((item) => item.id == period[i].month);
                         for (let j = 0; j < data.length; j++) {
-                            list.push({
-                                periode: bulan.name + ' ' + period[i].year,
-                                name: data[j].name,
-                                value: valueToBilion(data[j].value),
-                                pay_status: data[j].pay_status.name
+                            listName.push({ name: data[j].name });
+                        }
+                    }
+                    const uniqueDataName = Array.from(new Map(listName.map((item) => [item.name, item])).values());
+                    const dataArray = [];
+                    for (let i = 0; i < months.length; i++) {
+                        const dataPeriod = period.find((item) => item.month == months[i].id);
+                        // console.log(dataPeriod);
+                        if (dataPeriod != null) {
+                            const data = dataPeriod.data;
+                            const total = data.filter((item) => item.name === uniqueDataName[0].name).reduce((sum, item) => sum + (Number(item.value) || 0), 0);
+                            dataArray.push(Number(valueToBilion(total)));
+                            listTable.push({
+                                periode: months[i].name + ' ' + year,
+                                value: valueToBilion(total),
+                                pay_status: data[0].pay_status.name
+                            });
+                        } else {
+                            dataArray.push(0);
+                            listTable.push({
+                                periode: months[i].name + ' ' + year,
+                                value: 0,
+                                pay_status: '-'
                             });
                         }
                     }
-                    // console.log(list);
+                    result.chart.push({
+                        name: cffKategori.name + ' ' + year,
+                        data: dataArray
+                    });
+                    result.tabel.push({
+                        name: cffKategori.name + ' ' + year,
+                        data: listTable,
+                        color: '#cc0404'
+                    });
                 }
                 const cfiKategori = kategori.find((item) => item.name.toLowerCase().includes('cash flow investment'));
                 if (cfiKategori != null) {
                     const period = cfiKategori.period;
                     const listName = [];
+                    const listTable = [];
                     const listChart = [];
                     for (let i = 0; i < period.length; i++) {
                         const data = period[i].data;
@@ -49,24 +78,42 @@ export default new (class financeDetailController {
                     const uniqueDataName = Array.from(new Map(listName.map((item) => [item.name, item])).values());
                     for (let i = 0; i < uniqueDataName.length; i++) {
                         const dataArray = [];
+                        const dataTable = [];
                         for (let j = 0; j < months.length; j++) {
                             const dataPeriod = period.find((item) => item.month == months[j].id);
                             if (dataPeriod != null) {
                                 const data = dataPeriod.data;
                                 const total = data.filter((item) => item.name === uniqueDataName[i].name).reduce((sum, item) => sum + (Number(item.value) || 0), 0);
                                 dataArray.push(Number(valueToBilion(total)));
+                                dataTable.push({
+                                    periode: moment(months[j].name, 'MMMM').format('MMM'),
+                                    value: valueToBilion(total)
+                                });
                             } else {
                                 dataArray.push(0);
+                                dataTable.push({
+                                    periode: moment(months[j].name, 'MMMM').format('MMM'),
+                                    value: 0
+                                });
                             }
                         }
                         listChart.push({
                             name: uniqueDataName[i].name,
                             data: dataArray
                         });
+                        listTable.push({
+                            name: uniqueDataName[i].name,
+                            data: dataTable
+                        });
                     }
                     result.chart.push({
-                        name: cfiKategori.name,
+                        name: cfiKategori.name + ' ' + year,
                         dataChart: listChart
+                    });
+                    result.tabel.push({
+                        name: cfiKategori.name + ' ' + year,
+                        dataTable: listTable,
+                        color: '#1a5276'
                     });
                 }
             }
@@ -78,6 +125,73 @@ export default new (class financeDetailController {
             };
             return result;
         }
+    };
+    resultPaySchedule = async (form) => {
+        const response = await this.paySchedule(form);
+
+        // Label Chart
+        const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        const listLabels = [];
+        for (let i = 0; i < labels.length; i++) {
+            listLabels.push(moment(labels[i], 'MMMM').format('MMM'));
+        }
+
+        // Chart
+        const listChart = [];
+        const chart = response.chart;
+        if (chart.length > 0) {
+            // CFF
+            const cffChart = chart.find((item) => item.name.includes('Cash Flow Funding'));
+            const data = cffChart.data;
+            const label = 'Pembayaran Pinjaman Kepada Pihak Berelasi';
+            const type = 'bar';
+            const color = ['rgba(204, 4, 4, 0.6)'];
+            const strokeColor = ['rgba(204, 4, 4, 1'];
+            const dataLabelStat = true;
+            const total = '';
+            // const typeChart = 'line'
+
+            listChart.push({
+                name: 'CFF Payment Schedule (dlm IDR Miliar)',
+                total: total,
+                type: type,
+                chartOptions: barChartOptionsApex(listLabels, color, strokeColor, dataLabelStat, total),
+                series: [
+                    {
+                        name: label,
+                        data: data
+                    }
+                ]
+            });
+
+            // CFI
+            const cfiChart = chart.find((item) => item.name.includes('Cash Flow Investment'));
+            const dataSeries = [];
+            const dataChart = cfiChart.dataChart;
+            for (let i = 0; i < dataChart.length; i++) {
+                dataSeries.push({
+                    label: dataChart[i].name,
+                    data: dataChart[i].data
+                });
+            }
+            const typeChart = 'bar';
+            const series = dataSeries.map((dataItem) => ({
+                name: dataItem.label,
+                data: dataItem.data
+            }));
+
+            listChart.push({
+                name: 'CFI Payment Schedule (dlm IDR Miliar)',
+                type: typeChart,
+                total: total,
+                chartOptions: stackedChartOptionsApex(total, listLabels, null, null),
+                series: series
+            });
+        }
+        return {
+            table: response.tabel,
+            chart: listChart
+        };
     };
     cashFlowMovement = async (form) => {
         try {
