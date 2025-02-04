@@ -80,7 +80,7 @@ const loadProduk = async () => {
         .filter((item) => item.jenis === 'bulk')
         .map((item, index) => ({
             ...item,
-            color: getColor(index), // Tambahkan warna berdasarkan logika
+            color: getColor(index) // Tambahkan warna berdasarkan logika
         }));
 
     listProduct.value = bulk;
@@ -108,7 +108,7 @@ const toggle = async (event) => {
 };
 
 const changeDate = async () => {
-    const lastDate = await loopingPeriod()
+    const lastDate = await loopingPeriod();
     // const listdate = [];
     // let start, end;
 
@@ -138,21 +138,19 @@ const changeDate = async () => {
 const loopingPeriod = async () => {
     const bulanTahun = dates2.value; // Contoh: "2023-01"
     const today = moment(); // Tanggal hari ini
-    const inputDate = moment(bulanTahun, "YYYY-MM"); // Parse bulan dan tahun dari input
+    const inputDate = moment(bulanTahun, 'YYYY-MM'); // Parse bulan dan tahun dari input
 
     let lastDate;
 
     // Cek apakah bulan dan tahun input sama dengan bulan dan tahun saat ini
     if (inputDate.isSame(today, 'month')) {
-        lastDate = today.format("YYYY-MM-DD"); // Ambil tanggal hari ini
+        lastDate = today.format('YYYY-MM-DD'); // Ambil tanggal hari ini
     } else {
-        lastDate = inputDate.endOf('month').format("YYYY-MM-DD"); // Tanggal terakhir di bulan input
+        lastDate = inputDate.endOf('month').format('YYYY-MM-DD'); // Tanggal terakhir di bulan input
     }
 
-    return lastDate
-
+    return lastDate;
 };
-
 
 const convertDate = (dateString) => {
     const date = moment(dateString).toDate();
@@ -278,7 +276,7 @@ const submitData = async () => {
             <span class="text-3xl">Levy Duty & Market Routers</span>
             <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-emerald-500 hover:bg-emerald-700 text-white rounded-full flex gap-2">
                 <i class="pi pi-plus"></i>
-                <span>Add Data</span>
+                <span>Tambah Data</span>
             </button>
         </div>
         <Drawer v-model:visible="drawerCond" position="right" class="!w-full md:!w-[30rem]">
@@ -346,11 +344,11 @@ const submitData = async () => {
             <div class="flex flex-col items-center gap-4 w-[25rem] py-2">
                 <div class="flex flex-col gap-2 w-full">
                     <div class="flex flex-col gap-1 w-full items-start">
-                        <label for="pmg" class="text-[0.8vw]">Select by Currency</label>
+                        <label for="pmg" class="text-[0.8vw]">Pilih Mata Uang</label>
                         <Select v-model="selectedMataUang" :options="listMataUang" optionLabel="name" optionValue="id" placeholder="Select a Currency" class="w-full" />
                     </div>
                     <div class="flex flex-col gap-1 w-full items-start">
-                        <label for="pmg" class="text-[0.8vw]">Select by Period</label>
+                        <label for="pmg" class="text-[0.8vw]">Pilih Periode</label>
                         <DatePicker v-model="dates2" showIcon view="month" dateFormat="yy-mm" placeholder="Select Date Range" class="w-full" />
                     </div>
                 </div>
@@ -365,7 +363,7 @@ const submitData = async () => {
                 <div class="flex gap-5 items-center mb-5">
                     <div class="flex items-center justify-between gap-3 w-full">
                         <button @click="toggle" class="py-2 px-3 text-black text-[0.8vw] flex gap-3 items-center bg-pink-200 shadow-md rounded-lg shadow-gray-200 font-bold hover:bg-pink-300 transition-all duration-300">
-                            <i class="pi pi-calendar" style="font-size: 0.8vw"></i><span>Select Data</span>
+                            <i class="pi pi-calendar" style="font-size: 0.8vw"></i><span>Filter</span>
                         </button>
                         <Chip :label="`${moment(beforeDate).format('DD MMM YYYY')} - ${moment(now).format('DD MMM YYYY')}`" icon="pi pi-calendar" style="font-size: 0.6vw" class="font-bold" />
                     </div>
@@ -398,13 +396,13 @@ const submitData = async () => {
                         </thead>
                         <tbody>
                             <tr class="bg-gray-50" v-for="(item, index) in listTable" :key="index">
-                                <th class="px-6 py-3 text-left text-sm font-medium text-gray-600 border border-gray-200">{{item.tanggal}}</th>
+                                <th class="px-6 py-3 text-left text-sm font-medium text-gray-600 border border-gray-200">{{ item.tanggal }}</th>
                                 <template v-for="(prod, list) in listProduct" :key="list">
                                     <th class="px-6 py-3 text-center text-sm font-medium text-gray-600 border border-gray-200">0</th>
                                     <th class="px-6 py-3 text-center text-sm font-medium text-gray-600 border border-gray-200">0</th>
                                     <th class="px-6 py-3 text-center text-sm font-medium text-gray-600 border border-gray-200">0</th>
                                 </template>
-                                <th class="px-6 py-3 text-left text-sm font-medium text-gray-600 border border-gray-200">{{formatCurrency(Number(item.kursValue))}}</th>
+                                <th class="px-6 py-3 text-left text-sm font-medium text-gray-600 border border-gray-200">{{ formatCurrency(Number(item.kursValue)) }}</th>
                                 <th v-for="(item, index) in listProduct" :key="index" class="px-6 py-3 text-center text-sm font-medium text-gray-600 border border-gray-200">0</th>
                             </tr>
                         </tbody>

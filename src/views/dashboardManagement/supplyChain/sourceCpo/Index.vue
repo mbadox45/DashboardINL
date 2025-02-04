@@ -138,7 +138,7 @@ const filteredList = computed(() => {
             <span class="text-5xl">Source CPO</span>
             <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-emerald-500 hover:bg-emerald-700 text-white rounded-full flex gap-2">
                 <i class="pi pi-plus"></i>
-                <span>Add Component</span>
+                <span>Tambah Source</span>
             </button>
         </div>
         <Drawer v-model:visible="drawerCond" position="right" class="!w-full md:!w-[30rem]">
@@ -155,8 +155,8 @@ const filteredList = computed(() => {
                     <Message v-for="msg of messages" :key="msg.id" :severity="msg.severity" class="mt-4"><i :class="`pi ${msg.icon}`"></i> {{ msg.content }}</Message>
                 </transition-group>
                 <div class="flex flex-col gap-1">
-                    <label for="nama">Nama <small class="text-red-500 font-bold">*</small></label>
-                    <InputText v-model="formData.name" placeholder="Please input Name" />
+                    <label for="nama">Source <small class="text-red-500 font-bold">*</small></label>
+                    <InputText v-model="formData.name" placeholder="Input Source" />
                 </div>
                 <div class="flex flex-row-reverse w-full gap-3">
                     <button @click="refreshForm" class="px-3 py-2 w-full border rounded-lg hover:shadow-md hover:shadow-black transition-all duration-300 shadow-sm shadow-black flex items-center gap-2 justify-center">
@@ -201,9 +201,9 @@ const filteredList = computed(() => {
         <Card>
             <template #title>
                 <div class="flex gap-2 items-center mb-5">
-                    <span class="text-xl font-bold w-full">List Component</span>
+                    <span class="text-xl font-bold w-full">List Source</span>
                     <InputGroup>
-                        <InputText placeholder="Search Components" v-model="search" />
+                        <InputText placeholder="Cari" v-model="search" />
                         <InputGroupAddon>
                             <i class="pi pi-search" />
                         </InputGroupAddon>

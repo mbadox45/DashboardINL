@@ -1,10 +1,7 @@
 <script setup>
-import { URL_WEB } from '@/api/http/dataVariable';
-import jenisLaporanProduksiController from '@/controller/getApiFromThisApp/laporanProduksi/jenisLaporanProduksiController';
-import laporanProduksiController from '@/controller/getApiFromThisApp/laporanProduksi/laporanProduksiController';
-import pmgMasterController from '@/controller/getApiFromThisApp/master/pmgMasterController';
-import productMasterController from '@/controller/getApiFromThisApp/master/productMasterController';
 import mataUangKursController from '@/controller/getApiFromThisApp/kurs/mataUangKursController';
+import jenisLaporanProduksiController from '@/controller/getApiFromThisApp/laporanProduksi/jenisLaporanProduksiController';
+import productMasterController from '@/controller/getApiFromThisApp/master/productMasterController';
 import levyRoutersPenjualanController from '@/controller/getApiFromThisApp/sales/levyRoutersPenjualanController';
 import moment from 'moment';
 import { onMounted, ref } from 'vue';
@@ -170,7 +167,7 @@ const postData = async (cond) => {
                     class="px-4 py-2 text-[1vw] font-bold items-center shadow hover:shadow-none transition-all duration-300 bg-red-600 hover:bg-red-700 text-white rounded-full flex gap-2"
                 >
                     <i class="pi pi-times" style="font-size: 1vw"></i>
-                    <span>Batal</span>
+                    <span>Cancel</span>
                 </button>
             </div>
         </div>

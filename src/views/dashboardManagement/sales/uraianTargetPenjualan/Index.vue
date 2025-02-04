@@ -136,15 +136,15 @@ const filteredList = computed(() => {
 <template>
     <div class="flex flex-col w-full gap-8">
         <div class="flex gap-2 items-center justify-between w-full font-bold">
-            <span class="text-3xl">Master Uraian Target Penjualan</span>
+            <span class="text-3xl">Uraian Target Penjualan</span>
             <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-emerald-500 hover:bg-emerald-700 text-white rounded-full flex gap-2">
                 <i class="pi pi-plus"></i>
-                <span>Add Component</span>
+                <span>Tambah Jenis Target</span>
             </button>
         </div>
         <Drawer v-model:visible="drawerCond" position="right" class="!w-full md:!w-[30rem]">
             <template #header>
-                <span class="text-[1vw] font-bold">Form Component</span>
+                <span class="text-[1vw] font-bold">Form Jenis Target</span>
             </template>
             <template #footer>
                 <div class="flex w-full justify-end pt-3 border-t">
@@ -157,7 +157,7 @@ const filteredList = computed(() => {
                 </transition-group>
                 <div class="flex flex-col gap-1">
                     <label for="nama">Nama <small class="text-red-500 font-bold">*</small></label>
-                    <InputText v-model="formData.nama" placeholder="Please input Name" />
+                    <InputText v-model="formData.nama" placeholder="Input Nama Target" />
                 </div>
                 <div class="flex flex-row-reverse w-full gap-3">
                     <button @click="refreshForm" class="px-3 py-2 w-full border rounded-lg hover:shadow-md hover:shadow-black transition-all duration-300 shadow-sm shadow-black flex items-center gap-2 justify-center">
@@ -202,9 +202,9 @@ const filteredList = computed(() => {
         <Card>
             <template #title>
                 <div class="flex gap-2 items-center mb-5">
-                    <span class="text-xl font-bold w-full">List Component</span>
+                    <span class="text-xl font-bold w-full">List Target</span>
                     <InputGroup>
-                        <InputText placeholder="Search Components" v-model="search" />
+                        <InputText placeholder="Cari" v-model="search" />
                         <InputGroupAddon>
                             <i class="pi pi-search" />
                         </InputGroupAddon>
@@ -215,7 +215,7 @@ const filteredList = computed(() => {
                 <ScrollPanel style="width: 100%; height: 32vw">
                     <div class="flex flex-col gap-6">
                         <div class="w-full rounded-xl p-3 border flex gap-3 items-center" v-for="(item, index) in filteredList" :key="index">
-                            <i class="pi pi-box p-3 rounded-xl bg-gray-200 text-black" style="font-size: 1.2vw"></i>
+                            <i class="pi pi-bullseye p-3 rounded-xl bg-gray-200 text-black" style="font-size: 1.2vw"></i>
                             <div class="flex flex-col w-full items-start gap-3">
                                 <span class="text-[0.9vw]">{{ item.nama }}</span>
                             </div>

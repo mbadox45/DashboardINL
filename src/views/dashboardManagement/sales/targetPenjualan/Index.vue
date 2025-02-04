@@ -252,12 +252,12 @@ const submitData = async () => {
             <span class="text-3xl">Target Penjualan</span>
             <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-emerald-500 hover:bg-emerald-700 text-white rounded-full flex gap-2">
                 <i class="pi pi-plus"></i>
-                <span>Add Component</span>
+                <span>Tambah Target</span>
             </button>
         </div>
         <Drawer v-model:visible="drawerCond" position="right" class="!w-full md:!w-[30rem]">
             <template #header>
-                <span class="text-[1vw] font-bold">Form Component</span>
+                <span class="text-[1vw] font-bold">Form Target</span>
             </template>
             <template #footer>
                 <div class="flex w-full justify-end pt-3 border-t">
@@ -269,19 +269,19 @@ const submitData = async () => {
                     <Message v-for="msg of messages" :key="msg.id" :severity="msg.severity" class="mt-4"><i :class="`pi ${msg.icon}`"></i> {{ msg.content }}</Message>
                 </transition-group>
                 <div class="flex flex-col gap-1">
-                    <label for="date">Uraian <small class="text-red-500 font-bold">*</small></label>
-                    <Select v-model="formData.uraian_id" :options="listUraian" optionLabel="nama" optionValue="id" placeholder="Select a Type" class="w-full" />
+                    <label for="date">Target <small class="text-red-500 font-bold">*</small></label>
+                    <Select v-model="formData.uraian_id" :options="listUraian" optionLabel="nama" optionValue="id" placeholder="Pilih Target" class="w-full" />
                 </div>
                 <div class="flex flex-col gap-1">
-                    <label for="lokasi">Produk <small class="text-red-500 font-bold">*</small></label>
-                    <Select v-model="formData.product_id" :options="listProduct" optionLabel="name" optionValue="id" placeholder="Select a Type" class="w-full" />
+                    <label for="lokasi">Produk Bulk<small class="text-red-500 font-bold">*</small></label>
+                    <Select v-model="formData.product_id" :options="listProduct" optionLabel="name" optionValue="id" placeholder="Pilih Produk" class="w-full" />
                 </div>
                 <div class="flex flex-col gap-1 w-full">
                     <label for="date" class="font-bold">Tanggal <small class="text-red-500 font-bold">*</small></label>
                     <DatePicker v-model="formData.tanggal" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" />
                 </div>
                 <div class="flex flex-col gap-1">
-                    <label for="kapasitas">Kapasitas <small class="text-red-500 font-bold">*</small></label>
+                    <label for="kapasitas">Jumlah ({{ optionButton == 0 ? 'Kg' : 'Box' }}) <small class="text-red-500 font-bold">*</small></label>
                     <InputNumber v-model="formData.qty" inputId="minmaxfraction" placeholder="1,000,000" :minFractionDigits="0" :maxFractionDigits="2" fluid />
                 </div>
                 <div class="flex flex-row-reverse w-full gap-3">
@@ -328,7 +328,7 @@ const submitData = async () => {
             <div class="flex flex-col items-center gap-4 w-[25rem] py-2">
                 <div class="flex flex-col gap-2 w-full">
                     <div class="flex flex-col gap-1 w-full items-start">
-                        <label for="pmg" class="text-[0.8vw]">Select by Period</label>
+                        <label for="pmg" class="text-[0.8vw]">Pilih Periode</label>
                         <DatePicker v-model="dates" selectionMode="range" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :manualInput="false" placeholder="Select Date Range" class="w-full" />
                     </div>
                 </div>
@@ -343,14 +343,14 @@ const submitData = async () => {
                 <div class="flex gap-2 items-center mb-5">
                     <div class="flex items-center justify-between gap-3 w-full">
                         <button @click="toggle" class="py-2 px-3 text-black text-[0.8vw] flex gap-3 items-center bg-pink-200 shadow-md rounded-lg shadow-gray-200 font-bold hover:bg-pink-300 transition-all duration-300">
-                            <i class="pi pi-calendar" style="font-size: 0.8vw"></i><span>Select Data</span>
+                            <i class="pi pi-calendar" style="font-size: 0.8vw"></i><span>Filter</span>
                         </button>
                         <Chip :label="`${moment(beforeDate).format('DD MMM YYYY')} - ${moment(now).format('DD MMM YYYY')}`" icon="pi pi-calendar" style="font-size: 0.6vw" class="font-bold" />
                     </div>
                     <div class="w-full flex justify-end items-center">
                         <div class="flex gap-3 p-2 border-2 rounded-xl">
-                            <button @click="selectButton(0)" :class="optionButton == 0 ? 'bg-gray-200 text-black shadow' : ''" class="px-3 py-1 text-[0.8vw] rounded-lg">Bulky</button>
-                            <button @click="selectButton(1)" :class="optionButton == 1 ? 'bg-gray-200 text-black shadow' : ''" class="px-3 py-1 text-[0.8vw] rounded-lg">Retail</button>
+                            <button @click="selectButton(0)" :class="optionButton == 0 ? 'bg-pink-500 text-black shadow' : ''" class="px-3 py-1 text-[0.8vw] rounded-lg">Bulky</button>
+                            <button @click="selectButton(1)" :class="optionButton == 1 ? 'bg-pink-500 text-black shadow' : ''" class="px-3 py-1 text-[0.8vw] rounded-lg">Retail</button>
                         </div>
                     </div>
                     <!-- <InputGroup>
@@ -377,10 +377,10 @@ const submitData = async () => {
                                 </template>
                                 <DataTable v-model:expandedRows="expandedRows" :value="item.target" showGridlines dataKey="percentageQtyToTarget">
                                     <Column expander style="width: 5%" />
-                                    <Column field="name" sortable style="width: 15%; font-size: 0.7vw">
+                                    <Column field="name" sortable style="width: 15%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                                         <template #header>
-                                            <div class="flex w-full justify-center">
-                                                <span>Uraian</span>
+                                            <div class="flex w-full justify-center text-black">
+                                                <span>Nama Target</span>
                                             </div>
                                         </template>
                                         <template #body="{ data }">
@@ -389,10 +389,10 @@ const submitData = async () => {
                                             </div>
                                         </template>
                                     </Column>
-                                    <Column field="totalQty" sortable style="width: 25%; font-size: 0.7vw">
+                                    <Column field="totalQty" sortable style="width: 25%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                                         <template #header>
-                                            <div class="flex w-full justify-center">
-                                                <span>Target (%)</span>
+                                            <div class="flex w-full justify-center text-black">
+                                                <span>Pencapaian (%)</span>
                                             </div>
                                         </template>
                                         <template #body="{ data }">
@@ -401,10 +401,10 @@ const submitData = async () => {
                                             </div>
                                         </template>
                                     </Column>
-                                    <Column field="totalQty" sortable style="width: 25%; font-size: 0.7vw">
+                                    <Column field="totalQty" sortable style="width: 25%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                                         <template #header>
-                                            <div class="flex w-full justify-center">
-                                                <span>Target Qty</span>
+                                            <div class="flex w-full justify-center text-black">
+                                                <span>Total Jumlah ({{ optionButton == 0 ? 'Kg' : 'Box' }}) </span>
                                             </div>
                                         </template>
                                         <template #body="{ data }">
@@ -416,10 +416,10 @@ const submitData = async () => {
                                     <template #expansion="slotProps">
                                         <div class="p-4">
                                             <DataTable :value="slotProps.data.detail">
-                                                <Column field="tanggal" sortable style="width: 15%; font-size: 0.7vw">
+                                                <Column field="tanggal" sortable style="width: 15%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                                                     <template #header>
-                                                        <div class="flex w-full justify-center">
-                                                            <span>Uraian</span>
+                                                        <div class="flex w-full justify-center text-black">
+                                                            <span>Tanggal</span>
                                                         </div>
                                                     </template>
                                                     <template #body="{ data }">
@@ -428,10 +428,10 @@ const submitData = async () => {
                                                         </div>
                                                     </template>
                                                 </Column>
-                                                <Column field="qty" sortable style="width: 25%; font-size: 0.7vw">
+                                                <Column field="qty" sortable style="width: 25%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                                                     <template #header>
-                                                        <div class="flex w-full justify-center">
-                                                            <span>Quantity</span>
+                                                        <div class="flex w-full justify-center text-black">
+                                                            <span>Jumlah ({{ optionButton == 0 ? 'Kg' : 'Box' }}) </span>
                                                         </div>
                                                     </template>
                                                     <template #body="{ data }">
@@ -440,10 +440,10 @@ const submitData = async () => {
                                                         </div>
                                                     </template>
                                                 </Column>
-                                                <Column field="id" style="width: 5%; font-size: 0.7vw">
+                                                <Column field="id" style="width: 5%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                                                     <template #body="{ data }">
                                                         <div class="flex justify-center items center">
-                                                            <button @click="showDrawer(data)" class="p-3 border rounded-full flex bg-gray-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
+                                                            <button @click="showDrawer(data)" class="p-3 border rounded-full flex bg-teal-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
                                                                 <i class="pi pi-pencil" style="font-size: 0.6vw"></i>
                                                             </button>
                                                         </div>
