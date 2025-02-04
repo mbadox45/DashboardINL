@@ -231,15 +231,15 @@ const submitData = async () => {
 <template>
     <div class="flex flex-col w-full gap-8">
         <div class="flex gap-2 items-center justify-between w-full font-bold">
-            <span class="text-3xl">Stock Bulky</span>
+            <span class="text-3xl">Stock Bulky (MT)</span>
             <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-emerald-500 hover:bg-emerald-700 text-white rounded-full flex gap-2">
                 <i class="pi pi-plus"></i>
-                <span>Add Component</span>
+                <span>Tambah Data</span>
             </button>
         </div>
         <Drawer v-model:visible="drawerCond" position="right" class="!w-full md:!w-[30rem]">
             <template #header>
-                <span class="text-[1vw] font-bold">Form Component</span>
+                <span class="text-[1vw] font-bold">Form Data</span>
             </template>
             <template #footer>
                 <div class="flex w-full justify-end pt-3 border-t">
@@ -255,24 +255,24 @@ const submitData = async () => {
                     <DatePicker v-model="formData.tanggal" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" />
                 </div>
                 <div class="flex flex-col gap-1">
-                    <label for="tanki">Tanki <small class="text-red-500 font-bold">*</small></label>
-                    <Select v-model="formData.tanki_id" :options="listTanki" optionLabel="name" optionValue="id" placeholder="Select a Type" class="w-full" />
+                    <label for="tanki">Tangki <small class="text-red-500 font-bold">*</small></label>
+                    <Select v-model="formData.tanki_id" :options="listTanki" optionLabel="name" optionValue="id" placeholder="Pilih Tangki" class="w-full" />
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="produk">Produk <small class="text-red-500 font-bold">*</small></label>
-                    <Select v-model="formData.id_bulky" :options="listProduk" optionLabel="name" optionValue="id" placeholder="Select a Type" class="w-full" />
+                    <Select v-model="formData.id_bulky" :options="listProduk" optionLabel="name" optionValue="id" placeholder="Pilih Produk" class="w-full" />
                 </div>
                 <div class="flex flex-col gap-1">
-                    <label for="umur">Umur <small class="text-red-500 font-bold">*</small></label>
+                    <label for="umur">Umur (Hari)<small class="text-red-500 font-bold">*</small></label>
                     <InputNumber v-model="formData.umur" inputId="minmaxfraction" placeholder="1,000,000" :minFractionDigits="0" :maxFractionDigits="2" fluid />
                 </div>
                 <div class="flex flex-col gap-1">
-                    <label for="qty">Stock <small class="text-red-500 font-bold">*</small></label>
+                    <label for="qty">Stock (MT) <small class="text-red-500 font-bold">*</small></label>
                     <InputNumber v-model="formData.qty" inputId="minmaxfraction" placeholder="1,000,000" :minFractionDigits="0" :maxFractionDigits="2" fluid />
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="remarks">Remarks <small class="text-red-500 font-bold">*</small></label>
-                    <InputText v-model="formData.remarks" placeholder="Please input Remarks" />
+                    <InputText v-model="formData.remarks" placeholder="Input Remarks" />
                 </div>
                 <div class="flex flex-row-reverse w-full gap-3">
                     <button @click="refreshForm" class="px-3 py-2 w-full border rounded-lg hover:shadow-md hover:shadow-black transition-all duration-300 shadow-sm shadow-black flex items-center gap-2 justify-center">
@@ -318,7 +318,7 @@ const submitData = async () => {
             <div class="flex flex-col items-center gap-4 w-[25rem] py-2">
                 <div class="flex flex-col gap-2 w-full">
                     <div class="flex flex-col gap-1 w-full items-start">
-                        <label for="pmg" class="text-[0.8vw]">Select by Period</label>
+                        <label for="pmg" class="text-[0.8vw]">Pilih Periode</label>
                         <DatePicker v-model="dates" selectionMode="range" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :manualInput="false" placeholder="Select Date Range" class="w-full" />
                     </div>
                 </div>
@@ -333,12 +333,12 @@ const submitData = async () => {
                 <div class="flex gap-2 items-center mb-5">
                     <div class="flex items-center justify-between gap-3 w-full">
                         <button @click="toggle" class="py-2 px-3 text-black text-[0.8vw] flex gap-3 items-center bg-pink-200 shadow-md rounded-lg shadow-gray-200 font-bold hover:bg-pink-300 transition-all duration-300">
-                            <i class="pi pi-calendar" style="font-size: 0.8vw"></i><span>Select Data</span>
+                            <i class="pi pi-calendar" style="font-size: 0.8vw"></i><span>Filter</span>
                         </button>
                         <Chip :label="`${moment(beforeDate).format('DD MMM YYYY')} - ${moment(now).format('DD MMM YYYY')}`" icon="pi pi-calendar" style="font-size: 0.6vw" class="font-bold" />
                     </div>
                     <InputGroup>
-                        <InputText placeholder="Search Components" v-model="search['global'].value" />
+                        <InputText placeholder="Cari" v-model="search['global'].value" />
                         <InputGroupAddon>
                             <i class="pi pi-search" />
                         </InputGroupAddon>
@@ -347,9 +347,9 @@ const submitData = async () => {
             </template>
             <template #content>
                 <DataTable :value="listTable" v-model:filters="search" showGridlines paginator :rows="10" dataKey="period" :globalFilterFields="['tanki.lokasi.name', 'product.name', 'tanki.name', 'tanki.kapasitas', 'remarks']">
-                    <Column field="tanggal" sortable style="width: 15%; font-size: 0.7vw">
+                    <Column field="tanggal" sortable style="width: 15%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                         <template #header>
-                            <div class="flex w-full justify-center">
+                            <div class="flex w-full justify-center text-black">
                                 <span>Tanggal</span>
                             </div>
                         </template>
@@ -359,9 +359,9 @@ const submitData = async () => {
                             </div>
                         </template>
                     </Column>
-                    <Column field="tanki.lokasi.name" sortable style="width: 25%; font-size: 0.7vw">
+                    <Column field="tanki.lokasi.name" sortable style="width: 25%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                         <template #header>
-                            <div class="flex w-full justify-center">
+                            <div class="flex w-full justify-center text-black">
                                 <span>Lokasi</span>
                             </div>
                         </template>
@@ -371,9 +371,9 @@ const submitData = async () => {
                             </div>
                         </template>
                     </Column>
-                    <Column field="product.name" sortable style="width: 25%; font-size: 0.7vw">
+                    <Column field="product.name" sortable style="width: 25%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                         <template #header>
-                            <div class="flex w-full justify-center">
+                            <div class="flex w-full justify-center text-black">
                                 <span>Produk</span>
                             </div>
                         </template>
@@ -383,10 +383,10 @@ const submitData = async () => {
                             </div>
                         </template>
                     </Column>
-                    <Column field="tanki.name" sortable style="width: 10%; font-size: 0.7vw">
+                    <Column field="tanki.name" sortable style="width: 10%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                         <template #header>
-                            <div class="flex w-full justify-center">
-                                <span>No Tanki</span>
+                            <div class="flex w-full justify-center text-black">
+                                <span>No Tangki</span>
                             </div>
                         </template>
                         <template #body="{ data }">
@@ -395,9 +395,9 @@ const submitData = async () => {
                             </div>
                         </template>
                     </Column>
-                    <Column field="tanki.kapasitas" sortable style="width: 10%; font-size: 0.7vw">
+                    <Column field="tanki.kapasitas" sortable style="width: 10%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                         <template #header>
-                            <div class="flex w-full justify-center">
+                            <div class="flex w-full justify-center text-black">
                                 <span>Kapasitas</span>
                             </div>
                         </template>
@@ -407,9 +407,9 @@ const submitData = async () => {
                             </div>
                         </template>
                     </Column>
-                    <Column field="qty" sortable style="width: 10%; font-size: 0.7vw">
+                    <Column field="qty" sortable style="width: 10%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                         <template #header>
-                            <div class="flex w-full justify-center">
+                            <div class="flex w-full justify-center text-black">
                                 <span>Stock</span>
                             </div>
                         </template>
@@ -419,9 +419,9 @@ const submitData = async () => {
                             </div>
                         </template>
                     </Column>
-                    <Column field="space" sortable style="width: 10%; font-size: 0.7vw">
+                    <Column field="space" sortable style="width: 10%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                         <template #header>
-                            <div class="flex w-full justify-center">
+                            <div class="flex w-full justify-center text-black">
                                 <span>Space</span>
                             </div>
                         </template>
@@ -431,9 +431,9 @@ const submitData = async () => {
                             </div>
                         </template>
                     </Column>
-                    <Column field="umur" sortable style="width: 10%; font-size: 0.7vw">
+                    <Column field="umur" sortable style="width: 10%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                         <template #header>
-                            <div class="flex w-full justify-center">
+                            <div class="flex w-full justify-center text-black">
                                 <span>Umur</span>
                             </div>
                         </template>
@@ -443,9 +443,9 @@ const submitData = async () => {
                             </div>
                         </template>
                     </Column>
-                    <Column field="remarks" sortable style="width: 25%; font-size: 0.7vw">
+                    <Column field="remarks" sortable style="width: 25%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                         <template #header>
-                            <div class="flex w-full justify-center">
+                            <div class="flex w-full justify-center text-black">
                                 <span>Remark</span>
                             </div>
                         </template>
@@ -455,7 +455,7 @@ const submitData = async () => {
                             </div>
                         </template>
                     </Column>
-                    <Column field="id" style="width: 5%; font-size: 0.7vw">
+                    <Column field="id" style="width: 5%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                         <template #body="{ data }">
                             <div class="flex justify-center items center">
                                 <button @click="showDrawer(data)" class="p-3 border rounded-full flex bg-gray-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">

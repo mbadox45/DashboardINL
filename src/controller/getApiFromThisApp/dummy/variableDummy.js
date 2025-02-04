@@ -12,8 +12,8 @@ export const kategori = [
 ];
 
 export const jenisTable = [
-    { name: 'Default', id: 'default' },
-    { name: 'Get All', id: 'getAll' }
+    { name: 'Aktif', id: 'default' },
+    { name: 'Semua', id: 'getAll' }
 ];
 
 export const listJenis = [

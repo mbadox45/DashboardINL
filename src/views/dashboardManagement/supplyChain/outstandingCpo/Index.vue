@@ -166,7 +166,7 @@ const submitData = async () => {
             <span class="text-3xl">Outstanding CPO</span>
             <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-emerald-500 hover:bg-emerald-700 text-white rounded-full flex gap-2">
                 <i class="pi pi-plus"></i>
-                <span>Add Data</span>
+                <span>Tambah Data</span>
             </button>
         </div>
         <Drawer v-model:visible="drawerCond" position="right" class="!w-full md:!w-[30rem]">
@@ -191,11 +191,11 @@ const submitData = async () => {
                     <Select v-model="formData.supplier_id" :options="listSupplier" optionLabel="name" optionValue="id" placeholder="Select a Supplier" class="w-full" />
                 </div>
                 <div class="flex flex-col gap-1">
-                    <label for="awal">Quantity <small class="text-red-500 font-bold">*</small></label>
+                    <label for="awal">Jumlah (Kg) <small class="text-red-500 font-bold">*</small></label>
                     <InputNumber v-model="formData.qty" inputId="minmaxfraction" placeholder="1,000,000" :minFractionDigits="0" :maxFractionDigits="2" fluid />
                 </div>
                 <div class="flex flex-col gap-1">
-                    <label for="pakai">Harga <small class="text-red-500 font-bold">*</small></label>
+                    <label for="pakai">Harga Satuan (IDR) <small class="text-red-500 font-bold">*</small></label>
                     <InputNumber v-model="formData.harga" inputId="minmaxfraction" placeholder="1,000,000" :minFractionDigits="0" :maxFractionDigits="2" fluid />
                 </div>
                 <div class="flex flex-col gap-1" v-if="statusForm == 'edit'">
@@ -247,13 +247,13 @@ const submitData = async () => {
                 <div class="flex gap-2 items-center mb-5">
                     <InputGroup>
                         <InputGroupAddon>
-                            <span class="text-[0.8vw]">Change Table</span>
+                            <span class="text-[0.8vw]">Filter</span>
                         </InputGroupAddon>
                         <Select v-model="jenis" :options="jenisTable" optionLabel="name" optionValue="id" size="small" placeholder="Select Data" class="w-full" @change="loadData" />
                     </InputGroup>
                     <div class="w-full"></div>
                     <InputGroup>
-                        <DatePicker v-model="search['global'].value" dateFormat="yy-mm-dd" placeholder="Search by Date" size="small" />
+                        <DatePicker v-model="search['global'].value" dateFormat="yy-mm-dd" placeholder="Cari" size="small" />
                         <InputGroupAddon>
                             <i class="pi pi-search" />
                         </InputGroupAddon>
@@ -262,9 +262,9 @@ const submitData = async () => {
             </template>
             <template #content>
                 <DataTable v-model:filters="search" :value="listTable" showGridlines :globalFilterFields="['tanggal']" paginator :rows="10">
-                    <Column field="supplier.name" sortable style="width: 25%; font-size: 0.7vw">
+                    <Column field="supplier.name" sortable style="width: 25%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                         <template #header>
-                            <div class="flex w-full justify-center">
+                            <div class="flex w-full justify-center text-black">
                                 <span>Supplier</span>
                             </div>
                         </template>
@@ -274,9 +274,9 @@ const submitData = async () => {
                             </div>
                         </template>
                     </Column>
-                    <Column field="kontrak" sortable style="width: 25%; font-size: 0.7vw">
+                    <Column field="kontrak" sortable style="width: 25%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                         <template #header>
-                            <div class="flex w-full justify-center">
+                            <div class="flex w-full justify-center text-black">
                                 <span>Kontrak</span>
                             </div>
                         </template>
@@ -286,10 +286,10 @@ const submitData = async () => {
                             </div>
                         </template>
                     </Column>
-                    <Column field="harga" sortable style="width: 25%; font-size: 0.7vw">
+                    <Column field="harga" sortable style="width: 25%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                         <template #header>
-                            <div class="flex w-full justify-center">
-                                <span>Harga</span>
+                            <div class="flex w-full justify-center text-black">
+                                <span>Harga Satuan (IDR)</span>
                             </div>
                         </template>
                         <template #body="{ data }">
@@ -298,10 +298,10 @@ const submitData = async () => {
                             </div>
                         </template>
                     </Column>
-                    <Column field="qty" sortable style="width: 25%; font-size: 0.7vw">
+                    <Column field="qty" sortable style="width: 25%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                         <template #header>
-                            <div class="flex w-full justify-center">
-                                <span>Quantity</span>
+                            <div class="flex w-full justify-center text-black">
+                                <span>Jumlah (Kg)</span>
                             </div>
                         </template>
                         <template #body="{ data }">
@@ -310,10 +310,10 @@ const submitData = async () => {
                             </div>
                         </template>
                     </Column>
-                    <Column field="value" sortable style="width: 25%; font-size: 0.7vw">
+                    <Column field="value" sortable style="width: 25%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                         <template #header>
-                            <div class="flex w-full justify-center">
-                                <span>Total</span>
+                            <div class="flex w-full justify-center text-black">
+                                <span>Nilai (IDR)</span>
                             </div>
                         </template>
                         <template #body="{ data }">
@@ -322,10 +322,10 @@ const submitData = async () => {
                             </div>
                         </template>
                     </Column>
-                    <Column field="id" style="width: 5%; font-size: 0.7vw">
+                    <Column field="id" style="width: 5%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                         <template #body="{ data }">
                             <div class="flex justify-center items center">
-                                <button @click="showDrawer(data)" class="p-3 border rounded-full flex bg-gray-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
+                                <button @click="showDrawer(data)" class="p-3 border rounded-full flex bg-teal-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
                                     <i class="pi pi-pencil" style="font-size: 0.6vw"></i>
                                 </button>
                             </div>

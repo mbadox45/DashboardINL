@@ -218,7 +218,7 @@ const submitData = async () => {
 <template>
     <div class="flex flex-col w-full gap-8">
         <div class="flex gap-2 items-center justify-between w-full font-bold">
-            <span class="text-3xl">Target Incoming (RKAP)</span>
+            <span class="text-3xl">Target Incoming CPO</span>
             <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-emerald-500 hover:bg-emerald-700 text-white rounded-full flex gap-2">
                 <i class="pi pi-plus"></i>
                 <span>Tambah Data</span>
@@ -226,7 +226,7 @@ const submitData = async () => {
         </div>
         <Drawer v-model:visible="drawerCond" position="right" class="!w-full md:!w-[30rem]">
             <template #header>
-                <span class="text-[1vw] font-bold">Form Kurs</span>
+                <span class="text-[1vw] font-bold">Form Target Incoming</span>
             </template>
             <template #footer>
                 <div class="flex w-full justify-end pt-3 border-t">
@@ -242,7 +242,7 @@ const submitData = async () => {
                     <DatePicker v-model="formData.tanggal" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" />
                 </div>
                 <div class="flex flex-col gap-1">
-                    <label for="value">Quantity <small class="text-red-500 font-bold">*</small></label>
+                    <label for="value">Jumlah (Kg) <small class="text-red-500 font-bold">*</small></label>
                     <InputNumber v-model="formData.qty" inputId="minmaxfraction" placeholder="1,000" :minFractionDigits="0" :maxFractionDigits="2" fluid />
                 </div>
                 <div class="flex flex-row-reverse w-full gap-3 mt-3">
@@ -327,7 +327,7 @@ const submitData = async () => {
                     <Column field="qty" sortable style="width: 25%; font-size: 0.9vw" headerStyle="background-color:rgb(251 207 232)">
                         <template #header>
                             <div class="flex w-full justify-center text-black">
-                                <span>Quantity</span>
+                                <span>Jumlah (Kg)</span>
                             </div>
                         </template>
                         <template #body="{ data }">

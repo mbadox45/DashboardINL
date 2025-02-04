@@ -136,10 +136,10 @@ const submitData = async () => {
 <template>
     <div class="flex flex-col w-full gap-8">
         <div class="flex gap-2 items-center justify-between w-full font-bold">
-            <span class="text-3xl">Saldo PE</span>
+            <span class="text-3xl">Riwayat Saldo PE</span>
             <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-emerald-500 hover:bg-emerald-700 text-white rounded-full flex gap-2">
                 <i class="pi pi-plus"></i>
-                <span>Add Data</span>
+                <span>Tambah Data</span>
             </button>
         </div>
         <Drawer v-model:visible="drawerCond" position="right" class="!w-full md:!w-[30rem]">
@@ -221,9 +221,9 @@ const submitData = async () => {
             </template>
             <template #content>
                 <DataTable v-model:filters="search" :value="listTable" showGridlines :globalFilterFields="['tanggal']">
-                    <Column field="tanggal" sortable style="width: 25%; font-size: 0.7vw">
+                    <Column field="tanggal" sortable style="width: 25%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                         <template #header>
-                            <div class="flex w-full justify-center">
+                            <div class="flex w-full justify-center text-black">
                                 <span>Tanggal</span>
                             </div>
                         </template>
@@ -233,9 +233,9 @@ const submitData = async () => {
                             </div>
                         </template>
                     </Column>
-                    <Column field="saldo_awal" sortable style="width: 25%; font-size: 0.7vw">
+                    <Column field="saldo_awal" sortable style="width: 25%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                         <template #header>
-                            <div class="flex w-full justify-center">
+                            <div class="flex w-full justify-center text-black">
                                 <span>Saldo Awal</span>
                             </div>
                         </template>
@@ -245,9 +245,9 @@ const submitData = async () => {
                             </div>
                         </template>
                     </Column>
-                    <Column field="saldo_pakai" sortable style="width: 25%; font-size: 0.7vw">
+                    <Column field="saldo_pakai" sortable style="width: 25%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                         <template #header>
-                            <div class="flex w-full justify-center">
+                            <div class="flex w-full justify-center text-black">
                                 <span>Saldo Terpakai</span>
                             </div>
                         </template>
@@ -257,9 +257,9 @@ const submitData = async () => {
                             </div>
                         </template>
                     </Column>
-                    <Column field="saldo_tersedia" sortable style="width: 25%; font-size: 0.7vw">
+                    <Column field="saldo_tersedia" sortable style="width: 25%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                         <template #header>
-                            <div class="flex w-full justify-center">
+                            <div class="flex w-full justify-center text-black">
                                 <span>Saldo Tersedia</span>
                             </div>
                         </template>
@@ -269,7 +269,7 @@ const submitData = async () => {
                             </div>
                         </template>
                     </Column>
-                    <Column field="id" style="width: 5%; font-size: 0.7vw">
+                    <Column field="id" style="width: 5%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                         <template #body="{ data }">
                             <div class="flex justify-center items center">
                                 <button @click="showDrawer(data)" class="p-3 border rounded-full flex bg-gray-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
