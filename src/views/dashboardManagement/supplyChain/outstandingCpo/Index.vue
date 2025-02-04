@@ -253,7 +253,7 @@ const submitData = async () => {
                     </InputGroup>
                     <div class="w-full"></div>
                     <InputGroup>
-                        <DatePicker v-model="search['global'].value" dateFormat="yy-mm-dd" placeholder="Cari" size="small" />
+                        <InputText v-model="search['global'].value" placeholder="Cari" size="small" />
                         <InputGroupAddon>
                             <i class="pi pi-search" />
                         </InputGroupAddon>
@@ -261,7 +261,7 @@ const submitData = async () => {
                 </div>
             </template>
             <template #content>
-                <DataTable v-model:filters="search" :value="listTable" showGridlines :globalFilterFields="['tanggal']" paginator :rows="10">
+                <DataTable v-model:filters="search" :value="listTable" showGridlines :globalFilterFields="['kontrak', 'supplier.name']" paginator :rows="10">
                     <Column field="supplier.name" sortable style="width: 25%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                         <template #header>
                             <div class="flex w-full justify-center text-black">

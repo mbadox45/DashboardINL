@@ -220,7 +220,7 @@ const submitData = async () => {
                 </div>
             </template>
             <template #content>
-                <DataTable v-model:filters="search" :value="listTable" showGridlines :globalFilterFields="['tanggal']">
+                <DataTable :value="listTable" showGridlines paginator :rows="10">
                     <Column field="tanggal" sortable style="width: 25%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                         <template #header>
                             <div class="flex w-full justify-center text-black">
