@@ -257,7 +257,7 @@ const submitData = async () => {
             <span class="text-4xl">Laporan Material</span>
             <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-emerald-500 hover:bg-emerald-700 text-white rounded-full flex gap-2">
                 <i class="pi pi-plus"></i>
-                <span>Add Data</span>
+                <span>Tambah Laporan</span>
             </button>
         </div>
         <Drawer v-model:visible="drawerCond" position="right" class="!w-full md:!w-[30rem]">
@@ -333,11 +333,11 @@ const submitData = async () => {
             <div class="flex flex-col items-center gap-4 w-[25rem] py-2">
                 <div class="flex flex-col gap-2 w-full">
                     <div class="flex flex-col gap-1 w-full items-start">
-                        <label for="pmg" class="text-[0.8vw]">Select by PMG</label>
+                        <label for="pmg" class="text-[0.8vw]">Pilih PMG</label>
                         <Select v-model="selectedPmg" :options="pmg" optionLabel="nama" optionValue="id" placeholder="Select a Region" class="w-full" />
                     </div>
                     <div class="flex flex-col gap-1 w-full items-start">
-                        <label for="pmg" class="text-[0.8vw]">Select by Period</label>
+                        <label for="pmg" class="text-[0.8vw]">Pilih Periode</label>
                         <DatePicker v-model="dates" selectionMode="range" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :manualInput="false" placeholder="Select Date Range" class="w-full" />
                     </div>
                 </div>
@@ -352,7 +352,7 @@ const submitData = async () => {
                 <div class="flex gap-5 items-center mb-5">
                     <div class="flex items-center justify-between gap-3 w-full">
                         <button @click="toggle" class="py-2 px-3 text-black text-[0.8vw] flex gap-3 items-center bg-pink-200 shadow-md rounded-lg shadow-gray-200 font-bold hover:bg-pink-300 transition-all duration-300">
-                            <i class="pi pi-calendar" style="font-size: 0.8vw"></i><span>Select Data</span>
+                            <i class="pi pi-calendar" style="font-size: 0.8vw"></i><span>Filter</span>
                         </button>
                         <Chip :label="`${moment(beforeDate).format('DD MMM YYYY')} - ${moment(now).format('DD MMM YYYY')}`" icon="pi pi-calendar" style="font-size: 0.6vw" class="font-bold" />
                     </div>
@@ -384,24 +384,24 @@ const submitData = async () => {
                                                 <span class="text-[0.8vw] font-medium italic font-sans w-full uppercase">{{ materials.name }}</span>
                                             </div>
                                             <DataTable :value="materials.detail" showGridlines dataKey="id">
-                                                <Column field="tanggal" sortable header="Tanggal" style="width: 25%; font-size: 0.8vw">
+                                                <Column field="tanggal" sortable header="Tanggal" style="width: 25%; font-size: 0.8vw" headerStyle="background-color:rgb(251 207 232); color:black">
                                                     <template #body="{ data }">
                                                         <div class="flex w-full font-bold">
                                                             <span>{{ moment(data.tanggal).format('DD MMM YYYY') }}</span>
                                                         </div>
                                                     </template>
                                                 </Column>
-                                                <Column field="qty" sortable header="Quantity" style="width: 25%; font-size: 0.8vw">
+                                                <Column field="qty" sortable header="Quantity" style="width: 25%; font-size: 0.8vw" headerStyle="background-color:rgb(251 207 232); color:black">
                                                     <template #body="{ data }">
                                                         <div class="flex w-full justify-end font-bold">
                                                             <span>{{ formatCurrency(Number(data.qty).toFixed(2)) }}</span>
                                                         </div>
                                                     </template>
                                                 </Column>
-                                                <Column field="qty" style="width: 25%; font-size: 0.8vw">
+                                                <Column field="qty" style="width: 25%; font-size: 0.8vw" headerStyle="background-color:rgb(251 207 232); color:black">
                                                     <template #body="{ data }">
                                                         <div class="flex w-full items-center justify-end font-bold">
-                                                            <button @click="showDrawer(data)" class="p-3 border rounded-full flex justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
+                                                            <button @click="showDrawer(data)" class="p-3 border rounded-full flex justify-center items-center bg-teal-200 hover:bg-amber-300 shadow-md transition-all duration-300">
                                                                 <i class="pi pi-pencil" style="font-size: 0.6vw"></i>
                                                             </button>
                                                         </div>
@@ -410,47 +410,7 @@ const submitData = async () => {
                                             </DataTable>
                                         </div>
                                     </div>
-                                    <div class="w-full">
-                                        <!-- <DataTable :value="items.detail" showGridlines dataKey="id">
-                                            <Column field="tanggal" sortable header="Tanggal" style="width: 25%; font-size: 0.8vw">
-                                                <template #body="{ data }">
-                                                    <div class="flex w-full font-bold">
-                                                        <span>{{ moment(data.tanggal).format('DD MMM YYYY') }}</span>
-                                                    </div>
-                                                </template>
-                                            </Column>
-                                            <Column field="item_produksi" sortable header="Jenis" style="width: 25%; font-size: 0.8vw">
-                                                <template #body="{ data }">
-                                                    <div class="flex w-full font-bold">
-                                                        <span>{{ data.item_produksi.name }}</span>
-                                                    </div>
-                                                </template>
-                                            </Column>
-                                            <Column field="pmg" header="PMG" style="width: 25%; font-size: 0.8vw">
-                                                <template #body="{ data }">
-                                                    <div class="flex w-full font-bold">
-                                                        <span>{{ data.pmg.nama }}</span>
-                                                    </div>
-                                                </template>
-                                            </Column>
-                                            <Column field="qty" sortable header="Qty" style="width: 25%; font-size: 0.8vw">
-                                                <template #body="{ data }">
-                                                    <div class="flex w-full justify-end font-bold">
-                                                        <span>{{ formatCurrency(Number(data.qty).toFixed(2)) }}</span>
-                                                    </div>
-                                                </template>
-                                            </Column>
-                                            <Column field="qty" style="width: 25%; font-size: 0.8vw">
-                                                <template #body="{ data }">
-                                                    <div class="flex w-full items-center justify-end font-bold">
-                                                        <button @click="showDrawer(data)" class="p-3 border rounded-full flex justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
-                                                            <i class="pi pi-pencil" style="font-size: 0.6vw"></i>
-                                                        </button>
-                                                    </div>
-                                                </template>
-                                            </Column>
-                                        </DataTable> -->
-                                    </div>
+                                    <div class="w-full"></div>
                                 </Panel>
                             </div>
                         </Panel>

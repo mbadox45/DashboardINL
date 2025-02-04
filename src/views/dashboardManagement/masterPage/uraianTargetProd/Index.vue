@@ -215,7 +215,7 @@ const filteredList = computed(() => {
                 <ScrollPanel style="width: 100%; height: 32vw">
                     <div class="flex flex-col gap-6">
                         <div class="min-h-[7rem] w-full bg-black rounded-xl p-5 text-white flex gap-3 items-center" v-for="(item, index) in filteredList" :key="index">
-                            <i class="pi pi-paperclip p-3 rounded-xl bg-gray-900" style="font-size: 2vw"></i>
+                            <i class="pi pi-cog p-3 rounded-xl bg-gray-900" style="font-size: 2vw"></i>
                             <div class="flex flex-col w-full items-start gap-3">
                                 <span class="text-[0.9vw]">{{ item.nama }}</span>
                             </div>

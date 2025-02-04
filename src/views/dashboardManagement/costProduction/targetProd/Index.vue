@@ -259,12 +259,12 @@ const submitData = async () => {
             <span class="text-3xl">Target Produksi</span>
             <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-emerald-500 hover:bg-emerald-700 text-white rounded-full flex gap-2">
                 <i class="pi pi-plus"></i>
-                <span>Add Data</span>
+                <span>Tambah Target</span>
             </button>
         </div>
         <Drawer v-model:visible="drawerCond" position="right" class="!w-full md:!w-[30rem]">
             <template #header>
-                <span class="text-[1vw] font-bold">Form Data</span>
+                <span class="text-[1vw] font-bold">Form Target</span>
             </template>
             <template #footer>
                 <div class="flex w-full justify-end pt-3 border-t">
@@ -374,85 +374,37 @@ const submitData = async () => {
                             <span class="text-red-500 font-bold">Data tidak tersedia, silahkan select data di periode lain. </span>
                         </div>
                     </template>
-                    <Column field="uraian" sortable header="Uraian" style="width: 25%"></Column>
-                    <Column field="tanggal" sortable header="Tanggal" style="width: 25%">
+                    <Column field="uraian" sortable header="Uraian" style="width: 25%" headerStyle="background-color:rgb(251 207 232); color:black"></Column>
+                    <Column field="tanggal" sortable header="Tanggal" style="width: 25%" headerStyle="background-color:rgb(251 207 232); color:black">
                         <template #body="{ data }">
                             <div class="flex w-full text-sm font-bold">
                                 <span>{{ moment(data.tanggal).format('DD MMM YYYY') }}</span>
                             </div>
                         </template>
                     </Column>
-                    <Column field="pmg" sortable header="PMG" style="width: 5%">
+                    <Column field="pmg" sortable header="PMG" style="width: 5%" headerStyle="background-color:rgb(251 207 232); color:black">
                         <template #body="{ data }">
                             <div class="flex w-full justify-start text-sm font-bold">
                                 <span>{{ data.pmg }}</span>
                             </div>
                         </template>
                     </Column>
-                    <Column field="value" sortable header="Target CPO Olah (Kg)" style="width: 25%">
+                    <Column field="value" sortable header="Target CPO Olah (Kg)" style="width: 25%" headerStyle="background-color:rgb(251 207 232); color:black">
                         <template #body="{ data }">
                             <div class="flex w-full justify-end text-sm font-bold">
                                 <span>{{ formatCurrency(data.value.toFixed(2)) }}</span>
                             </div>
                         </template>
                     </Column>
-                    <Column field="value" style="width: 5%">
+                    <Column field="value" style="width: 5%" headerStyle="background-color:rgb(251 207 232)">
                         <template #body="{ data }">
                             <div class="flex w-full justify-center items-center text-sm font-bold">
-                                <button @click="showDrawer(data)" class="p-3 border rounded-full flex justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
+                                <button @click="showDrawer(data)" class="p-3 border rounded-full flex justify-center items-center bg-teal-200 hover:bg-amber-300 shadow-md transition-all duration-300">
                                     <i class="pi pi-pencil" style="font-size: 0.6vw"></i>
                                 </button>
                             </div>
                         </template>
                     </Column>
-                    <!-- <ColumnGroup type="footer">
-                        <Row>
-                            <Column footer="Total Cost Production:" :colspan="3" footerStyle="text-align:right" />
-                            <Column :footer="formatCurrency(totalTable.totalCost.toFixed(2))" footerStyle="text-align:right; background-color:black; color:white;" />
-                            <Column :footer="formatCurrency(totalTable.totalHargaSatuan.toFixed(2))" footerStyle="text-align:right; background-color:black; color:white;" />
-                        </Row>
-                        <Row>
-                            <Column footer="CPO Olah:" :colspan="4" footerStyle="text-align:right" />
-                            <Column :footer="formatCurrency(totalTable.cpoOlah.toFixed(2))" footerStyle="text-align:right; background-color:black; color:white;" />
-                        </Row>
-                    </ColumnGroup> -->
-                    <!-- <template #expansion="{ data: mainRow }">
-                        <div class="px-4">
-                            <DataTable :value="mainRow.details" showGridlines dataKey="id" paginator :rows="5">
-                                <template #empty> No items production found. </template>
-                                <Column field="tanggal" sortable header="Tanggal" style="width: 25%">
-                                    <template #body="{ data: subRow }">
-                                        <div class="flex w-full text-sm font-bold">
-                                            <span>{{ moment(subRow.tanggal).format('DD MMM YYYY') }}</span>
-                                        </div>
-                                    </template>
-                                </Column>
-                                <Column field="value" sortable header="Biaya Produksi" style="width: 25%">
-                                    <template #body="{ data: subRow }">
-                                        <div class="flex w-full justify-end text-sm font-bold">
-                                            <span>{{ formatCurrency(Number(subRow.value).toFixed(2)) }}</span>
-                                        </div>
-                                    </template>
-                                </Column>
-                                <Column field="hargaSatuan" sortable header="Harga Satuan" style="width: 25%">
-                                    <template #body="{ data: subRow }">
-                                        <div class="flex w-full justify-end text-sm font-bold">
-                                            <span>{{ formatCurrency(subRow.hargaSatuan.toFixed(2)) }}</span>
-                                        </div>
-                                    </template>
-                                </Column>
-                                <Column field="hargaSatuan" style="width: 5%">
-                                    <template #body="{ data: subRow }">
-                                        <div class="flex w-full justify-center items-center text-sm font-bold">
-                                            <button @click="showDrawer(subRow, mainRow)" class="p-3 border rounded-full flex justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
-                                                <i class="pi pi-pencil" style="font-size: 0.6vw"></i>
-                                            </button>
-                                        </div>
-                                    </template>
-                                </Column>
-                            </DataTable>
-                        </div>
-                    </template> -->
                 </DataTable>
             </template>
         </Card>

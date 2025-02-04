@@ -77,11 +77,17 @@ export const menuAllAccess = () => {
                     ]
                 },
                 {
+                    label: 'Target Packaging',
+                    icon: 'pi pi-fw pi-bullseye',
+                    items: [
+                        { label: 'Uraian Target Packaging', to: '/operation/packaging/uraian-target' },
+                        { label: 'Target Packaging', to: '/operation/packaging/target' }
+                    ]
+                },
+                {
                     label: 'Laporan Packaging',
                     icon: 'pi pi-fw pi-box',
                     items: [
-                        { label: 'Uraian Target Packaging', to: '/operation/packaging/uraian-target' },
-                        { label: 'Target Packaging', to: '/operation/packaging/target' },
                         { label: 'Jenis Laporan', to: '/operation/packaging/jenis-laporan' },
                         { label: 'Laporan', to: '/operation/packaging/laporan-packaging' }
                     ]

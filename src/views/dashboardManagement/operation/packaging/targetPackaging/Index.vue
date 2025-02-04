@@ -267,15 +267,15 @@ const submitData = async () => {
 <template>
     <div class="flex flex-col w-full gap-8">
         <div class="flex gap-2 items-center justify-between w-full font-bold">
-            <span class="text-4xl">Target Packaging (RKAP)</span>
+            <span class="text-4xl">Target Packaging</span>
             <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-emerald-500 hover:bg-emerald-700 text-white rounded-full flex gap-2">
                 <i class="pi pi-plus"></i>
-                <span>Add Data</span>
+                <span>Tambah Target</span>
             </button>
         </div>
         <Drawer v-model:visible="drawerCond" position="right" class="!w-full md:!w-[30rem]">
             <template #header>
-                <span class="text-[1vw] font-bold">Form Data</span>
+                <span class="text-[1vw] font-bold">Form Target</span>
             </template>
             <template #footer>
                 <div class="flex w-full justify-end pt-3 border-t">
@@ -287,23 +287,23 @@ const submitData = async () => {
                     <Message v-for="msg of messages" :key="msg.id" :severity="msg.severity" class="mt-4"><i :class="`pi ${msg.icon}`"></i> {{ msg.content }}</Message>
                 </transition-group>
                 <div class="flex flex-col gap-1">
-                    <label for="date">Lokasi Packaging <small class="text-red-500 font-bold">*</small></label>
-                    <Select v-model="formData.packaging_id" :options="pmg" optionLabel="nama" optionValue="id" placeholder="Select a Region" class="w-full" />
+                    <label for="date">Packaging <small class="text-red-500 font-bold">*</small></label>
+                    <Select v-model="formData.packaging_id" :options="pmg" optionLabel="nama" optionValue="id" placeholder="Pilih Packaging" class="w-full" />
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="date">Jenis Packaging <small class="text-red-500 font-bold">*</small></label>
-                    <Select v-model="formData.jenis_id" filter :options="listJenis" optionLabel="name" optionValue="id" placeholder="Select a Description" class="w-full" />
+                    <Select v-model="formData.jenis_id" filter :options="listJenis" optionLabel="name" optionValue="id" placeholder="Pilih Jenis" class="w-full" />
                 </div>
                 <div class="flex flex-col gap-1">
-                    <label for="date">Uraian <small class="text-red-500 font-bold">*</small></label>
-                    <Select v-model="formData.uraian_id" :options="listUraian" optionLabel="nama" optionValue="id" placeholder="Select a Region" class="w-full" />
+                    <label for="date">Target <small class="text-red-500 font-bold">*</small></label>
+                    <Select v-model="formData.uraian_id" :options="listUraian" optionLabel="nama" optionValue="id" placeholder="Pilih Target" class="w-full" />
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="date">Tanggal <small class="text-red-500 font-bold">*</small></label>
                     <DatePicker v-model="formData.tanggal" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" />
                 </div>
                 <div class="flex flex-col gap-1">
-                    <label for="date">Quantity <small class="text-red-500 font-bold">*</small></label>
+                    <label for="date">Nilai (Box) <small class="text-red-500 font-bold">*</small></label>
                     <InputNumber v-model="formData.value" inputId="minmaxfraction" placeholder="1,000,000" :minFractionDigits="0" :maxFractionDigits="2" fluid />
                 </div>
                 <div class="flex flex-row-reverse w-full gap-3 mt-3">
@@ -350,11 +350,11 @@ const submitData = async () => {
             <div class="flex flex-col items-center gap-4 w-[25rem] py-2">
                 <div class="flex flex-col gap-2 w-full">
                     <div class="flex flex-col gap-1 w-full items-start">
-                        <label for="pmg" class="text-[0.8vw]">Select by Packaging</label>
+                        <label for="pmg" class="text-[0.8vw]">Pilih Packaging</label>
                         <Select v-model="selectedPmg" :options="pmg" optionLabel="nama" optionValue="id" placeholder="Select a Region" class="w-full" />
                     </div>
                     <div class="flex flex-col gap-1 w-full items-start">
-                        <label for="pmg" class="text-[0.8vw]">Select by Period</label>
+                        <label for="pmg" class="text-[0.8vw]">Pilih Periode</label>
                         <DatePicker v-model="dates" selectionMode="range" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :manualInput="false" placeholder="Select Date Range" class="w-full" />
                     </div>
                 </div>
@@ -369,12 +369,12 @@ const submitData = async () => {
                 <div class="flex gap-5 items-center mb-5">
                     <div class="flex items-center justify-between gap-3 w-full">
                         <button @click="toggle" class="py-2 px-3 text-black text-[0.8vw] flex gap-3 items-center bg-pink-200 shadow-md rounded-lg shadow-gray-200 font-bold hover:bg-pink-300 transition-all duration-300">
-                            <i class="pi pi-calendar" style="font-size: 0.8vw"></i><span>Select Data</span>
+                            <i class="pi pi-calendar" style="font-size: 0.8vw"></i><span>Filter</span>
                         </button>
                         <Chip :label="`${moment(beforeDate).format('DD MMM YYYY')} - ${moment(now).format('DD MMM YYYY')}`" icon="pi pi-calendar" style="font-size: 0.6vw" class="font-bold" />
                     </div>
                     <InputGroup>
-                        <InputText placeholder="Search Components" v-model="search" />
+                        <InputText placeholder="Cari Jenis Packaging" v-model="search" />
                         <InputGroupAddon>
                             <i class="pi pi-search" />
                         </InputGroupAddon>
@@ -387,21 +387,28 @@ const submitData = async () => {
                         <span>Loading Data...</span>
                     </div>
                     <DataTable v-else :value="filteredList" rowGroupMode="subheader" groupRowsBy="jenis.name" sortMode="single" sortField="jenis.name" :sortOrder="1" showGridlines>
-                        <Column field="tanggal" sortable header="Tanggal" style="width: 25%; font-size: 0.8vw" :globalFilterFields="['tanggal', 'uraian.nama', 'jenis.name', 'value', 'packaging.name']">
+                        <Column
+                            field="tanggal"
+                            sortable
+                            header="Tanggal"
+                            style="width: 25%; font-size: 0.8vw"
+                            :globalFilterFields="['tanggal', 'uraian.nama', 'jenis.name', 'value', 'packaging.name']"
+                            headerStyle="background-color:rgb(251 207 232); color:black"
+                        >
                             <template #body="{ data }">
                                 <div class="flex w-full font-bold">
                                     <span>{{ moment(data.tanggal).format('DD MMM YYYY') }}</span>
                                 </div>
                             </template>
                         </Column>
-                        <Column field="packaging_id" sortable header="Packaging" style="width: 25%; font-size: 0.8vw">
+                        <Column field="packaging_id" sortable header="Packaging" style="width: 25%; font-size: 0.8vw" headerStyle="background-color:rgb(251 207 232); color:black">
                             <template #body="{ data }">
                                 <div class="flex w-full font-bold">
                                     <span>{{ data.packaging.nama }}</span>
                                 </div>
                             </template>
                         </Column>
-                        <Column field="uraian.nama" sortable header="Uraian" style="width: 25%; font-size: 0.8vw">
+                        <Column field="uraian.nama" sortable header="Target" style="width: 25%; font-size: 0.8vw" headerStyle="background-color:rgb(251 207 232); color:black">
                             <template #body="{ data }">
                                 <div class="flex w-full font-bold">
                                     <span>{{ data.uraian.nama }}</span>
@@ -415,24 +422,24 @@ const submitData = async () => {
                                 </div>
                             </template>
                         </Column>
-                        <Column field="value" sortable header="Value" style="width: 25%; font-size: 0.8vw">
+                        <Column field="value" sortable header="Nilai (Box)" style="width: 25%; font-size: 0.8vw" headerStyle="background-color:rgb(251 207 232); color:black">
                             <template #body="{ data }">
                                 <div class="flex w-full font-bold">
                                     <span>{{ formatCurrency(data.value) }}</span>
                                 </div>
                             </template>
                         </Column>
-                        <Column field="value" style="width: 25%; font-size: 0.8vw">
+                        <Column field="value" style="width: 25%; font-size: 0.8vw" headerStyle="background-color:rgb(251 207 232); color:black">
                             <template #body="{ data }">
                                 <div class="flex w-full items-center justify-end font-bold">
-                                    <button @click="showDrawer(data)" class="p-3 border rounded-full flex justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
+                                    <button @click="showDrawer(data)" class="p-3 border rounded-full flex justify-center items-center bg-teal-200 hover:bg-amber-300 shadow-md transition-all duration-300">
                                         <i class="pi pi-pencil" style="font-size: 0.6vw"></i>
                                     </button>
                                 </div>
                             </template>
                         </Column>
                         <template #groupheader="slotProps">
-                            <div class="flex items-center gap-2">
+                            <div class="flex items-center gap-2 px-3 py-2 font-bold text-white rounded-md" style="background-color: rgb(194, 245, 66); color: black">
                                 <span>{{ slotProps.data.jenis.name }}</span>
                             </div>
                         </template>

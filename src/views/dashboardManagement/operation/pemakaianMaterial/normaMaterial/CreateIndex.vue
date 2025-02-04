@@ -134,7 +134,7 @@ const postData = async (cond) => {
                     class="px-4 py-2 text-[1vw] font-bold items-center shadow hover:shadow-none transition-all duration-300 bg-red-600 hover:bg-red-700 text-white rounded-full flex gap-2"
                 >
                     <i class="pi pi-times" style="font-size: 1vw"></i>
-                    <span>Batal</span>
+                    <span>Cancel</span>
                 </button>
             </div>
         </div>
@@ -158,12 +158,12 @@ const postData = async (cond) => {
                         </div>
                         <div class="flex flex-col gap-1 w-full">
                             <label for="pmg" class="font-bold">PMG <small class="text-red-500 font-bold">*</small></label>
-                            <Select v-model="pmg" filter :options="listPmg" optionLabel="nama" optionValue="id" placeholder="Select a PMG" class="w-full" />
+                            <Select v-model="pmg" filter :options="listPmg" optionLabel="nama" optionValue="id" placeholder="Pilih PMG" class="w-full" />
                         </div>
                     </div>
                     <div class="flex flex-col gap-1">
-                        <label for="jenis" class="font-bold">Jenis <small class="text-red-500 font-bold">*</small></label>
-                        <Select v-model="jenis" filter :options="listJenis" optionLabel="name" optionValue="id" placeholder="Select a Jenis" class="w-full" @change="loadForm" />
+                        <label for="jenis" class="font-bold">Material <small class="text-red-500 font-bold">*</small></label>
+                        <Select v-model="jenis" filter :options="listJenis" optionLabel="name" optionValue="id" placeholder="Pilih Material" class="w-full" @change="loadForm" />
                     </div>
                     <Divider align="left" type="solid"><b>Form Item</b></Divider>
                     <ScrollPanel style="width: 100%; height: 22rem">

@@ -262,7 +262,7 @@ const filteredList = computed(() => {
                                 <Column field="name" sortable style="width: 25%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232);">
                                     <template #header>
                                         <div class="flex w-full justify-start text-black">
-                                            <span>Name</span>
+                                            <span>Nama Item</span>
                                         </div>
                                     </template>
                                     <template #body="{ data }">
@@ -274,7 +274,7 @@ const filteredList = computed(() => {
                                 <Column field="kategori" sortable style="width: 25%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232);">
                                     <template #header>
                                         <div class="flex w-full justify-start text-black">
-                                            <span>Kategori</span>
+                                            <span>Kategori Item</span>
                                         </div>
                                     </template>
                                     <template #body="{ data }">
