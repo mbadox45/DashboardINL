@@ -105,7 +105,7 @@ const postData = async (cond) => {
 <template>
     <div class="flex flex-col w-full gap-8">
         <div class="flex gap-2 items-center justify-between w-full font-bold">
-            <span class="text-3xl">Form Data (Laporan Packaging)</span>
+            <span class="text-3xl">Form Laporan Packaging (Box)</span>
             <div class="flex gap-3">
                 <button
                     @click="postData('save')"
@@ -155,13 +155,13 @@ const postData = async (cond) => {
                             <DatePicker v-model="tanggal" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" />
                         </div>
                         <div class="flex flex-col gap-1 w-full">
-                            <label for="date" class="font-bold">Lokasi Packaging <small class="text-red-500 font-bold">*</small></label>
-                            <Select v-model="pmg" filter :options="listPmg" optionLabel="nama" optionValue="id" placeholder="Select a Location" class="w-full" />
+                            <label for="date" class="font-bold">Packaging <small class="text-red-500 font-bold">*</small></label>
+                            <Select v-model="pmg" filter :options="listPmg" optionLabel="nama" optionValue="id" placeholder="Pilih Packaging" class="w-full" />
                         </div>
                     </div>
                     <div class="flex flex-col gap-1">
-                        <label for="date" class="font-bold">Jenis <small class="text-red-500 font-bold">*</small></label>
-                        <Select v-model="jenis" filter :options="listJenis" optionLabel="name" optionValue="id" placeholder="Select a Description" class="w-full" @change="loadForm" />
+                        <label for="date" class="font-bold">Jenis Packaging <small class="text-red-500 font-bold">*</small></label>
+                        <Select v-model="jenis" filter :options="listJenis" optionLabel="name" optionValue="id" placeholder="Pilih Jenis Packaging" class="w-full" @change="loadForm" />
                     </div>
                     <Divider align="left" type="solid"><b>Form Item</b></Divider>
                     <ScrollPanel style="width: 100%; height: 22rem">

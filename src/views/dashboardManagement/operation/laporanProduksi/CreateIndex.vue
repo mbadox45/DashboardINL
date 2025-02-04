@@ -106,7 +106,7 @@ const postData = async (cond) => {
 <template>
     <div class="flex flex-col w-full gap-8">
         <div class="flex gap-2 items-center justify-between w-full font-bold">
-            <span class="text-3xl">Form Data (Laporan Produksi)</span>
+            <span class="text-3xl">Form Laporan Produksi (Kg)</span>
             <div class="flex gap-3">
                 <button
                     @click="postData('save')"
