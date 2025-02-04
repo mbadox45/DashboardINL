@@ -1,6 +1,5 @@
 <script setup>
 import { barChartOptionsApex } from '@/controller/chartStyle/chartDummy';
-import { formatCurrency } from '@/controller/dummyController';
 import moment from 'moment';
 import { defineProps, onMounted, ref, watch } from 'vue';
 import ApexCharts from 'vue3-apexcharts';
@@ -52,11 +51,13 @@ const loadProduct = async () => {
     const response = props.datas;
     const labels = [];
     const dataChart = [];
+    const dataChartAsing = [];
     const records = [];
     if (response.length > 0) {
         for (let i = 0; i < response.length; i++) {
             labels.push(response[i].name);
-            dataChart.push(formatCurrency(Number(response[i].avg).toFixed(2)));
+            dataChart.push(Number(response[i].avg).toFixed(2));
+            dataChartAsing.push(Number(response[i].avgAsing).toFixed(2));
             records.push({
                 id: i,
                 name: moment(response[i].name, 'MMM YYYY').format('MMMM YYYY'),
@@ -84,7 +85,7 @@ const loadProduct = async () => {
                 categories: labels
             },
             title: {
-                text: `Avg CPO KPBN for ${props.year}`
+                text: ``
             },
             plotOptions: {
                 bar: {
@@ -133,7 +134,7 @@ const handleChartClick = async (data) => {
 
     for (let i = 0; i < response.length; i++) {
         labels.push(moment(response[i].tanggal).format('DD'));
-        dataChart.push(formatCurrency(Number(response[i].avg).toFixed(2)));
+        dataChart.push(Number(response[i].value).toFixed(2));
     }
 
     monthName.value = data.name;
@@ -170,6 +171,9 @@ watch(() => props.datas, loadData, { immediate: true });
             <!-- Vue Apex Chart -->
             <ApexCharts type="line" :options="chartOptions" :series="chartSeries" class="w-full" height="400vw" />
             <!-- <VueApexCharts :type="listdata.type" :series="listdata.series" :options="listdata.options" class="w-full" height="400vw" style="z-index: 1 !important" /> -->
+            <Dialog v-model:visible="showDialog" modal :header="`Detailed Records for ${monthName}`" style="width: 80rem; background-color: black; color: white">
+                <ApexCharts type="line" :options="optionView" :series="dataView.series" class="w-full" height="300" />
+            </Dialog>
         </div>
     </div>
 </template>

@@ -49,4 +49,15 @@ export default new (class targetIncomingScmController {
             return null;
         }
     };
+    getByPeriod = async (form) => {
+        try {
+            const response = await targetIncomingScmAPI.getByPeriod(form);
+            const load = response.data;
+            const data = load.data;
+            // console.log(data);
+            return data;
+        } catch (error) {
+            return null;
+        }
+    };
 })();

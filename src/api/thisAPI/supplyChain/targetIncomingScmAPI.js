@@ -15,4 +15,7 @@ export default new (class targetIncomingScmAPI {
     getByID(id) {
         return httpCommonThisAPI.get(`target-income-cpo/get/${id}`);
     }
+    getByPeriod(date) {
+        return httpCommonThisAPI.post('target-income-cpo/period', date);
+    }
 })();

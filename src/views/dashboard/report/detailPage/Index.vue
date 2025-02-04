@@ -79,6 +79,8 @@ const loadFinance = async (path) => {
         result = await financeDetailController.resultPaySchedule(formData.value);
     } else if (path.toLowerCase().includes('cpo-kpbn-financial')) {
         result = await financeDetailController.cpoKpbn(formData.value);
+    } else if (path.toLowerCase().includes('kurs-mata-uang-financial')) {
+        result = await financeDetailController.kursMataUang(formData.value);
     } else {
         result = await financeDetailController.resultGrossProfit(formData.value);
     }

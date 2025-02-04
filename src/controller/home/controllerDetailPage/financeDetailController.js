@@ -3,10 +3,73 @@ import { formatCurrency, months, valueToBilion } from '@/controller/dummyControl
 import cashFlowMovementController from '@/controller/getApiFromThisApp/cashFlowMovement/cashFlowMovementController';
 import cashFlowScheduleController from '@/controller/getApiFromThisApp/cashFlowSchedule/cashFlowScheduleController';
 import cpoKpbnController from '@/controller/getApiFromThisApp/cpoKpbn/cpoKpbnController';
+import kursController from '@/controller/getApiFromThisApp/kurs/kursController';
 import profitabilityController from '@/controller/getApiFromThisApp/profitability/profitabilityController';
 import moment from 'moment';
 
 export default new (class financeDetailController {
+    kursMataUang = async (form) => {
+        try {
+            const result = [];
+            const response = await kursController.getByPeriod(form);
+            if (response != null) {
+                for (let i = 0; i < response.length; i++) {
+                    result.push({
+                        tanggal: moment(response[i].tanggal).format('DD MMM YYYY'),
+                        value: Number(response[i].value),
+                        mata_uang: `${response[i].mata_uang.symbol}_${response[i].mata_uang.name} - ${response[i].mata_uang.remark}`
+                    });
+                }
+            }
+            return result;
+        } catch (error) {
+            const result = [];
+            return result;
+        }
+    };
+    resultKursMataUang = async (form) => {
+        const response = await this.kursMataUang(form);
+
+        let result = {
+            name: null,
+            total: null,
+            type: null,
+            chartOptions: null,
+            series: []
+        };
+
+        if (response.length > 0) {
+            // CFF
+            const mataUang = response[0].mata_uang;
+            const label = 'Mata Uang (' + mataUang + ')';
+            const type = 'bar';
+            const color = ['rgba(204, 4, 4, 0.6)'];
+            const strokeColor = ['rgba(204, 4, 4, 1'];
+            const dataLabelStat = true;
+            const total = '';
+            const data = [];
+            const listLabels = [];
+            for (let i = 0; i < response.length; i++) {
+                data.push(response[i].value);
+                listLabels.push(response[i].tanggal);
+            }
+            // const typeChart = 'line'
+
+            result = {
+                name: label,
+                total: total,
+                type: type,
+                chartOptions: barChartOptionsApex(listLabels, color, strokeColor, dataLabelStat, total),
+                series: [
+                    {
+                        name: label,
+                        data: data
+                    }
+                ]
+            };
+        }
+        return result;
+    };
     cpoKpbn = async (form) => {
         try {
             let result = [];
@@ -20,6 +83,7 @@ export default new (class financeDetailController {
                         listData.push({
                             name: moment(month[j].month, 'M').format('MMM') + ' ' + years[i].year,
                             avg: month[j].average,
+                            avgAsing: month[j].averageAsing,
                             records: month[j].detail
                         });
                         // listData.push(month[j].average);
@@ -33,37 +97,6 @@ export default new (class financeDetailController {
             const result = [];
             return result;
         }
-    };
-    resultCpoKpbn = async (form) => {
-        const response = await this.cpoKpbn(form);
-
-        // Chart
-        const listLabels = response.chart.label;
-        const data = response.chart.data;
-        const label = 'Rata-rata CPO KPBN';
-        const type = 'bar';
-        const color = ['rgba(249, 115, 22, 0.6)'];
-        const strokeColor = ['rgb(249, 115, 22)'];
-        const dataLabelStat = true;
-        const total = '';
-
-        const dataChart = {
-            name: 'CPO KPBN (dlm IDR)',
-            total: total,
-            type: type,
-            chartOptions: barChartOptionsApex(listLabels, color, strokeColor, dataLabelStat, total),
-            series: [
-                {
-                    name: label,
-                    data: data
-                }
-            ]
-        };
-
-        return {
-            table: response.table,
-            chart: dataChart
-        };
     };
     paySchedule = async (form) => {
         try {
