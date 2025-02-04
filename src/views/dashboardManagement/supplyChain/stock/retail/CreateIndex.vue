@@ -93,7 +93,7 @@ const postData = async (cond) => {
 <template>
     <div class="flex flex-col w-full gap-8">
         <div class="flex gap-2 items-center justify-between w-full font-bold">
-            <span class="text-3xl">Form Data (Stock Retail)</span>
+            <span class="text-3xl">Form Stock Retail (Box)</span>
             <div class="flex gap-3">
                 <button
                     @click="postData('save')"
@@ -120,7 +120,7 @@ const postData = async (cond) => {
                     class="px-4 py-2 text-[1vw] font-bold items-center shadow hover:shadow-none transition-all duration-300 bg-red-600 hover:bg-red-700 text-white rounded-full flex gap-2"
                 >
                     <i class="pi pi-times" style="font-size: 1vw"></i>
-                    <span>Batal</span>
+                    <span>Cancel</span>
                 </button>
             </div>
         </div>
@@ -144,7 +144,7 @@ const postData = async (cond) => {
                         </div>
                         <div class="flex flex-col gap-1 w-full">
                             <label for="date" class="font-bold">Produk <small class="text-red-500 font-bold">*</small></label>
-                            <Select v-model="jenis" filter :options="listProduk" optionLabel="name" optionValue="id" placeholder="Select a Product" class="w-full" @change="loadJenis" />
+                            <Select v-model="jenis" filter :options="listProduk" optionLabel="name" optionValue="id" placeholder="Pilih Produk" class="w-full" @change="loadJenis" />
                         </div>
                     </div>
                     <Divider align="left" type="solid"><b>Form Item</b></Divider>
@@ -153,11 +153,11 @@ const postData = async (cond) => {
                             <div class="flex flex-col gap-3 p-3 rounded-xl border" v-for="(item, index) in formData" :key="index">
                                 <label for="date" class="font-bold">{{ item.item_produksi }} <small class="text-red-500 font-bold">*</small></label>
                                 <div class="flex flex-col gap-1 text-[0.8vw]">
-                                    <label for="test">Quantity</label>
+                                    <label for="test">Jumlah (Box)</label>
                                     <InputNumber v-model="item.qty" inputId="minmaxfraction" placeholder="1,000" :minFractionDigits="0" :maxFractionDigits="2" fluid />
                                 </div>
                                 <div class="flex flex-col gap-1 text-[0.8vw]">
-                                    <label for="test">Umur</label>
+                                    <label for="test">Umur (Hari)</label>
                                     <InputNumber v-model="item.umur" inputId="minmaxfraction" placeholder="1,000" :minFractionDigits="0" :maxFractionDigits="2" fluid />
                                 </div>
                                 <div class="flex flex-col gap-1 text-[0.8vw]">

@@ -247,7 +247,7 @@ const submitData = async () => {
             <span class="text-3xl">Stock Retail</span>
             <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-emerald-500 hover:bg-emerald-700 text-white rounded-full flex gap-2">
                 <i class="pi pi-plus"></i>
-                <span>Add Component</span>
+                <span>Tambah Data</span>
             </button>
         </div>
         <Drawer v-model:visible="drawerCond" position="right" class="!w-full md:!w-[30rem]">
@@ -331,7 +331,7 @@ const submitData = async () => {
             <div class="flex flex-col items-center gap-4 w-[25rem] py-2">
                 <div class="flex flex-col gap-2 w-full">
                     <div class="flex flex-col gap-1 w-full items-start">
-                        <label for="pmg" class="text-[0.8vw]">Select by Period</label>
+                        <label for="pmg" class="text-[0.8vw]">Pilih Periode</label>
                         <DatePicker v-model="dates" selectionMode="range" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :manualInput="false" placeholder="Select Date Range" class="w-full" />
                     </div>
                 </div>
@@ -372,10 +372,10 @@ const submitData = async () => {
                                     <Column :footer="formatCurrency(Number(totalData.totalTon).toFixed(2))" footerStyle="text-align:right; background-color:black; color:white; font-size:0.6vw;" />
                                 </Row>
                             </ColumnGroup>
-                            <Column field="product_name" sortable style="width: 15%; font-size: 0.6vw">
+                            <Column field="product_name" sortable style="width: 15%; font-size: 0.6vw" headerStyle="background-color:rgb(251 207 232)">
                                 <template #header>
-                                    <div class="flex w-full justify-center">
-                                        <span>Product</span>
+                                    <div class="flex w-full justify-center text-black">
+                                        <span>Produk</span>
                                     </div>
                                 </template>
                                 <template #body="{ data }">
@@ -387,10 +387,10 @@ const submitData = async () => {
                                     </div>
                                 </template>
                             </Column>
-                            <Column field="totalQty" sortable style="width: 15%; font-size: 0.6vw">
+                            <Column field="totalQty" sortable style="width: 15%; font-size: 0.6vw" headerStyle="background-color:rgb(251 207 232)">
                                 <template #header>
-                                    <div class="flex w-full justify-center">
-                                        <span>Ctn</span>
+                                    <div class="flex w-full justify-center text-black">
+                                        <span>Jumlah (Box)</span>
                                     </div>
                                 </template>
                                 <template #body="{ data }">
@@ -399,10 +399,10 @@ const submitData = async () => {
                                     </div>
                                 </template>
                             </Column>
-                            <Column field="totalTon" sortable style="width: 15%; font-size: 0.6vw">
+                            <Column field="totalTon" sortable style="width: 15%; font-size: 0.6vw" headerStyle="background-color:rgb(251 207 232)">
                                 <template #header>
-                                    <div class="flex w-full justify-center">
-                                        <span>MT</span>
+                                    <div class="flex w-full justify-center text-black">
+                                        <span>Jumlah (MT)</span>
                                     </div>
                                 </template>
                                 <template #body="{ data }">
@@ -416,6 +416,8 @@ const submitData = async () => {
                     <Panel v-for="(item, index) in listTable" :key="index">
                         <template #header>
                             <span>{{ item.warehouseName }}</span>
+                            <span> Kapasitas Terpakai : {{ formatCurrency(Number(item.warehouseUtilisasiPercent).toFixed(2)) }} %</span>
+                            <span> Sisa Space (Pallet) : {{ item.warehouseSpace }}</span>
                         </template>
                         <DataTable :value="item.detail" showGridlines>
                             <ColumnGroup type="footer">
@@ -426,30 +428,30 @@ const submitData = async () => {
                                     <Column :footer="formatCurrency(Number(item.warehousePallet).toFixed(2))" footerStyle="text-align:right; background-color:black; color:white; font-size:0.6vw;" />
                                 </Row>
                                 <Row>
-                                    <Column footer="Kapasitas WH :" :colspan="2" footerStyle="text-align:right; font-size:0.6vw;" />
+                                    <Column footer="Kapasitas Warehouse :" :colspan="2" footerStyle="text-align:right; font-size:0.6vw;" />
                                     <Column :footer="formatCurrency((Number(item.warehouseCapacity) * 55).toFixed(2))" footerStyle="text-align:right; background-color:black; color:white; font-size:0.6vw;" />
                                     <Column :footer="formatCurrency((Number(item.warehouseCapacity) * 55 * 0.010864).toFixed(2))" footerStyle="text-align:right; background-color:black; color:white; font-size:0.6vw;" />
                                     <Column :footer="formatCurrency(Number(item.warehouseCapacity).toFixed(2))" footerStyle="text-align:right; background-color:black; color:white; font-size:0.6vw;" />
                                 </Row>
                             </ColumnGroup>
-                            <Column field="product.name" sortable style="width: 15%; font-size: 0.6vw">
+                            <Column field="product.name" sortable style="width: 15%; font-size: 0.6vw" headerStyle="background-color:rgb(251 207 232)">
                                 <template #header>
-                                    <div class="flex w-full justify-center">
-                                        <span>Product</span>
+                                    <div class="flex w-full justify-center text-black">
+                                        <span>Produk</span>
                                     </div>
                                 </template>
                                 <template #body="{ data }">
                                     <div class="flex w-full items-center gap-2 justify-start">
-                                        <button @click="showDrawer(data)" class="p-3 border rounded-full flex bg-gray-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
+                                        <button @click="showDrawer(data)" class="p-3 border rounded-full flex bg-teal-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
                                             <i class="pi pi-pencil" style="font-size: 0.6vw"></i>
                                         </button>
                                         <span>{{ data.product.name }}</span>
                                     </div>
                                 </template>
                             </Column>
-                            <Column field="tanggal" sortable style="width: 15%; font-size: 0.6vw">
+                            <Column field="tanggal" sortable style="width: 15%; font-size: 0.6vw" headerStyle="background-color:rgb(251 207 232)">
                                 <template #header>
-                                    <div class="flex w-full justify-center">
+                                    <div class="flex w-full justify-center text-black">
                                         <span>Tanggal</span>
                                     </div>
                                 </template>
@@ -459,10 +461,10 @@ const submitData = async () => {
                                     </div>
                                 </template>
                             </Column>
-                            <Column field="qty" sortable style="width: 15%; font-size: 0.6vw">
+                            <Column field="qty" sortable style="width: 15%; font-size: 0.6vw" headerStyle="background-color:rgb(251 207 232)">
                                 <template #header>
-                                    <div class="flex w-full justify-center">
-                                        <span>Ctn</span>
+                                    <div class="flex w-full justify-center text-black">
+                                        <span>Jumlah (Box)</span>
                                     </div>
                                 </template>
                                 <template #body="{ data }">
@@ -471,10 +473,10 @@ const submitData = async () => {
                                     </div>
                                 </template>
                             </Column>
-                            <Column field="qtyTon" sortable style="width: 15%; font-size: 0.6vw">
+                            <Column field="qtyTon" sortable style="width: 15%; font-size: 0.6vw" headerStyle="background-color:rgb(251 207 232)">
                                 <template #header>
-                                    <div class="flex w-full justify-center">
-                                        <span>MT</span>
+                                    <div class="flex w-full justify-center text-black">
+                                        <span>Jumlah (MT)</span>
                                     </div>
                                 </template>
                                 <template #body="{ data }">
@@ -483,10 +485,10 @@ const submitData = async () => {
                                     </div>
                                 </template>
                             </Column>
-                            <Column field="qtyPallet" sortable style="width: 15%; font-size: 0.6vw">
+                            <Column field="qtyPallet" sortable style="width: 15%; font-size: 0.6vw" headerStyle="background-color:rgb(251 207 232)">
                                 <template #header>
-                                    <div class="flex w-full justify-center">
-                                        <span>Pallet</span>
+                                    <div class="flex w-full justify-center text-black">
+                                        <span>Jumlah (Pallet)</span>
                                     </div>
                                 </template>
                                 <template #body="{ data }">
@@ -498,125 +500,6 @@ const submitData = async () => {
                         </DataTable>
                     </Panel>
                 </div>
-                <!-- <DataTable :value="listTable" v-model:filters="search" showGridlines paginator :rows="10" dataKey="period" :globalFilterFields="['tanki.lokasi.name', 'product.name', 'tanki.name', 'tanki.kapasitas', 'remarks']">
-                    <Column field="tanggal" sortable style="width: 15%; font-size: 0.7vw">
-                        <template #header>
-                            <div class="flex w-full justify-center">
-                                <span>Tanggal</span>
-                            </div>
-                        </template>
-                        <template #body="{ data }">
-                            <div class="flex w-full justify-center">
-                                <span>{{ moment(data.tanggal).format('DD MMM YYYY') }}</span>
-                            </div>
-                        </template>
-                    </Column>
-                    <Column field="tanki.lokasi.name" sortable style="width: 25%; font-size: 0.7vw">
-                        <template #header>
-                            <div class="flex w-full justify-center">
-                                <span>Lokasi</span>
-                            </div>
-                        </template>
-                        <template #body="{ data }">
-                            <div class="flex w-full justify-center">
-                                <span>{{ data.tanki.lokasi.name }}</span>
-                            </div>
-                        </template>
-                    </Column>
-                    <Column field="product.name" sortable style="width: 25%; font-size: 0.7vw">
-                        <template #header>
-                            <div class="flex w-full justify-center">
-                                <span>Produk</span>
-                            </div>
-                        </template>
-                        <template #body="{ data }">
-                            <div class="flex w-full justify-center">
-                                <span>{{ data.product.name }}</span>
-                            </div>
-                        </template>
-                    </Column>
-                    <Column field="tanki.name" sortable style="width: 10%; font-size: 0.7vw">
-                        <template #header>
-                            <div class="flex w-full justify-center">
-                                <span>No Tanki</span>
-                            </div>
-                        </template>
-                        <template #body="{ data }">
-                            <div class="flex w-full justify-start">
-                                <span class="capitalize">{{ data.tanki.name }}</span>
-                            </div>
-                        </template>
-                    </Column>
-                    <Column field="tanki.kapasitas" sortable style="width: 10%; font-size: 0.7vw">
-                        <template #header>
-                            <div class="flex w-full justify-center">
-                                <span>Kapasitas</span>
-                            </div>
-                        </template>
-                        <template #body="{ data }">
-                            <div class="flex w-full justify-end">
-                                <span class="capitalize">{{ formatCurrency(Number(data.tanki.kapasitas).toFixed(2)) }}</span>
-                            </div>
-                        </template>
-                    </Column>
-                    <Column field="qty" sortable style="width: 10%; font-size: 0.7vw">
-                        <template #header>
-                            <div class="flex w-full justify-center">
-                                <span>Stock</span>
-                            </div>
-                        </template>
-                        <template #body="{ data }">
-                            <div class="flex w-full justify-end">
-                                <span class="capitalize">{{ formatCurrency(Number(data.qty).toFixed(2)) }}</span>
-                            </div>
-                        </template>
-                    </Column>
-                    <Column field="space" sortable style="width: 10%; font-size: 0.7vw">
-                        <template #header>
-                            <div class="flex w-full justify-center">
-                                <span>Space</span>
-                            </div>
-                        </template>
-                        <template #body="{ data }">
-                            <div class="flex w-full justify-end">
-                                <span class="capitalize">{{ formatCurrency(Number(data.space).toFixed(2)) }}</span>
-                            </div>
-                        </template>
-                    </Column>
-                    <Column field="umur" sortable style="width: 10%; font-size: 0.7vw">
-                        <template #header>
-                            <div class="flex w-full justify-center">
-                                <span>Umur</span>
-                            </div>
-                        </template>
-                        <template #body="{ data }">
-                            <div class="flex w-full justify-end">
-                                <span class="capitalize">{{ formatCurrency(Number(data.umur).toFixed(2)) }}</span>
-                            </div>
-                        </template>
-                    </Column>
-                    <Column field="remarks" sortable style="width: 25%; font-size: 0.7vw">
-                        <template #header>
-                            <div class="flex w-full justify-center">
-                                <span>Remark</span>
-                            </div>
-                        </template>
-                        <template #body="{ data }">
-                            <div class="flex w-full justify-start">
-                                <span class="capitalize">{{ data.remarks }}</span>
-                            </div>
-                        </template>
-                    </Column>
-                    <Column field="id" style="width: 5%; font-size: 0.7vw">
-                        <template #body="{ data }">
-                            <div class="flex justify-center items center">
-                                <button @click="showDrawer(data)" class="p-3 border rounded-full flex bg-gray-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
-                                    <i class="pi pi-pencil" style="font-size: 0.6vw"></i>
-                                </button>
-                            </div>
-                        </template>
-                    </Column>
-                </DataTable> -->
             </template>
         </Card>
     </div>
