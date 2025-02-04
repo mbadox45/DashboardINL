@@ -2,10 +2,69 @@ import { barChartOptionsApex, combo3ChartOptionsApex, comboChartOptionsApex, sta
 import { formatCurrency, months, valueToBilion } from '@/controller/dummyController';
 import cashFlowMovementController from '@/controller/getApiFromThisApp/cashFlowMovement/cashFlowMovementController';
 import cashFlowScheduleController from '@/controller/getApiFromThisApp/cashFlowSchedule/cashFlowScheduleController';
+import cpoKpbnController from '@/controller/getApiFromThisApp/cpoKpbn/cpoKpbnController';
 import profitabilityController from '@/controller/getApiFromThisApp/profitability/profitabilityController';
 import moment from 'moment';
 
 export default new (class financeDetailController {
+    cpoKpbn = async (form) => {
+        try {
+            let result = [];
+            const response = await cpoKpbnController.getByPeriod(form);
+            if (response != null) {
+                const years = response.years;
+                const listData = [];
+                for (let i = 0; i < years.length; i++) {
+                    const month = years[i].months;
+                    for (let j = 0; j < month.length; j++) {
+                        listData.push({
+                            name: moment(month[j].month, 'M').format('MMM') + ' ' + years[i].year,
+                            avg: month[j].average,
+                            records: month[j].detail
+                        });
+                        // listData.push(month[j].average);
+                        // listLabel.push(moment(month[j].month, 'M').format('MMM') + ' ' + years[i].year);
+                    }
+                }
+                result = listData;
+            }
+            return result;
+        } catch (error) {
+            const result = [];
+            return result;
+        }
+    };
+    resultCpoKpbn = async (form) => {
+        const response = await this.cpoKpbn(form);
+
+        // Chart
+        const listLabels = response.chart.label;
+        const data = response.chart.data;
+        const label = 'Rata-rata CPO KPBN';
+        const type = 'bar';
+        const color = ['rgba(249, 115, 22, 0.6)'];
+        const strokeColor = ['rgb(249, 115, 22)'];
+        const dataLabelStat = true;
+        const total = '';
+
+        const dataChart = {
+            name: 'CPO KPBN (dlm IDR)',
+            total: total,
+            type: type,
+            chartOptions: barChartOptionsApex(listLabels, color, strokeColor, dataLabelStat, total),
+            series: [
+                {
+                    name: label,
+                    data: data
+                }
+            ]
+        };
+
+        return {
+            table: response.table,
+            chart: dataChart
+        };
+    };
     paySchedule = async (form) => {
         try {
             let result = {

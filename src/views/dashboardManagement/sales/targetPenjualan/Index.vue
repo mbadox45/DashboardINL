@@ -54,7 +54,7 @@ initFilters();
 onMounted(() => {
     loadData();
     loadUraian();
-    loadProduk();
+    // loadProduk();
     loadLokasi();
 });
 
@@ -68,6 +68,14 @@ const loadData = async () => {
         allData.value = data;
         const ritel = data.ritel;
         const bulk = data.bulk;
+        const produk = await productMasterController.getAll();
+        if (optionButton.value == 1) {
+            listTable.value = ritel.products;
+            listProduct.value = produk.filter((item) => item.jenis == 'ritel');
+        } else {
+            listProduct.value = produk.filter((item) => item.jenis == 'bulk');
+            listTable.value = bulk.products;
+        }
     } catch (error) {
         listTable.value = [];
     }

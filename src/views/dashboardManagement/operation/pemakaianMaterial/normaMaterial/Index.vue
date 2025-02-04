@@ -3,6 +3,7 @@ import { formatCurrency } from '@/controller/dummyController';
 import jenisLaporanMaterialController from '@/controller/getApiFromThisApp/laporanMaterial/jenisLaporanMaterialController';
 import normaLaporanMaterialController from '@/controller/getApiFromThisApp/laporanMaterial/normaLaporanMaterialController';
 import pmgMasterController from '@/controller/getApiFromThisApp/master/pmgMasterController';
+import { FilterMatchMode } from '@primevue/core/api';
 import moment from 'moment';
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
@@ -19,7 +20,7 @@ const optionPage = ref(0);
 
 const listTable = ref([]);
 const totalTable = ref({ cpoOlah: 0, totalCost: 0, totalHargaSatuan: 0 });
-const search = ref();
+const search = ref({ global: { value: null, matchMode: FilterMatchMode.CONTAINS } });
 const expandedRows = ref([]);
 
 const selectedPmg = ref(1);
@@ -64,6 +65,7 @@ const loadData = async () => {
         pmg.value = loadPMG;
 
         const data = await normaLaporanMaterialController.getAll();
+        // console.log(data);
         listTable.value = data;
     } catch (error) {
         listTable.value = [];
@@ -355,7 +357,7 @@ const submitData = async () => {
                         <Chip :label="`${moment(beforeDate).format('DD MMM YYYY')} - ${moment(now).format('DD MMM YYYY')}`" icon="pi pi-calendar" style="font-size: 0.6vw" class="font-bold" />
                     </div>
                     <InputGroup>
-                        <InputText placeholder="Cari" v-model="search" />
+                        <InputText placeholder="Cari" v-model="search['global'].value" />
                         <InputGroupAddon>
                             <i class="pi pi-search" />
                         </InputGroupAddon>
@@ -363,7 +365,7 @@ const submitData = async () => {
                 </div>
             </template>
             <template #content>
-                <DataTable :value="listTable" showGridlines paginator :rows="10" dataKey="id">
+                <DataTable v-model:filters="search" :value="listTable" showGridlines paginator :rows="10" dataKey="id" :globalFilterFields="['item_material.name', 'satuan']">
                     <Column field="item_material" sortable style="width: 25%; font-size: 0.8vw" headerStyle="background-color:rgb(251 207 232)">
                         <template #header>
                             <div class="flex w-full items-center justify-center font-bold text-black">

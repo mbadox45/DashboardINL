@@ -11,6 +11,7 @@ import CashBalanceFinance from '@/views/dashboard/report/detailPage/components/f
 import CashFlowMovementFinance from '@/views/dashboard/report/detailPage/components/financial/CashFlowMovementFinance.vue';
 import CffPayScheduleFinance from '@/views/dashboard/report/detailPage/components/financial/CffPayScheduleFinance.vue';
 import CfiPayScheduleFinance from '@/views/dashboard/report/detailPage/components/financial/CfiPayScheduleFinance.vue';
+import CpoKpbnDetailFinance from '@/views/dashboard/report/detailPage/components/financial/CpoKpbnDetailFinance.vue';
 import EbitdaMarginFinance from '@/views/dashboard/report/detailPage/components/financial/EbitdaMarginFinance.vue';
 import GrossProfitDetailFinance from '@/views/dashboard/report/detailPage/components/financial/GrossProfitDetailFinance.vue';
 import HargaSpotInventoryBulkyFinance from '@/views/dashboard/report/detailPage/components/financial/HargaSpotInventoryBulkyFinance.vue';
@@ -35,7 +36,7 @@ const formData = ref({
     idMataUang: 1,
     idPackaging: 1,
     tanggalAwal: moment('2023-01-01').format('YYYY-MM-DD'),
-    tanggalAkhir: moment('2024-02-28').format('YYYY-MM-DD')
+    tanggalAkhir: moment('2025-01-31').format('YYYY-MM-DD')
     // tanggalAwal: moment().format('YYYY-MM-01'),
     // tanggalAkhir: moment().format('YYYY-MM-DD')
 });
@@ -76,6 +77,8 @@ const loadFinance = async (path) => {
         result = await financeDetailController.resultCashFlowMovement(formData.value);
     } else if (path.toLowerCase().includes('cff-pay-schedule-financial')) {
         result = await financeDetailController.resultPaySchedule(formData.value);
+    } else if (path.toLowerCase().includes('cpo-kpbn-financial')) {
+        result = await financeDetailController.cpoKpbn(formData.value);
     } else {
         result = await financeDetailController.resultGrossProfit(formData.value);
     }
@@ -111,6 +114,7 @@ const updateDates = async (dates) => {
             <cfi-pay-schedule-finance v-else-if="routeName == 'cfi-pay-schedule'" />
             <harga-spot-inventory-bulky-finance v-else-if="routeName == 'harga-spot-inventory-bulky'" />
             <harga-spot-inventory-retail-finance v-else-if="routeName == 'harga-spot-inventory-retail'" />
+            <cpo-kpbn-detail-finance v-else-if="routeName == 'cpo-kpbn'" :datas="listData" />
         </div>
         <div class="min-h-[30rem] p-6 rounded-xl" v-else>
             <cpo-olah-vs-rkap-operation v-if="routeName == 'cpo-olah-vs-rkap'" />
