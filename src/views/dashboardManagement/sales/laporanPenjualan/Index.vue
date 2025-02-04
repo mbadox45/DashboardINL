@@ -28,6 +28,7 @@ const formData = ref({
     id: null,
     customer_id: null,
     product_id: null,
+    kontrak: null,
     tanggal: moment().format('YYYY-MM-DD'),
     qty: null,
     harga_satuan: null,
@@ -122,6 +123,7 @@ const showDrawer = async (data) => {
             formData.value.id = data.id;
             formData.value.customer_id = data.customer_id;
             formData.value.product_id = data.product_id;
+            formData.value.kontrak = data.kontrak;
             formData.value.qty = Number(data.qty);
             formData.value.harga_satuan = Number(data.harga_satuan);
             formData.value.margin_percent = Number(data.margin_percent);
@@ -133,6 +135,7 @@ const showDrawer = async (data) => {
             formData.value.customer_id = null;
             formData.value.product_id = null;
             formData.value.qty = null;
+            formData.value.kontrak = null;
             formData.value.harga_satuan = null;
             formData.value.margin_percent = null;
             formData.value.tanggal = moment().format('YYYY-MM-DD');
@@ -147,6 +150,7 @@ const showDrawer = async (data) => {
         formData.value.product_id = null;
         formData.value.qty = null;
         formData.value.harga_satuan = null;
+        formData.value.kontrak = null;
         formData.value.margin_percent = null;
         formData.value.tanggal = moment().format('YYYY-MM-DD');
         statusForm.value = 'add';
@@ -158,6 +162,7 @@ const refreshForm = () => {
     formData.value.product_id = null;
     formData.value.qty = null;
     formData.value.harga_satuan = null;
+    formData.value.kontrak = null;
     formData.value.margin_percent = null;
     formData.value.tanggal = moment().format('YYYY-MM-DD');
 };
@@ -265,6 +270,10 @@ const submitData = async () => {
                 <transition-group name="p-message" tag="div" class="flex flex-col">
                     <Message v-for="msg of messages" :key="msg.id" :severity="msg.severity" class="mt-4"><i :class="`pi ${msg.icon}`"></i> {{ msg.content }}</Message>
                 </transition-group>
+                <div class="flex flex-col gap-1">
+                    <label for="lokasi">Kontrak <small class="text-red-500 font-bold">*</small></label>
+                    <InputText type="text" v-model="formData.kontrak" placeholder="No. Kontrak" class="w-full" />
+                </div>
                 <div class="flex flex-col gap-1">
                     <label for="lokasi">Produk <small class="text-red-500 font-bold">*</small></label>
                     <Select v-model="formData.product_id" :options="listProduct" optionLabel="name" optionValue="id" placeholder="Pilih Produk" class="w-full" />
@@ -381,6 +390,18 @@ const submitData = async () => {
                                     <span class="text-[0.9vw] font-bold italic">{{ item.name }}</span>
                                 </template>
                                 <DataTable :value="item.detail" showGridlines>
+                                    <Column field="kontrak" sortable style="width: 20%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
+                                        <template #header>
+                                            <div class="flex w-full justify-center font-bold text-black">
+                                                <span>Kontrak</span>
+                                            </div>
+                                        </template>
+                                        <template #body="{ data }">
+                                            <div class="flex w-full justify-start">
+                                                <span>{{ data.kontrak }}</span>
+                                            </div>
+                                        </template>
+                                    </Column>
                                     <Column field="customer.name" sortable style="width: 20%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                                         <template #header>
                                             <div class="flex w-full justify-center font-bold text-black">

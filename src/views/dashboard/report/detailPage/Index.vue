@@ -16,6 +16,7 @@ import EbitdaMarginFinance from '@/views/dashboard/report/detailPage/components/
 import GrossProfitDetailFinance from '@/views/dashboard/report/detailPage/components/financial/GrossProfitDetailFinance.vue';
 import HargaSpotInventoryBulkyFinance from '@/views/dashboard/report/detailPage/components/financial/HargaSpotInventoryBulkyFinance.vue';
 import HargaSpotInventoryRetailFinance from '@/views/dashboard/report/detailPage/components/financial/HargaSpotInventoryRetailFinance.vue';
+import KursMataUangFinance from '@/views/dashboard/report/detailPage/components/financial/KursMataUangFinance.vue';
 import NetProfitMarginFinance from '@/views/dashboard/report/detailPage/components/financial/NetProfitMarginFinance.vue';
 import RevenueDetailFinance from '@/views/dashboard/report/detailPage/components/financial/RevenueDetailFinance.vue';
 // Operation
@@ -30,13 +31,13 @@ const route = useRoute();
 const router = useRouter();
 const routeName = ref('');
 const routeType = ref('');
-const listData = ref({});
+const listData = ref(null);
 const formData = ref({
     idPmg: 1,
     idMataUang: 1,
     idPackaging: 1,
-    tanggalAwal: moment('2023-01-01').format('YYYY-MM-DD'),
-    tanggalAkhir: moment('2025-01-31').format('YYYY-MM-DD')
+    tanggalAwal: moment('2024-01-01').format('YYYY-MM-DD'),
+    tanggalAkhir: moment('2024-01-31').format('YYYY-MM-DD')
     // tanggalAwal: moment().format('YYYY-MM-01'),
     // tanggalAkhir: moment().format('YYYY-MM-DD')
 });
@@ -80,7 +81,7 @@ const loadFinance = async (path) => {
     } else if (path.toLowerCase().includes('cpo-kpbn-financial')) {
         result = await financeDetailController.cpoKpbn(formData.value);
     } else if (path.toLowerCase().includes('kurs-mata-uang-financial')) {
-        result = await financeDetailController.kursMataUang(formData.value);
+        result = await financeDetailController.resultKursMataUang(formData.value);
     } else {
         result = await financeDetailController.resultGrossProfit(formData.value);
     }
@@ -117,6 +118,7 @@ const updateDates = async (dates) => {
             <harga-spot-inventory-bulky-finance v-else-if="routeName == 'harga-spot-inventory-bulky'" />
             <harga-spot-inventory-retail-finance v-else-if="routeName == 'harga-spot-inventory-retail'" />
             <cpo-kpbn-detail-finance v-else-if="routeName == 'cpo-kpbn'" :datas="listData" />
+            <kurs-mata-uang-finance v-else-if="routeName == 'kurs-mata-uang'" :datas="listData" />
         </div>
         <div class="min-h-[30rem] p-6 rounded-xl" v-else>
             <cpo-olah-vs-rkap-operation v-if="routeName == 'cpo-olah-vs-rkap'" />

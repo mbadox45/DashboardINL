@@ -30,13 +30,7 @@ export default new (class financeDetailController {
     resultKursMataUang = async (form) => {
         const response = await this.kursMataUang(form);
 
-        let result = {
-            name: null,
-            total: null,
-            type: null,
-            chartOptions: null,
-            series: []
-        };
+        const chart = [];
 
         if (response.length > 0) {
             // CFF
@@ -55,7 +49,7 @@ export default new (class financeDetailController {
             }
             // const typeChart = 'line'
 
-            result = {
+            chart.push({
                 name: label,
                 total: total,
                 type: type,
@@ -66,9 +60,11 @@ export default new (class financeDetailController {
                         data: data
                     }
                 ]
-            };
+            });
         }
-        return result;
+        return {
+            chart: chart.length > 0 ? chart[0] : null
+        };
     };
     cpoKpbn = async (form) => {
         try {
