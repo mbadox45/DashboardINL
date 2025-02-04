@@ -272,12 +272,12 @@ const filteredList = computed(() => {
                         <Panel v-for="(item, index) in filteredList" :key="index" toggleable :collapsed="true" class="w-full">
                             <template #header>
                                 <div class="flex items-center gap-3">
-                                    <button @click="showDrawer(item)" class="p-3 border rounded-lg flex bg-gray-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
+                                    <button @click="showDrawer(item)" class="p-3 border rounded-lg flex bg-teal-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
                                         <i class="pi pi-pencil" style="font-size: 0.6vw"></i>
                                     </button>
                                     <div class="flex flex-col items-start">
                                         <span class="text-[0.9vw] font-bold italic">{{ item.name }}</span>
-                                        <small class="px-2 py-1 text-[0.6vw] flex items-center rounded-full bg-gray-200 shadow font-bold">{{ condFunction(item.condition_olah) }}</small>
+                                        <small class="px-2 py-1 text-[0.6vw] flex items-center rounded-full bg-amber-500 shadow font-bold">{{ condFunction(item.condition_olah) }}</small>
                                     </div>
                                 </div>
                             </template>

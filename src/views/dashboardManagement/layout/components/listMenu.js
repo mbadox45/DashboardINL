@@ -71,7 +71,7 @@ export const menuAllAccess = () => {
                     label: 'Laporan Material',
                     icon: 'pi pi-fw pi-list-check',
                     items: [
-                        { label: 'Jenis Material', to: '/master/jenis-material' },
+                        { label: 'Jenis Laporan', to: '/master/jenis-material' },
                         { label: 'Norma Material', to: '/operation/norma-material' },
                         { label: 'Laporan', to: '/operation/laporan-material' }
                     ]

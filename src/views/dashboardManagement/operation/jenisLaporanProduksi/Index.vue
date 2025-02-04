@@ -164,7 +164,7 @@ const filteredList = computed(() => {
                     <InputText type="text" v-model="formData.name" placeholder="Input Nama Laporan" size="small" />
                 </div>
                 <div class="flex flex-col gap-1">
-                    <label for="nama">Penggunaan Bahan Olah <small class="text-red-500 font-bold">*jika bahan olah > 1</small></label>
+                    <label for="nama">Kondisi Bahan Olah <small class="text-red-500 font-bold">*jika bahan olah > 1</small></label>
                     <Select v-model="formData.condition_olah" :options="listCondition" optionLabel="name" size="small" optionValue="id" placeholder="Pilih Kondisi" class="w-full" />
                 </div>
                 <div class="flex flex-col gap-3">
@@ -249,20 +249,20 @@ const filteredList = computed(() => {
                         <Panel v-for="(item, index) in filteredList" :key="index" toggleable :collapsed="true" class="w-full">
                             <template #header>
                                 <div class="flex items-center gap-3">
-                                    <button @click="showDrawer(item)" class="p-3 border rounded-lg flex bg-teal-500 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
+                                    <button @click="showDrawer(item)" class="p-3 border rounded-lg flex bg-teal-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
                                         <i class="pi pi-pencil" style="font-size: 0.6vw"></i>
                                     </button>
                                     <div class="flex flex-col items-start">
                                         <span class="text-[0.9vw] font-bold italic">{{ item.name }}</span>
-                                        <small class="px-2 py-1 text-[0.6vw] flex items-center rounded-full bg-teal-500 shadow font-bold">{{ condFunction(item.condition_olah) }}</small>
+                                        <small class="px-2 py-1 text-[0.6vw] flex items-center rounded-full bg-amber-500 shadow font-bold">{{ condFunction(item.condition_olah) }}</small>
                                     </div>
                                 </div>
                             </template>
                             <DataTable :value="item.item_produksi" showGridlines class="mt-4">
-                                <Column field="name" sortable style="width: 25%; font-size: 0.7vw">
+                                <Column field="name" sortable style="width: 25%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232);">
                                     <template #header>
-                                        <div class="flex w-full justify-start">
-                                            <span>Name</span>
+                                        <div class="flex w-full justify-start text-black">
+                                            <span>Nama Item</span>
                                         </div>
                                     </template>
                                     <template #body="{ data }">
@@ -271,10 +271,10 @@ const filteredList = computed(() => {
                                         </div>
                                     </template>
                                 </Column>
-                                <Column field="kategori" sortable style="width: 25%; font-size: 0.7vw">
+                                <Column field="kategori" sortable style="width: 25%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232);">
                                     <template #header>
-                                        <div class="flex w-full justify-start">
-                                            <span>Kategori</span>
+                                        <div class="flex w-full justify-start text-black">
+                                            <span>Kategori Item</span>
                                         </div>
                                     </template>
                                     <template #body="{ data }">

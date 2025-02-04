@@ -157,12 +157,12 @@ const postData = async (cond) => {
                         </div>
                         <div class="flex flex-col gap-1 w-full">
                             <label for="date" class="font-bold">PMG <small class="text-red-500 font-bold">*</small></label>
-                            <Select v-model="pmg" filter :options="listPmg" optionLabel="nama" optionValue="id" placeholder="Select a Description" class="w-full" />
+                            <Select v-model="pmg" filter :options="listPmg" optionLabel="nama" optionValue="id" placeholder="Pilih PMG" class="w-full" />
                         </div>
                     </div>
                     <div class="flex flex-col gap-1">
-                        <label for="date" class="font-bold">Jenis <small class="text-red-500 font-bold">*</small></label>
-                        <Select v-model="jenis" filter :options="listJenis" optionLabel="name" optionValue="id" placeholder="Select a Description" class="w-full" @change="loadForm" />
+                        <label for="date" class="font-bold">Jenis Laporan <small class="text-red-500 font-bold">*</small></label>
+                        <Select v-model="jenis" filter :options="listJenis" optionLabel="name" optionValue="id" placeholder="Pilih Jenis Laporan" class="w-full" @change="loadForm" />
                     </div>
                     <Divider align="left" type="solid"><b>Form Item</b></Divider>
                     <ScrollPanel style="width: 100%; height: 22rem">
