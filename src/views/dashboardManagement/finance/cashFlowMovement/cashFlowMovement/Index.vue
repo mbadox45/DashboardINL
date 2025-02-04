@@ -336,7 +336,7 @@ const submitData = async () => {
                         <Select v-model="selectedPmg" :options="pmg" optionLabel="nama" optionValue="id" placeholder="Select a Region" class="w-full" />
                     </div> -->
                     <div class="flex flex-col gap-1 w-full items-start">
-                        <label for="pmg" class="text-[0.8vw]">Select by Period</label>
+                        <label for="pmg" class="text-[0.8vw]">Pilih Periode</label>
                         <DatePicker v-model="dates" selectionMode="range" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :manualInput="false" placeholder="Select Date Range" class="w-full" />
                     </div>
                 </div>
@@ -356,7 +356,7 @@ const submitData = async () => {
                         <Chip :label="`${moment(beforeDate).format('DD MMM YYYY')} - ${moment(now).format('DD MMM YYYY')}`" icon="pi pi-calendar" style="font-size: 0.6vw" class="font-bold" />
                     </div>
                     <div class="w-full flex justify-end">
-                        <div class="text-md font-bold px-4 py-2 justify-center items-center bg-cyan-200 rounded-full">Cash Balance: {{ formatCurrency(latestCashBalance?.value || 0) }}</div>
+                        <div class="text-md font-bold px-4 py-2 justify-center items-center bg-amber-200 rounded-full">Cash Balance: {{ formatCurrency(latestCashBalance?.value || 0) }}</div>
                     </div>
                 </div>
             </template>
@@ -393,8 +393,11 @@ const submitData = async () => {
                                             </template>
                                             <template #body="{ data }">
                                                 <div class="flex w-full justify-center">
-                                                    <div class="flex items-center gap-2 px-3 py-1 rounded-full" :class="data.nilai.toLowerCase() == 'positive' ? 'bg-emerald-200' : 'bg-red-200'">
-                                                        <i class="pi" :class="data.nilai.toLowerCase() == 'positive' ? 'pi-plus' : 'pi-minus'" style="font-size: 0.7vw"></i>
+                                                    <div
+                                                        class="flex items-center gap-2 px-3 py-1 rounded-full"
+                                                        :class="data.nilai.toLowerCase() == 'positive' ? 'bg-emerald-200' : data.nilai.toLowerCase() === 'negative' ? 'bg-red-200' : 'bg-yellow-200'"
+                                                    >
+                                                        <i class="pi" :class="data.nilai.toLowerCase() === 'positive' ? 'pi-plus' : data.nilai.toLowerCase() === 'negative' ? 'pi-minus' : 'pi-equals'" style="font-size: 0.7vw"> </i>
                                                     </div>
                                                 </div>
                                             </template>
