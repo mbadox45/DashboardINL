@@ -2,6 +2,7 @@
 import { formatCurrency } from '@/controller/dummyController';
 import { jenisProduk } from '@/controller/getApiFromThisApp/dummy/variableDummy';
 import productMasterController from '@/controller/getApiFromThisApp/master/productMasterController';
+import { FilterMatchMode } from '@primevue/core/api';
 import moment from 'moment';
 import { onMounted, ref } from 'vue';
 
@@ -24,6 +25,13 @@ const formData = ref({
     konversi_pallet: null,
     konversi_pouch: null
 });
+
+const initFilters = () => {
+    search.value = {
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS }
+    };
+};
+initFilters();
 
 onMounted(() => {
     loadData();
@@ -242,7 +250,7 @@ const submitData = async () => {
                 <div class="flex gap-2 items-center mb-5">
                     <span class="text-xl font-bold w-full">List Component</span>
                     <InputGroup>
-                        <InputText placeholder="Search Components" v-model="search" />
+                        <InputText placeholder="Search Components" v-model="search['global'].value" />
                         <InputGroupAddon>
                             <i class="pi pi-search" />
                         </InputGroupAddon>
@@ -250,7 +258,7 @@ const submitData = async () => {
                 </div>
             </template>
             <template #content>
-                <DataTable :value="listTable" showGridlines paginator :rows="10" dataKey="period">
+                <DataTable v-model:filters="search" :value="listTable" showGridlines paginator :rows="10" dataKey="period" :globalFilterFields="['name', 'jenis']">
                     <Column field="name" sortable style="width: 25%; font-size: 0.7vw">
                         <template #header>
                             <div class="flex w-full justify-center">

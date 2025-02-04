@@ -1,18 +1,21 @@
 <script setup>
 import { formatCurrency } from '@/controller/dummyController';
 import saldoPeScmController from '@/controller/getApiFromThisApp/supplyChain/saldoPeScmController';
-import { FilterMatchMode } from '@primevue/core/api';
 import moment from 'moment';
 import { onMounted, ref } from 'vue';
 
 const listTable = ref([]);
-const search = ref({ global: { value: null, matchMode: FilterMatchMode.CONTAINS } });
+const listAllTable = ref([]);
+const search = ref(null);
 const drawerCond = ref(false);
 const messages = ref([]);
 const statusForm = ref('add');
 const timeResponse = ref(3000);
 const loadingSave = ref(false);
 const logFile = ref([]);
+
+const beforeDate = ref(moment().subtract(30, 'days').format('YYYY-MM-DD')); // 30 hari ke belakang
+const now = ref(moment().format('YYYY-MM-DD')); // Tanggal hari ini
 
 let count = ref(0);
 
@@ -31,9 +34,41 @@ const loadData = async () => {
     try {
         const data = await saldoPeScmController.getAll();
         listTable.value = data;
+        listAllTable.value = data;
     } catch (error) {
         listTable.value = [];
+        listAllTable.value = [];
     }
+};
+
+const changeDate = (cond) => {
+    if (cond == 'search') {
+        const list = search.value; // Nilai pencarian (array tanggal)
+        let start, end;
+
+        if (list && list.length > 1) {
+            start = moment(list[0], 'YYYY-MM-DD').format('YYYY-MM-DD');
+            end = moment(list[1], 'YYYY-MM-DD').format('YYYY-MM-DD');
+        } else {
+            start = beforeDate.value;
+            end = now.value;
+        }
+
+        // Filter data berdasarkan rentang tanggal
+        listTable.value = list ? listAllTable.value.filter((item) => item.tanggal >= start && item.tanggal <= end) : listAllTable.value;
+    } else {
+        listTable.value = listAllTable.value;
+        search.value = null;
+    }
+};
+
+const convertDate = (dateString) => {
+    const date = moment(dateString).toDate();
+    return date;
+};
+
+const filterData = () => {
+    const list = listAllTable.value;
 };
 
 const showDrawer = async (data) => {
@@ -212,9 +247,12 @@ const submitData = async () => {
                 <div class="flex gap-2 items-center mb-5">
                     <span class="text-xl font-bold w-full">List Saldo</span>
                     <InputGroup>
-                        <DatePicker v-model="search['global'].value" dateFormat="yy-mm-dd" placeholder="Search by Date" clear />
-                        <InputGroupAddon>
+                        <DatePicker v-model="search" selectionMode="range" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :manualInput="false" placeholder="Select Date Range" class="w-full" />
+                        <InputGroupAddon class="cursor-pointer" @click="changeDate('search')">
                             <i class="pi pi-search" />
+                        </InputGroupAddon>
+                        <InputGroupAddon class="cursor-pointer" @click="changeDate('refresh')">
+                            <i class="pi pi-refresh" />
                         </InputGroupAddon>
                     </InputGroup>
                 </div>
