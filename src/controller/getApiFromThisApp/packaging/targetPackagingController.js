@@ -91,7 +91,7 @@ export default new (class targetPackagingController {
             let kondisi;
             if (form.length > 0) {
                 for (let i = 0; i < list.length; i++) {
-                    if (list[i].item_packaging_id != null && list[i].packaging_id != null && list[i].tanggal != null && list[i].qty != null) {
+                    if (list[i].uraian_id != null && list[i].packaging_id != null && list[i].tanggal != null && list[i].value != null && list[i].jenis_id != null) {
                         if (i < list.length - 1) {
                             continue;
                         }

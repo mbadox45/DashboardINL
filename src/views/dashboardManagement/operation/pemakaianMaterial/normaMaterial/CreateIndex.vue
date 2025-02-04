@@ -1,10 +1,12 @@
 <script setup>
-import { URL_WEB } from '@/api/http/dataVariable';
 import jenisLaporanMaterialController from '@/controller/getApiFromThisApp/laporanMaterial/jenisLaporanMaterialController';
 import normaLaporanMaterialController from '@/controller/getApiFromThisApp/laporanMaterial/normaLaporanMaterialController';
 import pmgMasterController from '@/controller/getApiFromThisApp/master/pmgMasterController';
 import moment from 'moment';
 import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const messages = ref([]);
 const tanggal = ref(moment().format('YYYY-MM-DD'));
@@ -83,7 +85,8 @@ const resetForm = () => {
 
 const postData = async (cond) => {
     if (cond == 'back') {
-        window.location.replace(`${URL_WEB}operation/norma-material`);
+        router.push('/operation/norma-material/');
+        // window.location.replace(`${URL_WEB}operation/norma-material`);
     } else {
         loadings.value = true;
         const response = await normaLaporanMaterialController.postData(formData.value);
@@ -91,7 +94,8 @@ const postData = async (cond) => {
         if (response.severity == 'success') {
             setTimeout(function () {
                 loadings.value = false;
-                window.location.replace(`${URL_WEB}operation/norma-material`);
+                router.push('/operation/norma-material/');
+                // window.location.replace(`${URL_WEB}operation/norma-material`);
             }, setTime.value);
         } else {
             loadings.value = false;

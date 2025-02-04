@@ -1,11 +1,13 @@
 <script setup>
-import { URL_WEB } from '@/api/http/dataVariable';
 import { formatCurrency } from '@/controller/dummyController';
 import jenisLaporanMaterialController from '@/controller/getApiFromThisApp/laporanMaterial/jenisLaporanMaterialController';
 import normaLaporanMaterialController from '@/controller/getApiFromThisApp/laporanMaterial/normaLaporanMaterialController';
 import pmgMasterController from '@/controller/getApiFromThisApp/master/pmgMasterController';
 import moment from 'moment';
 import { computed, onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const drawerCond = ref(false);
 const messages = ref([]);
@@ -178,7 +180,8 @@ const showDrawer = async (data) => {
             formData.value.qty = Number(data.qty);
             statusForm.value = 'edit';
         } else {
-            window.location.replace(`${URL_WEB}operation/norma-material/create`);
+            router.push('/operation/norma-material/create');
+            // window.location.replace(`${URL_WEB}operation/norma-material/create`);
             logFile.value = [];
             formData.value.id = null;
             formData.value.item_material_id = null;
@@ -188,6 +191,7 @@ const showDrawer = async (data) => {
             statusForm.value = 'add';
         }
     } catch (error) {
+        router.push('/operation/norma-material/create');
         messages.value = [];
         drawerCond.value = true;
         logFile.value = [];

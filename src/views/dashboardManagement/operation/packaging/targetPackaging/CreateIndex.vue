@@ -68,7 +68,7 @@ const loadForm = () => {
             item_produksi: listProd[i].name,
             packaging_id: pmg.value,
             tanggal: tanggal.value,
-            qty: null
+            value: null
         });
     }
     formData.value = list;
@@ -83,7 +83,7 @@ const resetForm = () => {
 
 const postData = async (cond) => {
     if (cond == 'back') {
-        router.push('/operation/packaging/laporan-packaging');
+        router.push('/operation/packaging/target');
         // window.location.replace(`${URL_WEB}operation/laporan-produksi`);
     } else {
         loadings.value = true;
@@ -93,7 +93,7 @@ const postData = async (cond) => {
             setTimeout(function () {
                 loadings.value = false;
                 // window.location.replace(`${URL_WEB}operation/laporan-produksi`);
-                router.push('/operation/packaging/laporan-packaging');
+                router.push('/operation/packaging/target');
             }, setTime.value);
         } else {
             loadings.value = false;
@@ -168,7 +168,7 @@ const postData = async (cond) => {
                         <div class="grid grid-cols-2 gap-3">
                             <div class="flex flex-col gap-1" v-for="(item, index) in formData" :key="index">
                                 <label for="date" class="font-bold">{{ item.item_produksi }} <small class="text-red-500 font-bold">*</small></label>
-                                <InputNumber v-model="item.qty" inputId="minmaxfraction" placeholder="1,000" :minFractionDigits="0" :maxFractionDigits="2" fluid />
+                                <InputNumber v-model="item.value" inputId="minmaxfraction" placeholder="1,000" :minFractionDigits="0" :maxFractionDigits="2" fluid />
                             </div>
                         </div>
                     </ScrollPanel>

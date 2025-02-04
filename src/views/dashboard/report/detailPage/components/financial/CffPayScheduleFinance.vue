@@ -109,39 +109,13 @@ watch(() => props.datas, loadData, { immediate: true });
                         <div class="border rounded-lg p-3 flex flex-col gap-2" v-for="(item, index) in listTable2.dataTable" :key="index">
                             <span>{{ item.name }}</span>
                             <div class="flex w-full">
-                                <div class="flex w-full justify-center items-center" v-for="(data, items) in item.data" :key="items">
-                                    {{ data.periode }}
+                                <div class="flex flex-col w-full justify-center items-center" v-for="(data, items) in item.data" :key="items">
+                                    <div class="border text-center p-2 w-full" :style="`background-color: ${listTable2.color};`">{{ data.periode }}</div>
+                                    <div class="border text-center p-2 w-full">{{ data.value }}</div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- <DataTable :value="listTable1.data" showGridlines removableSort tableStyle="background-color:#00000;">
-                        <Column field="periode" sortable :headerStyle="`background-color: ${listTable1.color};`" style="background-color: black; color: white">
-                            <template #header>
-                                <span class="flex justify-center items-center w-full text-center">Periode</span>
-                            </template>
-                        </Column>
-                        <Column field="value" sortable :headerStyle="`background-color: ${listTable1.color};`" style="background-color: black; color: white">
-                            <template #header>
-                                <span class="flex justify-center items-center w-full text-center">Pembayaran</span>
-                            </template>
-                            <template #body="{ data }">
-                                <div class="w-full flex justify-center items-center">
-                                    <span>{{ data.value }}</span>
-                                </div>
-                            </template>
-                        </Column>
-                        <Column field="pay_status" sortable :headerStyle="`background-color: ${listTable1.color};`" style="background-color: black; color: white">
-                            <template #header>
-                                <span class="flex justify-center items-center w-full text-center">Status</span>
-                            </template>
-                            <template #body="{ data }">
-                                <div class="w-full flex justify-center items-center">
-                                    <span>{{ data.pay_status }}</span>
-                                </div>
-                            </template>
-                        </Column>
-                    </DataTable> -->
                 </div>
             </div>
         </div>

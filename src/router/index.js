@@ -409,6 +409,20 @@ const router = createRouter({
                     }
                 },
                 {
+                    path: '/operation/packaging/target/create',
+                    name: 'packaging-target-create',
+                    component: () => import('@/views/dashboardManagement/operation/packaging/targetPackaging/CreateIndex.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        // finance: true,
+                        operation: true
+                        // sales: true,
+                        // scm: true,
+                        // sdm: true
+                    }
+                },
+                {
                     path: '/operation/packaging/laporan-packaging',
                     name: 'packaging-laporan-packaging',
                     component: () => import('@/views/dashboardManagement/operation/packaging/laporanPackaging/Index.vue'),

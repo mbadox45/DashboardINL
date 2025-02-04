@@ -192,8 +192,9 @@ const showDrawer = async (data) => {
             formData.value.value = Number(data.value);
             statusForm.value = 'edit';
         } else {
-            router.push('/operation/packaging/laporan-packaging/create');
+            // router.push('/operation/packaging/target/create');
             logFile.value = [];
+            drawerCond.value = true;
             formData.value.id = null;
             formData.value.uraian_id = null;
             formData.value.jenis_id = null;
@@ -203,7 +204,7 @@ const showDrawer = async (data) => {
             statusForm.value = 'add';
         }
     } catch (error) {
-        router.push('/operation/packaging/laporan-packaging/create');
+        // router.push('/operation/packaging/target/create');
         messages.value = [];
         drawerCond.value = true;
         logFile.value = [];
@@ -286,12 +287,12 @@ const submitData = async () => {
                     <Message v-for="msg of messages" :key="msg.id" :severity="msg.severity" class="mt-4"><i :class="`pi ${msg.icon}`"></i> {{ msg.content }}</Message>
                 </transition-group>
                 <div class="flex flex-col gap-1">
-                    <label for="date">Jenis Packaging <small class="text-red-500 font-bold">*</small></label>
-                    <Select v-model="formData.jenis_id" filter :options="listJenis" optionLabel="name" optionValue="id" placeholder="Select a Description" class="w-full" />
-                </div>
-                <div class="flex flex-col gap-1">
                     <label for="date">Lokasi Packaging <small class="text-red-500 font-bold">*</small></label>
                     <Select v-model="formData.packaging_id" :options="pmg" optionLabel="nama" optionValue="id" placeholder="Select a Region" class="w-full" />
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label for="date">Jenis Packaging <small class="text-red-500 font-bold">*</small></label>
+                    <Select v-model="formData.jenis_id" filter :options="listJenis" optionLabel="name" optionValue="id" placeholder="Select a Description" class="w-full" />
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="date">Uraian <small class="text-red-500 font-bold">*</small></label>

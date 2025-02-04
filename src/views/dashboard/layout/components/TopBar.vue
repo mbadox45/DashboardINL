@@ -20,6 +20,11 @@ const listMatauang = ref([]);
 const listPackaging = ref([]);
 const routeName = ref(route.name);
 
+let today = new Date();
+let month = today.getMonth();
+let year = today.getFullYear();
+let day = today.getDate();
+const maxDate = ref(new Date());
 const beforeDate = ref(moment().format('YYYY-MM-01'));
 const now = ref(moment().format('YYYY-MM-DD'));
 // const beforeDate = ref('2023-01-01');
@@ -32,6 +37,9 @@ const { onDateChange } = defineProps({
 });
 
 onMounted(() => {
+    maxDate.value.setDate(day);
+    maxDate.value.setMonth(month);
+    maxDate.value.setFullYear(year);
     loadPmg();
     loadCurrency();
     loadPackaging();
@@ -60,7 +68,6 @@ const loadPackaging = async () => {
 };
 
 const test = () => {
-    // showMenu.value = !showMenu.value;
     visibleTop.value = true;
 };
 
@@ -160,7 +167,7 @@ const goBack = () => {
                     </div>
                     <div class="flex flex-col gap-1">
                         <label for="PMG" class="text-[0.6vw]">Select by PMG</label>
-                        <DatePicker v-model="dates" selectionMode="range" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :manualInput="false" placeholder="Select Date Range" class="w-full" style="background-color: black" />
+                        <DatePicker v-model="dates" selectionMode="range" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :manualInput="false" :maxDate="maxDate" placeholder="Select Date Range" class="w-full" style="background-color: black" />
                     </div>
                     <button class="w-full p-3 rounded-lg bg-white shadow-none hover:bg-gray-300 hover:shadow transition-all duration-700 text-black flex gap-3 items-center justify-center" @click="changeDate">
                         <i class="pi pi-search" style="font-size: 12px"></i>

@@ -53,6 +53,9 @@ initFilters();
 
 onMounted(() => {
     loadData();
+    loadUraian();
+    loadProduk();
+    loadLokasi();
 });
 
 const loadData = async () => {
@@ -65,27 +68,30 @@ const loadData = async () => {
         allData.value = data;
         const ritel = data.ritel;
         const bulk = data.bulk;
-
-        const produk = await productMasterController.getAll();
-        if (optionButton.value == 1) {
-            listTable.value = ritel.products;
-            listProduct.value = produk.filter((item) => item.jenis == 'ritel');
-        } else {
-            listProduct.value = produk.filter((item) => item.jenis == 'bulk');
-            listTable.value = bulk.products;
-        }
-
-        await loadUraian();
-
-        const lokasi = await lokasiMasterController.getAll();
-        listLokasi.value = lokasi;
     } catch (error) {
         listTable.value = [];
     }
 };
 
+const loadProduk = async () => {
+    const produk = await productMasterController.getAll();
+    if (optionButton.value == 1) {
+        listTable.value = ritel.products;
+        listProduct.value = produk.filter((item) => item.jenis == 'ritel');
+    } else {
+        listProduct.value = produk.filter((item) => item.jenis == 'bulk');
+        listTable.value = bulk.products;
+    }
+};
+
+const loadLokasi = async () => {
+    const lokasi = await lokasiMasterController.getAll();
+    listLokasi.value = lokasi;
+};
+
 const loadUraian = async () => {
     const response = await uraianPenjualanController.getAll();
+    console.log(response);
     listUraian.value = response;
 };
 
