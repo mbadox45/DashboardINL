@@ -72,9 +72,23 @@ const router = createRouter({
                     }
                 },
                 {
-                    path: '/finance/harga',
-                    name: 'harga',
-                    component: () => import('@/views/dashboardManagement/finance/harga/Index.vue'),
+                    path: '/finance/harga/spot',
+                    name: 'harga-spot',
+                    component: () => import('@/views/dashboardManagement/finance/harga/spot/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        // finance: true
+                        // operation: true
+                        sales: true
+                        // scm: true,
+                        // sdm: true
+                    }
+                },
+                {
+                    path: '/finance/harga/inventory',
+                    name: 'harga-inventory',
+                    component: () => import('@/views/dashboardManagement/finance/harga/inventory/Index.vue'),
                     meta: {
                         requiresAuth: true,
                         allUser: true,

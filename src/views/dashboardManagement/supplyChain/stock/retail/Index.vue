@@ -415,9 +415,11 @@ const submitData = async () => {
                     </Panel>
                     <Panel v-for="(item, index) in listTable" :key="index">
                         <template #header>
-                            <span>{{ item.warehouseName }}</span>
-                            <span> Kapasitas Terpakai : {{ formatCurrency(Number(item.warehouseUtilisasiPercent).toFixed(2)) }} %</span>
-                            <span> Sisa Space (Pallet) : {{ item.warehouseSpace }}</span>
+                            <div class="flex items-center justify-between gap-4 w-full">
+                                <span class="font-bold">{{ item.warehouseName }}</span>
+                                <span class="text-[0.6vw] px-3 py-1 rounded-full bg-pink-600 text-white font-bold"> Kapasitas Terpakai : {{ formatCurrency(Number(item.warehouseUtilisasiPercent).toFixed(2)) }} %</span>
+                                <span class="text-[0.6vw] px-3 py-1 rounded-full bg-amber-600 text-white font-bold"> Sisa Space (Pallet) : {{ item.warehouseSpace }}</span>
+                            </div>
                         </template>
                         <DataTable :value="item.detail" showGridlines>
                             <ColumnGroup type="footer">
@@ -442,7 +444,7 @@ const submitData = async () => {
                                 </template>
                                 <template #body="{ data }">
                                     <div class="flex w-full items-center gap-2 justify-start">
-                                        <button @click="showDrawer(data)" class="p-3 border rounded-full flex bg-teal-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
+                                        <button @click="showDrawer(data)" class="p-3 border rounded-full flex text-black bg-teal-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
                                             <i class="pi pi-pencil" style="font-size: 0.6vw"></i>
                                         </button>
                                         <span>{{ data.product.name }}</span>

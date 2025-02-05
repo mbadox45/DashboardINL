@@ -13,6 +13,7 @@ const statusForm = ref('add');
 const timeResponse = ref(3000);
 const loadingSave = ref(false);
 const logFile = ref([]);
+const dataLatest = ref({ saldo_awal: null, saldo_pakai: null, saldo_tersedia: null, tanggal: moment().format('DD MMMM YYYY') });
 
 const beforeDate = ref(moment().subtract(30, 'days').format('YYYY-MM-DD')); // 30 hari ke belakang
 const now = ref(moment().format('YYYY-MM-DD')); // Tanggal hari ini
@@ -33,11 +34,24 @@ onMounted(() => {
 const loadData = async () => {
     try {
         const data = await saldoPeScmController.getAll();
+
         listTable.value = data;
         listAllTable.value = data;
+        const sortedData = data.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
+        const lastDate = sortedData[0];
+        console.log(lastDate);
+        if (lastDate != null) {
+            dataLatest.value = {
+                saldo_awal: formatCurrency(Number(lastDate.saldo_awal).toFixed(2)),
+                saldo_pakai: formatCurrency(Number(lastDate.saldo_pakai).toFixed(2)),
+                saldo_tersedia: formatCurrency(Number(lastDate.saldo_tersedia).toFixed(2)),
+                tanggal: moment(lastDate.tanggal).format('DD MMMM YYYY')
+            };
+        }
     } catch (error) {
         listTable.value = [];
         listAllTable.value = [];
+        dataLatest.value = { saldo_awal: null, saldo_pakai: null, saldo_tersedia: null, tanggal: moment().format('DD MMMM YYYY') };
     }
 };
 
@@ -244,17 +258,39 @@ const submitData = async () => {
         </Drawer>
         <Card>
             <template #title>
-                <div class="flex gap-2 items-center mb-5">
-                    <span class="text-xl font-bold w-full">List Saldo</span>
-                    <InputGroup>
-                        <DatePicker v-model="search" selectionMode="range" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :manualInput="false" placeholder="Select Date Range" class="w-full" />
-                        <InputGroupAddon class="cursor-pointer" @click="changeDate('search')">
-                            <i class="pi pi-search" />
-                        </InputGroupAddon>
-                        <InputGroupAddon class="cursor-pointer" @click="changeDate('refresh')">
-                            <i class="pi pi-refresh" />
-                        </InputGroupAddon>
-                    </InputGroup>
+                <div class="flex flex-col gap-1 w-full">
+                    <div class="flex gap-2 items-center mb-5">
+                        <span class="text-xl font-bold w-full">List Saldo</span>
+                        <InputGroup>
+                            <DatePicker v-model="search" selectionMode="range" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :manualInput="false" placeholder="Select Date Range" class="w-full" />
+                            <InputGroupAddon class="cursor-pointer" @click="changeDate('search')">
+                                <i class="pi pi-search" />
+                            </InputGroupAddon>
+                            <InputGroupAddon class="cursor-pointer" @click="changeDate('refresh')">
+                                <i class="pi pi-refresh" />
+                            </InputGroupAddon>
+                        </InputGroup>
+                    </div>
+                    <div class="flex justify-end w-full">
+                        <div class="flex w-2/3 gap-5 p-3 rounded-md bg-gray-50 items-center">
+                            <div class="flex flex-col w-full text-right text-pink-700">
+                                <small class="w-full text-xs">Update Saldo Terakhir</small>
+                                <span class="font-bold">{{ dataLatest.tanggal }}</span>
+                            </div>
+                            <div class="flex flex-col w-full text-right text-black">
+                                <span class="font-bold text-md text-cyan-600">{{ dataLatest.saldo_awal }}</span>
+                                <small class="text-xs text-cyan-500">Saldo Awal</small>
+                            </div>
+                            <div class="flex flex-col w-full text-right text-black">
+                                <span class="font-bold text-md text-cyan-600">{{ dataLatest.saldo_pakai }}</span>
+                                <small class="text-xs text-cyan-500">Saldo Terpakai</small>
+                            </div>
+                            <div class="flex flex-col w-full text-right text-black">
+                                <span class="font-bold text-md text-cyan-600">{{ dataLatest.saldo_tersedia }}</span>
+                                <small class="text-xs text-cyan-500">Saldo Tersedia</small>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </template>
             <template #content>

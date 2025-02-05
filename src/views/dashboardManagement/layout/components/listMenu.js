@@ -19,7 +19,11 @@ export const menuAllAccess = () => {
                     ]
                 },
                 { label: 'CPO KPBN', icon: 'pi pi-chart-bar', to: '/finance/cpo-kpbn' },
-                { label: 'Harga Spot & Inv.', icon: 'pi pi-tags', to: '/finance/harga' },
+                {
+                    label: 'Harga Inventory',
+                    icon: 'pi pi-tags',
+                    to: '/finance/harga/inventory'
+                },
                 {
                     label: 'Cash Flow Movement',
                     icon: 'pi pi-dollar',
@@ -97,6 +101,11 @@ export const menuAllAccess = () => {
         {
             label: 'Sales',
             items: [
+                {
+                    label: 'Harga Spot',
+                    icon: 'pi pi-tags',
+                    to: '/finance/harga/spot'
+                },
                 {
                     label: 'Target Penjualan',
                     icon: 'pi pi-fw pi-bullseye',
