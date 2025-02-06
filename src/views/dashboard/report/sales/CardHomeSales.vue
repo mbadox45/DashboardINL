@@ -19,7 +19,7 @@ const props = defineProps({
 <template>
     <div class="grid grid-cols-1 gap-2">
         <qty-penjualan-bulk-sales :datas="databulk" />
-        <qty-penjualan-ritel-sales :datas="databulk" />
+        <qty-penjualan-ritel-sales :datas="dataritel" />
         <!-- <net-profit-margin-finance :datas="datarevenue" /> -->
     </div>
 </template>

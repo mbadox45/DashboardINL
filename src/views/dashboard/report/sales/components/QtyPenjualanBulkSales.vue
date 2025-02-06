@@ -1,41 +1,4 @@
-<script setup>
-import CryptoJS from 'crypto-js';
-import { defineProps, onMounted, onUnmounted, ref, watch } from 'vue';
-import VueApexCharts from 'vue3-apexcharts';
-// import { pieChartApex } from '@/controller/chartStyle/radialBarDummy';
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
-
-const props = defineProps({
-    datas: {
-        type: Object,
-        default: () => ({})
-    }
-});
-
-const load = ref({ name: '', icon: '', nilai: 0, persen: 0, versus: '', link: null, colspan: null, dataChart: null, optionsChart: null });
-const currentIndex = ref(0);
-const animationClass = ref('fade-in');
-
-const loadData = async () => {
-    const data = props.datas;
-    load.value = {
-        name: data.name,
-        icon: data.icon,
-        nilai: data.value,
-        persen: null,
-        versus: data.versus || [],
-        link: data.link,
-        colspan: data.colspan,
-        dataChart: data.dataChart,
-        optionsChart: data.optionsChart
-    };
-};
-
-watch(() => props.datas, loadData, { immediate: true });
-
-let intervalId;
+<!-- let intervalId;
 
 // Start the auto-cycling timer
 const startIndexCycle = () => {
@@ -76,11 +39,52 @@ const prevIndex = () => {
             startIndexCycle(); // Restart the timer
         }, 500);
     }
+}; -->
+
+<!-- <div v-if="load.versus.length > 1" class="flex justify-between pt-1">
+                <button @click="prevIndex" class="p-1 bg-gray-700 text-white text-sm rounded hover:bg-gray-600 transition flex items-center text-[0.6vw]"><i class="pi pi-chevron-left mr-1" style="font-size: 0.6vw"></i> Prev</button>
+                <button @click="nextIndex" class="p-1 bg-gray-700 text-white text-sm rounded hover:bg-gray-600 transition flex items-center text-[0.6vw]">Next <i class="pi pi-chevron-right ml-1" style="font-size: 0.6vw"></i></button>
+            </div> -->
+<!-- // const currentIndex = ref(0); -->
+<!-- // const animationClass = ref('fade-in'); -->
+<script setup>
+import CryptoJS from 'crypto-js';
+import { defineProps, onMounted, onUnmounted, ref, watch } from 'vue';
+import VueApexCharts from 'vue3-apexcharts';
+// import { pieChartApex } from '@/controller/chartStyle/radialBarDummy';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+const props = defineProps({
+    datas: {
+        type: Object,
+        default: () => ({})
+    }
+});
+
+const load = ref({ name: '', icon: '', nilai: 0, persen: 0, versus: '', link: null, colspan: null, dataChart: null, optionsChart: null });
+
+const loadData = async () => {
+    const data = props.datas;
+    load.value = {
+        name: data.name,
+        icon: data.icon,
+        nilai: data.value,
+        persen: null,
+        versus: data.versus || [],
+        link: data.link,
+        colspan: data.colspan,
+        dataChart: data.dataChart,
+        optionsChart: data.optionsChart
+    };
 };
+
+watch(() => props.datas, loadData, { immediate: true });
 
 onMounted(() => {
     loadData();
-    startIndexCycle();
+    // startIndexCycle();
 });
 
 onUnmounted(() => {
@@ -117,10 +121,6 @@ const routerLink = (path) => {
                     <!-- <div :class="animationClass" class="h-full w-full" v-html="load.versus[currentIndex]"></div> -->
                 </div>
                 <VueApexCharts v-show="load.dataChart != null" :series="load.dataChart" :options="load.optionsChart" class="w-full" height="150vw" style="z-index: 1 !important" />
-            </div>
-            <div v-if="load.versus.length > 1" class="flex justify-between pt-1">
-                <button @click="prevIndex" class="p-1 bg-gray-700 text-white text-sm rounded hover:bg-gray-600 transition flex items-center text-[0.6vw]"><i class="pi pi-chevron-left mr-1" style="font-size: 0.6vw"></i> Prev</button>
-                <button @click="nextIndex" class="p-1 bg-gray-700 text-white text-sm rounded hover:bg-gray-600 transition flex items-center text-[0.6vw]">Next <i class="pi pi-chevron-right ml-1" style="font-size: 0.6vw"></i></button>
             </div>
         </div>
     </div>
