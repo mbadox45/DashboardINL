@@ -1,185 +1,74 @@
-import hargaFinanceController from '@/controller/getApiFromThisApp/harga/hargaFinanceController';
-import hargaSpotSalesController from '@/controller/getApiFromThisApp/harga/hargaSpotSalesController';
-import productMasterController from '@/controller/getApiFromThisApp/master/productMasterController';
+import { pieChartApex } from '@/controller/chartStyle/radialBarDummy';
+import bebanProdCpoOlahController from '@/controller/getApiFromThisApp/cpoOlah/bebanProdCpoOlahController';
+import targetProdCpoOlahController from '@/controller/getApiFromThisApp/cpoOlah/targetProdCpoOlahController';
 
 export default new (class hargaDetailController {
-    hargaSpotInventoryRetail = async (form) => {
+    cpoOlahVsRkap = async (form) => {
         try {
-            const hargaInventory = await hargaFinanceController.getByPeriod(form);
-            const hargaSpot = await hargaSpotSalesController.getByPeriod(form);
-            const listInv = [];
-            const listSpot = [];
-            const listAll = [];
-            const produk = await productMasterController.getAll();
-            const produkJenis = produk.filter((item) => item.jenis == 'ritel');
-            if (hargaInventory != null) {
-                const latestHargaRitel = hargaInventory.latestHargaRitel;
-                for (let i = 0; i < produkJenis.length; i++) {
-                    const ritel = latestHargaRitel.find((item) => item.id_product == produkJenis[i].id);
-                    // console.log(ritel);
-                    if (ritel != null) {
-                        listInv.push({
-                            id_product: produkJenis[i].id,
-                            produk: produkJenis[i].name,
-                            invRp: Number(ritel.inventory).toFixed(2),
-                            invUsd: Number(ritel.hargaAsingInventory).toFixed(2),
-                            invBoxRp: Number(ritel.hargaBoxInventory).toFixed(2),
-                            invBoxUsd: Number(ritel.hargaAsingBoxInventory).toFixed(2)
-                        });
-                    } else {
-                        listInv.push({
-                            id_product: produkJenis[i].id,
-                            produk: produkJenis[i].name,
-                            invRp: 0,
-                            invUsd: 0,
-                            invBoxRp: 0,
-                            invBoxUsd: 0
-                        });
-                    }
-                }
-            }
-            if (hargaSpot != null) {
-                const latestHargaRitel = hargaSpot.latestHargaRitel;
-                for (let i = 0; i < produkJenis.length; i++) {
-                    const ritel = latestHargaRitel.find((item) => item.id_product == produkJenis[i].id);
-                    if (ritel != null) {
-                        listSpot.push({
-                            id_product: produkJenis[i].id,
-                            produk: produkJenis[i].name,
-                            spotRp: Number(ritel.spot).toFixed(2),
-                            spotUsd: Number(ritel.hargaAsingSpot).toFixed(2),
-                            spotBoxRp: Number(ritel.hargaBoxSpot).toFixed(2),
-                            spotBoxUsd: Number(ritel.hargaAsingBoxSpot).toFixed(2)
-                        });
-                    } else {
-                        listSpot.push({
-                            id_product: produkJenis[i].id,
-                            produk: produkJenis[i].name,
-                            spotRp: 0,
-                            spotUsd: 0,
-                            spotBoxRp: 0,
-                            spotBoxUsd: 0
-                        });
-                    }
-                }
-            }
-            for (let i = 0; i < produkJenis.length; i++) {
-                const spot = listSpot.find((item) => item.id_product == produkJenis[i].id);
-                const inventory = listInv.find((item) => item.id_product == produkJenis[i].id);
-                listAll.push({
-                    id_product: produkJenis[i].id,
-                    produk: produkJenis[i].name,
-                    invRp: inventory == null ? 0 : inventory.invRp,
-                    invUsd: inventory == null ? 0 : inventory.invUsd,
-                    invBoxRp: inventory == null ? 0 : inventory.invBoxRp,
-                    invBoxUsd: inventory == null ? 0 : inventory.invBoxUsd,
-                    spotRp: spot == null ? 0 : spot.spotRp,
-                    spotUsd: spot == null ? 0 : spot.spotUsd,
-                    spotBoxRp: spot == null ? 0 : spot.spotBoxRp,
-                    spotBoxUsd: spot == null ? 0 : spot.spotBoxUsd
-                });
-            }
-            return listAll;
-        } catch (error) {
-            const produk = await productMasterController.getAll();
-            const produkBulk = produk.filter((item) => item.jenis == 'bulk');
             const list = [];
-            for (let i = 0; i < produkBulk.length; i++) {
-                list.push({
-                    produk: produkBulk[i].name,
-                    spotRp: 0,
-                    spotUsd: 0,
-                    spotBoxRp: 0,
-                    spotBoxUsd: 0,
-                    invRp: 0,
-                    invUsd: 0,
-                    invBoxRp: 0,
-                    invBoxUsd: 0
-                });
-            }
-            return list;
-        }
-    };
-    hargaSpotInventoryBulk = async (form) => {
-        try {
-            const hargaInventory = await hargaFinanceController.getByPeriod(form);
-            const hargaSpot = await hargaSpotSalesController.getByPeriod(form);
-            const listInv = [];
-            const listSpot = [];
-            const listAll = [];
-            const produk = await productMasterController.getAll();
-            const produkJenis = produk.filter((item) => item.jenis == 'bulk');
-            if (hargaInventory != null) {
-                const latestHargaBulk = hargaInventory.latestHargaBulk;
-                for (let i = 0; i < produkJenis.length; i++) {
-                    const ritel = latestHargaBulk.find((item) => item.id_product == produkJenis[i].id);
-                    // console.log(ritel);
-                    if (ritel != null) {
-                        listInv.push({
-                            id_product: produkJenis[i].id,
-                            produk: produkJenis[i].name,
-                            invRp: Number(ritel.inventory).toFixed(2),
-                            invUsd: Number(ritel.hargaAsingInventory).toFixed(2)
-                        });
-                    } else {
-                        listInv.push({
-                            id_product: produkJenis[i].id,
-                            produk: produkJenis[i].name,
-                            invRp: 0,
-                            invUsd: 0
+            let total = { cpoOlah: 0, totalCost: 0, totalHargaSatuan: 0 };
+            const listChart = [];
+            const bebanProd = await bebanProdCpoOlahController.getByPeriod(form);
+            if (bebanProd != null) {
+                const detail = bebanProd.detail;
+                total.cpoOlah = bebanProd.cpoOlah;
+                total.totalCost = bebanProd.totalCost;
+                total.totalHargaSatuan = bebanProd.totalHargaSatuan;
+                if (detail.length > 0) {
+                    for (let i = 0; i < detail.length; i++) {
+                        list.push({
+                            uraian: detail[i].uraian,
+                            bebanProduksi: detail[i].totalValue,
+                            rpKg: detail[i].hargaSatuan,
+                            pmg: detail[i].pmg
                         });
                     }
                 }
             }
-            if (hargaSpot != null) {
-                const latestHargaBulk = hargaSpot.latestHargaBulk;
-                for (let i = 0; i < produkJenis.length; i++) {
-                    const ritel = latestHargaBulk.find((item) => item.id_product == produkJenis[i].id);
-                    if (ritel != null) {
-                        listSpot.push({
-                            id_product: produkJenis[i].id,
-                            produk: produkJenis[i].name,
-                            spotRp: Number(ritel.spot).toFixed(2),
-                            spotUsd: Number(ritel.hargaAsingSpot).toFixed(2)
-                        });
-                    } else {
-                        listSpot.push({
-                            id_product: produkJenis[i].id,
-                            produk: produkJenis[i].name,
-                            spotRp: 0,
-                            spotUsd: 0
-                        });
+            const targetProd = await targetProdCpoOlahController.getByPeriod(form);
+            if (targetProd != null) {
+                const summary = targetProd.summary;
+                const dataCPO = summary.find((item) => item.nama.toLowerCase().includes('cpo'));
+                const cpo = dataCPO.value == null ? 0 : Number(dataCPO.value);
+                const dataRKAP = summary.find((item) => item.nama.toLowerCase().includes('rkap'));
+                const rkap = dataRKAP.value == null ? 0 : Number(dataRKAP.value);
+                const persenRkap = dataRKAP.percentage == null ? 0 : Number(dataRKAP.percentage);
+                const dataUtility = summary.find((item) => item.nama.toLowerCase().includes('utility'));
+                const utility = dataUtility.value == null ? 0 : Number(dataUtility.value);
+                const persenUtility = dataUtility.percentage == null ? 0 : Number(dataUtility.percentage);
+
+                // Go to Chart
+                listChart.push(
+                    {
+                        qty: [cpo, rkap],
+                        label: ['CPO Olah', 'RKAP'],
+                        name: 'RKAP',
+                        persen: persenRkap,
+                        chartData: pieChartApex([cpo, rkap], ['CPO Olah', 'RKAP'])
+                    },
+                    {
+                        qty: [cpo, utility],
+                        label: ['CPO Olah', 'Kapasitas Utility'],
+                        name: 'Kapasitas Utility',
+                        persen: persenUtility,
+                        chartData: pieChartApex([cpo, utility], ['CPO Olah', 'Kapasitas Utility'])
                     }
-                }
+                );
             }
-            for (let i = 0; i < produkJenis.length; i++) {
-                const spot = listSpot.find((item) => item.id_product == produkJenis[i].id);
-                const inventory = listInv.find((item) => item.id_product == produkJenis[i].id);
-                listAll.push({
-                    id_product: produkJenis[i].id,
-                    produk: produkJenis[i].name,
-                    invRp: inventory == null ? 0 : inventory.invRp,
-                    invUsd: inventory == null ? 0 : inventory.invUsd,
-                    spotRp: spot == null ? 0 : spot.spotRp,
-                    spotUsd: spot == null ? 0 : spot.spotUsd
-                });
-            }
-            return listAll;
+            return {
+                dataTable: list,
+                total: total,
+                dataChart: listChart
+            };
         } catch (error) {
-            const produk = await productMasterController.getAll();
-            const produkBulk = produk.filter((item) => item.jenis == 'bulk');
             const list = [];
-            for (let i = 0; i < produkBulk.length; i++) {
-                list.push({
-                    produk: produkBulk[i].name,
-                    spotRp: 0,
-                    spotUsd: 0,
-                    invRp: 0,
-                    invUsd: 0,
-                    tanggal: ''
-                });
-            }
-            return list;
+            const total = { cpoOlah: 0, totalCost: 0, totalHargaSatuan: 0 };
+            const listChart = [];
+            return {
+                dataTable: list,
+                total: total,
+                dataChart: listChart
+            };
         }
     };
 })();

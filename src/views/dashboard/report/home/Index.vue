@@ -10,7 +10,6 @@ import supplyChainHomeController from '@/controller/home/controllerHomePage/supp
 // Components
 import HomeDash from '@/controller/home/homeDash';
 import ImagesHome from '@/views/dashboard/report/home/components/ImagesHome.vue';
-import CardSales from '@/views/dashboard/report/home/components/sales/CardSalesValues.vue';
 import CardScmValues from '@/views/dashboard/report/home/components/scm/CardSCMValues.vue';
 
 import CardHomeFinance from '@/views/dashboard/report/finance/CardHomeFinance.vue';
@@ -18,6 +17,7 @@ import HargaSpotFinance from '@/views/dashboard/report/harga/HargaSpotFinance.vu
 import CardHomeMaterial from '@/views/dashboard/report/operation/CardHomeMaterial.vue';
 import CardHomeOperation from '@/views/dashboard/report/operation/CardHomeOperation.vue';
 import CardHomePackaging from '@/views/dashboard/report/packaging/CardHomePackaging.vue';
+import CardHomeSales from '@/views/dashboard/report/sales/CardHomeSales.vue';
 import CardHomeSupplyChain from '@/views/dashboard/report/scm/CardHomeSupplyChain.vue';
 
 // import moment from 'moment';
@@ -322,11 +322,7 @@ const loadDelay = async () => {
                         <images-home />
                         <card-home-packaging :laporanpackaging="dataLaporanPackaging" />
                         <span class="font-bold w-full text-[0.8vw]">Sales & Marketing</span>
-                        <div class="flex flex-col gap-2">
-                            <div class="grid grid-cols-1 gap-2">
-                                <card-sales v-for="(item, index) in listCardSalesPerformance" :key="index" :datas="item" :style="`animation: fadein ${index}s ease-in-out`" />
-                            </div>
-                        </div>
+                        <card-home-sales />
                     </div>
                     <div class="col-span-2 flex flex-col gap-3">
                         <span class="font-bold w-full text-[0.8vw]">Financial</span>

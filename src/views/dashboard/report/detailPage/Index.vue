@@ -20,13 +20,14 @@ import KursMataUangFinance from '@/views/dashboard/report/detailPage/components/
 import NetProfitMarginFinance from '@/views/dashboard/report/detailPage/components/financial/NetProfitMarginFinance.vue';
 import RevenueDetailFinance from '@/views/dashboard/report/detailPage/components/financial/RevenueDetailFinance.vue';
 // Operation
-import CpoOlahVsRkapOperation from '@/views/dashboard/report/detailPage/components/operation/cpoOlahRkapUtility/Index.vue';
+import CpoOlahVsRkapOperation from '@/views/dashboard/report/detailPage/components/operation/CpoOlahRkapUtilityOperation.vue';
 import LaporanProduksiOperation from '@/views/dashboard/report/detailPage/components/operation/LaporanProduksiOperation.vue';
 import PackagingOperation from '@/views/dashboard/report/detailPage/components/operation/PackagingOperation.vue';
 
 // Controller
 import financeDetailController from '@/controller/home/controllerDetailPage/financeDetailController';
 import hargaDetailController from '@/controller/home/controllerDetailPage/hargaDetailController';
+import operationDetailController from '@/controller/home/controllerDetailPage/operationDetailController';
 
 const route = useRoute();
 const router = useRouter();
@@ -87,6 +88,8 @@ const loadFinance = async (path) => {
         result = await hargaDetailController.hargaSpotInventoryBulk(formData.value);
     } else if (path.toLowerCase().includes('harga-spot-inventory-retail-financial')) {
         result = await hargaDetailController.hargaSpotInventoryRetail(formData.value);
+    } else if (path.toLowerCase().includes('cpo-olah-vs-rkap-operation')) {
+        result = await operationDetailController.cpoOlahVsRkap(formData.value);
     } else {
         result = await financeDetailController.resultGrossProfit(formData.value);
     }
