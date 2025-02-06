@@ -268,7 +268,7 @@ const submitData = async () => {
                     <DatePicker v-model="formData.tanggal" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" showButtonBar :manualInput="false" />
                 </div>
                 <div class="flex flex-col gap-1">
-                    <label for="kapasitas">Spot <small class="text-red-500 font-bold">*</small></label>
+                    <label for="kapasitas">Spot ({{ optionButton == 0 ? 'MT' : 'Pouch' }}) <small class="text-red-500 font-bold">*</small></label>
                     <InputNumber v-model="formData.spot" inputId="minmaxfraction" placeholder="1,000,000" :minFractionDigits="0" :maxFractionDigits="2" fluid />
                 </div>
                 <div class="flex flex-row-reverse w-full gap-3">
@@ -382,7 +382,7 @@ const submitData = async () => {
                         <Column field="spot" sortable style="width: 15%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                             <template #header>
                                 <div class="flex w-full justify-center text-black">
-                                    <span>Spot ({{ optionButton == 0 ? 'Kg' : 'Box' }})</span>
+                                    <span>Spot ({{ optionButton == 0 ? 'Kg' : 'Pouch' }})</span>
                                 </div>
                             </template>
                             <template #body="{ data }">
@@ -406,7 +406,7 @@ const submitData = async () => {
                         <Column field="hargaAsingSpot" sortable style="width: 15%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                             <template #header>
                                 <div class="flex w-full justify-center text-black">
-                                    <span>Harga Spot ({{ optionButton == 0 ? 'MT' : 'Box' }}) Asing</span>
+                                    <span>Harga Spot ({{ optionButton == 0 ? 'MT' : 'Pouch' }}) Asing</span>
                                 </div>
                             </template>
                             <template #body="{ data }">

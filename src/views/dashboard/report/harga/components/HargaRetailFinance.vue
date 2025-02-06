@@ -96,7 +96,7 @@ watch(() => load.value, startIndexCycle, { immediate: true });
             <div class="flex items-center gap-3">
                 <span class="font-bold w-full text-[0.8vw]">Harga Spot & Inventory Retail</span>
                 <button
-                    @click="routerLink('harga-spot-inventory-bulky')"
+                    @click="routerLink('harga-spot-inventory-retail')"
                     class="animate-pulse hover:animate-none p-4 w-[1.5vw] h-[1.5vw] cursor-pointer bg-transparent text-emerald-500 rotate-180 hover:rotate-[-180] hover:bg-black hover:text-amber-500 rounded-full flex items-center justify-center transition-all duration-500"
                 >
                     <i class="pi pi-external-link" style="font-weight: 600; font-size: 0.9vw"></i>
@@ -110,21 +110,21 @@ watch(() => load.value, startIndexCycle, { immediate: true });
                             <div class="flex flex-col gap-1 w-full">
                                 <div class="flex flex-col text-amber-600 justify-between items-end w-full">
                                     <span class="text-[0.8vw] font-bold">{{ card.spotRp }}</span>
-                                    <span class="text-[0.7vw] text-cyan-500">Spot (Rp/Kg)</span>
+                                    <span class="text-[0.7vw] text-cyan-500">Spot (Rp/Box)</span>
                                 </div>
                                 <div class="flex flex-col text-amber-600 justify-between items-end w-full">
                                     <span class="text-[0.8vw] font-bold">{{ card.spotUsd }}</span>
-                                    <span class="text-[0.7vw] text-cyan-500">Spot (USD/MT)</span>
+                                    <span class="text-[0.7vw] text-cyan-500">Spot (USD/Box)</span>
                                 </div>
                             </div>
                             <div class="flex flex-col gap-1 w-full">
                                 <div class="flex flex-col text-green-600 justify-between items-end w-full">
                                     <span class="text-[0.8vw] font-bold">{{ card.invRp }}</span>
-                                    <span class="text-[0.7vw] text-cyan-500">Inv. (Rp/Kg)</span>
+                                    <span class="text-[0.7vw] text-cyan-500">Inv. (Rp/Box)</span>
                                 </div>
                                 <div class="flex flex-col text-green-600 justify-between items-end w-full">
                                     <span class="text-[0.8vw] font-bold">{{ card.invUsd }}</span>
-                                    <span class="text-[0.7vw] text-cyan-500">Inv. (USD/MT)</span>
+                                    <span class="text-[0.7vw] text-cyan-500">Inv. (USD/Box)</span>
                                 </div>
                             </div>
                         </div>

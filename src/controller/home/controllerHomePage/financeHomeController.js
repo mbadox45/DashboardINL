@@ -3,6 +3,7 @@ import cashFlowMovementController from '@/controller/getApiFromThisApp/cashFlowM
 import cashFlowScheduleController from '@/controller/getApiFromThisApp/cashFlowSchedule/cashFlowScheduleController';
 import cpoKpbnController from '@/controller/getApiFromThisApp/cpoKpbn/cpoKpbnController';
 import hargaFinanceController from '@/controller/getApiFromThisApp/harga/hargaFinanceController';
+import hargaSpotSalesController from '@/controller/getApiFromThisApp/harga/hargaSpotSalesController';
 import kursController from '@/controller/getApiFromThisApp/kurs/kursController';
 import productMasterController from '@/controller/getApiFromThisApp/master/productMasterController';
 import profitabilityController from '@/controller/getApiFromThisApp/profitability/profitabilityController';
@@ -11,49 +12,69 @@ import moment from 'moment';
 export default new (class financeHomeController {
     hargaSpotInvRitel = async (form) => {
         try {
-            const response = await hargaFinanceController.getByPeriod(form);
-            const list = [];
+            const hargaInventory = await hargaFinanceController.getByPeriod(form);
+            const hargaSpot = await hargaSpotSalesController.getByPeriod(form);
+            const listInv = [];
+            const listSpot = [];
+            const listAll = [];
             const produk = await productMasterController.getAll();
             const produkRitel = produk.filter((item) => item.jenis == 'ritel');
-            if (response != null) {
-                const bulk = response.latestHargaRitel;
-                if (bulk != null) {
-                    for (let i = 0; i < produkRitel.length; i++) {
-                        const dataHarga = bulk.find((item) => item.id_product == produkRitel[i].id);
-                        list.push({
-                            produk: produkRitel[i].name,
-                            spotRp: formatCurrency(Number(dataHarga.spot).toFixed(2)),
-                            spotUsd: formatCurrency(Number(dataHarga.hargaAsingSpot).toFixed(2)),
-                            invRp: formatCurrency(Number(dataHarga.inventory).toFixed(2)),
-                            invUsd: formatCurrency(Number(dataHarga.hargaAsingInventory).toFixed(2)),
-                            tanggal: moment(dataHarga.tanggal).format('DD MMMM YYYY')
-                        });
-                    }
-                } else {
-                    for (let i = 0; i < produkRitel.length; i++) {
-                        list.push({
-                            produk: produkRitel[i].name,
-                            spotRp: 0,
-                            spotUsd: 0,
-                            invRp: 0,
-                            invUsd: 0,
-                            tanggal: ''
-                        });
-                    }
-                }
-            } else {
+            if (hargaInventory != null) {
+                const latestHargaRitel = hargaInventory.latestHargaRitel;
                 for (let i = 0; i < produkRitel.length; i++) {
-                    list.push({
-                        produk: produkRitel[i].name,
-                        spotRp: 0,
-                        spotUsd: 0,
-                        invRp: 0,
-                        invUsd: 0,
-                        tanggal: ''
-                    });
+                    const ritel = latestHargaRitel.find((item) => item.id_product == produkRitel[i].id);
+                    // console.log(ritel);
+                    if (ritel != null) {
+                        listInv.push({
+                            id_product: produkRitel[i].id,
+                            produk: produkRitel[i].name,
+                            invRp: formatCurrency(Number(ritel.hargaBoxInventory).toFixed(2)),
+                            invUsd: formatCurrency(Number(ritel.hargaAsingBoxInventory).toFixed(2))
+                        });
+                    } else {
+                        listInv.push({
+                            id_product: produkRitel[i].id,
+                            produk: produkRitel[i].name,
+                            invRp: 0,
+                            invUsd: 0
+                        });
+                    }
                 }
             }
-            return list;
+            if (hargaSpot != null) {
+                const latestHargaRitel = hargaSpot.latestHargaRitel;
+                for (let i = 0; i < produkRitel.length; i++) {
+                    const ritel = latestHargaRitel.find((item) => item.id_product == produkRitel[i].id);
+                    if (ritel != null) {
+                        listSpot.push({
+                            id_product: produkRitel[i].id,
+                            produk: produkRitel[i].name,
+                            spotRp: formatCurrency(Number(ritel.hargaBoxSpot).toFixed(2)),
+                            spotUsd: formatCurrency(Number(ritel.hargaAsingBoxSpot).toFixed(2))
+                        });
+                    } else {
+                        listSpot.push({
+                            id_product: produkRitel[i].id,
+                            produk: produkRitel[i].name,
+                            spotRp: 0,
+                            spotUsd: 0
+                        });
+                    }
+                }
+            }
+            for (let i = 0; i < produkRitel.length; i++) {
+                const spot = listSpot.find((item) => item.id_product == produkRitel[i].id);
+                const inventory = listInv.find((item) => item.id_product == produkRitel[i].id);
+                listAll.push({
+                    id_product: produkRitel[i].id,
+                    produk: produkRitel[i].name,
+                    invRp: inventory == null ? 0 : inventory.invRp,
+                    invUsd: inventory == null ? 0 : inventory.invUsd,
+                    spotRp: spot == null ? 0 : spot.spotRp,
+                    spotUsd: spot == null ? 0 : spot.spotUsd
+                });
+            }
+            return listAll;
         } catch (error) {
             const produk = await productMasterController.getAll();
             const produkRitel = produk.filter((item) => item.jenis == 'bulk');
@@ -73,49 +94,69 @@ export default new (class financeHomeController {
     };
     hargaSpotInvBulk = async (form) => {
         try {
-            const response = await hargaFinanceController.getByPeriod(form);
-            const list = [];
+            const hargaInventory = await hargaFinanceController.getByPeriod(form);
+            const hargaSpot = await hargaSpotSalesController.getByPeriod(form);
+            const listInv = [];
+            const listSpot = [];
+            const listAll = [];
             const produk = await productMasterController.getAll();
-            const produkBulk = produk.filter((item) => item.jenis == 'bulk');
-            if (response != null) {
-                const bulk = response.latestHargaBulk;
-                if (bulk != null) {
-                    for (let i = 0; i < produkBulk.length; i++) {
-                        const dataHarga = bulk.find((item) => item.id_product == produkBulk[i].id);
-                        list.push({
-                            produk: produkBulk[i].name,
-                            spotRp: formatCurrency(Number(dataHarga.spot).toFixed(2)),
-                            spotUsd: formatCurrency(Number(dataHarga.hargaAsingSpot).toFixed(2)),
-                            invRp: formatCurrency(Number(dataHarga.inventory).toFixed(2)),
-                            invUsd: formatCurrency(Number(dataHarga.hargaAsingInventory).toFixed(2)),
-                            tanggal: moment(dataHarga.tanggal).format('DD MMMM YYYY')
+            const produkRitel = produk.filter((item) => item.jenis == 'bulk');
+            if (hargaInventory != null) {
+                const latestHargaRitel = hargaInventory.latestHargaBulk;
+                for (let i = 0; i < produkRitel.length; i++) {
+                    const ritel = latestHargaRitel.find((item) => item.id_product == produkRitel[i].id);
+                    // console.log(ritel);
+                    if (ritel != null) {
+                        listInv.push({
+                            id_product: produkRitel[i].id,
+                            produk: produkRitel[i].name,
+                            invRp: formatCurrency(Number(ritel.inventory).toFixed(2)),
+                            invUsd: formatCurrency(Number(ritel.hargaAsingInventory).toFixed(2))
                         });
-                    }
-                } else {
-                    for (let i = 0; i < produkBulk.length; i++) {
-                        list.push({
-                            produk: produkBulk[i].name,
-                            spotRp: 0,
-                            spotUsd: 0,
+                    } else {
+                        listInv.push({
+                            id_product: produkRitel[i].id,
+                            produk: produkRitel[i].name,
                             invRp: 0,
-                            invUsd: 0,
-                            tanggal: ''
+                            invUsd: 0
                         });
                     }
-                }
-            } else {
-                for (let i = 0; i < produkBulk.length; i++) {
-                    list.push({
-                        produk: produkBulk[i].name,
-                        spotRp: 0,
-                        spotUsd: 0,
-                        invRp: 0,
-                        invUsd: 0,
-                        tanggal: ''
-                    });
                 }
             }
-            return list;
+            if (hargaSpot != null) {
+                const latestHargaRitel = hargaSpot.latestHargaBulk;
+                for (let i = 0; i < produkRitel.length; i++) {
+                    const ritel = latestHargaRitel.find((item) => item.id_product == produkRitel[i].id);
+                    if (ritel != null) {
+                        listSpot.push({
+                            id_product: produkRitel[i].id,
+                            produk: produkRitel[i].name,
+                            spotRp: formatCurrency(Number(ritel.spot).toFixed(2)),
+                            spotUsd: formatCurrency(Number(ritel.hargaAsingSpot).toFixed(2))
+                        });
+                    } else {
+                        listSpot.push({
+                            id_product: produkRitel[i].id,
+                            produk: produkRitel[i].name,
+                            spotRp: 0,
+                            spotUsd: 0
+                        });
+                    }
+                }
+            }
+            for (let i = 0; i < produkRitel.length; i++) {
+                const spot = listSpot.find((item) => item.id_product == produkRitel[i].id);
+                const inventory = listInv.find((item) => item.id_product == produkRitel[i].id);
+                listAll.push({
+                    id_product: produkRitel[i].id,
+                    produk: produkRitel[i].name,
+                    invRp: inventory == null ? 0 : inventory.invRp,
+                    invUsd: inventory == null ? 0 : inventory.invUsd,
+                    spotRp: spot == null ? 0 : spot.spotRp,
+                    spotUsd: spot == null ? 0 : spot.spotUsd
+                });
+            }
+            return listAll;
         } catch (error) {
             const produk = await productMasterController.getAll();
             const produkBulk = produk.filter((item) => item.jenis == 'bulk');
