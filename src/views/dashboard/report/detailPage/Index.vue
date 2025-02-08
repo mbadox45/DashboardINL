@@ -23,11 +23,17 @@ import RevenueDetailFinance from '@/views/dashboard/report/detailPage/components
 import CpoOlahVsRkapOperation from '@/views/dashboard/report/detailPage/components/operation/CpoOlahRkapUtilityOperation.vue';
 import LaporanProduksiOperation from '@/views/dashboard/report/detailPage/components/operation/LaporanProduksiOperation.vue';
 import PackagingOperation from '@/views/dashboard/report/detailPage/components/operation/PackagingOperation.vue';
+// Sales
+import PenjualanBulkSales from '@/views/dashboard/report/detailPage/components/sales/PenjualanBulkSales.vue';
+import PenjualanRitelSales from '@/views/dashboard/report/detailPage/components/sales/PenjualanRitelSales.vue';
+// SCM
 
 // Controller
 import financeDetailController from '@/controller/home/controllerDetailPage/financeDetailController';
 import hargaDetailController from '@/controller/home/controllerDetailPage/hargaDetailController';
 import operationDetailController from '@/controller/home/controllerDetailPage/operationDetailController';
+import salesDetailController from '@/controller/home/controllerDetailPage/salesDetailController';
+import scmDetailController from '@/controller/home/controllerDetailPage/scmDetailController';
 
 const route = useRoute();
 const router = useRouter();
@@ -39,7 +45,7 @@ const formData = ref({
     idMataUang: 1,
     idPackaging: 1,
     tanggalAwal: moment('2023-01-01').format('YYYY-MM-DD'),
-    tanggalAkhir: moment('2024-03-31').format('YYYY-MM-DD')
+    tanggalAkhir: moment('2024-12-30').format('YYYY-MM-DD')
     // tanggalAwal: moment().format('YYYY-MM-01'),
     // tanggalAkhir: moment().format('YYYY-MM-DD')
 });
@@ -90,8 +96,20 @@ const loadFinance = async (path) => {
         result = await hargaDetailController.hargaSpotInventoryRetail(formData.value);
     } else if (path.toLowerCase().includes('cpo-olah-vs-rkap-operation')) {
         result = await operationDetailController.cpoOlahVsRkap(formData.value);
-    } else {
+    } else if (path.toLowerCase().includes('laporan-produksi-operation-operation')) {
+        result = await operationDetailController.laporanProduksi(formData.value);
+    } else if (path.toLowerCase().includes('packaging-operation-operation')) {
+        result = await operationDetailController.laporanPackaging(formData.value);
+    } else if (path.toLowerCase().includes('gross-profit-financial')) {
         result = await financeDetailController.resultGrossProfit(formData.value);
+    } else if (path.toLowerCase().includes('penjualan-bulk-sales')) {
+        result = await salesDetailController.penjualanBulk(formData.value);
+    } else if (path.toLowerCase().includes('penjualan-ritel-sales')) {
+        result = await salesDetailController.penjualanRitel(formData.value);
+    } else if (path.toLowerCase().includes('stock-ritel-scm')) {
+        result = await scmDetailController.stockRitel(formData.value);
+    } else {
+        result = null;
     }
     return result;
 };
@@ -128,10 +146,14 @@ const updateDates = async (dates) => {
             <cpo-kpbn-detail-finance v-else-if="routeName == 'cpo-kpbn'" :datas="listData" />
             <kurs-mata-uang-finance v-else-if="routeName == 'kurs-mata-uang'" :datas="listData" />
         </div>
+        <div class="min-h-[30rem] p-6 rounded-xl" v-else-if="routeType == 'sales'">
+            <penjualan-bulk-sales v-if="routeName == 'penjualan-bulk'" :datas="listData" />
+            <penjualan-ritel-sales v-if="routeName == 'penjualan-ritel'" :datas="listData" />
+        </div>
         <div class="min-h-[30rem] p-6 rounded-xl" v-else>
-            <cpo-olah-vs-rkap-operation v-if="routeName == 'cpo-olah-vs-rkap'" />
-            <packaging-operation v-else-if="routeName == 'packaging-operation'" />
-            <laporan-produksi-operation v-else-if="routeName == 'laporan-produksi-operation'" />
+            <cpo-olah-vs-rkap-operation v-if="routeName == 'cpo-olah-vs-rkap'" :datas="listData" />
+            <packaging-operation v-else-if="routeName == 'packaging-operation'" :datas="listData" />
+            <laporan-produksi-operation v-else-if="routeName == 'laporan-produksi-operation'" :datas="listData" />
             <div v-else class="h-[30rem] w-full flex flex-col items-center justify-center">
                 <span>404 Not Found</span>
             </div>

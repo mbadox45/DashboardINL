@@ -86,11 +86,14 @@ export default new (class operationHomeController {
                     for (let j = 0; j < kategori.length; j++) {
                         const material = kategori[j].materials;
                         for (let k = 0; k < material.length; k++) {
+                            console.log(material[k]);
                             nilaiLaporan.push({
                                 jenisLaporan: laporan[i].jenis_laporan,
                                 materialsName: material[k].name,
                                 kategori: kategori[j].kategori,
                                 value: material[k].totalQty,
+                                usage: material[k].usage,
+                                color: material[k].color,
                                 totalPemakaian: formatCurrency(Number(laporan[i].totalPemakaian).toFixed(2)),
                                 selisih: formatCurrency(Number(laporan[i].selisih).toFixed(2))
                             });
@@ -107,7 +110,9 @@ export default new (class operationHomeController {
                         outgoing.push({
                             name: normaNilai[j].materialsName,
                             value: formatCurrency(Number(material.value).toFixed(2)),
-                            norma: formatCurrency(Number(normaNilai[j].value).toFixed(2))
+                            norma: formatCurrency(Number(normaNilai[j].value).toFixed(2)),
+                            usage: formatCurrency(Number(material.usage).toFixed(2)),
+                            color: material.color
                         });
                     }
                     const listIncoming = [];

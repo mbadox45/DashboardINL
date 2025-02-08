@@ -104,7 +104,7 @@ watch(
             <div class="flex items-center gap-3">
                 <span class="font-bold w-full text-[0.8vw]">Pemakaian Material</span>
                 <button
-                    @click="routerLink('packaging-operation')"
+                    @click="routerLink('laporan-material')"
                     class="animate-pulse hover:animate-none p-4 w-[1.5vw] h-[1.5vw] cursor-pointer bg-transparent text-emerald-500 rotate-180 hover:rotate-[-180] hover:bg-black hover:text-amber-500 rounded-full flex items-center justify-center transition-all duration-500"
                 >
                     <i class="pi pi-external-link" style="font-weight: 600; font-size: 0.9vw"></i>
@@ -143,9 +143,13 @@ watch(
                                                 <span class="text-[0.7vw] w-full text-right border-b pb-1 border-neutral-800">Quantity</span>
                                                 <span class="text-[0.7vw] w-full text-right font-bold text-cyan-500" v-for="(item, index) in displayedCard.outgoing" :key="index">{{ item.value }}</span>
                                             </div>
-                                            <div class="flex flex-col gap-1 w-1/2">
+                                            <div class="flex flex-col gap-1 w-1/4">
                                                 <span class="text-[0.7vw] w-full text-right border-b pb-1 border-neutral-800">Norma</span>
                                                 <span class="text-[0.7vw] w-full text-right font-bold text-cyan-500" v-for="(item, index) in displayedCard.outgoing" :key="index">{{ item.norma }}</span>
+                                            </div>
+                                            <div class="flex flex-col gap-1 w-1/4">
+                                                <span class="text-[0.7vw] w-full text-right border-b pb-1 border-neutral-800">Usage</span>
+                                                <span class="text-[0.7vw] w-full text-right font-bold" v-for="(item, index) in displayedCard.outgoing" :key="index" :class="`text-${item.color}-500`">{{ item.usage }}</span>
                                             </div>
                                         </div>
                                         <!-- <div v-for="(item, index) in displayedCard.outgoing" :key="index" class="flex items-center justify-between border-t border-neutral-800 w-full text-cyan-500">

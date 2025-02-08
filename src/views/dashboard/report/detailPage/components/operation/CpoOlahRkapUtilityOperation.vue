@@ -1,9 +1,15 @@
 <script setup>
 // import { bulkySalesChart, cashFlowData } from '@/controller/report/OperationReport';
 import { formatCurrency, valueColorIntCondition, valueColorPersenCondition } from '@/controller/dummyController';
-import { cpoOlah, listTableCPOOlah } from '@/controller/getApiFromDaico/ProductionReport';
-import { onMounted, ref } from 'vue';
+import { defineProps, onMounted, ref, watch } from 'vue';
 import VueApexCharts from 'vue3-apexcharts';
+
+const props = defineProps({
+    datas: {
+        type: Object,
+        default: () => ({})
+    }
+});
 
 const listdata = ref({
     type: null,
@@ -26,23 +32,19 @@ onMounted(() => {
 
 const loadData = async () => {
     try {
+        const response = props.datas;
+        console.log(response);
         // const data = await bulkySalesChart();
-
         listdata.value = {
             name: 'CPO Olah vs RKAP vs Utility'
         };
-        const cpo = await cpoOlah();
-        listChart.value = cpo.data;
-        listTable.value = listTableCPOOlah;
-
-        let totalBeban = 0;
-        let totalRpKg = 0;
-        for (let i = 0; i < listTableCPOOlah.length; i++) {
-            totalBeban += listTableCPOOlah[i].bebanProduksi;
-            totalRpKg += listTableCPOOlah[i].rpKg;
+        if (response != null) {
+            listTable.value = response.dataTable;
+            listChart.value = response.dataChart;
+            bebanProduksi.value = response.total.totalCost;
+            rpKgTotal.value = response.total.totalHargaSatuan;
         }
-        bebanProduksi.value = totalBeban;
-        rpKgTotal.value = totalRpKg;
+
         // dataCashFlow.value = cashFlowData();
     } catch (error) {
         console.error('Error loading data:', error);
@@ -50,6 +52,8 @@ const loadData = async () => {
         isLoading.value = false; // Turn off the loading state after the data has loaded
     }
 };
+
+watch(() => props.datas, loadData, { immediate: true });
 </script>
 
 <template>
@@ -75,11 +79,11 @@ const loadData = async () => {
                         </div>
                         <div class="flex gap-6">
                             <div class="flex flex-col items-end w-full bg-neutral-800 p-3 rounded-xl">
-                                <span class="text-[1.1vw] text-teal-600 font-extrabold">{{ formatCurrency(item.qty[0]) }}</span>
+                                <span class="text-[1.1vw] text-teal-600 font-extrabold">{{ formatCurrency(Number(item.qty[0]).toFixed(2)) }}</span>
                                 <span class="text-[0.6vw] text-gray-400">Real</span>
                             </div>
                             <div class="flex flex-col items-end w-full bg-neutral-800 p-3 rounded-xl">
-                                <span class="text-[1.1vw] text-cyan-600 font-extrabold">{{ formatCurrency(item.qty[1]) }}</span>
+                                <span class="text-[1.1vw] text-cyan-600 font-extrabold">{{ formatCurrency(Number(item.qty[1]).toFixed(2)) }}</span>
                                 <span class="text-[0.6vw] text-gray-400">RKAP</span>
                             </div>
                             <div class="flex flex-col items-end w-full bg-neutral-800 p-3 rounded-xl">
@@ -111,7 +115,7 @@ const loadData = async () => {
                         </template>
                         <template #body="{ data }">
                             <div class="w-full flex justify-end items-center">
-                                <span class="text-[0.8vw]">{{ formatCurrency(data.bebanProduksi) }}</span>
+                                <span class="text-[0.8vw]">{{ formatCurrency(Number(data.bebanProduksi).toFixed(2)) }}</span>
                             </div>
                         </template>
                     </Column>
@@ -121,7 +125,7 @@ const loadData = async () => {
                         </template>
                         <template #body="{ data }">
                             <div class="w-full flex justify-end items-center">
-                                <span class="text-[0.8vw]">{{ formatCurrency(data.rpKg) }}</span>
+                                <span class="text-[0.8vw]">{{ formatCurrency(Number(data.rpKg).toFixed(2)) }}</span>
                             </div>
                         </template>
                     </Column>

@@ -5,6 +5,7 @@ import { onMounted, ref } from 'vue';
 // Controller
 import financeHomeController from '@/controller/home/controllerHomePage/financeHomeController';
 import operationHomeController from '@/controller/home/controllerHomePage/operationHomeController';
+import salesHomeController from '@/controller/home/controllerHomePage/salesHomeController';
 import supplyChainHomeController from '@/controller/home/controllerHomePage/supplyChainHomeController';
 
 // Components
@@ -22,16 +23,8 @@ import CardHomeSupplyChain from '@/views/dashboard/report/scm/CardHomeSupplyChai
 
 // import moment from 'moment';
 
-const listCardFinancial = ref([]);
-const listCardHarga = ref([]);
-const listCardOperation = ref([]);
-const listCardMaterial = ref([]);
-const listCardSalesPerformance = ref([]);
 const listCardSCM = ref([]);
-const listCardPackaging = ref([]);
-const listCardSdm = ref([]);
-const listDelay = ref([]);
-const activePage = ref(0);
+const activePage = ref(1);
 
 // Finance Var Data
 const dataRevenue = ref({});
@@ -55,6 +48,10 @@ const dataStockRetail = ref([]);
 const dataActualIncoming = ref({});
 const dataOutstanding = ref({});
 
+// Sales Var Data
+const dataPenjualanBulk = ref({});
+const dataPenjualanRitel = ref({});
+
 onMounted(() => {
     loadData();
     loadAllData();
@@ -73,6 +70,7 @@ const loadAllData = async () => {
     await loadDataControllerFinance(form);
     await loadDataControllerOperation(form);
     await loadDataControllerSCM(form);
+    await loadDataControllerSales(form);
 };
 
 const loadDataControllerFinance = async (form) => {
@@ -135,6 +133,13 @@ const loadDataControllerSCM = async (form) => {
     // console.log(outstanding);
 };
 
+const loadDataControllerSales = async (form) => {
+    const penjualanSalesRitel = await salesHomeController.laporanPenjualanRitel(form);
+    dataPenjualanRitel.value = penjualanSalesRitel;
+    const penjualanSalesBulk = await salesHomeController.laporanPenjualanBulk(form);
+    dataPenjualanBulk.value = penjualanSalesBulk;
+};
+
 const updateDates = async (dates) => {
     const form = {
         idPmg: dates.pmg,
@@ -149,71 +154,8 @@ const updateDates = async (dates) => {
 };
 
 const loadData = async () => {
-    await loadDataFinance();
-    await loadDataOperation();
-    await loadDataSales();
     await loadDataSCM();
-    await loadDataPackaging();
-    await loadDelay();
-    await loadDataSdm();
-    await loadDataHarga();
-    await loadDataMaterial();
 };
-
-const loadDataFinance = async () => {
-    const list = [];
-    const dataFinance = await HomeDash.cardFinancial();
-    for (let i = 0; i < dataFinance.length; i++) {
-        list.push({
-            name: dataFinance[i].name,
-            color: dataFinance[i].color,
-            icon: dataFinance[i].icon,
-            value: dataFinance[i].value,
-            persentase: dataFinance[i].persentase,
-            versus: dataFinance[i].versus,
-            link: dataFinance[i].link,
-            colspan: dataFinance[i].colspan
-        });
-    }
-    listCardFinancial.value = list;
-};
-
-const loadDataOperation = async () => {
-    const list = [];
-    const dataOperation = await HomeDash.cardOperational();
-    for (let i = 0; i < dataOperation.length; i++) {
-        list.push({
-            name: dataOperation[i].name,
-            color: dataOperation[i].color,
-            icon: dataOperation[i].icon,
-            value: dataOperation[i].value,
-            persentase: dataOperation[i].persentase,
-            versus: dataOperation[i].versus,
-            link: dataOperation[i].link,
-            colspan: dataOperation[i].colspan
-        });
-    }
-    listCardOperation.value = list;
-};
-
-const loadDataMaterial = async () => {
-    const list = [];
-    const dataMaterial = await HomeDash.cardOperationalMaterial();
-    for (let i = 0; i < dataMaterial.length; i++) {
-        list.push({
-            name: dataMaterial[i].name,
-            color: dataMaterial[i].color,
-            icon: dataMaterial[i].icon,
-            value: dataMaterial[i].value,
-            persentase: dataMaterial[i].persentase,
-            versus: dataMaterial[i].versus,
-            link: dataMaterial[i].link,
-            colspan: dataMaterial[i].colspan
-        });
-    }
-    listCardMaterial.value = list;
-};
-
 const loadDataSCM = async () => {
     const list = [];
     const dataSCM = await HomeDash.cardSCM();
@@ -231,85 +173,6 @@ const loadDataSCM = async () => {
     }
     listCardSCM.value = list;
 };
-const loadDataPackaging = async () => {
-    const list = [];
-    const dataSdm = await HomeDash.cardPackaging();
-    for (let i = 0; i < dataSdm.length; i++) {
-        list.push({
-            name: dataSdm[i].name,
-            color: dataSdm[i].color,
-            icon: dataSdm[i].icon,
-            value: dataSdm[i].value,
-            persentase: dataSdm[i].persentase,
-            versus: dataSdm[i].versus,
-            link: dataSdm[i].link,
-            colspan: dataSdm[i].colspan
-        });
-    }
-    listCardPackaging.value = list;
-};
-const loadDataSdm = async () => {
-    const list = [];
-    const dataSdm = await HomeDash.cardSdm();
-    for (let i = 0; i < dataSdm.length; i++) {
-        list.push({
-            name: dataSdm[i].name,
-            color: dataSdm[i].color,
-            icon: dataSdm[i].icon,
-            value: dataSdm[i].value,
-            persentase: dataSdm[i].persentase,
-            versus: dataSdm[i].versus,
-            link: dataSdm[i].link,
-            colspan: dataSdm[i].colspan
-        });
-    }
-    listCardSdm.value = list;
-};
-
-const loadDataSales = async () => {
-    const list = [];
-    const dataSales = await HomeDash.cardSalesPerformance();
-    for (let i = 0; i < dataSales.length; i++) {
-        list.push({
-            name: dataSales[i].name,
-            color: dataSales[i].color,
-            icon: dataSales[i].icon,
-            value: dataSales[i].value,
-            versus: dataSales[i].versus,
-            link: dataSales[i].link,
-            colspan: dataSales[i].colspan,
-            dataChart: dataSales[i].qty,
-            optionsChart: dataSales[i].options
-        });
-    }
-    listCardSalesPerformance.value = list;
-};
-
-const loadDataHarga = async () => {
-    const list = [];
-    const dataHarga = await HomeDash.cardHarga();
-    for (let i = 0; i < dataHarga.length; i++) {
-        list.push({
-            name: dataHarga[i].name,
-            color: dataHarga[i].color,
-            icon: dataHarga[i].icon,
-            value: dataHarga[i].value,
-            persentase: dataHarga[i].persentase,
-            versus: dataHarga[i].versus,
-            link: dataHarga[i].link,
-            colspan: dataHarga[i].colspan
-        });
-    }
-    listCardHarga.value = list;
-};
-
-const loadDelay = async () => {
-    const list = [];
-    for (let i = 0; i < 22; i++) {
-        list.push(i + 1);
-    }
-    listDelay.value = list;
-};
 </script>
 
 <template>
@@ -322,7 +185,7 @@ const loadDelay = async () => {
                         <images-home />
                         <card-home-packaging :laporanpackaging="dataLaporanPackaging" />
                         <span class="font-bold w-full text-[0.8vw]">Sales & Marketing</span>
-                        <card-home-sales />
+                        <card-home-sales :dataritel="dataPenjualanRitel" :databulk="dataPenjualanBulk" />
                     </div>
                     <div class="col-span-2 flex flex-col gap-3">
                         <span class="font-bold w-full text-[0.8vw]">Financial</span>
@@ -334,6 +197,7 @@ const loadDelay = async () => {
                 </div>
                 <div v-else class="grid grid-cols-3 gap-3 h-full">
                     <div class="col-span-1 flex flex-col gap-3 h-full">
+                        <!-- <images-home /> -->
                         <images-home class="h-full" />
                     </div>
                     <div class="col-span-2 flex flex-col gap-3">
@@ -345,11 +209,6 @@ const loadDelay = async () => {
                             </div>
                         </div>
                         <card-home-material :laporanmaterial="dataLaporanMaterial" />
-                        <!-- <div class="flex flex-col gap-2">
-                            <div class="grid grid-cols-1 gap-2">
-                                <card-sdm v-for="(item, index) in listCardSdm" :key="index" :datas="item" :style="`animation: fadein ${index}s ease-in-out`" />
-                            </div>
-                        </div> -->
                     </div>
                 </div>
                 <div class="flex gap-2 justify-center">

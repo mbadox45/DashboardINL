@@ -49,6 +49,135 @@ export const radialBarApex = (label, colors) => {
     };
 };
 
+export const dougnutChartApex = (label, colors) => {
+    return {
+        chart: {
+            type: 'donut'
+        },
+        labels: label,
+        responsive: [
+            {
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        width: 300
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        ]
+    };
+};
+
+export const halfRadialChartApex = (label) => {
+    return {
+        chart: {
+            type: 'radialBar',
+            offsetY: -20,
+            sparkline: {
+                enabled: true
+            }
+        },
+        plotOptions: {
+            radialBar: {
+                startAngle: -90,
+                endAngle: 90,
+                track: {
+                    background: '#222', // 🔹 Ubah warna background track
+                    strokeWidth: '97%',
+                    margin: 5,
+                    dropShadow: {
+                        enabled: true,
+                        top: 2,
+                        left: 0,
+                        color: '#444',
+                        opacity: 0.7, // 🔹 Kurangi opacity shadow
+                        blur: 3
+                    }
+                },
+                dataLabels: {
+                    name: {
+                        show: false
+                    },
+                    value: {
+                        offsetY: -2,
+                        fontSize: '0.9vw', // 🔹 Ubah ukuran tulisan nilai
+                        fontWeight: 'bold', // 🔹 Bikin lebih tebal
+                        color: '#ffffff', // 🔹 Ubah warna teks
+                        formatter: (val) => {
+                            return val >= 1000 ? `${(val / 1000).toFixed(1)}k %` : `${val}%`; // 🔹 Ubah format angka
+                        }
+                    }
+                }
+            }
+        },
+        grid: {
+            padding: {
+                top: -10
+            }
+        },
+        fill: {
+            type: 'gradient',
+            gradient: {
+                shade: 'dark',
+                shadeIntensity: 0.5,
+                inverseColors: false,
+                opacityFrom: 1,
+                opacityTo: 1,
+                stops: [0, 50, 100]
+            }
+        },
+        colors: ['#FF4560'], // 🔹 Ubah warna chart (misalnya merah)
+        labels: label
+    };
+};
+
+export const radialChartApex = (label, colors, size) => {
+    return {
+        chart: {
+            height: 50,
+            type: 'radialBar'
+        },
+        plotOptions: {
+            radialBar: {
+                hollow: {
+                    size: '55%',
+                    background: 'transparent'
+                },
+                dataLabels: {
+                    name: {
+                        show: true,
+                        color: colors[0], // Warna putih untuk label
+                        fontWeight: 'bold',
+                        fontSize: '0.8vw'
+                    },
+                    value: {
+                        show: true,
+                        color: '#ffffff', // Warna putih untuk nilai persentase
+                        fontSize: '16px',
+                        fontWeight: 'bold',
+                        fontSize: '0.8vw'
+                    }
+                }
+            }
+        },
+        colors: colors,
+        labels: label,
+        responsive: [
+            {
+                breakpoint: 480,
+                options: {
+                    legend: {
+                        show: false
+                    }
+                }
+            }
+        ]
+    };
+};
+
 export const radialBarCustomApex = (colors) => {
     return {
         chart: {
@@ -220,6 +349,10 @@ export const pieChartApex = (label, qty) => {
         series: qty, // Use the qty array for chart data
         legend: {
             show: false
+        },
+        stroke: {
+            show: false, // ✅ Completely removes the border
+            width: 0 // Alternative: Set width to 0
         },
         dataLabels: {
             enabled: true,

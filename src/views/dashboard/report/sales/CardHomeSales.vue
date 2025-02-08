@@ -7,11 +7,11 @@ import { defineProps } from 'vue';
 const props = defineProps({
     dataritel: {
         type: Object,
-        default: () => ({})
+        default: () => {}
     },
     databulk: {
         type: Object,
-        default: () => ({})
+        default: () => {}
     }
 });
 </script>

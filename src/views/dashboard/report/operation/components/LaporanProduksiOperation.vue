@@ -104,7 +104,7 @@ watch(
             <div class="flex items-center gap-3">
                 <span class="font-bold w-full text-[0.8vw]">Laporan Produksi (in Kg)</span>
                 <button
-                    @click="routerLink('packaging-operation')"
+                    @click="routerLink('laporan-produksi-operation')"
                     class="animate-pulse hover:animate-none p-4 w-[1.5vw] h-[1.5vw] cursor-pointer bg-transparent text-emerald-500 rotate-180 hover:rotate-[-180] hover:bg-black hover:text-amber-500 rounded-full flex items-center justify-center transition-all duration-500"
                 >
                     <i class="pi pi-external-link" style="font-weight: 600; font-size: 0.9vw"></i>

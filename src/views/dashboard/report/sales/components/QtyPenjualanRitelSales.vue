@@ -1,6 +1,7 @@
 <script setup>
+import { formatCurrency } from '@/controller/dummyController';
 import CryptoJS from 'crypto-js';
-import { defineProps, onMounted, onUnmounted, ref, watch } from 'vue';
+import { defineProps, ref, watch } from 'vue';
 import VueApexCharts from 'vue3-apexcharts';
 // import { pieChartApex } from '@/controller/chartStyle/radialBarDummy';
 import { useRouter } from 'vue-router';
@@ -10,148 +11,73 @@ const router = useRouter();
 const props = defineProps({
     datas: {
         type: Object,
-        default: () => ({})
+        default: () => {}
     }
 });
 
-const load = ref({ name: '', icon: '', nilai: 0, persen: 0, versus: '', link: null, colspan: null, dataChart: null, optionsChart: null });
-const currentIndex = ref(0);
-const animationClass = ref('fade-in');
+const load = ref({ tanggal: '', real: 0, rkap: 0, persen: 0, dataChart: [] });
 
 const loadData = async () => {
-    const data = props.datas;
-    load.value = {
-        name: data.name,
-        icon: data.icon,
-        nilai: data.value,
-        persen: null,
-        versus: data.versus || [],
-        link: data.link,
-        colspan: data.colspan,
-        dataChart: data.dataChart,
-        optionsChart: data.optionsChart
-    };
-};
-
-watch(() => props.datas, loadData, { immediate: true });
-
-let intervalId;
-
-// Start the auto-cycling timer
-const startIndexCycle = () => {
-    if (load.value.versus.length <= 1) {
-        animationClass.value = 'fade-in';
-        return;
-    }
-
-    clearInterval(intervalId); // Clear any existing timer
-    intervalId = setInterval(() => {
-        animationClass.value = 'fade-out';
-        setTimeout(() => {
-            currentIndex.value = (currentIndex.value + 1) % load.value.versus.length;
-            animationClass.value = 'fade-in';
-        }, 500);
-    }, 5000); // Restart with a 5-second interval
-};
-
-// Reset the timer and navigate to the next index
-const nextIndex = () => {
-    if (load.value.versus.length > 1) {
-        animationClass.value = 'fade-out';
-        setTimeout(() => {
-            currentIndex.value = (currentIndex.value + 1) % load.value.versus.length;
-            animationClass.value = 'fade-in';
-            startIndexCycle(); // Restart the timer
-        }, 500);
+    try {
+        const data = props.datas;
+        if (data != null) {
+            load.value.tanggal = data.tanggal;
+            load.value.real = formatCurrency(Number(data.real).toFixed(2)) || 0;
+            load.value.rkap = formatCurrency(Number(data.rkap).toFixed(2)) || 0;
+            load.value.persen = formatCurrency(Number(data.persen).toFixed(2)) || 0;
+            load.value.dataChart = data.listChart || [];
+        }
+    } catch (error) {
+        load.value = { tanggal: '', real: 0, rkap: 0, persen: 0, dataChart: [] };
     }
 };
-
-// Reset the timer and navigate to the previous index
-const prevIndex = () => {
-    if (load.value.versus.length > 1) {
-        animationClass.value = 'fade-out';
-        setTimeout(() => {
-            currentIndex.value = (currentIndex.value - 1 + load.value.versus.length) % load.value.versus.length;
-            animationClass.value = 'fade-in';
-            startIndexCycle(); // Restart the timer
-        }, 500);
-    }
-};
-
-onMounted(() => {
-    loadData();
-    startIndexCycle();
-});
-
-onUnmounted(() => {
-    clearInterval(intervalId);
-});
 
 const routerLink = (path) => {
-    const data = JSON.stringify({ path: path, type: 'operation' });
+    const data = JSON.stringify({ path: path, type: 'sales' });
     const encryptedPath = CryptoJS.AES.encrypt(data, 'your-secret-key').toString();
     router.push({
         path: '/detail-dashboard',
         query: { component: encryptedPath }
     });
 };
+
+watch(() => props.datas, loadData, { immediate: true });
 </script>
 
 <template>
-    <div class="bg-gray-800 p-3 rounded-xl shadow-xl flex w-full gap-3 items-start h-full" :class="load.colspan">
+    <div class="bg-gray-800 p-3 rounded-xl shadow-xl flex w-full gap-3 items-start h-full">
         <div class="flex flex-col w-full h-full">
             <div class="flex items-center gap-6 h-full">
-                <span class="text-[0.8vw] font-bold w-full">{{ load.name }}</span>
+                <span class="text-[0.8vw] font-bold w-full">Qty Penjualan Retail (dlm Box)</span>
                 <button
-                    v-show="load.link != null"
-                    @click="routerLink(load.link)"
+                    @click="routerLink('penjualan-ritel')"
                     class="animate-pulse hover:animate-none p-4 w-[1.5vw] h-[1.5vw] cursor-pointer bg-transparent text-emerald-500 rotate-180 hover:rotate-[-180] hover:bg-black hover:text-amber-500 rounded-full flex items-center justify-center transition-all duration-500"
                 >
                     <i class="pi pi-external-link" style="font-weight: 600; font-size: 0.9vw"></i>
                 </button>
             </div>
-            <div class="flex gap-4 w-full h-full">
-                <img v-show="load.icon != null" :src="load.icon" alt="Icon" class="hidden lg:flex w-[3vw] h-[3vw]" />
-                <div class="w-full flex flex-col justify-between min-h-[3vw] gap-1 h-full">
-                    <div v-show="load.nilai != null" v-html="load.nilai" class="h-full w-full"></div>
-                    <!-- <div :class="animationClass" class="h-full w-full" v-html="load.versus[currentIndex]"></div> -->
+            <div class="grid grid-cols-3 gap-4 w-full h-full">
+                <div class="col-span-2 w-full flex flex-col justify-between min-h-[3vw] gap-1 h-full">
+                    <div class="flex w-full gap-2 h-full items-center py-1 px-1">
+                        <div class="flex flex-col gap-2 w-full bg-black h-full py-2 px-3 rounded-lg">
+                            <div class="flex gap-2 justify-between items-center">
+                                <span class="text-[1.7vw] font-bold text-amber-500">{{ load.persen }}%</span>
+                                <span class="text-[0.5vw] font-bold text-white">s/d {{ load.tanggal }}</span>
+                            </div>
+                            <div class="flex gap-2 h-full">
+                                <div class="flex w-full flex-col-reverse items-end justify-center text-amber-500 font-bold">
+                                    <span class="text-[0.5vw]">Real</span><span class="text-[0.7vw]">{{ load.real }}</span>
+                                </div>
+                                <div class="flex w-full flex-col-reverse items-end justify-center text-green-500 font-bold">
+                                    <span class="text-[0.5vw]">RKAP</span><span class="text-[0.7vw]">{{ load.rkap }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <VueApexCharts v-show="load.dataChart != null" :series="load.dataChart" :options="load.optionsChart" class="w-full" height="150vw" style="z-index: 1 !important" />
-            </div>
-            <div v-if="load.versus.length > 1" class="flex justify-between pt-1">
-                <button @click="prevIndex" class="p-1 bg-gray-700 text-white text-sm rounded hover:bg-gray-600 transition flex items-center text-[0.6vw]"><i class="pi pi-chevron-left mr-1" style="font-size: 0.6vw"></i> Prev</button>
-                <button @click="nextIndex" class="p-1 bg-gray-700 text-white text-sm rounded hover:bg-gray-600 transition flex items-center text-[0.6vw]">Next <i class="pi pi-chevron-right ml-1" style="font-size: 0.6vw"></i></button>
+                <VueApexCharts v-if="load.dataChart.length > 0" v-for="(item, index) in load.dataChart" :key="index" :series="item.series" :options="item.options" height="135vw" class="w-auto" style="z-index: 1 !important" />
+                <!-- <VueApexCharts v-if="load.dataChart.length > 0" v-for="(item, index) in load.dataChart" :key="index" :series="item.series" :options="item.options" class="w-full" height="200vw" style="z-index: 1 !important" /> -->
             </div>
         </div>
     </div>
 </template>
-
-<style>
-.fade-in {
-    opacity: 0;
-    animation: fadeIn 0.8s forwards;
-}
-
-.fade-out {
-    opacity: 1;
-    animation: fadeOut 0.8s forwards;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-@keyframes fadeOut {
-    from {
-        opacity: 1;
-    }
-    to {
-        opacity: 0;
-    }
-}
-</style>
