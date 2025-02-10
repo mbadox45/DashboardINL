@@ -1181,6 +1181,7 @@ export default new (class financeDetailController {
             listLabels.push(moment(labels[i], 'MMMM').format('MMM'));
         }
         return {
+            tanggal: moment(form.tanggalAkhir).format('MMM YYYY'),
             table: [
                 { tahun: response.tabel.tahunNow, data: thisYear },
                 { tahun: response.tabel.tahunLast, data: lastYear }

@@ -26,7 +26,7 @@ export default new (class HomeDashboard {
         return list;
     };
     cardSCM = () => {
-        const list = [proportionCost(), sdm()];
+        const list = [proportionCost()];
         return list;
     };
     cardPackaging = () => {

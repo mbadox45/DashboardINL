@@ -1,8 +1,8 @@
 <script setup>
+import { valueColorPersenCondition } from '@/controller/dummyController';
 import CryptoJS from 'crypto-js';
 import { defineProps, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
-import { valueColorPersenCondition } from '@/controller/dummyController';
 
 const router = useRouter();
 
@@ -13,11 +13,11 @@ const props = defineProps({
     }
 });
 
-const load = ref({ persen: 0, pendapatan: 0, rkap: 0 });
+const load = ref({ persen: 0, pendapatan: 0, rkap: 0, tanggal: '' });
 
 const loadData = async () => {
     const data = props.datas;
-    load.value = { persen: data.persenPendapatan, pendapatan: data.pendapatan, rkap: data.targetPendapatanRkap };
+    load.value = { persen: data.persenPendapatan, pendapatan: data.pendapatan, rkap: data.targetPendapatanRkap, tanggal: data.tanggal };
 };
 
 const routerLink = (path) => {
@@ -56,7 +56,7 @@ watch(() => props.datas, loadData, { immediate: true });
                                 <span class="text-[0.8vw]" :class="valueColorPersenCondition(load.persen)">{{ load.pendapatan }}</span>
                             </div>
                             <div class="font-bold flex flex-col-reverse items-end">
-                                <span class="text-white text-[0.6vw]">RKAP Des 2024</span>
+                                <span class="text-white text-[0.6vw]">RKAP {{ load.tanggal }}</span>
                                 <span class="text-amber-600 text-[0.8vw]">{{ load.rkap }}</span>
                             </div>
                         </div>

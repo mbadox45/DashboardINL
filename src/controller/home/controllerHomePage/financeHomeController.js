@@ -417,6 +417,7 @@ export default new (class financeHomeController {
                 if (monthsThisYear != null) {
                     const thisYearLatestMonth = {
                         month: monthsThisYear.month,
+                        tanggal: moment(form.tanggalAkhir).format('MMM YYYY'),
                         pendapatan: valueToBilion(monthsThisYear.pendapatan),
                         targetPendapatanRkap: valueToBilion(monthsThisYear.targetPendapatanRkap),
                         persenPendapatan: Number(monthsThisYear.targetPendapatanRkap) == 0 ? 0 : ((Number(monthsThisYear.pendapatan) / Number(monthsThisYear.targetPendapatanRkap)) * 100).toFixed(0),
@@ -442,6 +443,7 @@ export default new (class financeHomeController {
                 else {
                     const thisYearLatestMonth = {
                         month: 0,
+                        tanggal: moment(form.tanggalAkhir).format('MMM YYYY'),
                         pendapatan: 0,
                         targetPendapatanRkap: 0,
                         persenPendapatan: 0,
@@ -463,6 +465,7 @@ export default new (class financeHomeController {
             } else {
                 const thisYearLatestMonth = {
                     month: 0,
+                    tanggal: moment(form.tanggalAkhir).format('MMM YYYY'),
                     pendapatan: 0,
                     targetPendapatanRkap: 0,
                     persenPendapatan: 0,
@@ -484,6 +487,7 @@ export default new (class financeHomeController {
         } catch (error) {
             const thisYearLatestMonth = {
                 month: 0,
+                tanggal: '',
                 pendapatan: 0,
                 targetPendapatanRkap: 0,
                 persenPendapatan: 0,
