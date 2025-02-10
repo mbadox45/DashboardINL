@@ -33,11 +33,12 @@ export default new (class scmDetailController {
                         //     saldo_tersedia: formatCurrency(Number(saldo[i].saldo_tersedia).toFixed(2))
                         // });
                     }
+                    const nilai = saldo.length - 1;
                     result.table = {
-                        tanggal: moment(saldo[0].tanggal).format('DD MMMM YYYY'),
-                        saldo_awal: formatCurrency(Number(saldo[0].saldo_awal).toFixed(2)),
-                        saldo_pakai: formatCurrency(Number(saldo[0].saldo_pakai).toFixed(2)),
-                        saldo_tersedia: formatCurrency(Number(saldo[0].saldo_tersedia).toFixed(2))
+                        tanggal: moment(saldo[nilai].tanggal).format('DD MMMM YYYY'),
+                        saldo_awal: formatCurrency(Number(saldo[nilai].saldo_awal).toFixed(2)),
+                        saldo_pakai: formatCurrency(Number(saldo[nilai].saldo_pakai).toFixed(2)),
+                        saldo_tersedia: formatCurrency(Number(saldo[nilai].saldo_tersedia).toFixed(2))
                     };
                 }
                 result.series.push({
