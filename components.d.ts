@@ -15,6 +15,7 @@ declare module 'vue' {
     ColumnGroup: typeof import('primevue/columngroup')['default']
     DataTable: typeof import('primevue/datatable')['default']
     DatePicker: typeof import('primevue/datepicker')['default']
+    Dialog: typeof import('primevue/dialog')['default']
     Divider: typeof import('primevue/divider')['default']
     Drawer: typeof import('primevue/drawer')['default']
     FeaturesWidget: typeof import('./src/components/landing/FeaturesWidget.vue')['default']

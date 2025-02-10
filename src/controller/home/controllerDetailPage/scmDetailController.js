@@ -1,7 +1,56 @@
+import { lineChartApex } from '@/controller/chartStyle/chartDummy';
+import { formatCurrency } from '@/controller/dummyController';
 import productMasterController from '@/controller/getApiFromThisApp/master/productMasterController';
+import saldoPeScmController from '@/controller/getApiFromThisApp/supplyChain/saldoPeScmController';
 import retailStockScmController from '@/controller/getApiFromThisApp/supplyChain/stock/retailStockScmController';
+import moment from 'moment';
 
 export default new (class scmDetailController {
+    saldoPe = async (form) => {
+        try {
+            const label = [];
+            const series = [];
+            const table = [];
+            let result = {
+                series: [],
+                chartOptions: null,
+                table: null
+            };
+            const response = await saldoPeScmController.getAll();
+            if (response != null) {
+                const saldo = response.filter((item) => {
+                    const itemDate = new Date(item.tanggal); // Ubah ke tipe Date
+                    return itemDate >= new Date(form.tanggalAwal) && itemDate <= new Date(form.tanggalAkhir);
+                });
+                if (saldo.length > 0) {
+                    for (let i = 0; i < saldo.length; i++) {
+                        label.push(saldo[i].tanggal);
+                        series.push(saldo[i].saldo_tersedia);
+                        // table.push({
+                        //     tanggal: moment(saldo[i].tanggal).format('DD MMMM YYYY'),
+                        //     saldo_awal: formatCurrency(Number(saldo[i].saldo_awal).toFixed(2)),
+                        //     saldo_pakai: formatCurrency(Number(saldo[i].saldo_pakai).toFixed(2)),
+                        //     saldo_tersedia: formatCurrency(Number(saldo[i].saldo_tersedia).toFixed(2))
+                        // });
+                    }
+                    result.table = {
+                        tanggal: moment(saldo[0].tanggal).format('DD MMMM YYYY'),
+                        saldo_awal: formatCurrency(Number(saldo[0].saldo_awal).toFixed(2)),
+                        saldo_pakai: formatCurrency(Number(saldo[0].saldo_pakai).toFixed(2)),
+                        saldo_tersedia: formatCurrency(Number(saldo[0].saldo_tersedia).toFixed(2))
+                    };
+                }
+                result.series.push({
+                    name: 'Saldo Tersedia',
+                    data: series
+                });
+                result.chartOptions = lineChartApex(label);
+            }
+            return result;
+        } catch (error) {
+            return null;
+        }
+    };
     stockRitel = async (form) => {
         try {
             const listQtyProduct = [];

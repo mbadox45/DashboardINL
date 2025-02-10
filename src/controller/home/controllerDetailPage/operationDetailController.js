@@ -2,12 +2,92 @@ import { pieChartApex, radialChartApex } from '@/controller/chartStyle/radialBar
 import { formatCurrency } from '@/controller/dummyController';
 import bebanProdCpoOlahController from '@/controller/getApiFromThisApp/cpoOlah/bebanProdCpoOlahController';
 import targetProdCpoOlahController from '@/controller/getApiFromThisApp/cpoOlah/targetProdCpoOlahController';
+import laporanMaterialController from '@/controller/getApiFromThisApp/laporanMaterial/laporanMaterialController';
 import laporanProduksiController from '@/controller/getApiFromThisApp/laporanProduksi/laporanProduksiController';
 import jenisLaporanPackagingController from '@/controller/getApiFromThisApp/packaging/jenisLaporanPackagingController';
 import laporanPackagingController from '@/controller/getApiFromThisApp/packaging/laporanPackagingController';
 import targetPackagingController from '@/controller/getApiFromThisApp/packaging/targetPackagingController';
 
 export default new (class hargaDetailController {
+    laporanMaterial = async (form) => {
+        try {
+            const listAll = [];
+            const response = await laporanMaterialController.getByPeriod(form);
+            if (response != null) {
+                const laporan = response.laporan_material;
+                if (laporan != null) {
+                    for (let i = 0; i < laporan.length; i++) {
+                        const listMaterial = [];
+                        const kategori = laporan[i].kategori_data;
+                        const incoming = kategori.find((item) => item.kategori == 'incoming');
+                        if (incoming != null) {
+                            const materials = incoming.materials;
+                            for (let j = 0; j < materials.length; j++) {
+                                listMaterial.push({
+                                    name: materials[j].name,
+                                    totalQty: formatCurrency(Number(materials[j].totalQty).toFixed(2)),
+                                    norma: materials[j].norma == null ? '-' : formatCurrency(Number(materials[j].norma).toFixed(2)),
+                                    usage: materials[j].usage == null ? '-' : formatCurrency(Number(materials[j].usage).toFixed(2)),
+                                    color: materials[j].color,
+                                    kategori: incoming.kategori
+                                });
+                            }
+                        }
+                        const outgoing = kategori.find((item) => item.kategori == 'outgoing');
+                        if (outgoing != null) {
+                            const materials = outgoing.materials;
+                            for (let j = 0; j < materials.length; j++) {
+                                listMaterial.push({
+                                    name: materials[j].name,
+                                    totalQty: formatCurrency(Number(materials[j].totalQty).toFixed(2)),
+                                    norma: materials[j].norma == null ? '-' : formatCurrency(Number(materials[j].norma).toFixed(2)),
+                                    usage: materials[j].usage == null ? '-' : formatCurrency(Number(materials[j].usage).toFixed(2)),
+                                    color: materials[j].color,
+                                    kategori: outgoing.kategori
+                                });
+                            }
+                        }
+                        const proportion = kategori.find((item) => item.kategori == 'proportion');
+                        if (proportion != null) {
+                            const materials = proportion.materials;
+                            for (let j = 0; j < materials.length; j++) {
+                                listMaterial.push({
+                                    name: materials[j].name,
+                                    totalQty: formatCurrency(Number(materials[j].totalQty).toFixed(2)),
+                                    norma: materials[j].norma == null ? '-' : formatCurrency(Number(materials[j].norma).toFixed(2)),
+                                    usage: materials[j].usage == null ? '-' : formatCurrency(Number(materials[j].usage).toFixed(2)),
+                                    color: materials[j].color,
+                                    kategori: proportion.kategori
+                                });
+                            }
+                        }
+                        const others = kategori.find((item) => item.kategori == 'others');
+                        if (others != null) {
+                            const materials = others.materials;
+                            for (let j = 0; j < materials.length; j++) {
+                                listMaterial.push({
+                                    name: materials[j].name,
+                                    totalQty: formatCurrency(Number(materials[j].totalQty).toFixed(2)),
+                                    norma: materials[j].norma == null ? '-' : formatCurrency(Number(materials[j].norma).toFixed(2)),
+                                    usage: materials[j].usage == null ? '-' : formatCurrency(Number(materials[j].usage).toFixed(2)),
+                                    color: materials[j].color,
+                                    kategori: others.kategori
+                                });
+                            }
+                        }
+
+                        listAll.push({
+                            name: laporan[i].jenis_laporan,
+                            items: listMaterial
+                        });
+                    }
+                }
+            }
+            return listAll;
+        } catch (error) {
+            return null;
+        }
+    };
     laporanPackaging = async (form) => {
         try {
             const list = [];

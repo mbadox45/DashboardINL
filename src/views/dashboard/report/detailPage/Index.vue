@@ -21,12 +21,14 @@ import NetProfitMarginFinance from '@/views/dashboard/report/detailPage/componen
 import RevenueDetailFinance from '@/views/dashboard/report/detailPage/components/financial/RevenueDetailFinance.vue';
 // Operation
 import CpoOlahVsRkapOperation from '@/views/dashboard/report/detailPage/components/operation/CpoOlahRkapUtilityOperation.vue';
+import LaporanMaterialOperation from '@/views/dashboard/report/detailPage/components/operation/LaporanMaterialOperation.vue';
 import LaporanProduksiOperation from '@/views/dashboard/report/detailPage/components/operation/LaporanProduksiOperation.vue';
 import PackagingOperation from '@/views/dashboard/report/detailPage/components/operation/PackagingOperation.vue';
 // Sales
 import PenjualanBulkSales from '@/views/dashboard/report/detailPage/components/sales/PenjualanBulkSales.vue';
 import PenjualanRitelSales from '@/views/dashboard/report/detailPage/components/sales/PenjualanRitelSales.vue';
 // SCM
+import SaldoPeScm from '@/views/dashboard/report/detailPage/components/scm/SaldoPeScm.vue';
 
 // Controller
 import financeDetailController from '@/controller/home/controllerDetailPage/financeDetailController';
@@ -100,6 +102,8 @@ const loadFinance = async (path) => {
         result = await operationDetailController.laporanProduksi(formData.value);
     } else if (path.toLowerCase().includes('packaging-operation-operation')) {
         result = await operationDetailController.laporanPackaging(formData.value);
+    } else if (path.toLowerCase().includes('laporan-material-operation')) {
+        result = await operationDetailController.laporanMaterial(formData.value);
     } else if (path.toLowerCase().includes('gross-profit-financial')) {
         result = await financeDetailController.resultGrossProfit(formData.value);
     } else if (path.toLowerCase().includes('penjualan-bulk-sales')) {
@@ -108,6 +112,8 @@ const loadFinance = async (path) => {
         result = await salesDetailController.penjualanRitel(formData.value);
     } else if (path.toLowerCase().includes('stock-ritel-scm')) {
         result = await scmDetailController.stockRitel(formData.value);
+    } else if (path.toLowerCase().includes('saldo-pe-scm')) {
+        result = await scmDetailController.saldoPe(formData.value);
     } else {
         result = null;
     }
@@ -150,10 +156,15 @@ const updateDates = async (dates) => {
             <penjualan-bulk-sales v-if="routeName == 'penjualan-bulk'" :datas="listData" />
             <penjualan-ritel-sales v-if="routeName == 'penjualan-ritel'" :datas="listData" />
         </div>
+        <div class="min-h-[30rem] p-6 rounded-xl" v-else-if="routeType == 'scm'">
+            <penjualan-bulk-sales v-if="routeName == 'penjualan-bulk'" :datas="listData" />
+            <saldo-pe-scm v-if="routeName == 'saldo-pe'" :datas="listData" />
+        </div>
         <div class="min-h-[30rem] p-6 rounded-xl" v-else>
             <cpo-olah-vs-rkap-operation v-if="routeName == 'cpo-olah-vs-rkap'" :datas="listData" />
             <packaging-operation v-else-if="routeName == 'packaging-operation'" :datas="listData" />
             <laporan-produksi-operation v-else-if="routeName == 'laporan-produksi-operation'" :datas="listData" />
+            <laporan-material-operation v-else-if="routeName == 'laporan-material'" :datas="listData" />
             <div v-else class="h-[30rem] w-full flex flex-col items-center justify-center">
                 <span>404 Not Found</span>
             </div>

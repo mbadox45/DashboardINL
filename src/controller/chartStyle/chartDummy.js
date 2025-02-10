@@ -1,3 +1,49 @@
+export const lineChartApex = (label) => {
+    return {
+        chart: {
+            height: 350,
+            type: 'area'
+        },
+        dataLabels: {
+            enabled: false
+        },
+        stroke: {
+            curve: 'smooth'
+        },
+        xaxis: {
+            type: 'date',
+            categories: label
+        },
+        plotOptions: {
+            area: {
+                colors: {
+                    ranges: [
+                        {
+                            from: -Infinity,
+                            to: 0,
+                            color: 'rgba(255, 0, 0, 0.6)'
+                        }
+                    ]
+                },
+                dataLabels: {
+                    position: 'bottom',
+                    offsetY: 10
+                }
+            }
+        },
+        tooltip: {
+            theme: 'dark', // Mengubah background tooltip menjadi hitam
+            x: {
+                format: 'dd/MM/yy'
+            },
+            style: {
+                fontSize: '12px',
+                fontFamily: 'Arial, sans-serif'
+            }
+        }
+    };
+};
+
 export const comboChartOptionsApex = (total, label1, label2, listLabels, colors, colorsLabel, scale1, scale2) => {
     return {
         chart: {

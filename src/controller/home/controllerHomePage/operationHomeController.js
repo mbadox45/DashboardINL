@@ -86,7 +86,6 @@ export default new (class operationHomeController {
                     for (let j = 0; j < kategori.length; j++) {
                         const material = kategori[j].materials;
                         for (let k = 0; k < material.length; k++) {
-                            console.log(material[k]);
                             nilaiLaporan.push({
                                 jenisLaporan: laporan[i].jenis_laporan,
                                 materialsName: material[k].name,
@@ -216,7 +215,6 @@ export default new (class operationHomeController {
                     items: []
                 }
             ];
-            console.log(result);
             return result;
         }
     };
