@@ -1,3 +1,133 @@
+import { formatCurrency } from '../dummyController';
+
+export const barHorizontalChartApex = (label) => {
+    return {
+        chart: {
+            type: 'bar',
+            height: 350,
+            foreColor: '#ffffff' // Warna teks default menjadi putih
+        },
+        plotOptions: {
+            bar: {
+                borderRadius: 4,
+                borderRadiusApplication: 'end',
+                horizontal: true
+            }
+        },
+        dataLabels: {
+            enabled: false
+        },
+        xaxis: {
+            categories: label,
+            labels: {
+                style: {
+                    colors: '#ffffff', // Warna putih untuk teks di bawah
+                    fontSize: '12px'
+                },
+                formatter: function (val) {
+                    return formatCurrency(Number(val).toFixed(0)); // Format nilai di bawah
+                }
+            }
+        },
+        yaxis: {
+            labels: {
+                style: {
+                    colors: '#ffffff', // Warna putih untuk teks di samping
+                    fontSize: '12px'
+                }
+            }
+        },
+        tooltip: {
+            theme: 'dark',
+            style: {
+                fontSize: '12px',
+                fontFamily: 'Arial, sans-serif'
+            },
+            y: {
+                formatter: function (val) {
+                    return 'Total ' + formatCurrency(Number(val).toFixed(0));
+                }
+            }
+        }
+    };
+};
+
+export const barChartApex = (label) => {
+    return {
+        chart: {
+            type: 'bar',
+            height: 350
+        },
+        plotOptions: {
+            bar: {
+                horizontal: false,
+                columnWidth: '55%',
+                borderRadius: 5,
+                borderRadiusApplication: 'end'
+            }
+        },
+        dataLabels: {
+            enabled: false,
+            style: {
+                colors: ['#ffffff'] // Warna putih untuk nilai di dalam chart
+            }
+        },
+        stroke: {
+            show: true,
+            width: 2,
+            colors: ['transparent']
+        },
+        xaxis: {
+            categories: label,
+            labels: {
+                style: {
+                    colors: '#ffffff', // Warna putih untuk label di sumbu X
+                    fontSize: '12px'
+                }
+            }
+        },
+        yaxis: {
+            labels: {
+                style: {
+                    colors: '#ffffff', // Warna putih untuk label di sumbu Y
+                    fontSize: '12px'
+                },
+                formatter: function (val) {
+                    return formatCurrency(Number(val).toFixed(0)); // Format nilai dengan formatCurrency
+                }
+            },
+            title: {
+                text: 'Qty (Kg)',
+                style: {
+                    color: '#ffffff' // Warna putih untuk judul sumbu Y
+                }
+            }
+        },
+        fill: {
+            opacity: 1
+        },
+        tooltip: {
+            theme: 'dark',
+            style: {
+                fontSize: '12px',
+                fontFamily: 'Arial, sans-serif',
+                color: '#ffffff' // Warna putih untuk teks di tooltip
+            },
+            y: {
+                formatter: function (val) {
+                    return 'Qty ' + formatCurrency(Number(val).toFixed(0)) + ' Kg';
+                }
+            }
+        },
+        legend: {
+            labels: {
+                colors: '#ffffff', // Warna putih untuk teks legend
+                useSeriesColors: false
+            }
+        }
+    };
+};
+
 export const lineChartApex = (label) => {
     return {
         chart: {
@@ -5,14 +135,34 @@ export const lineChartApex = (label) => {
             type: 'area'
         },
         dataLabels: {
-            enabled: false
+            enabled: false,
+            style: {
+                colors: ['#ffffff'] // Warna putih untuk nilai di chart
+            }
         },
         stroke: {
             curve: 'smooth'
         },
         xaxis: {
-            type: 'date',
-            categories: label
+            type: 'datetime',
+            categories: label,
+            labels: {
+                style: {
+                    colors: '#ffffff', // Warna putih untuk label di sumbu X
+                    fontSize: '12px'
+                }
+            }
+        },
+        yaxis: {
+            labels: {
+                style: {
+                    colors: '#ffffff', // Warna putih untuk label di sumbu Y
+                    fontSize: '12px'
+                },
+                formatter: function (val) {
+                    return formatCurrency(Number(val).toFixed(0)); // Format nilai dengan formatCurrency
+                }
+            }
         },
         plotOptions: {
             area: {
@@ -38,7 +188,8 @@ export const lineChartApex = (label) => {
             },
             style: {
                 fontSize: '12px',
-                fontFamily: 'Arial, sans-serif'
+                fontFamily: 'Arial, sans-serif',
+                color: '#ffffff' // Warna putih untuk teks di tooltip
             }
         }
     };

@@ -28,7 +28,12 @@ import PackagingOperation from '@/views/dashboard/report/detailPage/components/o
 import PenjualanBulkSales from '@/views/dashboard/report/detailPage/components/sales/PenjualanBulkSales.vue';
 import PenjualanRitelSales from '@/views/dashboard/report/detailPage/components/sales/PenjualanRitelSales.vue';
 // SCM
+import ActualIncomingScm from '@/views/dashboard/report/detailPage/components/scm/ActualIncomingScm.vue';
+import OutstandingCpoScm from '@/views/dashboard/report/detailPage/components/scm/OutstandingCpoScm.vue';
 import SaldoPeScm from '@/views/dashboard/report/detailPage/components/scm/SaldoPeScm.vue';
+import StokBulkScm from '@/views/dashboard/report/detailPage/components/scm/StokBulkScm.vue';
+import StokCpoScm from '@/views/dashboard/report/detailPage/components/scm/StokCpoScm.vue';
+import StokRitelScm from '@/views/dashboard/report/detailPage/components/scm/StokRitelScm.vue';
 
 // Controller
 import financeDetailController from '@/controller/home/controllerDetailPage/financeDetailController';
@@ -47,7 +52,7 @@ const formData = ref({
     idMataUang: 1,
     idPackaging: 1,
     tanggalAwal: moment('2023-01-01').format('YYYY-MM-DD'),
-    tanggalAkhir: moment('2024-12-30').format('YYYY-MM-DD')
+    tanggalAkhir: moment('2024-10-30').format('YYYY-MM-DD')
     // tanggalAwal: moment().format('YYYY-MM-01'),
     // tanggalAkhir: moment().format('YYYY-MM-DD')
 });
@@ -112,8 +117,16 @@ const loadFinance = async (path) => {
         result = await salesDetailController.penjualanRitel(formData.value);
     } else if (path.toLowerCase().includes('stock-ritel-scm')) {
         result = await scmDetailController.stockRitel(formData.value);
+    } else if (path.toLowerCase().includes('stock-bulk-scm')) {
+        result = await scmDetailController.stockBulk(formData.value);
+    } else if (path.toLowerCase().includes('stock-cpo-scm')) {
+        result = await scmDetailController.stockCpo(formData.value);
     } else if (path.toLowerCase().includes('saldo-pe-scm')) {
         result = await scmDetailController.saldoPe(formData.value);
+    } else if (path.toLowerCase().includes('actual-incoming-cpo-scm')) {
+        result = await scmDetailController.actualIncomingCpo(formData.value);
+    } else if (path.toLowerCase().includes('outstanding-cpo-scm')) {
+        result = await scmDetailController.outstandingCpo(formData.value);
     } else {
         result = null;
     }
@@ -158,7 +171,12 @@ const updateDates = async (dates) => {
         </div>
         <div class="min-h-[30rem] p-6 rounded-xl" v-else-if="routeType == 'scm'">
             <penjualan-bulk-sales v-if="routeName == 'penjualan-bulk'" :datas="listData" />
-            <saldo-pe-scm v-if="routeName == 'saldo-pe'" :datas="listData" />
+            <saldo-pe-scm v-else-if="routeName == 'saldo-pe'" :datas="listData" />
+            <actual-incoming-scm v-else-if="routeName == 'actual-incoming-cpo'" :datas="listData" />
+            <outstanding-cpo-scm v-else-if="routeName == 'outstanding-cpo'" :datas="listData" />
+            <stok-ritel-scm v-else-if="routeName == 'stock-ritel'" :datas="listData" />
+            <stok-bulk-scm v-else-if="routeName == 'stock-bulk'" :datas="listData" />
+            <stok-cpo-scm v-else-if="routeName == 'stock-cpo'" :datas="listData" />
         </div>
         <div class="min-h-[30rem] p-6 rounded-xl" v-else>
             <cpo-olah-vs-rkap-operation v-if="routeName == 'cpo-olah-vs-rkap'" :datas="listData" />

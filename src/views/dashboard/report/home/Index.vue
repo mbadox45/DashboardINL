@@ -47,6 +47,7 @@ const dataStockBulk = ref([]);
 const dataStockRetail = ref([]);
 const dataActualIncoming = ref({});
 const dataOutstanding = ref({});
+const dataStockCpo = ref({});
 
 // Sales Var Data
 const dataPenjualanBulk = ref({});
@@ -130,6 +131,9 @@ const loadDataControllerSCM = async (form) => {
 
     const outstanding = await supplyChainHomeController.outstandingCpo();
     dataOutstanding.value = outstanding;
+
+    const stokCpo = await supplyChainHomeController.stokCpo(form);
+    dataStockCpo.value = stokCpo;
     // console.log(outstanding);
 };
 
@@ -202,7 +206,7 @@ const loadDataSCM = async () => {
                     </div>
                     <div class="col-span-2 flex flex-col gap-3">
                         <span class="font-bold w-full text-[0.8vw]">Supply Chain</span>
-                        <card-home-supply-chain :stokbulk="dataStockBulk" :stokritel="dataStockRetail" :actualincoming="dataActualIncoming" :outstanding="dataOutstanding" :saldope="dataSaldoPe" />
+                        <card-home-supply-chain :stokcpo="dataStockCpo" :stokbulk="dataStockBulk" :stokritel="dataStockRetail" :actualincoming="dataActualIncoming" :outstanding="dataOutstanding" :saldope="dataSaldoPe" />
                         <div class="flex flex-col gap-2">
                             <div class="grid grid-cols-3 gap-2">
                                 <card-scm-values v-for="(item, index) in listCardSCM" :key="index" :datas="item" :style="`animation: fadein 1s ease-in-out`" />

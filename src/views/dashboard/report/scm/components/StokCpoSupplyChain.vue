@@ -12,11 +12,11 @@ const props = defineProps({
     }
 });
 
-const load = ref({ saldoTersedia: 0, saldoAwal: 0, pengiriman: 0 });
+const load = ref({ total: 0, cpoIn: 0, cpoFeed: 0, tanggal: '' });
 
 const loadData = async () => {
     const data = props.datas;
-    load.value = { saldoTersedia: data.saldoTersedia, saldoAwal: data.saldoAwal, pengiriman: data.pengiriman };
+    load.value = { total: data.total, cpoIn: data.cpoIn, cpoFeed: data.cpoFeed, tanggal: data.tanggal };
 };
 
 const routerLink = (path) => {
@@ -47,12 +47,16 @@ watch(() => props.datas, loadData, { immediate: true });
                 <div class="w-full h-full">
                     <div class="flex flex-col gap-2 w-full">
                         <div class="flex flex-row-reverse justify-between items-center">
-                            <span class="font-bold text-[1.5vw] text-green-600">1,000</span>
-                            <span class="font-bold text-[0.8vw] text-cyan-600">31 Dec 2024</span>
+                            <span class="font-bold text-[1.5vw] text-green-600">{{ load.total }}</span>
+                            <span class="font-bold text-[0.8vw] text-cyan-600">{{ load.tanggal }}</span>
                         </div>
                         <div class="flex gap-2 w-full">
-                            <div class="flex flex-col-reverse items-end w-full text-cyan-500 font-bold"><span class="text-[0.8vw]">CPO in</span><span class="text-amber-500 text-[1vw]">3,000</span></div>
-                            <div class="flex flex-col-reverse items-end w-full text-cyan-500 font-bold"><span class="text-[0.8vw]">CPO feed</span><span class="text-amber-500 text-[1vw]">2,000</span></div>
+                            <div class="flex flex-col-reverse items-end w-full text-cyan-500 font-bold">
+                                <span class="text-[0.8vw]">CPO in</span><span class="text-amber-500 text-[1vw]">{{ load.cpoIn }}</span>
+                            </div>
+                            <div class="flex flex-col-reverse items-end w-full text-cyan-500 font-bold">
+                                <span class="text-[0.8vw]">CPO feed</span><span class="text-amber-500 text-[1vw]">{{ load.cpoFeed }}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
