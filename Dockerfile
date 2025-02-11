@@ -1,5 +1,5 @@
-# Use the official Node.js image
-FROM node:14-alpine
+# Use the official Node.js image (version 20)
+FROM node:20-alpine
 
 # Set the working directory
 WORKDIR /app
@@ -13,8 +13,8 @@ RUN npm install
 # Copy the rest of the application files
 COPY . .
 
-# Expose port
-EXPOSE 8090
+# Expose port 8481
+EXPOSE 8481
 
 # Command to run the Vue.js application
 CMD ["npm", "run", "dev"]
