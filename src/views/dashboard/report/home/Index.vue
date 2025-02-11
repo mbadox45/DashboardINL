@@ -11,13 +11,12 @@ import supplyChainHomeController from '@/controller/home/controllerHomePage/supp
 // Components
 import HomeDash from '@/controller/home/homeDash';
 import ImagesHome from '@/views/dashboard/report/home/components/ImagesHome.vue';
-import CardScmValues from '@/views/dashboard/report/home/components/scm/CardSCMValues.vue';
 
 import CardHomeFinance from '@/views/dashboard/report/finance/CardHomeFinance.vue';
 import HargaSpotFinance from '@/views/dashboard/report/harga/HargaSpotFinance.vue';
 import CardHomeMaterial from '@/views/dashboard/report/operation/CardHomeMaterial.vue';
 import CardHomeOperation from '@/views/dashboard/report/operation/CardHomeOperation.vue';
-import SdmView from '@/views/dashboard/report/others/SdmView.vue';
+import MarketReuters from '@/views/dashboard/report/others/MarketReuters.vue';
 import CardHomePackaging from '@/views/dashboard/report/packaging/CardHomePackaging.vue';
 import CardHomeSales from '@/views/dashboard/report/sales/CardHomeSales.vue';
 import CardHomeSupplyChain from '@/views/dashboard/report/scm/CardHomeSupplyChain.vue';
@@ -25,7 +24,7 @@ import CardHomeSupplyChain from '@/views/dashboard/report/scm/CardHomeSupplyChai
 // import moment from 'moment';
 
 const listCardSCM = ref([]);
-const activePage = ref(0);
+const activePage = ref(1);
 
 // Finance Var Data
 const dataRevenue = ref({});
@@ -49,6 +48,7 @@ const dataStockRetail = ref([]);
 const dataActualIncoming = ref({});
 const dataOutstanding = ref({});
 const dataStockCpo = ref({});
+const dataMarketReuters = ref({});
 
 // Sales Var Data
 const dataPenjualanBulk = ref({});
@@ -208,9 +208,10 @@ const loadDataSCM = async () => {
                     <div class="col-span-2 flex flex-col gap-3">
                         <span class="font-bold w-full text-[0.8vw]">Supply Chain</span>
                         <card-home-supply-chain :stokcpo="dataStockCpo" :stokbulk="dataStockBulk" :stokritel="dataStockRetail" :actualincoming="dataActualIncoming" :outstanding="dataOutstanding" :saldope="dataSaldoPe" />
-                        <div class="grid grid-cols-3 gap-2">
-                            <card-scm-values v-for="(item, index) in listCardSCM" :key="index" :datas="item" :style="`animation: fadein 1s ease-in-out`" />
-                            <sdm-view class="col-span-2" />
+                        <div class="grid grid-cols-1 gap-2">
+                            <!-- <card-scm-values v-for="(item, index) in listCardSCM" :key="index" :datas="item" :style="`animation: fadein 1s ease-in-out`" />
+                            <sdm-view class="col-span-2" /> -->
+                            <market-reuters :datas="dataMarketReuters" />
                         </div>
                         <card-home-material :laporanmaterial="dataLaporanMaterial" />
                     </div>

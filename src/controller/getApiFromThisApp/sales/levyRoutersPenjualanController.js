@@ -30,10 +30,14 @@ export default new (class levyRoutersPenjualanController {
                 while (currentDate <= akhir) {
                     const tgl = currentDate.toISOString().split('T')[0];
                     const kurs = loadkurs.find((item) => item.tanggal == tgl);
+                    let nilaiKurs = 0;
+                    if (kurs != null) {
+                        nilaiKurs = kurs.value;
+                    }
                     dates.push({
                         tanggal: tgl,
-                        kursValue: kurs.value
-                    }); // Format YYYY-MM-DD
+                        kursValue: nilaiKurs
+                    });
 
                     // Tambah 1 hari
                     currentDate.setDate(currentDate.getDate() + 1);

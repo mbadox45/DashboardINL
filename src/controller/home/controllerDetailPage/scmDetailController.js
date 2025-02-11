@@ -1,6 +1,7 @@
 import { barChartApex, barHorizontalChartApex, lineChartApex } from '@/controller/chartStyle/chartDummy';
 import { formatCurrency } from '@/controller/dummyController';
 import productMasterController from '@/controller/getApiFromThisApp/master/productMasterController';
+import levyRoutersPenjualanController from '@/controller/getApiFromThisApp/sales/levyRoutersPenjualanController';
 import incomingCpoScmController from '@/controller/getApiFromThisApp/supplyChain/incomingCpoScmController';
 import outstandingCpoScmController from '@/controller/getApiFromThisApp/supplyChain/outstandingCpoScmController';
 import saldoPeScmController from '@/controller/getApiFromThisApp/supplyChain/saldoPeScmController';
@@ -10,6 +11,113 @@ import retailStockScmController from '@/controller/getApiFromThisApp/supplyChain
 import moment from 'moment';
 
 export default new (class scmDetailController {
+    marketReuters = async (form) => {
+        try {
+            const color = ['#F9E79F', '#D6EAF8', '#FAE5D3', '#F2D7D5', '#F2D7D5', '#F2D7D5', '#F2D7D5'];
+            const result = [];
+            const response = await levyRoutersPenjualanController.getByPeriod(form);
+            const productBulk = await productMasterController.getAll();
+            const bulk = productBulk.filter((item) => item.jenis == 'bulk');
+            // console.log(response);
+            const listBulk = [];
+            if (bulk != null) {
+                for (let i = 0; i < bulk.length; i++) {
+                    listBulk.push({
+                        name: bulk[i].name,
+                        id: bulk[i].id,
+                        color: color[i]
+                    });
+                }
+            }
+            if (response != null) {
+                for (let j = 0; j < response.length; j++) {
+                    const averageKurs = response[j].averageKurs == null ? 0 : formatCurrency(Number(response[j].averageKurs).toFixed(2));
+                    const averageMarketUsd = response[j].averageMarketReutersExcldLevyDuty == null ? null : response[j].averageMarketReutersExcldLevyDuty;
+                    const listUsd = [];
+                    if (averageMarketUsd != null) {
+                        for (let i = 0; i < averageMarketUsd.length; i++) {
+                            listUsd.push({
+                                product: averageMarketUsd[i].product,
+                                avg: formatCurrency(Number(averageMarketUsd[i].avg).toFixed(2))
+                            });
+                        }
+                    }
+                    const averageMarketIdr = response[j].averageMarketIdr == null ? null : response[j].averageMarketIdr;
+                    const listIdr = [];
+                    if (averageMarketIdr != null) {
+                        for (let i = 0; i < averageMarketIdr.length; i++) {
+                            listIdr.push({
+                                product: averageMarketIdr[i].product,
+                                avg: formatCurrency(Number(averageMarketIdr[i].avg).toFixed(2))
+                            });
+                        }
+                    }
+
+                    const listTable = [];
+
+                    const listKurs = [];
+                    const listLevy = [];
+                    const months = await response[j].months;
+                    if (months != null) {
+                        for (let i = 0; i < months.length; i++) {
+                            const kurs = months[i].kurs;
+                            for (let k = 0; k < kurs.length; k++) {
+                                listKurs.push({
+                                    id: kurs[k].id,
+                                    id_mata_uang: kurs[k].id_mata_uang,
+                                    mata_uang: kurs[k].mata_uang,
+                                    tanggal: kurs[k].tanggal,
+                                    value: kurs[k].value
+                                });
+                            }
+
+                            const products = months[i].products;
+                            for (let k = 0; k < products.length; k++) {
+                                const levyduty = products[k].levyduty;
+                                for (let l = 0; l < levyduty.length; l++) {
+                                    listLevy.push({
+                                        name: products[k].product,
+                                        nilai: products[k].nilai,
+                                        id_bulky: products[k].id_bulky,
+                                        id_mata_uang: products[k].id_mata_uang,
+                                        tanggal: products[k].tanggal
+                                    });
+                                }
+                            }
+                        }
+                    }
+
+                    if (listKurs.length > 0) {
+                        for (let i = 0; i < listKurs.length; i++) {
+                            // const levyDuty = listLevy.filter(item => item.tanggal == listKurs[i].tanggal)
+                            listTable.push({
+                                tanggal: listKurs[i].tanggal,
+                                // Kurs Jisdor
+                                id_mata_uang: listKurs[i].id_mata_uang,
+                                value: listKurs[i].value
+                            });
+                        }
+                    }
+
+                    console.log(listKurs);
+
+                    // Final Result
+                    result.push({
+                        year: response[j].year == null ? '' : response[j].year,
+                        averageKurs: averageKurs,
+                        averageMarketUsd: listUsd,
+                        averageMarketIdr: listIdr,
+                        dataTable: listTable,
+                        productList: listBulk,
+                        products: []
+                    });
+                }
+            }
+            return result;
+        } catch (error) {
+            return null;
+        }
+    };
     stockCpo = async (form) => {
         try {
             const list = [];

@@ -29,6 +29,7 @@ import PenjualanBulkSales from '@/views/dashboard/report/detailPage/components/s
 import PenjualanRitelSales from '@/views/dashboard/report/detailPage/components/sales/PenjualanRitelSales.vue';
 // SCM
 import ActualIncomingScm from '@/views/dashboard/report/detailPage/components/scm/ActualIncomingScm.vue';
+import MarketReutersScm from '@/views/dashboard/report/detailPage/components/scm/MarketReutersScm.vue';
 import OutstandingCpoScm from '@/views/dashboard/report/detailPage/components/scm/OutstandingCpoScm.vue';
 import SaldoPeScm from '@/views/dashboard/report/detailPage/components/scm/SaldoPeScm.vue';
 import StokBulkScm from '@/views/dashboard/report/detailPage/components/scm/StokBulkScm.vue';
@@ -125,6 +126,8 @@ const loadFinance = async (path) => {
         result = await scmDetailController.saldoPe(formData.value);
     } else if (path.toLowerCase().includes('actual-incoming-cpo-scm')) {
         result = await scmDetailController.actualIncomingCpo(formData.value);
+    } else if (path.toLowerCase().includes('reuters-levy-duty-scm')) {
+        result = await scmDetailController.marketReuters(formData.value);
     } else if (path.toLowerCase().includes('outstanding-cpo-scm')) {
         result = await scmDetailController.outstandingCpo(formData.value);
     } else {
@@ -177,6 +180,7 @@ const updateDates = async (dates) => {
             <stok-ritel-scm v-else-if="routeName == 'stock-ritel'" :datas="listData" />
             <stok-bulk-scm v-else-if="routeName == 'stock-bulk'" :datas="listData" />
             <stok-cpo-scm v-else-if="routeName == 'stock-cpo'" :datas="listData" />
+            <market-reuters-scm v-else-if="routeName == 'reuters-levy-duty'" :datas="listData" />
         </div>
         <div class="min-h-[30rem] p-6 rounded-xl" v-else>
             <cpo-olah-vs-rkap-operation v-if="routeName == 'cpo-olah-vs-rkap'" :datas="listData" />
