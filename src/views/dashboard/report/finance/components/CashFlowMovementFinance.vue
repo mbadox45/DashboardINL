@@ -10,6 +10,10 @@ const props = defineProps({
     datas: {
         type: Object,
         default: () => ({})
+    },
+    formPush: {
+        type: Object,
+        default: () => ({})
     }
 });
 
@@ -21,7 +25,7 @@ const loadData = async () => {
 };
 
 const routerLink = (path) => {
-    const data = JSON.stringify({ path: path, type: 'financial' });
+    const data = JSON.stringify({ path: path, type: 'financial', form: props.formPush });
     const encryptedPath = CryptoJS.AES.encrypt(data, 'your-secret-key').toString();
     router.push({
         path: '/detail-dashboard',
@@ -30,6 +34,7 @@ const routerLink = (path) => {
 };
 
 watch(() => props.datas, loadData, { immediate: true });
+watch(() => props.formPush, loadData, { immediate: true });
 </script>
 <template>
     <div class="bg-gray-800 p-2 rounded-xl shadow-xl flex h-full gap-3 items-start">

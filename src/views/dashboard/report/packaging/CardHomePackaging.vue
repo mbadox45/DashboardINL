@@ -6,12 +6,16 @@ const props = defineProps({
     laporanpackaging: {
         type: Object,
         default: () => ({})
+    },
+    formPush: {
+        type: Object,
+        default: () => ({})
     }
 });
 </script>
 
 <template>
     <div class="w-full">
-        <laporan-packaging :datas="laporanpackaging" />
+        <laporan-packaging :datas="laporanpackaging" :formPush="formPush" />
     </div>
 </template>

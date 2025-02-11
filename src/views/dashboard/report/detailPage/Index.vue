@@ -70,13 +70,24 @@ const funcCondition = async () => {
         const bytes = CryptoJS.AES.decrypt(query, 'your-secret-key');
         const jsonString = bytes.toString(CryptoJS.enc.Utf8);
         const hasil = JSON.parse(jsonString);
+
         routeName.value = hasil.path;
         routeType.value = hasil.type;
-        console.log(hasil.path + '-' + hasil.type);
+        // console.log(hasil.path + '-' + hasil.type);
+        // Route Condition
         const pathName = hasil.path + '-' + hasil.type;
+        // Load Data Condition
+        const form = hasil.form;
+        formData.value = {
+            idPmg: form.idPmg,
+            idMataUang: form.idMataUang,
+            idPackaging: form.idPackaging,
+            tanggalAwal: form.tanggalAwal,
+            tanggalAkhir: form.tanggalAkhir
+        };
         const response = await loadFinance(pathName);
-        console.log(response);
         listData.value = response;
+        console.log(hasil.form);
     }
 };
 

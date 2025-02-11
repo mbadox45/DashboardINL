@@ -31,17 +31,21 @@ const props = defineProps({
     stokcpo: {
         type: Object,
         default: () => ({})
+    },
+    formPush: {
+        type: Object,
+        default: () => ({})
     }
 });
 </script>
 
 <template>
     <div class="grid grid-cols-3 gap-2">
-        <stok-cpo-supply-chain :datas="stokcpo" />
-        <stok-bulk-supply-chain :datas="stokbulk" />
-        <stok-ritel-supply-chain :datas="stokritel" />
-        <actual-incoming-supply-chain :datas="actualincoming" />
-        <outstanding-supply-chain :datas="outstanding" />
-        <saldo-pe-supply-chain :datas="saldope" />
+        <stok-cpo-supply-chain :datas="stokcpo" :formPush="formPush" />
+        <stok-bulk-supply-chain :datas="stokbulk" :formPush="formPush" />
+        <stok-ritel-supply-chain :datas="stokritel" :formPush="formPush" />
+        <actual-incoming-supply-chain :datas="actualincoming" :formPush="formPush" />
+        <outstanding-supply-chain :datas="outstanding" :formPush="formPush" />
+        <saldo-pe-supply-chain :datas="saldope" :formPush="formPush" />
     </div>
 </template>

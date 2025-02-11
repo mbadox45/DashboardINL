@@ -13,7 +13,7 @@ import moment from 'moment';
 export default new (class scmDetailController {
     marketReuters = async (form) => {
         try {
-            const color = ['#F9E79F', '#D6EAF8', '#FAE5D3', '#F2D7D5', '#F2D7D5', '#F2D7D5', '#F2D7D5'];
+            const color = ['#F9E79F', '#D6EAF8', '#FAE5D3', '#F2D7D5', '#73c6b6', '#aeb6bf', '#d2b4de'];
             const result = [];
             const response = await levyRoutersPenjualanController.getByPeriod(form);
             const productBulk = await productMasterController.getAll();
@@ -57,8 +57,12 @@ export default new (class scmDetailController {
 
                     const listKurs = [];
                     const listLevy = [];
+                    const listMarket = [];
+                    const listExcld = [];
+                    const listMarketIdr = [];
+
                     const months = await response[j].months;
-                    if (months != null) {
+                    if (months) {
                         for (let i = 0; i < months.length; i++) {
                             const kurs = months[i].kurs;
                             for (let k = 0; k < kurs.length; k++) {
@@ -73,33 +77,110 @@ export default new (class scmDetailController {
 
                             const products = months[i].products;
                             for (let k = 0; k < products.length; k++) {
-                                const levyduty = products[k].levyduty;
+                                const levyduty = products[k].levyduty || [];
                                 for (let l = 0; l < levyduty.length; l++) {
                                     listLevy.push({
-                                        name: products[k].product,
-                                        nilai: products[k].nilai,
-                                        id_bulky: products[k].id_bulky,
-                                        id_mata_uang: products[k].id_mata_uang,
-                                        tanggal: products[k].tanggal
+                                        name: products[k].product.trim().toLowerCase(),
+                                        nilai: levyduty[l].nilai,
+                                        id_bulky: levyduty[l].id_bulky,
+                                        id_mata_uang: levyduty[l].id_mata_uang,
+                                        tanggal: levyduty[l].tanggal
+                                    });
+                                }
+
+                                const marketReuters = products[k].marketReuters || [];
+                                for (let l = 0; l < marketReuters.length; l++) {
+                                    listMarket.push({
+                                        name: products[k].product.trim().toLowerCase(),
+                                        nilai: marketReuters[l].nilai,
+                                        id_bulky: marketReuters[l].id_bulky,
+                                        id_mata_uang: marketReuters[l].id_mata_uang,
+                                        tanggal: marketReuters[l].tanggal
+                                    });
+                                }
+
+                                const marketReutersExcld = products[k].marketReutersExcldLevyDuty || [];
+                                for (let l = 0; l < marketReutersExcld.length; l++) {
+                                    listExcld.push({
+                                        name: products[k].product.trim().toLowerCase(),
+                                        nilai: marketReutersExcld[l].nilai,
+                                        tanggal: marketReutersExcld[l].tanggal
+                                    });
+                                }
+
+                                const marketIdr = products[k].marketIdr || [];
+                                for (let l = 0; l < marketIdr.length; l++) {
+                                    listMarketIdr.push({
+                                        name: products[k].product.trim().toLowerCase(),
+                                        nilai: marketIdr[l].nilai,
+                                        tanggal: marketIdr[l].tanggal
                                     });
                                 }
                             }
                         }
                     }
 
-                    if (listKurs.length > 0) {
+                    // Debugging untuk memastikan data sudah masuk
+                    console.log('listKurs:', listKurs);
+                    console.log('listBulk:', listBulk);
+
+                    if (listKurs.length > 0 && listBulk.length > 0) {
                         for (let i = 0; i < listKurs.length; i++) {
-                            // const levyDuty = listLevy.filter(item => item.tanggal == listKurs[i].tanggal)
+                            const productData = {};
+
+                            for (let k = 0; k < listBulk.length; k++) {
+                                let nilaiLevy = 0;
+                                let nilaiReuters = 0;
+                                let nilaiExcld = 0;
+                                let nilaiIdr = 0;
+
+                                const bulkName = listBulk[k].name.trim().toLowerCase(); // Normalisasi nama
+
+                                // Levy Duty
+                                const levyDuty = listLevy.find((item) => item.tanggal === listKurs[i].tanggal && item.id_bulky === listBulk[k].id);
+                                if (levyDuty) {
+                                    nilaiLevy = levyDuty.nilai;
+                                }
+
+                                // Market Reuters
+                                const market = listMarket.find((item) => item.tanggal === listKurs[i].tanggal && item.id_bulky === listBulk[k].id);
+                                if (market) {
+                                    nilaiReuters = market.nilai;
+                                }
+
+                                // Market Excld Levy & Duty
+                                const excld = listExcld.find((item) => item.tanggal === listKurs[i].tanggal && item.name === bulkName);
+                                if (excld) {
+                                    nilaiExcld = excld.nilai;
+                                }
+
+                                // Market IDR
+                                const idr = listMarketIdr.find((item) => item.tanggal === listKurs[i].tanggal && item.name === bulkName);
+                                if (idr) {
+                                    nilaiIdr = idr.nilai;
+                                }
+
+                                // Simpan data dalam productData sesuai dengan productList
+                                productData[listBulk[k].id] = {
+                                    name: listBulk[k].name,
+                                    reuters: nilaiReuters,
+                                    levy: nilaiLevy,
+                                    excld: nilaiExcld,
+                                    idr: nilaiIdr
+                                };
+                            }
+
                             listTable.push({
                                 tanggal: listKurs[i].tanggal,
-                                // Kurs Jisdor
                                 id_mata_uang: listKurs[i].id_mata_uang,
-                                value: listKurs[i].value
+                                value: listKurs[i].value,
+                                productData: productData
                             });
                         }
                     }
 
-                    console.log(listKurs);
+                    // Debugging hasil akhir
+                    console.log('listTable:', listTable);
 
                     // Final Result
                     result.push({
@@ -108,8 +189,7 @@ export default new (class scmDetailController {
                         averageMarketUsd: listUsd,
                         averageMarketIdr: listIdr,
                         dataTable: listTable,
-                        productList: listBulk,
-                        products: []
+                        productList: listBulk
                     });
                 }
             }

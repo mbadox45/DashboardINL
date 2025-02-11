@@ -12,14 +12,18 @@ const props = defineProps({
     databulk: {
         type: Object,
         default: () => {}
+    },
+    formPush: {
+        type: Object,
+        default: () => ({})
     }
 });
 </script>
 
 <template>
     <div class="grid grid-cols-1 gap-2">
-        <qty-penjualan-bulk-sales :datas="databulk" />
-        <qty-penjualan-ritel-sales :datas="dataritel" />
+        <qty-penjualan-bulk-sales :datas="databulk" :formPush="formPush" />
+        <qty-penjualan-ritel-sales :datas="dataritel" :formPush="formPush" />
         <!-- <net-profit-margin-finance :datas="datarevenue" /> -->
     </div>
 </template>

@@ -67,28 +67,28 @@ watch(() => props.datas, loadData, { immediate: true });
         <div v-else class="w-full flex flex-col gap-4">
             <div v-if="listTable != null" v-for="(item, index) in listTable" :key="index" class="flex flex-col gap-3 w-full">
                 <div class="flex w-full gap-3 p-5 rounded-lg bg-slate-900 items-center">
-                    <span class="w-full text-[2vw]">Rata-rata Kurs</span>
+                    <span class="w-full text-[1.4vw]">Rata-rata Kurs</span>
                     <div class="flex-col w-full items-end flex gap-1">
-                        <span class="text-[2vw]">{{ item.averageKurs }}</span>
+                        <span class="text-[1.4vw]">{{ item.averageKurs }}</span>
                         <span>Rata-rata untuk periode {{ item.year }}</span>
                     </div>
                 </div>
                 <div class="flex gap-3 items-center w-full">
                     <div class="p-5 rounded-lg bg-teal-900 flex flex-col w-full gap-2">
-                        <span class="text-center w-full font-bold text-[1.5vw]">Market (USD) Excluded Tax</span>
+                        <span class="text-center w-full font-bold text-[1vw]">Market (USD) Excluded Tax</span>
                         <div class="flex flex-col w-full pb-2 border-b" v-for="(usd, indexes) in item.averageMarketUsd" :key="indexes">
                             <span class="font-bold">{{ usd.product }}</span>
-                            <div class="flex gap-3 justify-between items-center text-[1.2vw]">
+                            <div class="flex gap-3 justify-between items-center text-[0.9vw]">
                                 <span>USD</span>
                                 <span class="font-bold">{{ usd.avg }}</span>
                             </div>
                         </div>
                     </div>
                     <div class="p-5 rounded-lg bg-amber-900 flex flex-col w-full gap-2">
-                        <span class="text-center w-full font-bold text-[1.5vw]">Market (IDR) Excluded Tax</span>
+                        <span class="text-center w-full font-bold text-[1vw]">Market (IDR) Excluded Tax</span>
                         <div class="flex flex-col w-full pb-2 border-b" v-for="(usd, indexes) in item.averageMarketIdr" :key="indexes">
                             <span class="font-bold">{{ usd.product }}</span>
-                            <div class="flex gap-3 justify-between items-center text-[1.2vw]">
+                            <div class="flex gap-3 justify-between items-center text-[0.9vw]">
                                 <span>Rp</span>
                                 <span class="font-bold">{{ usd.avg }}</span>
                             </div>
@@ -104,13 +104,20 @@ watch(() => props.datas, loadData, { immediate: true });
                     <ColumnGroup type="header">
                         <Row>
                             <Column header="Date" :rowspan="2" frozen sortable />
-                            <Column header="Kurs (Jisdor)" :rowspan="2" sortable />
 
                             <!-- Looping Produk -->
                             <Column v-for="product in item.productList" :key="product.name" :colspan="3" :headerStyle="`background-color: ${product.color}; border-color:white;`">
                                 <template #header>
                                     <div class="text-center w-full flex justify-center font-bold">
                                         <span>{{ product.name }}</span>
+                                    </div>
+                                </template>
+                            </Column>
+                            <Column header="Kurs (Jisdor)" :rowspan="2" sortable />
+                            <Column :colspan="item.productList.length">
+                                <template #header>
+                                    <div class="text-center w-full flex justify-center font-bold">
+                                        <span>Market (IDR)</span>
                                     </div>
                                 </template>
                             </Column>
@@ -141,10 +148,20 @@ watch(() => props.datas, loadData, { immediate: true });
                                     </template>
                                 </Column>
                             </template>
+
+                            <template v-for="(product, index) in item.productList" :key="index">
+                                <Column :headerStyle="`background-color: ${product.color}; border-color:white;`">
+                                    <template #header>
+                                        <div class="text-center w-full flex justify-center font-bold">
+                                            <small>{{ product.name }}</small>
+                                        </div>
+                                    </template>
+                                </Column>
+                            </template>
                         </Row>
                     </ColumnGroup>
 
-                    <Column field="tanggal" style="min-width: 13rem" frozen>
+                    <Column field="tanggal" style="min-width: 13rem" frozen bodyClass="text-white" bodyStyle="background-color:black;">
                         <template #body="{ data }">
                             <div class="flex justify-between items-center gap-2">
                                 <strong class="text-sm w-full">{{ moment(data.tanggal).format('DD MMM YYYY') }}</strong>
@@ -152,7 +169,37 @@ watch(() => props.datas, loadData, { immediate: true });
                             </div>
                         </template>
                     </Column>
-                    <Column field="value" style="min-width: 13rem">
+
+                    <!-- Looping Data -->
+                    <template v-for="product in item.productList" :key="product.id">
+                        <Column style="min-width: 13rem" bodyClass="text-white" bodyStyle="background-color:black;">
+                            <template #body="{ data }">
+                                <div class="flex justify-between">
+                                    <small>USD</small>
+                                    <small>{{ formatCurrency(Number(data.productData?.[product.id]?.reuters).toFixed(2)) ?? '-' }}</small>
+                                </div>
+                            </template>
+                        </Column>
+
+                        <Column style="min-width: 13rem" bodyClass="text-white" bodyStyle="background-color:black;">
+                            <template #body="{ data }">
+                                <div class="flex justify-between">
+                                    <small>USD</small>
+                                    <small>{{ formatCurrency(Number(data.productData?.[product.id]?.levy).toFixed(2)) ?? '-' }}</small>
+                                </div>
+                            </template>
+                        </Column>
+                        <Column style="min-width: 13rem" bodyClass="text-white" bodyStyle="background-color:black;">
+                            <template #body="{ data }">
+                                <div class="flex justify-between">
+                                    <small>USD</small>
+                                    <small>{{ formatCurrency(Number(data.productData?.[product.id]?.excld).toFixed(2)) ?? '-' }}</small>
+                                </div>
+                            </template>
+                        </Column>
+                    </template>
+
+                    <Column field="value" style="min-width: 13rem" bodyClass="text-white" bodyStyle="background-color:black;">
                         <template #body="{ data }">
                             <div class="flex w-full justify-end items-center gap-2">
                                 <strong class="text-sm w-full text-right">{{ formatCurrency(Number(data.value).toFixed(2)) }}</strong>
@@ -160,19 +207,16 @@ watch(() => props.datas, loadData, { immediate: true });
                         </template>
                     </Column>
 
-                    <!-- Looping Data -->
-                    <!-- <template v-for="product in item.productList">
-                        <template v-for="subCol in subColumns">
-                            <Column :key="product.key + '-' + subCol.key" style="min-width: 13rem">
-                                <template #body="{ data }">
-                                    <div class="flex justify-content-between">
-                                        <small>USD</small>
-                                        <small>{{ data[product.key]?.[subCol.key] == null ? '-' : formatCurrency(data[product.key]?.[subCol.key]) }}</small>
-                                    </div>
-                                </template>
-                            </Column>
-                        </template>
-                    </template> -->
+                    <template v-for="product in item.productList" :key="product.id">
+                        <Column style="min-width: 13rem" bodyClass="text-white" bodyStyle="background-color:black;">
+                            <template #body="{ data }">
+                                <div class="flex justify-between">
+                                    <small>Rp.</small>
+                                    <small>{{ formatCurrency(Number(data.productData?.[product.id]?.idr).toFixed(2)) ?? '-' }}</small>
+                                </div>
+                            </template>
+                        </Column>
+                    </template>
                 </DataTable>
             </div>
         </div>

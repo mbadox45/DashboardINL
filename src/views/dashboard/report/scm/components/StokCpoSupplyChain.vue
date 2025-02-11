@@ -9,6 +9,10 @@ const props = defineProps({
     datas: {
         type: Object,
         default: () => ({})
+    },
+    formPush: {
+        type: Object,
+        default: () => ({})
     }
 });
 
@@ -20,7 +24,7 @@ const loadData = async () => {
 };
 
 const routerLink = (path) => {
-    const data = JSON.stringify({ path: path, type: 'scm' });
+    const data = JSON.stringify({ path: path, type: 'scm', form: props.formPush });
     const encryptedPath = CryptoJS.AES.encrypt(data, 'your-secret-key').toString();
     router.push({
         path: '/detail-dashboard',
@@ -29,6 +33,7 @@ const routerLink = (path) => {
 };
 
 watch(() => props.datas, loadData, { immediate: true });
+watch(() => props.formPush, loadData, { immediate: true });
 </script>
 <template>
     <div class="bg-gray-800 p-2 rounded-xl shadow-xl min-h-[120px] flex h-full gap-3 items-start">
@@ -44,20 +49,13 @@ watch(() => props.datas, loadData, { immediate: true });
             </div>
             <div class="flex h-full items-center gap-3">
                 <img src="/images/icon/scm/silo.png" alt="Icon" class="w-[3vw] h-[3vw] mr-1" />
-                <div class="w-full h-full">
-                    <div class="flex flex-col gap-2 w-full">
-                        <div class="flex flex-row-reverse justify-between items-center">
+                <div class="flex flex-col gap-2 w-full justify-center h-full">
+                    <div class="flex flex-row-reverse justify-between items-center">
+                        <div class="flex flex-col items-end">
                             <span class="font-bold text-[1.5vw] text-green-600">{{ load.total }}</span>
-                            <span class="font-bold text-[0.8vw] text-cyan-600">{{ load.tanggal }}</span>
+                            <span class="font-bold text-[0.8vw]">Total Stok</span>
                         </div>
-                        <div class="flex gap-2 w-full">
-                            <div class="flex flex-col-reverse items-end w-full text-cyan-500 font-bold">
-                                <span class="text-[0.8vw]">CPO in</span><span class="text-amber-500 text-[1vw]">{{ load.cpoIn }}</span>
-                            </div>
-                            <div class="flex flex-col-reverse items-end w-full text-cyan-500 font-bold">
-                                <span class="text-[0.8vw]">CPO feed</span><span class="text-amber-500 text-[1vw]">{{ load.cpoFeed }}</span>
-                            </div>
-                        </div>
+                        <span class="font-bold text-[0.8vw] text-cyan-600">{{ load.tanggal }}</span>
                     </div>
                 </div>
             </div>

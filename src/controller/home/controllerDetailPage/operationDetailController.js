@@ -174,7 +174,6 @@ export default new (class hargaDetailController {
                     chart: listChart
                 });
             }
-            console.log(list);
             return list;
         } catch (error) {
             return null;

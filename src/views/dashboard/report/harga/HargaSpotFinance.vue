@@ -12,13 +12,17 @@ const props = defineProps({
     dataretail: {
         type: Object,
         default: () => ({})
+    },
+    formPush: {
+        type: Object,
+        default: () => ({})
     }
 });
 </script>
 
 <template>
     <div class="grid grid-cols-2 gap-2">
-        <harga-bulky-finance :datas="databulky" />
-        <harga-retail-finance :datas="dataretail" />
+        <harga-bulky-finance :datas="databulky" :formPush="formPush" />
+        <harga-retail-finance :datas="dataretail" :formPush="formPush" />
     </div>
 </template>

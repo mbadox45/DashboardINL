@@ -9,6 +9,10 @@ const props = defineProps({
     datas: {
         type: Array,
         default: () => []
+    },
+    formPush: {
+        type: Object,
+        default: () => ({})
     }
 });
 
@@ -27,7 +31,7 @@ const loadData = async () => {
 };
 
 const routerLink = (path) => {
-    const data = JSON.stringify({ path: path, type: 'operation' });
+    const data = JSON.stringify({ path: path, type: 'operation', form: props.formPush });
     const encryptedPath = CryptoJS.AES.encrypt(data, 'your-secret-key').toString();
     router.push({
         path: '/detail-dashboard',
@@ -80,21 +84,9 @@ onUnmounted(() => {
     clearInterval(intervalId);
 });
 
-watch(
-    () => props.datas,
-    () => {
-        loadData();
-    },
-    { deep: true, immediate: true }
-);
-
-watch(
-    () => load.value,
-    (newLoad) => {
-        if (newLoad.length > 0) startIndexCycle();
-    },
-    { deep: true, immediate: true }
-);
+watch(() => props.datas, loadData, { immediate: true });
+watch(() => props.formPush, loadData, { immediate: true });
+watch(() => load.value, startIndexCycle, { immediate: true });
 </script>
 
 <template>

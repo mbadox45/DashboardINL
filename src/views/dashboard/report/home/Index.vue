@@ -1,5 +1,6 @@
 <script setup>
 import TopBar from '@/views/dashboard/layout/components/TopBar.vue';
+import moment from 'moment';
 import { onMounted, ref } from 'vue';
 
 // Controller
@@ -24,7 +25,7 @@ import CardHomeSupplyChain from '@/views/dashboard/report/scm/CardHomeSupplyChai
 // import moment from 'moment';
 
 const listCardSCM = ref([]);
-const activePage = ref(1);
+const activePage = ref(0);
 
 // Finance Var Data
 const dataRevenue = ref({});
@@ -54,25 +55,35 @@ const dataMarketReuters = ref({});
 const dataPenjualanBulk = ref({});
 const dataPenjualanRitel = ref({});
 
+const formData = ref({
+    idPmg: 1,
+    idMataUang: 1,
+    idPackaging: 1,
+    tanggalAwal: moment().format('YYYY-MM-01'),
+    tanggalAkhir: moment().format('YYYY-MM-DD')
+    // tanggalAwal: '2023-01-01',
+    // tanggalAkhir: '2024-02-28'
+});
+
 onMounted(() => {
     loadData();
     loadAllData();
 });
 
 const loadAllData = async () => {
-    const form = {
-        idPmg: 1,
-        idMataUang: 1,
-        idPackaging: 1,
-        // tanggalAwal: moment().format('YYYY-MM-01'),
-        // tanggalAkhir: moment().format('YYYY-MM-DD'),
-        tanggalAwal: '2023-01-01',
-        tanggalAkhir: '2024-02-28'
-    };
-    await loadDataControllerFinance(form);
-    await loadDataControllerOperation(form);
-    await loadDataControllerSCM(form);
-    await loadDataControllerSales(form);
+    // const form = {
+    //     idPmg: 1,
+    //     idMataUang: 1,
+    //     idPackaging: 1,
+    //     // tanggalAwal: moment().format('YYYY-MM-01'),
+    //     // tanggalAkhir: moment().format('YYYY-MM-DD'),
+    //     tanggalAwal: '2023-01-01',
+    //     tanggalAkhir: '2024-02-28'
+    // };
+    await loadDataControllerFinance(formData.value);
+    await loadDataControllerOperation(formData.value);
+    await loadDataControllerSCM(formData.value);
+    await loadDataControllerSales(formData.value);
 };
 
 const loadDataControllerFinance = async (form) => {
@@ -135,7 +146,9 @@ const loadDataControllerSCM = async (form) => {
 
     const stokCpo = await supplyChainHomeController.stokCpo(form);
     dataStockCpo.value = stokCpo;
-    // console.log(outstanding);
+
+    const levyDutyMarketReuter = await supplyChainHomeController.marketReutersLevyDuty(form);
+    dataMarketReuters.value = levyDutyMarketReuter;
 };
 
 const loadDataControllerSales = async (form) => {
@@ -146,16 +159,19 @@ const loadDataControllerSales = async (form) => {
 };
 
 const updateDates = async (dates) => {
-    const form = {
+    formData.value = {
         idPmg: dates.pmg,
         idMataUang: dates.mataUang,
         idPackaging: dates.packaging,
         tanggalAwal: dates.beforeDate,
         tanggalAkhir: dates.now
     };
-    await loadDataControllerFinance(form);
-    await loadDataControllerOperation(form);
-    await loadDataControllerSCM(form);
+    console.log(formData.value);
+    // await loadDataControllerFinance(form);
+    // await loadDataControllerOperation(form);
+    // await loadDataControllerSCM(form);
+    // await loadDataControllerSales(form);
+    await loadAllData();
 };
 
 const loadData = async () => {
@@ -188,16 +204,16 @@ const loadDataSCM = async () => {
                 <div v-if="activePage == 0" class="grid grid-cols-3 gap-2">
                     <div class="col-span-1 flex flex-col gap-2">
                         <images-home />
-                        <card-home-packaging :laporanpackaging="dataLaporanPackaging" />
+                        <card-home-packaging :laporanpackaging="dataLaporanPackaging" :formPush="formData" />
                         <span class="font-bold w-full text-[0.8vw]">Sales & Marketing</span>
-                        <card-home-sales :dataritel="dataPenjualanRitel" :databulk="dataPenjualanBulk" />
+                        <card-home-sales :dataritel="dataPenjualanRitel" :databulk="dataPenjualanBulk" :formPush="formData" />
                     </div>
                     <div class="col-span-2 flex flex-col gap-3">
                         <span class="font-bold w-full text-[0.8vw]">Financial</span>
-                        <card-home-finance :datarevenue="dataRevenue" :datacash="dataCbDanCfm" :datapayschedule="dataPaySchedule" :datacpokpbn="dataCpoKpbn" :datakurs="dataKurs" />
-                        <harga-spot-finance :databulky="dataHargaSpotInvBulk" :dataretail="dataHargaSpotInvRitel" />
+                        <card-home-finance :formPush="formData" :datarevenue="dataRevenue" :datacash="dataCbDanCfm" :datapayschedule="dataPaySchedule" :datacpokpbn="dataCpoKpbn" :datakurs="dataKurs" />
+                        <harga-spot-finance :formPush="formData" :databulky="dataHargaSpotInvBulk" :dataretail="dataHargaSpotInvRitel" />
                         <span class="font-bold w-full text-[0.8vw]">Production</span>
-                        <card-home-operation :datacpo="dataCpoOlah" :laporanproduksi="dataLaporanProduksi" />
+                        <card-home-operation :formPush="formData" :datacpo="dataCpoOlah" :laporanproduksi="dataLaporanProduksi" />
                     </div>
                 </div>
                 <div v-else class="grid grid-cols-3 gap-3 h-full">
@@ -207,13 +223,13 @@ const loadDataSCM = async () => {
                     </div>
                     <div class="col-span-2 flex flex-col gap-3">
                         <span class="font-bold w-full text-[0.8vw]">Supply Chain</span>
-                        <card-home-supply-chain :stokcpo="dataStockCpo" :stokbulk="dataStockBulk" :stokritel="dataStockRetail" :actualincoming="dataActualIncoming" :outstanding="dataOutstanding" :saldope="dataSaldoPe" />
+                        <card-home-supply-chain :formPush="formData" :stokcpo="dataStockCpo" :stokbulk="dataStockBulk" :stokritel="dataStockRetail" :actualincoming="dataActualIncoming" :outstanding="dataOutstanding" :saldope="dataSaldoPe" />
                         <div class="grid grid-cols-1 gap-2">
                             <!-- <card-scm-values v-for="(item, index) in listCardSCM" :key="index" :datas="item" :style="`animation: fadein 1s ease-in-out`" />
                             <sdm-view class="col-span-2" /> -->
-                            <market-reuters :datas="dataMarketReuters" />
+                            <market-reuters :formPush="formData" :datas="dataMarketReuters" />
                         </div>
-                        <card-home-material :laporanmaterial="dataLaporanMaterial" />
+                        <card-home-material :formPush="formData" :laporanmaterial="dataLaporanMaterial" />
                     </div>
                 </div>
                 <div class="flex gap-2 justify-center">

@@ -1,4 +1,6 @@
 import { formatCurrency } from '@/controller/dummyController';
+import productMasterController from '@/controller/getApiFromThisApp/master/productMasterController';
+import levyRoutersPenjualanController from '@/controller/getApiFromThisApp/sales/levyRoutersPenjualanController';
 import incomingCpoScmController from '@/controller/getApiFromThisApp/supplyChain/incomingCpoScmController';
 import outstandingCpoScmController from '@/controller/getApiFromThisApp/supplyChain/outstandingCpoScmController';
 import saldoPeScmController from '@/controller/getApiFromThisApp/supplyChain/saldoPeScmController';
@@ -8,6 +10,56 @@ import retailStockScmController from '@/controller/getApiFromThisApp/supplyChain
 import moment from 'moment';
 
 export default new (class supplyChainHomeController {
+    marketReutersLevyDuty = async (form) => {
+        try {
+            const listData = [];
+            const response = await levyRoutersPenjualanController.getByPeriod(form);
+            const products = await productMasterController.getAll();
+            const bulk = products.filter((item) => item.jenis == 'bulk');
+            if (response != null) {
+                const data = response[0];
+                if (data != null) {
+                    const months = data.months[0];
+                    if (months != null) {
+                        const product = months.products;
+                        if (bulk != null) {
+                            for (let i = 0; i < bulk.length; i++) {
+                                let nilaiLevy = 0;
+                                let nilaiReuters = 0;
+                                const dataProduk = product.find((item) => item.product.toLowerCase().includes(bulk[i].name.toLowerCase()));
+                                if (dataProduk != null) {
+                                    const levyduty = dataProduk.levyduty;
+                                    if (levyduty != null) {
+                                        const levyDutyNow = levyduty.find((item) => item.tanggal == form.tanggalAkhir);
+                                        if (levyDutyNow != null) {
+                                            nilaiLevy = formatCurrency(Number(levyDutyNow.nilai).toFixed(2));
+                                        }
+                                    }
+
+                                    const marketReuters = dataProduk.marketReuters;
+                                    if (marketReuters != null) {
+                                        const marketReutersNow = marketReuters.find((item) => item.tanggal == form.tanggalAkhir);
+                                        if (marketReutersNow != null) {
+                                            nilaiReuters = formatCurrency(Number(marketReutersNow.nilai).toFixed(2));
+                                        }
+                                    }
+                                }
+                                listData.push({
+                                    tanggal: moment(form.tanggalAkhir).format('DD MMMM YYYY'),
+                                    name: bulk[i].name,
+                                    levyduty: nilaiLevy,
+                                    reuters: nilaiReuters
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            return listData;
+        } catch (error) {
+            return [];
+        }
+    };
     outstandingCpo = async () => {
         try {
             const response = await outstandingCpoScmController.getByPeriod();
