@@ -64,6 +64,7 @@ export default new (class operationHomeController {
             const response = await laporanMaterialController.getByPeriod(form);
             const norma = response.norma;
             const laporan = response.laporan_material;
+            // console.log(jenis, response, norma, laporan);
             if (norma != null && laporan != null) {
                 const list = [];
                 const nilaiNorma = [];
@@ -100,19 +101,32 @@ export default new (class operationHomeController {
                     }
                 }
 
+                // console.log(nilaiNorma, nilaiLaporan);
+
                 for (let i = 0; i < jenis.length; i++) {
                     const laporanNilai = nilaiLaporan.filter((item) => item.jenisLaporan.toLowerCase().includes(jenis[i].name.toLowerCase()));
                     const normaNilai = nilaiNorma.filter((item) => item.jenisLaporan.toLowerCase().includes(jenis[i].name.toLowerCase()));
                     const outgoing = [];
                     for (let j = 0; j < normaNilai.length; j++) {
                         const material = laporanNilai.find((item) => item.materialsName.toLowerCase().includes(normaNilai[j].materialsName.toLowerCase()));
-                        outgoing.push({
-                            name: normaNilai[j].materialsName,
-                            value: formatCurrency(Number(material.value).toFixed(2)),
-                            norma: formatCurrency(Number(normaNilai[j].value).toFixed(2)),
-                            usage: formatCurrency(Number(material.usage).toFixed(2)),
-                            color: material.color
-                        });
+                        // console.log(material);
+                        if (material != null) {
+                            outgoing.push({
+                                name: normaNilai[j].materialsName,
+                                value: formatCurrency(Number(material.value).toFixed(2)),
+                                norma: formatCurrency(Number(normaNilai[j].value).toFixed(2)),
+                                usage: formatCurrency(Number(material.usage).toFixed(2)),
+                                color: material.color
+                            });
+                        } else {
+                            outgoing.push({
+                                name: normaNilai[j].materialsName,
+                                value: 0,
+                                norma: formatCurrency(Number(normaNilai[j].value).toFixed(2)),
+                                usage: 0,
+                                color: ''
+                            });
+                        }
                     }
                     const listIncoming = [];
                     if (laporanNilai.filter((item) => item.kategori.toLowerCase().includes('incoming')).length > 0) {
@@ -153,6 +167,7 @@ export default new (class operationHomeController {
     laporanProduksi = async (form) => {
         try {
             const response = await laporanProduksiController.getByPeriod(form);
+            console.log(response);
             const jenis = await jenisLaporanProduksiController.getAll();
             const list = [];
             if (response != null && jenis != null) {
@@ -193,7 +208,7 @@ export default new (class operationHomeController {
                         });
                     }
                 }
-                // console.log(list);
+                console.log(list);
                 return list;
             } else {
                 list.push({

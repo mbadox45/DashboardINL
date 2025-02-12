@@ -20,7 +20,11 @@ const logFile = ref([]);
 const optionPage = ref(0);
 const listProduct = ref([]);
 
-const listTable = ref([]);
+// const listTable = ref([]);
+const listTable = ref({
+    table: [],
+    productList: []
+});
 const totalTable = ref({ cpoOlah: 0, totalCost: 0, totalHargaSatuan: 0 });
 const search = ref();
 const expandedRows = ref([]);
@@ -66,11 +70,14 @@ const loadData = async () => {
         };
         await loadCurrency();
         await loadProduk();
-        const data = await levyRoutersPenjualanController.loadTable(form);
-        console.log(data);
+        const data = await levyRoutersPenjualanController.loadTable2(form);
+        // console.log(data);
         listTable.value = data;
     } catch (error) {
-        listTable.value = [];
+        listTable.value = {
+            table: [],
+            productList: []
+        };
     }
 };
 
@@ -370,10 +377,131 @@ const submitData = async () => {
                 </div>
             </template>
             <template #content>
-                <div class="overflow-auto h-[33vw] border border-gray-200">
+                <DataTable v-if="listTable.table != null" :value="listTable.table" showGridlines scrollHeight="550px" dataKey="id" scrollable :globalFilterFields="['date']">
+                    <template #empty> No customers found. </template>
+                    <template #loading> Loading customers data. Please wait. </template>
+
+                    <ColumnGroup type="header">
+                        <Row>
+                            <Column header="Date" :rowspan="2" frozen sortable />
+
+                            <!-- Looping Produk -->
+                            <Column v-for="product in listTable.productList" :key="product.name" :colspan="3" :headerStyle="`background-color: ${product.color}; border-color:white;`">
+                                <template #header>
+                                    <div class="text-center w-full flex justify-center font-bold">
+                                        <span>{{ product.name }}</span>
+                                    </div>
+                                </template>
+                            </Column>
+                            <Column header="Kurs (Jisdor)" :rowspan="2" sortable />
+                            <Column :colspan="listTable.productList.length">
+                                <template #header>
+                                    <div class="text-center w-full flex justify-center font-bold">
+                                        <span>Market (IDR)</span>
+                                    </div>
+                                </template>
+                            </Column>
+                        </Row>
+
+                        <!-- Looping Sub-Kolom -->
+                        <Row>
+                            <template v-for="(product, index) in listTable.productList" :key="index">
+                                <Column :headerStyle="`background-color: ${product.color}; border-color:white;`">
+                                    <template #header>
+                                        <div class="text-center w-full flex justify-center font-bold">
+                                            <small>Market Reuters (USD)</small>
+                                        </div>
+                                    </template>
+                                </Column>
+                                <Column :headerStyle="`background-color: ${product.color}; border-color:white;`">
+                                    <template #header>
+                                        <div class="text-center w-full flex justify-center font-bold">
+                                            <small>Levy Duty</small>
+                                        </div>
+                                    </template>
+                                </Column>
+                                <Column :headerStyle="`background-color: ${product.color}; border-color:white;`">
+                                    <template #header>
+                                        <div class="text-center w-full flex justify-center font-bold">
+                                            <small>Market Excld Levy & Duty (USD)</small>
+                                        </div>
+                                    </template>
+                                </Column>
+                            </template>
+
+                            <template v-for="(product, index) in listTable.productList" :key="index">
+                                <Column :headerStyle="`background-color: ${product.color}; border-color:white;`">
+                                    <template #header>
+                                        <div class="text-center w-full flex justify-center font-bold">
+                                            <small>{{ product.name }}</small>
+                                        </div>
+                                    </template>
+                                </Column>
+                            </template>
+                        </Row>
+                    </ColumnGroup>
+
+                    <Column field="tanggal" style="min-width: 13rem" frozen bodyClass="text-white" bodyStyle="background-color:black;">
+                        <template #body="{ data }">
+                            <div class="flex justify-between items-center gap-2">
+                                <strong class="text-sm w-full">{{ moment(data.tanggal).format('DD MMM YYYY') }}</strong>
+                                <!-- <Button icon="pi pi-pencil" severity="warning" text /> -->
+                            </div>
+                        </template>
+                    </Column>
+
+                    <!-- Looping Data -->
+                    <template v-for="product in listTable.productList" :key="product.id">
+                        <Column style="min-width: 13rem" bodyClass="text-white" bodyStyle="background-color:black;">
+                            <template #body="{ data }">
+                                <div class="flex justify-between">
+                                    <small>USD</small>
+                                    <small>{{ formatCurrency(Number(data.productData?.[product.id]?.reuters).toFixed(2)) ?? '-' }}</small>
+                                </div>
+                            </template>
+                        </Column>
+
+                        <Column style="min-width: 13rem" bodyClass="text-white" bodyStyle="background-color:black;">
+                            <template #body="{ data }">
+                                <div class="flex justify-between">
+                                    <small>USD</small>
+                                    <small>{{ formatCurrency(Number(data.productData?.[product.id]?.levy).toFixed(2)) ?? '-' }}</small>
+                                </div>
+                            </template>
+                        </Column>
+                        <Column style="min-width: 13rem" bodyClass="text-white" bodyStyle="background-color:black;">
+                            <template #body="{ data }">
+                                <div class="flex justify-between">
+                                    <small>USD</small>
+                                    <small>{{ formatCurrency(Number(data.productData?.[product.id]?.excld).toFixed(2)) ?? '-' }}</small>
+                                </div>
+                            </template>
+                        </Column>
+                    </template>
+
+                    <Column field="value" style="min-width: 13rem" bodyClass="text-white" bodyStyle="background-color:black;">
+                        <template #body="{ data }">
+                            <div class="flex w-full justify-end items-center gap-2">
+                                <strong class="text-sm w-full text-right">{{ formatCurrency(Number(data.value).toFixed(2)) }}</strong>
+                            </div>
+                        </template>
+                    </Column>
+
+                    <template v-for="product in listTable.productList" :key="product.id">
+                        <Column style="min-width: 13rem" bodyClass="text-white" bodyStyle="background-color:black;">
+                            <template #body="{ data }">
+                                <div class="flex justify-between">
+                                    <small>Rp.</small>
+                                    <small>{{ formatCurrency(Number(data.productData?.[product.id]?.idr).toFixed(2)) ?? '-' }}</small>
+                                </div>
+                            </template>
+                        </Column>
+                    </template>
+                </DataTable>
+                <!-- <div class="overflow-auto h-[33vw] border border-gray-200">
                     <table class="min-w-full border border-gray-200 bg-white">
                         <thead class="sticky top-0 bg-gray-50 z-10">
-                            <!-- Header Utama -->
+
                             <tr class="w-full">
                                 <th class="w-full px-6 py-3 text-left text-sm font-medium text-gray-600 border border-white" rowspan="2">Tanggal</th>
                                 <th v-for="(item, index) in listProduct" :key="index" class="w-full px-6 py-3 text-center text-sm font-medium text-black border border-white" :class="`bg-${item.color}-200`" colspan="3">
@@ -382,7 +510,7 @@ const submitData = async () => {
                                 <th class="w-full px-6 py-3 text-left text-sm font-medium text-gray-600 border border-white" rowspan="2">Rate Jisdor</th>
                                 <th class="w-full px-6 py-3 text-sm font-medium text-center text-gray-600 border border-white" :colspan="listProduct.length">Market (IDR)</th>
                             </tr>
-                            <!-- Header Sub -->
+
                             <tr class="bg-gray-100 w-full">
                                 <template v-for="(item, index) in listProduct" :key="index">
                                     <th class="w-full px-6 py-3 text-center text-sm font-medium text-gray-600 border border-white" :class="`bg-${item.color}-200`">Market Routers (USD)</th>
@@ -407,44 +535,7 @@ const submitData = async () => {
                             </tr>
                         </tbody>
                     </table>
-                </div>
-
-                <!-- <ScrollPanel style="width: 100%; height: 35vw">
-                    <table class="min-w-full border border-gray-200 bg-white">
-                        <thead>
-                            <tr class="bg-gray-50">
-                                <th class="px-6 py-3 text-left text-sm font-medium text-gray-600 border border-gray-200" rowspan="2">Tanggal</th>
-                                <th v-for="(item, index) in listProduct" :key="index" class="px-6 py-3 text-center text-sm font-medium text-gray-600 border border-gray-200" colspan="3">
-                                    {{ item.name }}
-                                </th>
-                                <th class="px-6 py-3 text-left text-sm font-medium text-gray-600 border border-gray-200" rowspan="2">Rate Jisdor</th>
-                                <th class="px-6 py-3 text-sm font-medium text-center text-gray-600 border border-gray-200" :colspan="listProduct.length">Market (IDR)</th>
-                            </tr>
-                            <tr class="bg-gray-100">
-                                <template v-for="(item, index) in listProduct" :key="index">
-                                    <th class="px-6 py-3 text-center text-sm font-medium text-gray-600 border border-gray-200">Market Routers (USD)</th>
-                                    <th class="px-6 py-3 text-center text-sm font-medium text-gray-600 border border-gray-200">Levy + Duty</th>
-                                    <th class="px-6 py-3 text-center text-sm font-medium text-gray-600 border border-gray-200">Market Excld Levy & Duty (USD)</th>
-                                </template>
-                                <th v-for="(item, index) in listProduct" :key="index" class="px-6 py-3 text-center text-sm font-medium text-gray-600 border border-gray-200">
-                                    {{ item.name }}
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="bg-gray-50" v-for="(item, index) in listTable" :key="index">
-                                <th class="px-6 py-3 text-left text-sm font-medium text-gray-600 border border-gray-200">{{item.tanggal}}</th>
-                                <template v-for="(prod, list) in listProduct" :key="list">
-                                    <th class="px-6 py-3 text-center text-sm font-medium text-gray-600 border border-gray-200">0</th>
-                                    <th class="px-6 py-3 text-center text-sm font-medium text-gray-600 border border-gray-200">0</th>
-                                    <th class="px-6 py-3 text-center text-sm font-medium text-gray-600 border border-gray-200">0</th>
-                                </template>
-                                <th class="px-6 py-3 text-left text-sm font-medium text-gray-600 border border-gray-200">{{formatCurrency(Number(item.kursValue))}}</th>
-                                <th v-for="(item, index) in listProduct" :key="index" class="px-6 py-3 text-center text-sm font-medium text-gray-600 border border-gray-200">0</th>
-                            </tr>
-                        </tbody>
-                    </table>
-                </ScrollPanel> -->
+                </div> -->
             </template>
         </Card>
     </div>

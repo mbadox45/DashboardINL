@@ -1,7 +1,7 @@
 <script setup>
 import CryptoJS from 'crypto-js';
 import moment from 'moment';
-import { defineProps, ref, watch } from 'vue';
+import { defineProps, onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
@@ -19,9 +19,13 @@ const props = defineProps({
 
 const load = ref({ total: 0, status: '', bulan: moment().format('MMMM YYYY') });
 
+onMounted(() => {
+    loadData();
+});
+
 const loadData = async () => {
     const data = props.datas;
-    load.value = { total: data.value, status: data.status, bulan: moment().format('MMMM YYYY') };
+    load.value = { total: data.value, status: data.status, bulan: data.tanggal };
 };
 
 const routerLink = (path) => {

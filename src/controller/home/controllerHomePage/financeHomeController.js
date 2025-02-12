@@ -276,12 +276,14 @@ export default new (class financeHomeController {
                 if (response?.latestCashBalance) {
                     const dataCashBalance = response?.latestCashBalance;
                     balance = {
+                        tanggal: moment(form.tanggalAkhir).format('MMMM YYYY'),
                         value: valueToBilion(Number(dataCashBalance.value)),
                         status: dataCashBalance.status,
                         difference: valueToBilion(Number(dataCashBalance.difference))
                     };
                 } else {
                     balance = {
+                        tanggal: '',
                         value: 0,
                         status: 'none',
                         difference: 0
@@ -339,6 +341,7 @@ export default new (class financeHomeController {
                     }
                 } else {
                     balance = {
+                        tanggal: '',
                         value: 0,
                         status: 'none',
                         difference: 0
@@ -357,12 +360,14 @@ export default new (class financeHomeController {
                 }
 
                 const result = {
+                    tanggal: moment(form.tanggalAkhir).format('MMMM YYYY'),
                     cashBalance: balance,
                     cashFlowMovement: cashFlowMovement
                 };
                 return result;
             } else {
                 const balance = {
+                    tanggal: '',
                     value: 0,
                     status: 'none',
                     difference: 0
@@ -379,6 +384,7 @@ export default new (class financeHomeController {
                     total: 0
                 };
                 const result = {
+                    tanggal: '-',
                     cashBalance: balance,
                     cashFlowMovement: cashFlowMovement
                 };
@@ -386,6 +392,7 @@ export default new (class financeHomeController {
             }
         } catch (error) {
             const balance = {
+                tanggal: '',
                 value: 0,
                 status: 'none',
                 difference: 0
@@ -402,6 +409,7 @@ export default new (class financeHomeController {
                 total: 0
             };
             const result = {
+                tanggal: '-',
                 cashBalance: balance,
                 cashFlowMovement: cashFlowMovement
             };
