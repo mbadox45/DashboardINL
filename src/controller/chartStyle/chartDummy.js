@@ -134,6 +134,7 @@ export const lineChartApex = (label) => {
             height: 350,
             type: 'area'
         },
+        colors: ['#FF5733', '#33FF57', '#3357FF', '#F3FF33', '#FF33F6', '#33FFF6', '#A633FF', '#FF8C33', '#33FF8C', '#8C33FF', '#FF3366', '#66FF33'],
         dataLabels: {
             enabled: false,
             style: {
@@ -190,6 +191,11 @@ export const lineChartApex = (label) => {
                 fontSize: '12px',
                 fontFamily: 'Arial, sans-serif',
                 color: '#ffffff' // Warna putih untuk teks di tooltip
+            }
+        },
+        legend: {
+            labels: {
+                colors: '#ffffff' // Mengubah warna teks legend menjadi putih
             }
         }
     };

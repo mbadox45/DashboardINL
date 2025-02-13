@@ -211,6 +211,7 @@ export default new (class financeHomeController {
     cpoKpbn = async (form) => {
         try {
             const response = await cpoKpbnController.getByPeriod(form);
+            // console.log(response);
             if (response != null) {
                 return {
                     averageAsingTotal: formatCurrency(Number(response.averageAsingTotal).toFixed(2)),
@@ -220,7 +221,7 @@ export default new (class financeHomeController {
                     latestCpoValue: formatCurrency(Number(response.latestCpoValue).toFixed(2)),
                     latestKursDate: moment(response.latestKursDate).format('DD MMMM YYYY'),
                     latestKursValue: formatCurrency(Number(response.latestKursValue).toFixed(2)),
-                    latestAsingTotal: formatCurrency(((Number(response.latestCpoValue) / Number(response.latestKursValue)) * 1000).toFixed(2))
+                    latestAsingTotal: response.latestKursValue == 0 ? formatCurrency(Number(0).toFixed(2)) : formatCurrency(((Number(response.latestCpoValue) / Number(response.latestKursValue)) * 1000).toFixed(2))
                 };
             } else {
                 return {

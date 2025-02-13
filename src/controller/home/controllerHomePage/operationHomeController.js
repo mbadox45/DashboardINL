@@ -167,7 +167,7 @@ export default new (class operationHomeController {
     laporanProduksi = async (form) => {
         try {
             const response = await laporanProduksiController.getByPeriod(form);
-            console.log(response);
+            // console.log(response);
             const jenis = await jenisLaporanProduksiController.getAll();
             const list = [];
             if (response != null && jenis != null) {
@@ -208,7 +208,7 @@ export default new (class operationHomeController {
                         });
                     }
                 }
-                console.log(list);
+                // console.log(list);
                 return list;
             } else {
                 list.push({

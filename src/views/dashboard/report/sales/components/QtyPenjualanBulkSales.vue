@@ -88,7 +88,16 @@ watch(() => props.formPush, loadData, { immediate: true });
                         </div>
                     </div>
                 </div>
-                <VueApexCharts v-if="load.dataChart.length > 0" v-for="(item, index) in load.dataChart" :key="index" :series="item.series" :options="item.options" height="135vw" class="w-auto" style="z-index: 1 !important" />
+                <VueApexCharts
+                    v-if="load.dataChart.length > 0"
+                    v-for="(item, index) in load.dataChart"
+                    :key="`${index}-${JSON.stringify(item.series)}`"
+                    :series="item.series"
+                    :options="item.options"
+                    height="135vw"
+                    class="w-auto"
+                    style="z-index: 1 !important"
+                />
                 <!-- <VueApexCharts v-if="load.dataChart.length > 0" v-for="(item, index) in load.dataChart" :key="index" :series="item.series" :options="item.options" class="w-full" height="200vw" style="z-index: 1 !important" /> -->
             </div>
         </div>

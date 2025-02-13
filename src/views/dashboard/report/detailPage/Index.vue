@@ -52,10 +52,10 @@ const formData = ref({
     idPmg: 1,
     idMataUang: 1,
     idPackaging: 1,
-    tanggalAwal: moment('2023-01-01').format('YYYY-MM-DD'),
-    tanggalAkhir: moment('2024-10-30').format('YYYY-MM-DD')
-    // tanggalAwal: moment().format('YYYY-MM-01'),
-    // tanggalAkhir: moment().format('YYYY-MM-DD')
+    // tanggalAwal: moment('2023-01-01').format('YYYY-MM-DD'),
+    // tanggalAkhir: moment('2024-10-30').format('YYYY-MM-DD')
+    tanggalAwal: moment().format('YYYY-MM-01'),
+    tanggalAkhir: moment().format('YYYY-MM-DD')
 });
 
 onMounted(() => {
@@ -73,26 +73,31 @@ const funcCondition = async () => {
 
         routeName.value = hasil.path;
         routeType.value = hasil.type;
-        // console.log(hasil.path + '-' + hasil.type);
         // Route Condition
         const pathName = hasil.path + '-' + hasil.type;
         // Load Data Condition
-        const form = hasil.form;
-        formData.value = {
-            idPmg: form.idPmg,
-            idMataUang: form.idMataUang,
-            idPackaging: form.idPackaging,
-            tanggalAwal: form.tanggalAwal,
-            tanggalAkhir: form.tanggalAkhir
-        };
+        // const form = hasil.form;
+        const dataLocal = localStorage.getItem('formData');
+        if (dataLocal != null) {
+            const parsedData = JSON.parse(dataLocal);
+            // console.log(parsedData);
+            formData.value = {
+                idPmg: parsedData.pmg,
+                idMataUang: parsedData.mataUang,
+                idPackaging: parsedData.packaging,
+                tanggalAwal: parsedData.beforeDate,
+                tanggalAkhir: parsedData.now
+            };
+        }
         const response = await loadFinance(pathName);
         listData.value = response;
-        console.log(hasil.form);
+        // console.log(response);
     }
 };
 
 const loadFinance = async (path) => {
     let result;
+    // console.log(formData.value);
     if (path.toLowerCase().includes('revenue-financial')) {
         result = await financeDetailController.resultRevenue(formData.value);
     } else if (path.toLowerCase().includes('ebitda-margin-financial')) {
@@ -156,8 +161,9 @@ const updateDates = async (dates) => {
         tanggalAkhir: dates.now
     };
     formData.value = form;
-    const response = await loadFinance(routeName.value + '-' + routeType.value);
-    listData.value = response;
+    // const response = await loadFinance(routeName.value + '-' + routeType.value);
+    // listData.value = response;
+    await funcCondition();
 };
 </script>
 
@@ -165,7 +171,11 @@ const updateDates = async (dates) => {
     <div class="flex flex-col gap-2 layout-scroller bg-neutral-950 min-h-screen text-white app-dark">
         <top-bar :onDateChange="updateDates"></top-bar>
         <!-- <app-topbar></app-topbar> -->
-        <div class="bg-black w-full p-6 rounded-xl" v-if="routeType == 'financial'">
+        <div class="bg-black w-full p-6 rounded-xl flex flex-col gap-3" v-if="routeType == 'financial'">
+            <div class="flex justify-end items-center text-[0.9vw] font-bold gap-3">
+                <i class="pi pi-calendar text-pink-700" style="font-size: 0.9vw"></i>
+                <span>{{ moment(formData.tanggalAwal).format('DD MMM YYYY') }} s/d {{ moment(formData.tanggalAkhir).format('DD MMM YYYY') }}</span>
+            </div>
             <revenue-detail-finance v-if="routeName == 'revenue'" :datas="listData" />
             <gross-profit-detail-finance v-else-if="routeName == 'gross-profit'" :datas="listData" />
             <ebitda-margin-finance v-else-if="routeName == 'ebitda-margin'" :datas="listData" />
@@ -179,11 +189,19 @@ const updateDates = async (dates) => {
             <cpo-kpbn-detail-finance v-else-if="routeName == 'cpo-kpbn'" :datas="listData" />
             <kurs-mata-uang-finance v-else-if="routeName == 'kurs-mata-uang'" :datas="listData" />
         </div>
-        <div class="min-h-[30rem] p-6 rounded-xl" v-else-if="routeType == 'sales'">
+        <div class="min-h-[30rem] p-6 rounded-xl flex flex-col gap-3" v-else-if="routeType == 'sales'">
+            <div class="flex justify-end items-center text-[0.9vw] font-bold gap-3">
+                <i class="pi pi-calendar text-pink-700" style="font-size: 0.9vw"></i>
+                <span>{{ moment(formData.tanggalAwal).format('DD MMM YYYY') }} s/d {{ moment(formData.tanggalAkhir).format('DD MMM YYYY') }}</span>
+            </div>
             <penjualan-bulk-sales v-if="routeName == 'penjualan-bulk'" :datas="listData" />
             <penjualan-ritel-sales v-if="routeName == 'penjualan-ritel'" :datas="listData" />
         </div>
-        <div class="min-h-[30rem] p-6 rounded-xl" v-else-if="routeType == 'scm'">
+        <div class="min-h-[30rem] p-6 rounded-xl flex flex-col gap-3" v-else-if="routeType == 'scm'">
+            <div class="flex justify-end items-center text-[0.9vw] font-bold gap-3">
+                <i class="pi pi-calendar text-pink-700" style="font-size: 0.9vw"></i>
+                <span>{{ moment(formData.tanggalAwal).format('DD MMM YYYY') }} s/d {{ moment(formData.tanggalAkhir).format('DD MMM YYYY') }}</span>
+            </div>
             <penjualan-bulk-sales v-if="routeName == 'penjualan-bulk'" :datas="listData" />
             <saldo-pe-scm v-else-if="routeName == 'saldo-pe'" :datas="listData" />
             <actual-incoming-scm v-else-if="routeName == 'actual-incoming-cpo'" :datas="listData" />
@@ -193,7 +211,11 @@ const updateDates = async (dates) => {
             <stok-cpo-scm v-else-if="routeName == 'stock-cpo'" :datas="listData" />
             <market-reuters-scm v-else-if="routeName == 'reuters-levy-duty'" :datas="listData" />
         </div>
-        <div class="min-h-[30rem] p-6 rounded-xl" v-else>
+        <div class="min-h-[30rem] p-6 rounded-xl flex flex-col gap-3" v-else>
+            <div class="flex justify-end items-center text-[0.9vw] font-bold gap-3">
+                <i class="pi pi-calendar text-pink-700" style="font-size: 0.9vw"></i>
+                <span>{{ moment(formData.tanggalAwal).format('DD MMM YYYY') }} s/d {{ moment(formData.tanggalAkhir).format('DD MMM YYYY') }}</span>
+            </div>
             <cpo-olah-vs-rkap-operation v-if="routeName == 'cpo-olah-vs-rkap'" :datas="listData" />
             <packaging-operation v-else-if="routeName == 'packaging-operation'" :datas="listData" />
             <laporan-produksi-operation v-else-if="routeName == 'laporan-produksi-operation'" :datas="listData" />

@@ -346,16 +346,30 @@ export default new (class scmDetailController {
             const ritel = produk.filter((item) => item.jenis == 'ritel');
 
             if (response != null) {
-                const warehouse = response.warehouse;
-                for (let i = 0; i < warehouse.length; i++) {
-                    const detail = warehouse[i].detail;
-                    for (let j = 0; j < detail.length; j++) {
-                        listQtyProduct.push({
-                            idRitel: detail[j].id_ritel,
-                            product: detail[j].product.name,
-                            qty: Number(detail[j].qty),
-                            tanggal: detail[j].tanggal
-                        });
+                // const warehouse = response.warehouse;
+                // for (let i = 0; i < warehouse.length; i++) {
+                //     const detail = warehouse[i].detail;
+                //     for (let j = 0; j < detail.length; j++) {
+                //         listQtyProduct.push({
+                //             idRitel: detail[j].id_ritel,
+                //             product: detail[j].product.name,
+                //             qty: Number(detail[j].qty),
+                //             tanggal: detail[j].tanggal
+                //         });
+                //     }
+                // }
+                const chart = response.chart;
+                if (chart.length > 0) {
+                    for (let i = 0; i < chart.length; i++) {
+                        const products = chart[i];
+                        for (let j = 0; j < products.length; j++) {
+                            listQtyProduct.push({
+                                idRitel: products[j].id_ritel,
+                                product: products[j].product.name,
+                                qty: Number(products[j].qty),
+                                tanggal: products[j].tanggal
+                            });
+                        }
                     }
                 }
             }
@@ -416,19 +430,25 @@ export default new (class scmDetailController {
     stockBulk = async (form) => {
         try {
             const listQtyProduct = [];
+            const listQtyProduct2 = [];
             const response = await bulkStockScmController.getByPeriod(form);
             const produk = await productMasterController.getAll();
             const bulk = produk.filter((item) => item.jenis == 'bulk');
 
             if (response != null) {
-                const details = response.details;
-                for (let i = 0; i < details.length; i++) {
-                    listQtyProduct.push({
-                        idBulk: details[i].id_bulky,
-                        product: details[i].product.name,
-                        qty: Number(details[i].qty),
-                        tanggal: details[i].tanggal
-                    });
+                const chart = response.chart;
+                if (chart.length > 0) {
+                    for (let i = 0; i < chart.length; i++) {
+                        const products = chart[i];
+                        for (let j = 0; j < products.length; j++) {
+                            listQtyProduct.push({
+                                idBulk: products[j].id_bulky,
+                                product: products[j].product.name,
+                                qty: Number(products[j].qty),
+                                tanggal: products[j].tanggal
+                            });
+                        }
+                    }
                 }
             }
             // 🔥 Grouping data berdasarkan idRitel dan tanggal
@@ -447,6 +467,7 @@ export default new (class scmDetailController {
             // 🔹 Konversi kembali ke array
             const finalList = Object.values(groupedData);
             const listLabel = [...new Set(finalList.map((item) => moment(item.tanggal).format('DD MMM YYYY')))];
+            // console.log(listLabel);
 
             // Masuk ke Data Produk
             const series = [];
@@ -467,6 +488,7 @@ export default new (class scmDetailController {
                             name: bulk[i].name,
                             data: nilai
                         });
+                        // console.log(nilai);
                     } else {
                         const nilai = [];
                         for (let j = 0; j < listLabel.length; j++) {

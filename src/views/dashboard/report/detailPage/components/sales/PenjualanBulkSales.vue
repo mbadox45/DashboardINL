@@ -31,7 +31,7 @@ onMounted(() => {
 const loadData = async () => {
     try {
         const response = props.datas;
-        console.log(response);
+        // console.log(response);
         if (response != null) {
             listPackaging.value = response.data;
             const responseTotal = response.total;

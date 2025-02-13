@@ -31,7 +31,7 @@ const loadData = async () => {
             setTimeout(function () {
                 loadingPage.value = false;
                 // window.location.replace(`${URL_WEB_Portal}auth/login`);
-                statusCheck2.value = 'Session anda berakhir, silahkan login kembali.';
+                statusCheck2.value = 'Session anda berakhir, silahkan login kembali atau kembali ke halaman utama.';
                 statusCheck.value = 'expired';
                 // console.log('token expired');
             }, timeLoading.value);
@@ -152,7 +152,19 @@ const actionButton = () => {
             <span class="py-2 px-3 bg-neutral-300 rounded-xl font-mono" v-if="loadingPage == false">{{ statusCheck2 }}</span>
             <div class="mt-3" v-if="loadingPage == false">
                 <button v-if="statusCheck == 'masuk'" @click="actionButton" class="px-6 py-2 text-[1vw] bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300">Go to Link</button>
-                <button v-else-if="statusCheck == 'expired'" @click="actionButton" class="px-6 py-2 text-[1vw] bg-amber-500 hover:bg-amber-600 text-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300">Go to PortalApps</button>
+                <div v-else-if="statusCheck == 'expired'" class="flex gap-3 items-center">
+                    <button
+                        @click="
+                            () => {
+                                router.push('/');
+                            }
+                        "
+                        class="px-6 py-2 text-[1vw] bg-cyan-500 hover:bg-cyan-600 text-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300"
+                    >
+                        Go to Home
+                    </button>
+                    <button @click="actionButton" class="px-6 py-2 text-[1vw] bg-amber-500 hover:bg-amber-600 text-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300">Go to PortalApps</button>
+                </div>
                 <button v-else @click="actionButton" class="px-6 py-2 text-[1vw] bg-red-500 hover:bg-red-600 text-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300">Close this page</button>
             </div>
         </div>

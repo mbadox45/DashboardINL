@@ -40,10 +40,38 @@ onMounted(() => {
     maxDate.value.setDate(day);
     maxDate.value.setMonth(month);
     maxDate.value.setFullYear(year);
-    loadPmg();
-    loadCurrency();
-    loadPackaging();
+    loadData();
 });
+
+const loadData = async () => {
+    const thisDateNow = moment().format('YYYY-MM-DD');
+    const dateLocalStorage = localStorage.getItem('dateFilter');
+    // console.log(dateLocalStorage);
+    if (dateLocalStorage != null) {
+        if (!moment(thisDateNow).isSame(moment(dateLocalStorage), 'day')) {
+            localStorage.removeItem('formData');
+            localStorage.setItem('dateFilter', thisDateNow);
+            // console.log('Tanggal berbeda!');
+        }
+    } else {
+        localStorage.setItem('dateFilter', thisDateNow);
+    }
+
+    const dataLocal = localStorage.getItem('formData');
+    // console.log(dataLocal);
+    if (dataLocal != null) {
+        const parsedData = JSON.parse(dataLocal);
+        selectedRegion.value = parsedData.pmg;
+        selectedMataUang.value = parsedData.mataUang;
+        selectedPackaging.value = parsedData.packaging;
+        dates.value = [moment(parsedData.beforeDate).toDate(), moment(parsedData.now).toDate()];
+    }
+
+    await loadPmg();
+    await loadCurrency();
+    await loadPackaging();
+    await tokenChecker();
+};
 
 const loadPmg = async () => {
     const response = await pmgMasterController.getAll();
@@ -73,18 +101,44 @@ const test = () => {
 
 const changeDate = () => {
     const list = dates.value;
-    let start = beforeDate.value;
-    let end = now.value;
+    let start, end;
+    const listdate = [];
 
-    if (list?.length > 1) {
-        start = moment(list[0], 'YYYY-MM-DD').format('YYYY-MM-DD');
-        end = moment(list[1], 'YYYY-MM-DD').format('YYYY-MM-DD');
+    if (list != null) {
+        if (list.length > 1) {
+            start = moment(list[0], 'YYYY-MM-DD').format('YYYY-MM-DD');
+            const lastDayOfMonth = moment(list[0], 'YYYY-MM-DD').endOf('month').format('YYYY-MM-DD');
+            end = moment(list[1] === null ? lastDayOfMonth : list[1], 'YYYY-MM-DD').format('YYYY-MM-DD');
+        } else {
+            start = beforeDate.value;
+            end = now.value;
+        }
+    } else {
+        start = beforeDate.value;
+        end = now.value;
     }
+    listdate.push(convertDate(start), convertDate(end));
+
+    const form = {
+        beforeDate: start,
+        now: end,
+        pmg: selectedRegion.value,
+        mataUang: selectedMataUang.value,
+        packaging: selectedPackaging.value
+    };
+
+    beforeDate.value = start;
+    now.value = end;
+    dates.value = listdate;
 
     // Check if onDateChange is a function before calling it
     if (typeof onDateChange === 'function') {
-        onDateChange({ beforeDate: start, now: end, pmg: selectedRegion.value, mataUang: selectedMataUang.value, packaging: selectedPackaging.value });
+        localStorage.setItem('formData', JSON.stringify(form));
+        onDateChange(form);
+        loadData();
+        visibleTop.value = false;
     } else {
+        visibleTop.value = false;
         console.error('onDateChange is not a function or is undefined');
     }
 };
@@ -106,6 +160,47 @@ const goToLogin = () => {
 
 const goBack = () => {
     router.back();
+};
+
+// Token Checker
+const tokenChecker = async () => {
+    const token = localStorage.getItem('usertoken');
+    if (token != null) {
+        const tokenData = parseJwt(token);
+        const expirationTime = tokenData.exp * 1000; // Convert expiration time to milliseconds
+
+        if (Date.now() > expirationTime) {
+            // Token has expired, remove it from localStorage
+            localStorage.removeItem('usertoken');
+            localStorage.removeItem('payload');
+            localStorage.removeItem('roles');
+            console.log('expired');
+            setTimeout(function () {
+                router.push('/');
+            }, 1000);
+        }
+        // else {
+        //     console.log('Token activated');
+        // }
+    }
+    // else {
+    //     console.log('Nothing Token');
+    // }
+};
+
+const parseJwt = (token) => {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+        atob(base64)
+            .split('')
+            .map(function (c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            })
+            .join('')
+    );
+
+    return JSON.parse(jsonPayload);
 };
 </script>
 

@@ -1,4 +1,5 @@
 <script setup>
+import { valueColorPersenCondition } from '@/controller/dummyController';
 import CryptoJS from 'crypto-js';
 import { computed, defineProps, onUnmounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
@@ -124,7 +125,7 @@ watch(
             <div class="flex items-start gap-4 h-full relative overflow-hidden">
                 <div v-if="displayedCard" :class="animationClass" class="flex gap-2 transition-all duration-500 w-full">
                     <div class="flex flex-col w-full gap-3 h-full justify-between mb-3">
-                        <span class="text-[1vw] text-pink-400 font-bold">{{ displayedCard.name }}</span>
+                        <span class="text-[1vw] text-slate-200 font-bold">{{ displayedCard.name }}</span>
 
                         <div class="w-full flex gap-0">
                             <div
@@ -137,7 +138,7 @@ watch(
                                 }"
                             >
                                 <div class="flex flex-col items-end w-full">
-                                    <span v-if="item.percentage != null" class="text-[1.2vw] font-bold text-amber-600">{{ item.percentage }}%</span>
+                                    <span v-if="item.percentage != null" class="text-[1.2vw] font-bold" :class="valueColorPersenCondition(item.percentage)">{{ item.percentage }}%</span>
                                     <span class="text-[0.7vw] font-bold text-amber-500">{{ item.value }}</span>
                                     <span class="text-[0.65vw] text-cyan-500">{{ item.name }}</span>
                                 </div>

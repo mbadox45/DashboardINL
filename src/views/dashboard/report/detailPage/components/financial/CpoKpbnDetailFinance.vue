@@ -41,7 +41,7 @@ const loadData = async () => {
         isLoading.value = true;
         await loadProduct();
     } catch (error) {
-        console.error('Error loading data:', error);
+        // console.error('Error loading data:', error);
     } finally {
         isLoading.value = false; // Set loading state false setelah data dimuat
     }

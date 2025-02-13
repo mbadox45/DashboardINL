@@ -7,11 +7,11 @@ export const valueToBilion = (val) => {
 export const valueColorPersenCondition = (val) => {
     let result = '';
     if (val <= 35) {
-        result = 'text-red-500';
+        result = 'text-red-600';
     } else if (val > 35 && val <= 70) {
-        result = 'text-amber-500';
+        result = 'text-amber-600';
     } else {
-        result = 'text-green-500';
+        result = 'text-green-600';
     }
     return result;
 };

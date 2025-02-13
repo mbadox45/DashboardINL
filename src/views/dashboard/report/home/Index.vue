@@ -71,6 +71,17 @@ onMounted(() => {
 });
 
 const loadAllData = async () => {
+    const dataLocal = localStorage.getItem('formData');
+    if (dataLocal != null) {
+        const parsedData = JSON.parse(dataLocal);
+        formData.value = {
+            idPmg: parsedData.pmg,
+            idMataUang: parsedData.mataUang,
+            idPackaging: parsedData.packaging,
+            tanggalAwal: parsedData.beforeDate,
+            tanggalAkhir: parsedData.now
+        };
+    }
     // const form = {
     //     idPmg: 1,
     //     idMataUang: 1,
@@ -209,7 +220,13 @@ const loadDataSCM = async () => {
                         <card-home-sales :dataritel="dataPenjualanRitel" :databulk="dataPenjualanBulk" :formPush="formData" />
                     </div>
                     <div class="col-span-2 flex flex-col gap-3">
-                        <span class="font-bold w-full text-[0.8vw]">Financial</span>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold w-full text-[0.8vw]">Financial</span>
+                            <span class="font-bold w-full text-[0.8vw] text-right flex gap-3 items-center justify-end">
+                                <i class="pi pi-calendar text-pink-700" style="font-size: 0.8vw"></i>
+                                <span>{{ moment(formData.tanggalAwal).format('DD MMM YYYY') }} s/d {{ moment(formData.tanggalAkhir).format('DD MMM YYYY') }}</span>
+                            </span>
+                        </div>
                         <card-home-finance :formPush="formData" :datarevenue="dataRevenue" :datacash="dataCbDanCfm" :datapayschedule="dataPaySchedule" :datacpokpbn="dataCpoKpbn" :datakurs="dataKurs" />
                         <harga-spot-finance :formPush="formData" :databulky="dataHargaSpotInvBulk" :dataretail="dataHargaSpotInvRitel" />
                         <span class="font-bold w-full text-[0.8vw]">Production</span>
@@ -222,7 +239,13 @@ const loadDataSCM = async () => {
                         <images-home class="h-full" />
                     </div>
                     <div class="col-span-2 flex flex-col gap-3">
-                        <span class="font-bold w-full text-[0.8vw]">Supply Chain</span>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold w-full text-[0.8vw]">Supply Chain</span>
+                            <span class="font-bold w-full text-[0.8vw] text-right flex gap-3 items-center justify-end">
+                                <i class="pi pi-calendar text-pink-700" style="font-size: 0.8vw"></i>
+                                <span>{{ moment(formData.tanggalAwal).format('DD MMM YYYY') }} s/d {{ moment(formData.tanggalAkhir).format('DD MMM YYYY') }}</span>
+                            </span>
+                        </div>
                         <card-home-supply-chain :formPush="formData" :stokcpo="dataStockCpo" :stokbulk="dataStockBulk" :stokritel="dataStockRetail" :actualincoming="dataActualIncoming" :outstanding="dataOutstanding" :saldope="dataSaldoPe" />
                         <div class="grid grid-cols-1 gap-2">
                             <!-- <card-scm-values v-for="(item, index) in listCardSCM" :key="index" :datas="item" :style="`animation: fadein 1s ease-in-out`" />

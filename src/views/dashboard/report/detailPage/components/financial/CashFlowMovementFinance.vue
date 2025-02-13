@@ -20,7 +20,7 @@ onMounted(() => {
 const loadData = async () => {
     try {
         const response = props.datas || null;
-        console.log(response);
+        // console.log(response);
 
         if (response != null) {
             const chart = response.chart || [];

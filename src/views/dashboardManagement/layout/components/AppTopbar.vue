@@ -17,7 +17,7 @@ const roles = ref(
 );
 
 onMounted(() => {
-    // console.log(users);
+    tokenChecker();
 });
 
 const toggle = (event) => {
@@ -32,6 +32,44 @@ const signOut = () => {
         router.push('/');
     }, 1000);
     // window.location.replace(URL_WEB);
+};
+
+const tokenChecker = async () => {
+    const token = localStorage.getItem('usertoken');
+    if (token != null) {
+        const tokenData = parseJwt(token);
+        const expirationTime = tokenData.exp * 1000; // Convert expiration time to milliseconds
+
+        if (Date.now() > expirationTime) {
+            // Token has expired, remove it from localStorage
+            localStorage.removeItem('usertoken');
+            localStorage.removeItem('payload');
+            localStorage.removeItem('roles');
+            console.log('expired');
+            setTimeout(function () {
+                router.push('/');
+            }, 1000);
+        } else {
+            console.log('Token activated');
+        }
+    } else {
+        console.log('Nothing Token');
+    }
+};
+
+const parseJwt = (token) => {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+        atob(base64)
+            .split('')
+            .map(function (c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            })
+            .join('')
+    );
+
+    return JSON.parse(jsonPayload);
 };
 </script>
 
