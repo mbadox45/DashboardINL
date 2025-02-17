@@ -83,15 +83,15 @@ watch(() => props.formPush, loadData, { immediate: true });
                     <!-- Data Summary Section -->
                     <div class="flex flex-col gap-1 w-full h-full">
                         <span class="items-center rounded-xl w-full font-bold bg-black flex py-1.5 px-3">
-                            <span class="text-green-500 w-full text-[0.8vw]">CPO Olah</span>
+                            <span class="w-full text-[0.8vw]">CPO Olah</span>
                             <span class="text-pink-600 text-[0.9vw]">{{ load.cpoOlah }}</span>
                         </span>
                         <span class="items-center rounded-xl w-full font-bold bg-black flex py-1.5 px-3">
-                            <span class="text-green-500 w-full text-[0.8vw]">RKAP</span>
+                            <span class="w-full text-[0.8vw]">RKAP</span>
                             <span class="text-pink-600 text-[0.9vw]">{{ load.rkap }}</span>
                         </span>
                         <span class="items-center rounded-xl w-full font-bold bg-black flex py-1.5 px-3">
-                            <span class="text-green-500 w-full text-[0.8vw]">Utility</span>
+                            <span class="w-full text-[0.8vw]">Utility</span>
                             <span class="text-pink-600 text-[0.9vw]">{{ load.kapasitasUtility }}</span>
                         </span>
                         <!-- Cost Section -->

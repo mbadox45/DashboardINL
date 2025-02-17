@@ -49,7 +49,7 @@ watch(() => props.formPush, loadData, { immediate: true });
                 </button>
             </div>
             <div class="flex h-full items-center gap-3">
-                <img src="/images/icon/financial/revenue.png" alt="Icon" class="w-[3vw] h-[3vw] mr-1" />
+                <!-- <img src="/images/icon/financial/revenue.png" alt="Icon" class="w-[3vw] h-[3vw] mr-1" /> -->
                 <div class="w-full h-full">
                     <div class="flex gap-1 items-center h-full">
                         <div class="flex gap-2 items-center mb-3">

@@ -50,7 +50,7 @@ watch(() => props.formPush, loadData, { immediate: true });
                 </button>
             </div>
             <div class="flex h-full items-center gap-3">
-                <img src="/images/icon/financial/ebitda.png" alt="Icon" class="w-[3vw] h-[3vw] mr-1" />
+                <!-- <img src="/images/icon/financial/ebitda.png" alt="Icon" class="w-[3vw] h-[3vw] mr-1" /> -->
                 <div class="flex gap-1 items-center h-full mt-3 w-full">
                     <div class="flex gap-2 items-center h-full">
                         <span class="font-bold text-[1.5vw]" :class="valueColorIntCondition(load.total)">{{ load.total }}</span>

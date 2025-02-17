@@ -16,11 +16,11 @@ const props = defineProps({
     }
 });
 
-const load = ref({ cff: 0, cfi: 0, period: '' });
+const load = ref({ cff: 0, cfi: 0, period: '', cfo: 0 });
 
 const loadData = async () => {
     const data = props.datas;
-    load.value = { cff: data.cff, cfi: data.cfi, period: data.period };
+    load.value = { cff: data.cff, cfi: data.cfi, period: data.period, cfo: data.cfo || 0 };
 };
 
 const routerLink = (path) => {
@@ -48,24 +48,35 @@ watch(() => props.formPush, loadData, { immediate: true });
                 </button>
             </div>
             <div class="flex h-full items-center gap-3">
-                <div class="flex gap-1 w-full h-full">
-                    <div class="flex flex-col gap-1 p-2 rounded-xl bg-black w-full">
+                <div class="flex gap-1 flex-col w-full h-full">
+                    <div class="flex justify-between items-center gap-1 p-2 rounded-xl bg-black w-full">
                         <div class="flex gap-2 justify-between items-center">
-                            <span class="font-bold text-[0.9vw]">CFF</span>
-                            <span class="text-cyan-500 font-bold text-[0.7vw]">s/d {{ load.period }}</span>
+                            <span class="font-bold text-[0.7vw]">CFF</span>
                         </div>
                         <div class="flex gap-2 items-center text-amber-500">
-                            <span class="font-bold text-[1.2vw]">{{ load.cff }}</span>
-                            <!-- <i class="pi pi-sort" style="font-size: 0.8vw"></i> -->
+                            <span class="font-bold text-[1vw]">{{ load.cff }}</span>
                         </div>
                     </div>
-                    <div class="flex flex-col gap-1 p-2 rounded-xl bg-black w-full">
+                    <div class="flex justify-between items-center gap-1 p-2 rounded-xl bg-black w-full">
                         <div class="flex gap-2 justify-between items-center">
-                            <span class="font-bold text-[0.9vw]">CFI</span>
+                            <span class="font-bold text-[0.7vw]">CFI</span>
                         </div>
                         <div class="flex gap-2 items-center text-amber-500">
-                            <span class="font-bold text-[1.2vw]">{{ load.cfi }}</span>
+                            <span class="font-bold text-[1vw]">{{ load.cfi }}</span>
                         </div>
+                    </div>
+                </div>
+                <div class="flex gap-1 flex-col w-full h-full">
+                    <div class="flex justify-between items-center gap-1 p-2 rounded-xl bg-black w-full">
+                        <div class="flex gap-2 justify-between items-center">
+                            <span class="font-bold text-[0.7vw]">CFO</span>
+                        </div>
+                        <div class="flex gap-2 items-center text-amber-500">
+                            <span class="font-bold text-[1vw]">{{ load.cfo }}</span>
+                        </div>
+                    </div>
+                    <div class="text-cyan-500 font-bold text-[0.7vw] w-full h-full flex items-center justify-center">
+                        <span>s/d {{ load.period }}</span>
                     </div>
                 </div>
             </div>

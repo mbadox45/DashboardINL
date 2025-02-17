@@ -204,7 +204,62 @@ export default new (class financeDetailController {
                         color: '#1a5276'
                     });
                 }
+
+                const cfoKategori = kategori.find((item) => item.name.toLowerCase().includes('cash flow operation'));
+                if (cfoKategori != null) {
+                    const period = cfoKategori.period;
+                    const listName = [];
+                    const listTable = [];
+                    const listChart = [];
+                    for (let i = 0; i < period.length; i++) {
+                        const data = period[i].data;
+                        for (let j = 0; j < data.length; j++) {
+                            listName.push({ name: data[j].name });
+                        }
+                    }
+                    const uniqueDataName = Array.from(new Map(listName.map((item) => [item.name, item])).values());
+                    for (let i = 0; i < uniqueDataName.length; i++) {
+                        const dataArray = [];
+                        const dataTable = [];
+                        for (let j = 0; j < months.length; j++) {
+                            const dataPeriod = period.find((item) => item.month == months[j].id);
+                            if (dataPeriod != null) {
+                                const data = dataPeriod.data;
+                                const total = data.filter((item) => item.name === uniqueDataName[i].name).reduce((sum, item) => sum + (Number(item.value) || 0), 0);
+                                dataArray.push(Number(valueToBilion(total)));
+                                dataTable.push({
+                                    periode: moment(months[j].name, 'MMMM').format('MMM'),
+                                    value: valueToBilion(total)
+                                });
+                            } else {
+                                dataArray.push(0);
+                                dataTable.push({
+                                    periode: moment(months[j].name, 'MMMM').format('MMM'),
+                                    value: 0
+                                });
+                            }
+                        }
+                        listChart.push({
+                            name: uniqueDataName[i].name,
+                            data: dataArray
+                        });
+                        listTable.push({
+                            name: uniqueDataName[i].name,
+                            data: dataTable
+                        });
+                    }
+                    result.chart.push({
+                        name: cfoKategori.name + ' ' + year,
+                        dataChart: listChart
+                    });
+                    result.tabel.push({
+                        name: cfoKategori.name + ' ' + year,
+                        dataTable: listTable,
+                        color: '#1a5276'
+                    });
+                }
             }
+            // console.log(result);
             return result;
         } catch (error) {
             const result = {
@@ -274,6 +329,30 @@ export default new (class financeDetailController {
                 total: total,
                 chartOptions: stackedChartOptionsApex(total, listLabels, null, null),
                 series: series
+            });
+
+            // CFO
+            const cfoChart = chart.find((item) => item.name.includes('Cash Flow Operation'));
+            const dataSeriesCfo = [];
+            const dataChartCfo = cfoChart.dataChart;
+            for (let i = 0; i < dataChartCfo.length; i++) {
+                dataSeriesCfo.push({
+                    label: dataChartCfo[i].name,
+                    data: dataChartCfo[i].data
+                });
+            }
+            const typeChartCfo = 'bar';
+            const seriesCfo = dataSeriesCfo.map((dataItem) => ({
+                name: dataItem.label,
+                data: dataItem.data
+            }));
+
+            listChart.push({
+                name: 'CFO Payment Schedule (dlm IDR Miliar)',
+                type: typeChartCfo,
+                total: total,
+                chartOptions: stackedChartOptionsApex(total, listLabels, null, null),
+                series: seriesCfo
             });
         }
         return {

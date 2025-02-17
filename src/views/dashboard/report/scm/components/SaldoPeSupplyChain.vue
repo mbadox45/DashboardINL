@@ -48,7 +48,7 @@ watch(() => props.formPush, loadData, { immediate: true });
                 </button>
             </div>
             <div class="flex h-full items-center gap-3">
-                <img src="/images/icon/scm/import-export.png" alt="Icon" class="w-[3vw] h-[3vw] mr-1" />
+                <!-- <img src="/images/icon/scm/import-export.png" alt="Icon" class="w-[3vw] h-[3vw] mr-1" /> -->
                 <div class="w-full h-full">
                     <div class="flex flex-col gap-2 w-full">
                         <div class="flex justify-between gap-2 items-center">

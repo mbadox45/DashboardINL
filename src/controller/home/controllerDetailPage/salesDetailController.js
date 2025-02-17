@@ -19,13 +19,13 @@ export default new (class salesDetailController {
             const laporan = await laporanPenjualanController.getByPeriod(form);
             const bulkLaporan = laporan == null ? null : laporan.ritel;
             const produkLaporan = bulkLaporan == null ? null : bulkLaporan.products;
-            total.totalQtyKategori = bulkLaporan == null ? 0 : Number(bulkLaporan.totalQtyKategori) / 1000;
-            total.totalValueKategori = bulkLaporan == null ? 0 : Number(bulkLaporan.totalValueKategori) / 1000;
+            total.totalQtyKategori = bulkLaporan == null ? 0 : Number(bulkLaporan.totalQtyKategori);
+            total.totalValueKategori = bulkLaporan == null ? 0 : Number(bulkLaporan.totalValueKategori);
 
             // Target
             const target = await targetPenjualanController.getByPeriod(form);
             const bulkTarget = target == null ? null : target.ritel;
-            total.totalQtyTargetKategori = bulkTarget == null ? 0 : Number(bulkTarget.totalQtyTargetKategori) / 1000;
+            total.totalQtyTargetKategori = bulkTarget == null ? 0 : Number(bulkTarget.totalQtyTargetKategori);
             total.percentageQtyToTargetKategori = bulkTarget == null ? 0 : bulkTarget.percentageQtyToTargetKategori;
 
             const produkTarget = bulkTarget == null ? null : bulkTarget.products;
@@ -46,14 +46,14 @@ export default new (class salesDetailController {
                         if (detail != null) {
                             const detailTarget = detail.target[0];
                             percentageQtyToTarget = detailTarget == null ? 0 : detailTarget.percentageQtyToTarget;
-                            totalQtyTarget = detailTarget == null ? 0 : Number(detailTarget.totalQtyTarget) / 1000;
+                            totalQtyTarget = detailTarget == null ? 0 : Number(detailTarget.totalQtyTarget);
                         }
                     }
                     if (produkLaporan != null) {
                         const detail = produkLaporan.find((item) => item.idProduct == ritel[i].id);
                         if (detail != null) {
-                            totalQty = Number(detail.totalQty) / 1000;
-                            totalValue = Number(detail.totalValue) / 1000;
+                            totalQty = Number(detail.totalQty);
+                            totalValue = Number(detail.totalValue);
                             totalHargaSatuan = detail.totalHargaSatuan;
                         }
                     }

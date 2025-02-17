@@ -104,7 +104,7 @@ watch(() => props.formPush, startIndexCycle, { immediate: true });
             <div class="flex items-start gap-4 h-full relative overflow-hidden">
                 <div v-if="displayedCard" :class="animationClass" class="flex gap-2 transition-all duration-500 w-full">
                     <div class="flex w-full h-full justify-between items-center">
-                        <span class="font-bold w-full text-[0.9vw] text-pink-400">{{ displayedCard.name }}</span>
+                        <span class="font-bold w-full text-[0.9vw] text-gray-300">{{ displayedCard.name }}</span>
                         <div class="flex flex-col items-end justify-center bg-black w-full h-full py-1 px-2 rounded-xl font-bold">
                             <span class="text-[0.8vw]">Aktual</span><span class="text-amber-500 text-[1.4vw]">{{ displayedCard.total }}</span>
                         </div>

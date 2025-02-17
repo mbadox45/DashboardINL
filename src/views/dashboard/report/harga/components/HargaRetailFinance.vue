@@ -110,7 +110,7 @@ watch(() => load.value, startIndexCycle, { immediate: true });
             <div class="flex items-center gap-4 h-full relative overflow-hidden">
                 <div :class="animationClass" class="flex gap-2 transition-all duration-500 w-full">
                     <div v-for="(card, index) in displayedCards" :key="index" class="flex flex-col gap-1 p-2 bg-black rounded-xl w-full">
-                        <span class="font-bold text-[0.8vw] text-pink-400">{{ card.title }}</span>
+                        <span class="font-bold text-[0.8vw]">{{ card.title }}</span>
                         <div class="flex gap-1 w-full">
                             <div class="flex flex-col gap-1 w-full">
                                 <div class="flex flex-col text-amber-600 justify-between items-end w-full">

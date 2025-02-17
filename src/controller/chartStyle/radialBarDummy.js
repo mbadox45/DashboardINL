@@ -345,6 +345,7 @@ export const pieChartApex = (label, qty) => {
                 show: false
             }
         },
+        colors: ['#FF5733', '#33FF57', '#3357FF', '#F3FF33', '#FF33F6', '#33FFF6', '#A633FF', '#FF8C33', '#33FF8C', '#8C33FF', '#FF3366', '#66FF33'],
         labels: label,
         series: qty, // Use the qty array for chart data
         legend: {

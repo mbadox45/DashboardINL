@@ -109,38 +109,38 @@ watch(() => load.value, startIndexCycle, { immediate: true });
                     <!-- Format Laporan Material -->
                     <div class="w-full flex items-end gap-2 mt-2">
                         <div class="flex flex-col w-full gap-2">
-                            <span class="text-[0.8vw] font-bold text-green-500">{{ displayedCard.name }}</span>
+                            <span class="text-[0.8vw] font-bold">{{ displayedCard.name }}</span>
                             <div class="flex flex-col w-full gap-2 text-amber-500">
                                 <div class="py-[0.9px] px-3 rounded-xl flex flex-col gap-1 bg-black">
-                                    <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-red-500">
-                                        <span class="text-[0.8vw] font-bold">{{ displayedCard.totalPemakaian }}</span>
-                                        <span class="font-bold text-[0.7vw] uppercase">Total Pemakaian</span>
+                                    <div class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full">
+                                        <span class="text-[0.8vw] font-bold text-white">{{ displayedCard.totalPemakaian }}</span>
+                                        <span class="font-bold text-[0.7vw] uppercase text-cyan-500">Total Pemakaian</span>
                                     </div>
                                 </div>
-                                <div class="flex gap-2 w-full">
+                                <div class="flex flex-col gap-2 w-full">
                                     <div v-if="displayedCard.incoming.length > 0" class="py-[0.9px] px-3 rounded-xl flex flex-col w-full gap-1 bg-black">
-                                        <span class="text-[0.7vw]">Incoming</span>
+                                        <span class="text-[0.7vw] text-cyan-500">Incoming</span>
                                         <div v-for="(item, index) in displayedCard.incoming" :key="index" class="flex flex-row-reverse items-center justify-between border-t border-neutral-800 w-full text-cyan-500">
                                             <span class="text-[0.8vw] font-bold">{{ item.value }}</span>
-                                            <span class="text-[0.7vw]">{{ item.name }}</span>
+                                            <span class="text-[0.7vw] text-white">{{ item.name }}</span>
                                         </div>
                                     </div>
                                     <div v-if="displayedCard.outgoing.length > 0" class="py-[0.9px] px-3 rounded-xl flex flex-col w-full gap-1 bg-black">
                                         <div class="flex items-center justify-between w-full text-amber-600">
                                             <div class="flex flex-col gap-1 w-full">
-                                                <span class="text-[0.7vw] w-full border-b pb-1 border-neutral-800">{{ displayedCard.incoming.length > 0 ? 'Outgoing' : 'Detail' }}</span>
-                                                <span class="text-[0.7vw] w-full text-cyan-500" v-for="(item, index) in displayedCard.outgoing" :key="index">{{ item.name }}</span>
+                                                <span class="text-[0.7vw] w-full border-b pb-1 border-neutral-800 text-cyan-500">{{ displayedCard.incoming.length > 0 ? 'Outgoing' : 'Detail' }}</span>
+                                                <span class="text-[0.7vw] w-full text-white" v-for="(item, index) in displayedCard.outgoing" :key="index">{{ item.name }}</span>
                                             </div>
                                             <div class="flex flex-col gap-1 w-1/2">
-                                                <span class="text-[0.7vw] w-full text-right border-b pb-1 border-neutral-800">Quantity</span>
+                                                <span class="text-[0.7vw] w-full text-right border-b pb-1 border-neutral-800 text-cyan-500">Quantity</span>
                                                 <span class="text-[0.7vw] w-full text-right font-bold text-cyan-500" v-for="(item, index) in displayedCard.outgoing" :key="index">{{ item.value }}</span>
                                             </div>
                                             <div class="flex flex-col gap-1 w-1/4">
-                                                <span class="text-[0.7vw] w-full text-right border-b pb-1 border-neutral-800">Norma</span>
-                                                <span class="text-[0.7vw] w-full text-right font-bold text-cyan-500" v-for="(item, index) in displayedCard.outgoing" :key="index">{{ item.norma }}</span>
+                                                <span class="text-[0.7vw] w-full text-right border-b pb-1 border-neutral-800 text-cyan-500">Norma</span>
+                                                <span class="text-[0.7vw] w-full text-right font-bold text-green-500" v-for="(item, index) in displayedCard.outgoing" :key="index">{{ item.norma }}</span>
                                             </div>
                                             <div class="flex flex-col gap-1 w-1/4">
-                                                <span class="text-[0.7vw] w-full text-right border-b pb-1 border-neutral-800">Usage</span>
+                                                <span class="text-[0.7vw] w-full text-right border-b pb-1 border-neutral-800 text-cyan-500">Usage</span>
                                                 <span class="text-[0.7vw] w-full text-right font-bold" v-for="(item, index) in displayedCard.outgoing" :key="index" :class="`text-${item.color}-500`">{{ item.usage }}</span>
                                             </div>
                                         </div>
@@ -151,7 +151,7 @@ watch(() => load.value, startIndexCycle, { immediate: true });
                                         </div> -->
                                     </div>
                                 </div>
-                                <div class="col-span-2 py-[0.9px] px-3 rounded-xl flex items-center justify-between bg-black">
+                                <div class="col-span-2 py-[0.9px] px-3 rounded-xl flex items-center justify-between bg-black text-red-500">
                                     <span class="font-bold text-[0.7vw] uppercase">Selisih</span>
                                     <span class="text-[0.8vw] font-bold">{{ displayedCard.selisih }}</span>
                                 </div>

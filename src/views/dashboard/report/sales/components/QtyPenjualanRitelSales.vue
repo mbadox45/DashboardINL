@@ -1,5 +1,5 @@
 <script setup>
-import { formatCurrency } from '@/controller/dummyController';
+import { formatCurrency, valueColorPersenCondition } from '@/controller/dummyController';
 import CryptoJS from 'crypto-js';
 import { defineProps, ref, watch } from 'vue';
 import VueApexCharts from 'vue3-apexcharts';
@@ -66,11 +66,11 @@ watch(() => props.formPush, loadData, { immediate: true });
                     <div class="flex w-full gap-2 h-full items-center py-1 px-1">
                         <div class="flex flex-col gap-2 w-full bg-black h-full py-2 px-3 rounded-lg">
                             <div class="flex gap-2 justify-between items-center">
-                                <span class="text-[1.7vw] font-bold text-amber-500">{{ load.persen }}%</span>
-                                <span class="text-[0.5vw] font-bold text-white">s/d {{ load.tanggal }}</span>
+                                <span class="text-[1.7vw] font-bold" :class="valueColorPersenCondition(load.persen)">{{ load.persen }}%</span>
+                                <span class="text-[0.5vw] font-bold text-cyan-600">s/d {{ load.tanggal }}</span>
                             </div>
                             <div class="flex gap-2 h-full">
-                                <div class="flex w-full flex-col-reverse items-end justify-center text-amber-500 font-bold">
+                                <div class="flex w-full flex-col-reverse items-end justify-center font-bold" :class="valueColorPersenCondition(load.persen)">
                                     <span class="text-[0.5vw]">Real</span><span class="text-[0.7vw]">{{ load.real }}</span>
                                 </div>
                                 <div class="flex w-full flex-col-reverse items-end justify-center text-green-500 font-bold">

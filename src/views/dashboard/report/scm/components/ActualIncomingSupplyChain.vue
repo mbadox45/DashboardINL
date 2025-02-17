@@ -48,14 +48,14 @@ watch(() => props.formPush, loadData, { immediate: true });
                 </button>
             </div>
             <div class="flex h-full items-center gap-3">
-                <img src="/images/icon/scm/on-time.png" alt="Icon" class="w-[3vw] h-[3vw] mr-1" />
+                <!-- <img src="/images/icon/scm/on-time.png" alt="Icon" class="w-[3vw] h-[3vw] mr-1" /> -->
                 <div class="w-full h-full">
                     <div class="flex flex-col gap-2 w-full">
                         <div class="w-full flex flex-col items-end font-bold">
                             <span class="text-[1vw] text-amber-500">{{ load.totalHarga }}</span>
                             <div class="text-[0.6vw] flex justify-between w-full">
-                                <span class="text-white font-normal w-full text-end">{{ load.tanggal }}</span
-                                ><span class="text-cyan-500 w-full text-right">Total Harga</span>
+                                <span class="font-normal w-full text-end text-cyan-500">{{ load.tanggal }}</span
+                                ><span class="text-cyan-500 w-full text-right">Total Nilai</span>
                             </div>
                         </div>
                         <div class="flex gap-1">

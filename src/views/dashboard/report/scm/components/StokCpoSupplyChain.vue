@@ -48,7 +48,7 @@ watch(() => props.formPush, loadData, { immediate: true });
                 </button>
             </div>
             <div class="flex h-full items-center gap-3">
-                <img src="/images/icon/scm/silo.png" alt="Icon" class="w-[3vw] h-[3vw] mr-1" />
+                <!-- <img src="/images/icon/scm/silo.png" alt="Icon" class="w-[3vw] h-[3vw] mr-1" /> -->
                 <div class="flex flex-col gap-2 w-full justify-center h-full">
                     <div class="flex flex-row-reverse justify-between items-center">
                         <div class="flex flex-col items-end">

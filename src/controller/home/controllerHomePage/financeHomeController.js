@@ -251,11 +251,13 @@ export default new (class financeHomeController {
             const response = await cashFlowScheduleController.getByPeriod(form);
             const cff = response.kategori.find((item) => item.name.toLowerCase().includes('funding'));
             const cfi = response.kategori.find((item) => item.name.toLowerCase().includes('investment'));
+            const cfo = response.kategori.find((item) => item.name.toLowerCase().includes('operation'));
             const last = cff.period[cff.period.length - 1];
 
             const result = {
                 cff: valueToBilion(Number(cff.total)),
                 cfi: valueToBilion(Number(cfi.total)),
+                cfo: valueToBilion(Number(cfo.total)),
                 period: moment(last.month > 9 ? `${last.year.toString()}-${last.month.toString()}-01` : `${last.year.toString()}-0${last.month.toString()}-01`).format('MMMM YYYY')
             };
             return result;
@@ -263,6 +265,7 @@ export default new (class financeHomeController {
             return {
                 cff: 0,
                 cfi: 0,
+                cfo: 0,
                 period: '-'
             };
         }

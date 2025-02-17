@@ -283,6 +283,34 @@ const router = createRouter({
                     }
                 },
                 {
+                    path: '/sdm/uraian',
+                    name: 'uraian-sdm',
+                    component: () => import('@/views/dashboardManagement/sdm/uraianSdm/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        // finance: true,
+                        // operation: true
+                        // sales: true,
+                        // scm: true,
+                        sdm: true
+                    }
+                },
+                {
+                    path: '/sdm/data-sdm',
+                    name: 'data-sdm',
+                    component: () => import('@/views/dashboardManagement/sdm/dataSdm/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        // finance: true,
+                        // operation: true
+                        // sales: true,
+                        // scm: true,
+                        sdm: true
+                    }
+                },
+                {
                     path: '/master/jenis-produksi',
                     name: 'jenis-produksi',
                     component: () => import('@/views/dashboardManagement/operation/jenisLaporanProduksi/Index.vue'),

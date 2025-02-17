@@ -605,7 +605,7 @@ export const barChartOptionsApex = (labels, color, strokeColor, dataLabelStat, t
                 if (value === 0) {
                     return '';
                 }
-                return value;
+                return formatCurrency(value); // ✅ Gunakan formatCurrency untuk dataLabels
             }
         },
         colors: color,
@@ -616,6 +616,11 @@ export const barChartOptionsApex = (labels, color, strokeColor, dataLabelStat, t
         },
         tooltip: {
             theme: 'dark',
+            y: {
+                formatter: function (value) {
+                    return formatCurrency(value); // ✅ Gunakan formatCurrency untuk tooltip
+                }
+            },
             style: {
                 fontSize: '12px',
                 fontFamily: 'Arial, sans-serif',

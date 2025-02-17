@@ -18,6 +18,7 @@ import HargaSpotFinance from '@/views/dashboard/report/harga/HargaSpotFinance.vu
 import CardHomeMaterial from '@/views/dashboard/report/operation/CardHomeMaterial.vue';
 import CardHomeOperation from '@/views/dashboard/report/operation/CardHomeOperation.vue';
 import MarketReuters from '@/views/dashboard/report/others/MarketReuters.vue';
+import SdmView from '@/views/dashboard/report/others/SdmView.vue';
 import CardHomePackaging from '@/views/dashboard/report/packaging/CardHomePackaging.vue';
 import CardHomeSales from '@/views/dashboard/report/sales/CardHomeSales.vue';
 import CardHomeSupplyChain from '@/views/dashboard/report/scm/CardHomeSupplyChain.vue';
@@ -247,10 +248,10 @@ const loadDataSCM = async () => {
                             </span>
                         </div>
                         <card-home-supply-chain :formPush="formData" :stokcpo="dataStockCpo" :stokbulk="dataStockBulk" :stokritel="dataStockRetail" :actualincoming="dataActualIncoming" :outstanding="dataOutstanding" :saldope="dataSaldoPe" />
-                        <div class="grid grid-cols-1 gap-2">
-                            <!-- <card-scm-values v-for="(item, index) in listCardSCM" :key="index" :datas="item" :style="`animation: fadein 1s ease-in-out`" />
-                            <sdm-view class="col-span-2" /> -->
+                        <div class="grid grid-cols-3 gap-2">
+                            <!-- <card-scm-values v-for="(item, index) in listCardSCM" :key="index" :datas="item" :style="`animation: fadein 1s ease-in-out`" /> -->
                             <market-reuters :formPush="formData" :datas="dataMarketReuters" />
+                            <sdm-view class="col-span-2" />
                         </div>
                         <card-home-material :formPush="formData" :laporanmaterial="dataLaporanMaterial" />
                     </div>

@@ -48,7 +48,7 @@ watch(() => props.formPush, loadData, { immediate: true });
                 </button>
             </div>
             <div class="flex h-full items-center gap-3">
-                <img src="/images/icon/financial/kurs.png" alt="Icon" class="w-[3vw] h-[3vw] mr-1" />
+                <!-- <img src="/images/icon/financial/kurs.png" alt="Icon" class="w-[3vw] h-[3vw] mr-1" /> -->
                 <div class="flex flex-col items-center h-full w-full">
                     <div class="flex gap-3 justify-between w-full h-full items-center">
                         <span class="font-bold text-[1vw] text-amber-600">{{ load.value }}</span>

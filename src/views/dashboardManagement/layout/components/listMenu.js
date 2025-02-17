@@ -144,6 +144,13 @@ export const menuAllAccess = () => {
             ]
         },
         {
+            label: 'SDM',
+            items: [
+                { label: 'Uraian', icon: 'pi pi-fw pi-bookmark-fill', to: '/sdm/uraian' },
+                { label: 'Data SDM', icon: 'pi pi-fw pi-user', to: '/sdm/data-sdm' }
+            ]
+        },
+        {
             label: 'Master',
             items: [
                 { label: 'PMG Master', icon: 'pi pi-fw pi-building', to: '/master/pmg' },

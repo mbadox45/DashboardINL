@@ -1,5 +1,6 @@
 <script setup>
 import { barChartOptionsApex } from '@/controller/chartStyle/chartDummy';
+import { formatCurrency } from '@/controller/dummyController';
 import moment from 'moment';
 import { defineProps, onMounted, ref, watch } from 'vue';
 import ApexCharts from 'vue3-apexcharts';
@@ -90,28 +91,37 @@ const loadProduct = async () => {
             plotOptions: {
                 bar: {
                     dataLabels: {
-                        position: 'top' // position labels inside the bars
+                        position: 'top' // Position labels inside the bars
                     }
                 }
             },
             dataLabels: {
-                enabled: true, // enables labels
+                enabled: true, // Enables labels
                 style: {
-                    colors: ['#000'] // sets label text color to black
+                    colors: ['#000'] // Sets label text color to black
                 },
-                offsetY: -10 // moves the label above the bar
+                offsetY: -10, // Moves the label above the bar
+                formatter: function (value) {
+                    return formatCurrency(value); // ✅ Gunakan formatCurrency untuk dataLabels
+                }
             },
             colors: ['rgba(249, 115, 22, 0.6)'],
             stroke: {
-                // border
+                // Border
                 show: true,
                 width: 1,
                 colors: ['rgb(249, 115, 22)']
             },
             tooltip: {
-                theme: 'dark'
+                theme: 'dark',
+                y: {
+                    formatter: function (value) {
+                        return formatCurrency(value); // ✅ Gunakan formatCurrency untuk tooltip
+                    }
+                }
             }
         };
+
         chartSeries.value = [
             {
                 name: 'AVG',
