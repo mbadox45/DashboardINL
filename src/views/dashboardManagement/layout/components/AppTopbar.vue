@@ -50,7 +50,7 @@ const tokenChecker = async () => {
                 router.push('/');
             }, 1000);
         } else {
-            console.log('Token activated');
+            // console.log('Token activated');
         }
     } else {
         console.log('Nothing Token');
@@ -80,7 +80,7 @@ const parseJwt = (token) => {
                 <i class="pi pi-bars"></i>
             </button>
             <router-link to="/" class="layout-topbar-logo">
-                <svg viewBox="0 0 54 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- <svg viewBox="0 0 54 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                         fill-rule="evenodd"
                         clip-rule="evenodd"
@@ -96,7 +96,8 @@ const parseJwt = (token) => {
                             fill="var(--primary-color)"
                         />
                     </g>
-                </svg>
+                </svg> -->
+                <img src="/images/icon-dashboard.png" alt="PT INL" width="40px" />
 
                 <span class="uppercase">INL Edge</span>
             </router-link>

@@ -1,4 +1,5 @@
 import { barChartOptionsApex, combo3ChartOptionsApex, comboChartOptionsApex, stackedChartOptionsApex } from '@/controller/chartStyle/chartDummy';
+import { halfRadialChartApex2 } from '@/controller/chartStyle/radialBarDummy';
 import { formatCurrency, months, valueToBilion } from '@/controller/dummyController';
 import cashFlowMovementController from '@/controller/getApiFromThisApp/cashFlowMovement/cashFlowMovementController';
 import cashFlowScheduleController from '@/controller/getApiFromThisApp/cashFlowSchedule/cashFlowScheduleController';
@@ -476,6 +477,8 @@ export default new (class financeDetailController {
                         if (month !== undefined && month !== null) {
                             const detail = month.detail;
                             if (detail.length > 0) {
+                                const starting = detail.find((item) => item.name.toLowerCase().includes('starting cash balanced'));
+                                const ending = formatCurrency(valueToBilion(month.ending_cash_balanced));
                                 const cfoIn = detail.find((item) => item.name.toLowerCase().includes('net cash flow operating in'));
                                 const cfoOut = detail.find((item) => item.name.toLowerCase().includes('net cash flow operating out'));
                                 const cfi = detail.find((item) => item.name.toLowerCase().includes('net cash flow investment'));
@@ -486,10 +489,12 @@ export default new (class financeDetailController {
                                 chartCff.push(cff.nilai == 'positive' ? Number(valueToBilion(cff.value)) : valueToBilion(cff.value) * -1);
                                 dataTable.push({
                                     periode: months[i].name,
+                                    starting: `${starting.nilai == 'positive' ? '' : '-'}${formatCurrency(valueToBilion(starting.value))}`,
                                     cfoIn: `${cfoIn.nilai == 'positive' ? '' : '-'}${formatCurrency(valueToBilion(cfoIn.value))}`,
                                     cfoOut: `${cfoOut.nilai == 'positive' ? '' : '-'}${formatCurrency(valueToBilion(cfoOut.value))}`,
                                     cfi: `${cfi.nilai == 'positive' ? '' : '-'}${formatCurrency(valueToBilion(cfi.value))}`,
-                                    cff: `${cff.nilai == 'positive' ? '' : '-'}${formatCurrency(valueToBilion(cff.value))}`
+                                    cff: `${cff.nilai == 'positive' ? '' : '-'}${formatCurrency(valueToBilion(cff.value))}`,
+                                    ending: ending
                                 });
                             } else {
                                 chartCfoIn.push(0);
@@ -498,10 +503,12 @@ export default new (class financeDetailController {
                                 chartCff.push(0);
                                 dataTable.push({
                                     periode: months[i].name,
+                                    starting: 0,
                                     cfoIn: 0,
                                     cfoOut: 0,
                                     cfi: 0,
-                                    cff: 0
+                                    cff: 0,
+                                    ending: 0
                                 });
                             }
                         } else {
@@ -511,10 +518,12 @@ export default new (class financeDetailController {
                             chartCff.push(0);
                             dataTable.push({
                                 periode: months[i].name,
+                                starting: 0,
                                 cfoIn: 0,
                                 cfoOut: 0,
                                 cfi: 0,
-                                cff: 0
+                                cff: 0,
+                                ending: 0
                             });
                         }
                     }
@@ -546,6 +555,8 @@ export default new (class financeDetailController {
                         if (month !== undefined && month !== null) {
                             const detail = month.detail;
                             if (detail.length > 0) {
+                                const starting = detail.find((item) => item.name.toLowerCase().includes('starting cash balanced'));
+                                const ending = formatCurrency(valueToBilion(month.ending_cash_balanced));
                                 const cfoIn = detail.find((item) => item.name.toLowerCase().includes('net cash flow operating in'));
                                 const cfoOut = detail.find((item) => item.name.toLowerCase().includes('net cash flow operating out'));
                                 const cfi = detail.find((item) => item.name.toLowerCase().includes('net cash flow investment'));
@@ -556,10 +567,12 @@ export default new (class financeDetailController {
                                 chartCff.push(cff.nilai == 'positive' ? Number(valueToBilion(cff.value)) : valueToBilion(cff.value) * -1);
                                 dataTable.push({
                                     periode: months[i].name,
+                                    starting: `${starting.nilai == 'positive' ? '' : '-'}${formatCurrency(valueToBilion(starting.value))}`,
                                     cfoIn: `${cfoIn.nilai == 'positive' ? '' : '-'}${formatCurrency(valueToBilion(cfoIn.value))}`,
                                     cfoOut: `${cfoOut.nilai == 'positive' ? '' : '-'}${formatCurrency(valueToBilion(cfoOut.value))}`,
                                     cfi: `${cfi.nilai == 'positive' ? '' : '-'}${formatCurrency(valueToBilion(cfi.value))}`,
-                                    cff: `${cff.nilai == 'positive' ? '' : '-'}${formatCurrency(valueToBilion(cff.value))}`
+                                    cff: `${cff.nilai == 'positive' ? '' : '-'}${formatCurrency(valueToBilion(cff.value))}`,
+                                    ending: ending
                                 });
                             } else {
                                 chartCfoIn.push(0);
@@ -568,10 +581,12 @@ export default new (class financeDetailController {
                                 chartCff.push(0);
                                 dataTable.push({
                                     periode: months[i].name,
+                                    starting: 0,
                                     cfoIn: 0,
                                     cfoOut: 0,
                                     cfi: 0,
-                                    cff: 0
+                                    cff: 0,
+                                    ending: 0
                                 });
                             }
                         } else {
@@ -581,10 +596,12 @@ export default new (class financeDetailController {
                             chartCff.push(0);
                             dataTable.push({
                                 periode: months[i].name,
+                                starting: 0,
                                 cfoIn: 0,
                                 cfoOut: 0,
                                 cfi: 0,
-                                cff: 0
+                                cff: 0,
+                                ending: 0
                             });
                         }
                     }
@@ -805,7 +822,12 @@ export default new (class financeDetailController {
         try {
             let result = {
                 chart: [],
-                table: []
+                table: [],
+                latest: {
+                    labaBersihLastMonth: 0,
+                    targetLabaBersihRkap: 0,
+                    npmRkapPercent: 0
+                }
             };
             const response = await profitabilityController.getByPeriod(form);
             if (response != null) {
@@ -870,6 +892,14 @@ export default new (class financeDetailController {
                     listChart.push({ laba: dataLaba, gpm: dataGpm, year: monthsLastMonth.year });
                     listTable.push({ year: monthsLastMonth.year, data: list, color: '#84cc16' });
                 }
+
+                const latestMonth = response.latestMonth;
+                if (latestMonth != null) {
+                    result.latest.labaBersihLastMonth = latestMonth.labaBersihLastMonth;
+                    result.latest.targetLabaBersihRkap = latestMonth.targetLabaBersihRkap;
+                    result.latest.npmRkapPercent = latestMonth.npmRkapPercent;
+                }
+
                 result.chart = listChart;
                 result.table = listTable;
             }
@@ -877,7 +907,12 @@ export default new (class financeDetailController {
         } catch (error) {
             let result = {
                 chart: [],
-                table: []
+                table: [],
+                latest: {
+                    labaBersihLastMonth: 0,
+                    targetLabaBersihRkap: 0,
+                    npmRkapPercent: 0
+                }
             };
             return result;
         }
@@ -934,17 +969,34 @@ export default new (class financeDetailController {
                 });
             }
         }
-        console.log(response.table, listChart);
+
+        // console.log(response.table, listChart);
+        const latest = response.latest;
+        // const gpmRkapPercent = 90;
+        const ebitdaRkapPercent = latest.npmRkapPercent;
+        const series = [Number(ebitdaRkapPercent) > 0 ? Number(Number(ebitdaRkapPercent).toFixed(1)) : Number(Number(ebitdaRkapPercent).toFixed(1) * -1)];
+        const chartData = halfRadialChartApex2(['Target RKAP'], Number(ebitdaRkapPercent));
         return {
             table: response.table,
-            chart: listChart
+            chart: listChart,
+            latest: {
+                chart: chartData,
+                series: series,
+                labaBersihLastMonth: valueToBilion(latest.labaBersihLastMonth),
+                targetLabaBersihRkap: valueToBilion(latest.targetLabaBersihRkap)
+            }
         };
     };
     ebitda = async (form) => {
         try {
             let result = {
                 chart: [],
-                table: []
+                table: [],
+                latest: {
+                    totalEbitda: 0,
+                    targetEbitdaRkap: 0,
+                    ebitdaRkapPercent: 0
+                }
             };
             const response = await profitabilityController.getByPeriod(form);
             if (response != null) {
@@ -1009,6 +1061,14 @@ export default new (class financeDetailController {
                     listChart.push({ laba: dataLaba, gpm: dataGpm, year: monthsLastMonth.year });
                     listTable.push({ year: monthsLastMonth.year, data: list, color: '#10b981' });
                 }
+
+                const latestMonth = response.latestMonth;
+                if (latestMonth != null) {
+                    result.latest.totalEbitda = latestMonth.ebitdaLastMonth;
+                    result.latest.targetEbitdaRkap = latestMonth.targetEbitdaRkap;
+                    result.latest.ebitdaRkapPercent = latestMonth.ebitdaRkapPercent;
+                }
+
                 result.chart = listChart;
                 result.table = listTable;
             }
@@ -1016,7 +1076,12 @@ export default new (class financeDetailController {
         } catch (error) {
             let result = {
                 chart: [],
-                table: []
+                table: [],
+                latest: {
+                    totalEbitda: 0,
+                    targetEbitdaRkap: 0,
+                    ebitdaRkapPercent: 0
+                }
             };
             return result;
         }
@@ -1073,17 +1138,36 @@ export default new (class financeDetailController {
                 });
             }
         }
-        console.log(response.table, listChart);
+        // console.log(response.table, listChart);
+        const latest = response.latest;
+        // const gpmRkapPercent = 90;
+        const ebitdaRkapPercent = latest.ebitdaRkapPercent;
+        const series = [Number(ebitdaRkapPercent) > 0 ? Number(Number(ebitdaRkapPercent).toFixed(1)) : Number(Number(ebitdaRkapPercent).toFixed(1) * -1)];
+        const chartData = halfRadialChartApex2(['Target RKAP'], Number(ebitdaRkapPercent));
+
         return {
             table: response.table,
-            chart: listChart
+            chart: listChart,
+            latest: {
+                chart: chartData,
+                series: series,
+                targetEbitdaRkap: valueToBilion(latest.targetEbitdaRkap),
+                totalEbitda: valueToBilion(latest.totalEbitda)
+            }
         };
     };
     grossProfit = async (form) => {
         try {
             let result = {
                 chart: [],
-                table: []
+                table: [],
+                latest: {
+                    totalLabaKotor: 0,
+                    labaKotor: 0,
+                    gpmPercent: 0,
+                    targetLabaKotorRkap: 0,
+                    gpmRkapPercent: 0
+                }
             };
             const response = await profitabilityController.getByPeriod(form);
             if (response != null) {
@@ -1146,8 +1230,17 @@ export default new (class financeDetailController {
                         }
                     }
                     listChart.push({ laba: dataLaba, gpm: dataGpm, year: monthsLastMonth.year });
-                    listTable.push({ year: monthsLastMonth.year, data: list, color: '#2d3748' });
+                    listTable.push({ year: monthsLastMonth.year, data: list, color: '#2e86c1' });
                 }
+
+                const latestMonth = response.latestMonth;
+                if (latestMonth != null) {
+                    result.latest.gpmRkapPercent = latestMonth.gpmRkapPercent;
+                    result.latest.labaKotor = latestMonth.labaKotor;
+                    result.latest.gpmPercent = latestMonth.gpmPercent;
+                    result.latest.targetLabaKotorRkap = latestMonth.targetLabaKotorRkap;
+                }
+
                 result.chart = listChart;
                 result.table = listTable;
             }
@@ -1155,7 +1248,14 @@ export default new (class financeDetailController {
         } catch (error) {
             let result = {
                 chart: [],
-                table: []
+                table: [],
+                latest: {
+                    totalLabaKotor: 0,
+                    labaKotor: 0,
+                    gpmPercent: 0,
+                    targetLabaKotorRkap: 0,
+                    gpmRkapPercent: 0
+                }
             };
             return result;
         }
@@ -1213,10 +1313,22 @@ export default new (class financeDetailController {
                 });
             }
         }
-        console.log(response.table, listChart);
+
+        const latest = response.latest;
+        // const gpmRkapPercent = 90;
+        const gpmRkapPercent = latest.gpmRkapPercent;
+        const series = [Number(gpmRkapPercent) > 0 ? Number(Number(gpmRkapPercent).toFixed(1)) : Number(Number(gpmRkapPercent).toFixed(1) * -1)];
+        const chartData = halfRadialChartApex2(['Target RKAP'], Number(gpmRkapPercent));
+        // console.log(response.table, listChart);
         return {
             table: response.table,
-            chart: listChart
+            chart: listChart,
+            latest: {
+                chart: chartData,
+                series: series,
+                targetLabaKotorRkap: valueToBilion(latest.targetLabaKotorRkap),
+                totalLabaKotor: valueToBilion(latest.totalLabaKotor)
+            }
         };
     };
     revenue = async (form) => {

@@ -37,6 +37,7 @@ const loadData = async () => {
             }
             listChart.value = list;
             listTable.value = response.table;
+            console.log(response.table);
         }
     } catch (error) {
         console.error('Error loading data:', error);
@@ -76,6 +77,16 @@ watch(() => props.datas, loadData, { immediate: true });
                         <Column field="periode" sortable :headerStyle="`background-color: ${item.color};`" style="background-color: black; color: white">
                             <template #header>
                                 <span class="flex justify-center items-center w-full text-center">Periode</span>
+                            </template>
+                        </Column>
+                        <Column field="starting" sortable :headerStyle="`background-color: ${item.color};`" style="background-color: black; color: white">
+                            <template #header>
+                                <span class="flex justify-center items-center w-full text-center">Starting Cash</span>
+                            </template>
+                            <template #body="{ data }">
+                                <div class="w-full flex justify-center items-center">
+                                    <span>{{ data.starting }}</span>
+                                </div>
                             </template>
                         </Column>
                         <Column field="cfoIn" sortable :headerStyle="`background-color: ${item.color};`" style="background-color: black; color: white">

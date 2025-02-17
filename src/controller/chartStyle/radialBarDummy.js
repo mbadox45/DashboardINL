@@ -134,6 +134,76 @@ export const halfRadialChartApex = (label) => {
     };
 };
 
+export const halfRadialChartApex2 = (label, value) => {
+    let color = '#28a745'; // Default hijau (>= 50)
+    if (value < 0) {
+        color = '#FF4560'; // Merah (< 0)
+    } else if (value >= 0 && value < 50) {
+        color = '#FFC107'; // Kuning (0 - 49)
+    }
+
+    return {
+        chart: {
+            type: 'radialBar',
+            offsetY: -20,
+            sparkline: {
+                enabled: true
+            }
+        },
+        plotOptions: {
+            radialBar: {
+                startAngle: -90,
+                endAngle: 90,
+                track: {
+                    background: '#222',
+                    strokeWidth: '97%',
+                    margin: 5,
+                    dropShadow: {
+                        enabled: true,
+                        top: 2,
+                        left: 0,
+                        color: '#444',
+                        opacity: 0.7,
+                        blur: 3
+                    }
+                },
+                dataLabels: {
+                    name: {
+                        show: false
+                    },
+                    value: {
+                        offsetY: -2,
+                        fontSize: '0.9vw',
+                        fontWeight: 'bold',
+                        color: color, // 🔹 Warna teks mengikuti kondisi
+                        formatter: (val) => {
+                            return value < 0 ? `- ${val}%` : val >= 1000 ? `${(val / 1000).toFixed(1)}k %` : `${val}%`;
+                        }
+                    }
+                }
+            }
+        },
+        grid: {
+            padding: {
+                top: -10
+            }
+        },
+        fill: {
+            type: 'gradient',
+            gradient: {
+                shade: 'dark',
+                shadeIntensity: 0.5,
+                inverseColors: false,
+                opacityFrom: 1,
+                opacityTo: 1,
+                stops: [0, 50, 100]
+            }
+        },
+        colors: [color], // 🔹 Warna chart mengikuti kondisi
+        labels: label
+    };
+};
+
 export const radialChartApex = (label, colors, size) => {
     return {
         chart: {

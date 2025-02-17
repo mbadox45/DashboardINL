@@ -1,4 +1,5 @@
 <script setup>
+import { formatCurrency } from '@/controller/dummyController';
 import dataSdmController from '@/controller/getApiFromThisApp/sdm/dataSdmController';
 import uraianSdmController from '@/controller/getApiFromThisApp/sdm/uraianSdmController';
 import { FilterMatchMode } from '@primevue/core/api';
@@ -250,7 +251,7 @@ const convertDate = (dateString) => {
 };
 
 const submitData = async () => {
-    if (!formData.value.uraian_id || !formData.value.tanggal || !formData.value.nilai) {
+    if (!formData.value.uraian_id || !formData.value.tanggal || formData.value.nilai == null) {
         messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     } else {
         if (statusForm.value == 'add') {
@@ -316,7 +317,7 @@ const submitData = async () => {
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="date">Uraian <small class="text-red-500 font-bold">*</small></label>
-                    <Select v-model="formData.uraian_id" :options="listUraian" optionLabel="name" optionValue="id" placeholder="Pilih Uraian" class="w-full" />
+                    <Select v-model="formData.uraian_id" :options="listUraian" optionLabel="name" optionValue="id" placeholder="Pilih Uraian" class="w-full" @change="formCondition2" />
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="kapasitas">Nilai <small class="text-red-500 font-bold">*</small></label>
@@ -396,8 +397,8 @@ const submitData = async () => {
                                     <div class="flex items-start justify-between w-full">
                                         <span class="text-[0.7vw] font-bold text-cyan-600">Update s/d {{ moment(item.tanggal).format('DD MMMM YYYY') }}</span>
                                         <div class="flex justify-end items-end flex-col gap-1">
-                                            <span class="text-[2vw] font-bold">{{ item.nilai }}</span>
-                                            <span class="text-[0.9vw] font-bold italic">{{ item.uraian.name }}</span>
+                                            <span class="text-[2vw] font-bold">{{ formatCurrency(Number(item.nilai).toFixed(0)) }}</span>
+                                            <span class="text-[0.9vw] font-bold italic text-right">{{ item.uraian.name }}</span>
                                         </div>
                                     </div>
                                 </template>

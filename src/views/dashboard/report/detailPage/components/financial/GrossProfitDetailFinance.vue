@@ -1,10 +1,17 @@
 <script setup>
+import { formatCurrency } from '@/controller/dummyController';
 import { defineProps, onMounted, ref, watch } from 'vue';
 import VueApexCharts from 'vue3-apexcharts';
 
 const isLoading = ref(true);
 const listTable = ref([]);
 const listChart = ref([]);
+const listLatest = ref({
+    chart: null,
+    series: [],
+    targetLabaKotorRkap: formatCurrency(Number(0).toFixed(2)),
+    totalLabaKotor: formatCurrency(Number(0).toFixed(2))
+});
 
 const props = defineProps({
     datas: {
@@ -37,6 +44,13 @@ const loadData = async () => {
             }
             listChart.value = list;
             listTable.value = response.table;
+            const latest = response.latest;
+            listLatest.value = {
+                chart: latest.chart,
+                series: latest.series,
+                targetLabaKotorRkap: formatCurrency(Number(latest.targetLabaKotorRkap).toFixed(2)),
+                totalLabaKotor: formatCurrency(Number(latest.totalLabaKotor).toFixed(2))
+            };
         }
     } catch (error) {
         console.error('Error loading data:', error);
@@ -56,7 +70,7 @@ watch(() => props.datas, loadData, { immediate: true });
 <template>
     <div class="flex flex-col w-full items-center gap-4">
         <!-- Chart Title -->
-        <span class="text-[1vw] font-bold"> Gross Profit Margin (in IDR Bn) </span>
+        <span class="text-[1vw] font-bold"> Gross Profit Margin (IDR Miliar) </span>
 
         <!-- Loading Indicator -->
         <div v-if="isLoading == true" class="flex justify-center items-center w-full h-[380px]">
@@ -64,8 +78,25 @@ watch(() => props.datas, loadData, { immediate: true });
         </div>
 
         <div v-else class="w-full flex flex-col gap-4">
+            <div class="grid grid-cols-2 items-center justify-between gap-5">
+                <div class="flex flex-col w-full">
+                    <VueApexCharts v-if="listLatest.series.length > 0" :series="listLatest.series" :options="listLatest.chart" class="w-full" height="400vw" style="z-index: 1 !important" />
+                    <span class="w-full text-center text-[1vw] font-bold uppercase">Target RKAP</span>
+                </div>
+                <div class="w-full flex item-center gap-3">
+                    <div class="flex flex-col items-end w-full bg-pink-300 p-3 rounded-lg">
+                        <span class="text-pink-600 text-[2vw] font-bold">{{ listLatest.totalLabaKotor }}</span>
+                        <span class="text-pink-700">Total Laba Kotor</span>
+                    </div>
+                    <div class="flex flex-col items-end w-full bg-amber-200 p-3 rounded-lg">
+                        <span class="text-amber-600 text-[2vw] font-bold">{{ listLatest.targetLabaKotorRkap }}</span>
+                        <span class="text-amber-700">Target RKAP Laba Kotor</span>
+                    </div>
+                </div>
+            </div>
+            <Divider />
             <!-- Vue Apex Chart -->
-            <div class="w-full flex gap-16">
+            <div class="w-full grid grid-cols-2 gap-16">
                 <VueApexCharts v-for="(item, index) in listChart" :key="index" :type="item.type" :series="item.series" :options="item.options" class="w-full" height="400vw" style="z-index: 1 !important" />
             </div>
 
@@ -80,7 +111,7 @@ watch(() => props.datas, loadData, { immediate: true });
                         </Column>
                         <Column field="labakotor" sortable :headerStyle="`background-color: ${item.color};`" style="background-color: black; color: white">
                             <template #header>
-                                <span class="flex justify-center items-center w-full text-center">Laba Kotor (Bn)</span>
+                                <span class="flex justify-center items-center w-full text-center">Laba Kotor (IDR Miliar)</span>
                             </template>
                         </Column>
                         <Column field="gpm" sortable :headerStyle="`background-color: ${item.color};`" style="background-color: black; color: white">

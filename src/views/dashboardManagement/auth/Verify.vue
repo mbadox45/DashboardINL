@@ -60,8 +60,10 @@ const loadData = async () => {
                         roles = 'sales';
                     } else if (cekAkses.level_akses == 5) {
                         roles = 'scm';
-                    } else {
+                    } else if (cekAkses.level_akses == 4) {
                         roles = 'sdm';
+                    } else {
+                        roles = 'viewer';
                     }
 
                     const user = cekAkses.user;

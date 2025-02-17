@@ -207,9 +207,9 @@ const parseJwt = (token) => {
 <template>
     <div class="relative text-white">
         <div class="justify-start px-4 fixed w-1/2 z-20">
-            <button class="bg-amber-500 px-3 py-4 rounded-b-xl hover:bg-amber-600 transition-all duration-300" @click="test">
-                <div class="p-1 bg-white rounded-lg animate-pulse">
-                    <img src="/images/inl.png" alt="PT INL" width="60px" class="" />
+            <button class="bg-gray-300 px-3 py-4 rounded-b-xl hover:bg-gray-400 transition-all duration-300" @click="test">
+                <div class="p-1 rounded-lg animate-pulse">
+                    <img src="/images/icon-dashboard.png" alt="PT INL" width="50px" class="" />
                 </div>
                 <!-- <i ref="icon" :class="`pi ${showMenu == true ? 'pi-chevron-down' : 'pi-chevron-up'}`" style="font-size: 0.7vw"></i> -->
             </button>
