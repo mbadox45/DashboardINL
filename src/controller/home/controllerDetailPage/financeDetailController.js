@@ -102,7 +102,7 @@ export default new (class financeDetailController {
             };
             const response = await cashFlowScheduleController.getByPeriod(form);
             const year = moment(form.tanggalAkhir).format('YYYY');
-            console.log(year);
+            // console.log(year);
             if (response != null) {
                 const kategori = response.kategori;
                 const cffKategori = kategori.find((item) => item.name.toLowerCase().includes('cash flow funding'));
@@ -164,65 +164,45 @@ export default new (class financeDetailController {
                         }
                     }
                     const uniqueDataName = Array.from(new Map(listName.map((item) => [item.name, item])).values());
-                    for (let i = 0; i < uniqueDataName.length; i++) {
-                        const dataArray = [];
-                        const dataTable = [];
-                        for (let j = 0; j < months.length; j++) {
-                            const dataPeriod = period.find((item) => item.month == months[j].id);
-                            if (dataPeriod != null) {
-                                const data = dataPeriod.data;
-                                const total = data.filter((item) => item.name === uniqueDataName[i].name).reduce((sum, item) => sum + (Number(item.value) || 0), 0);
-                                dataArray.push(Number(valueToBilion(total)));
-                                dataTable.push({
-                                    periode: moment(months[j].name, 'MMMM').format('MMM'),
-                                    value: valueToBilion(total)
-                                });
-                            } else {
-                                dataArray.push(0);
-                                dataTable.push({
-                                    periode: moment(months[j].name, 'MMMM').format('MMM'),
-                                    value: 0
-                                });
-                            }
-                        }
-                        listChart.push({
-                            name: uniqueDataName[i].name,
-                            data: dataArray
-                        });
-                        listTable.push({
-                            name: uniqueDataName[i].name,
-                            data: dataTable
-                        });
-                    }
-                    result.chart.push({
-                        name: cfiKategori.name + ' ' + year,
-                        dataChart: listChart
-                    });
-                    result.tabel.push({
-                        name: cfiKategori.name + ' ' + year,
-                        dataTable: listTable,
-                        color: '#1a5276'
-                    });
-                }
+                    if (uniqueDataName.length > 0) {
+                        for (let i = 0; i < uniqueDataName.length; i++) {
+                            const dataArray = [];
+                            const tableRow = { name: uniqueDataName[i].name }; // Objek dinamis untuk setiap nama unik
+                            // console.log(tableRow);
+                            for (let j = 0; j < months.length; j++) {
+                                const dataPeriod = period.find((item) => item.month == months[j].id);
+                                const monthKey = moment(months[j].name, 'MMMM').format('MMM').toLowerCase(); // Contoh: "Jan" → "jan"
 
-                const cfoKategori = kategori.find((item) => item.name.toLowerCase().includes('cash flow operation'));
-                if (cfoKategori != null) {
-                    const period = cfoKategori.period;
-                    const listName = [];
-                    const listTable = [];
-                    const listChart = [];
-                    for (let i = 0; i < period.length; i++) {
-                        const data = period[i].data;
-                        if (data.length > 0) {
-                            for (let j = 0; j < data.length; j++) {
-                                listName.push({ name: data[j].name });
+                                if (dataPeriod != null) {
+                                    const data = dataPeriod.data;
+                                    const totalData = data.filter((item) => item.name === uniqueDataName[i].name).reduce((sum, item) => sum + (Number(item.value) || 0), 0);
+                                    const statusData = data.find((item) => item.name === uniqueDataName[i].name);
+                                    let status;
+                                    if (statusData != null) {
+                                        status = statusData.pay_status ? statusData.pay_status.name : '-';
+                                    } else {
+                                        status = '-';
+                                    }
+                                    tableRow[monthKey] = {
+                                        value: valueToBilion(totalData),
+                                        status: status
+                                    };
+                                    dataArray.push(Number(valueToBilion(totalData)));
+                                } else {
+                                    dataArray.push(0);
+                                    tableRow[monthKey] = {
+                                        value: formatCurrency(Number(0).toFixed(2)),
+                                        status: '-'
+                                    };
+                                }
                             }
-                        } else {
-                            continue;
+                            listTable.push(tableRow); // Tambahkan ke listTable
+                            listChart.push({
+                                name: uniqueDataName[i].name,
+                                data: dataArray
+                            });
                         }
                     }
-                    const uniqueDataName = Array.from(new Map(listName.map((item) => [item.name, item])).values());
-                    console.log(uniqueDataName);
                     // for (let i = 0; i < uniqueDataName.length; i++) {
                     //     const dataArray = [];
                     //     const dataTable = [];
@@ -240,7 +220,7 @@ export default new (class financeDetailController {
                     //             dataArray.push(0);
                     //             dataTable.push({
                     //                 periode: moment(months[j].name, 'MMMM').format('MMM'),
-                    //                 value: formatCurrency(Number(0).toFixed(2))
+                    //                 value: 0
                     //             });
                     //         }
                     //     }
@@ -253,45 +233,104 @@ export default new (class financeDetailController {
                     //         data: dataTable
                     //     });
                     // }
-                    for (let i = 0; i < uniqueDataName.length; i++) {
-                        const dataArray = [];
-                        const tableRow = { name: uniqueDataName[i].name }; // Objek dinamis untuk setiap nama unik
+                    result.chart.push({
+                        name: cfiKategori.name + ' ' + year,
+                        dataChart: listChart
+                    });
+                    result.tabel.push({
+                        name: cfiKategori.name + ' ' + year,
+                        dataTable: listTable,
+                        color: '#1a5276'
+                    });
+                }
 
-                        for (let j = 0; j < months.length; j++) {
-                            const dataPeriod = period.find((item) => item.month == months[j].id);
-                            const monthKey = moment(months[j].name, 'MMMM').format('MMM').toLowerCase(); // Contoh: "Jan" → "jan"
+                const cfoKategori = kategori.find((item) => item.name.toLowerCase().includes('cash flow operation'));
+                if (cfoKategori != null) {
+                    const period = cfoKategori.period;
+                    const listName = [];
+                    const listNameChart = [];
+                    const listTable = [];
+                    const listChart = [];
 
-                            if (dataPeriod != null) {
-                                const data = dataPeriod.data;
-                                const total = data.filter((item) => item.name === uniqueDataName[i]).reduce((sum, item) => sum + (Number(item.value) || 0), 0);
-
-                                dataArray.push(Number(valueToBilion(total)));
-
-                                // Menentukan status
-                                const status = data.pay_status ? data.pay_status.name : 'Unknown';
-
-                                tableRow[monthKey] = {
-                                    value: valueToBilion(total),
-                                    status: status
-                                };
-                            } else {
-                                dataArray.push(0);
-                                tableRow[monthKey] = {
-                                    value: formatCurrency(Number(0).toFixed(2)),
-                                    status: 'Unknown'
-                                };
+                    // ListTable
+                    for (let i = 0; i < period.length; i++) {
+                        const data = period[i].data;
+                        if (data.length > 0) {
+                            for (let j = 0; j < data.length; j++) {
+                                listName.push({ name: data[j].name });
                             }
+                        } else {
+                            continue;
                         }
+                    }
+                    const uniqueDataName = Array.from(new Map(listName.map((item) => [item.name, item])).values());
+                    if (uniqueDataName.length > 0) {
+                        for (let i = 0; i < uniqueDataName.length; i++) {
+                            const tableRow = { name: uniqueDataName[i].name }; // Objek dinamis untuk setiap nama unik
+                            for (let j = 0; j < months.length; j++) {
+                                const dataPeriod = period.find((item) => item.month == months[j].id);
+                                const monthKey = moment(months[j].name, 'MMMM').format('MMM').toLowerCase(); // Contoh: "Jan" → "jan"
 
-                        listChart.push({
-                            name: uniqueDataName[i].name,
-                            data: dataArray
-                        });
-
-                        listTable.push(tableRow); // Tambahkan ke listTable
+                                if (dataPeriod != null) {
+                                    const data = dataPeriod.data;
+                                    const totalData = data.filter((item) => item.name === uniqueDataName[i].name).reduce((sum, item) => sum + (Number(item.value) || 0), 0);
+                                    const statusData = data.find((item) => item.name === uniqueDataName[i].name);
+                                    let status;
+                                    if (statusData != null) {
+                                        status = statusData.pay_status ? statusData.pay_status.name : '-';
+                                    } else {
+                                        status = '-';
+                                    }
+                                    tableRow[monthKey] = {
+                                        value: valueToBilion(totalData),
+                                        status: status
+                                    };
+                                } else {
+                                    tableRow[monthKey] = {
+                                        value: formatCurrency(Number(0).toFixed(2)),
+                                        status: '-'
+                                    };
+                                }
+                            }
+                            listTable.push(tableRow); // Tambahkan ke listTable
+                        }
                     }
 
-                    console.log(listTable);
+                    // ListChart
+                    for (let i = 0; i < period.length; i++) {
+                        const data = period[i].progress;
+                        if (data.length > 0) {
+                            for (let j = 0; j < data.length; j++) {
+                                listNameChart.push({ name: data[j].name });
+                            }
+                        } else {
+                            continue;
+                        }
+                    }
+                    const uniqueDataNameChart = Array.from(new Map(listNameChart.map((item) => [item.name, item])).values());
+                    if (uniqueDataNameChart.length > 0) {
+                        for (let i = 0; i < uniqueDataNameChart.length; i++) {
+                            const dataArray = [];
+                            for (let j = 0; j < months.length; j++) {
+                                const dataPeriod = period.find((item) => item.month == months[j].id);
+
+                                if (dataPeriod != null) {
+                                    const progress = dataPeriod.progress;
+                                    const totalProgress = progress.filter((item) => item.name === uniqueDataNameChart[i].name).reduce((sum, item) => sum + (Number(item.value) || 0), 0);
+                                    dataArray.push(Number(valueToBilion(totalProgress)));
+                                } else {
+                                    dataArray.push(0);
+                                }
+                            }
+
+                            listChart.push({
+                                name: uniqueDataNameChart[i].name,
+                                data: dataArray
+                            });
+                        }
+                    }
+
+                    console.log(listChart);
 
                     result.chart.push({
                         name: cfoKategori.name + ' ' + year,
@@ -403,7 +442,7 @@ export default new (class financeDetailController {
             }));
 
             listChart.push({
-                name: 'CFO Payment Schedule (dlm IDR Miliar)',
+                name: 'CFO Payment Schedule - Non Paid (dlm IDR Miliar)',
                 type: typeChartCfo,
                 total: total,
                 chartOptions: stackedChartOptionsApex(total, listLabels, null, null),

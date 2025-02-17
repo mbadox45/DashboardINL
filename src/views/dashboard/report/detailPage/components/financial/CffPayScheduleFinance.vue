@@ -43,6 +43,7 @@ const loadData = async () => {
             listTable1.value = table == null ? null : table.find((item) => item.name.includes('Cash Flow Funding'));
             listTable2.value = table == null ? null : table.find((item) => item.name.includes('Cash Flow Investment'));
             listTable3.value = table == null ? null : table.find((item) => item.name.includes('Cash Flow Operation'));
+            console.log(listTable1.value);
         }
     } catch (error) {
         console.error('Error loading data:', error);
@@ -111,7 +112,32 @@ watch(() => props.datas, loadData, { immediate: true });
                 </div>
                 <div class="w-full flex flex-col gap-2" v-if="listTable2 != null">
                     <span class="text-lg font-semibold" :style="`color: ${listTable2.color};`">{{ listTable2.name }}</span>
-                    <div class="flex flex-col gap-2">
+                    <DataTable :value="listTable2.dataTable" showGridlines removableSort tableStyle="background-color:#00000;" scrollable scrollHeight="400px">
+                        <Column field="name" sortable :headerStyle="`background-color: ${listTable2.color};`" style="background-color: black; color: white">
+                            <template #header>
+                                <span class="flex justify-center items-center w-full text-center">Nama</span>
+                            </template>
+                        </Column>
+
+                        <Column
+                            v-for="month in ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']"
+                            :key="month"
+                            :field="month"
+                            :headerStyle="`background-color: ${listTable2.color};`"
+                            style="background-color: black; color: white"
+                        >
+                            <template #header>
+                                <span class="flex justify-center items-center w-full text-center">{{ month.toUpperCase() }}</span>
+                            </template>
+                            <template #body="{ data }">
+                                <div class="w-full flex flex-col justify-center items-center">
+                                    <span>{{ data[month]?.value || '0.00' }}</span>
+                                    <small class="text-gray-400">{{ data[month]?.status || 'Unknown' }}</small>
+                                </div>
+                            </template>
+                        </Column>
+                    </DataTable>
+                    <!-- <div class="flex flex-col gap-2">
                         <div class="border rounded-lg p-3 flex flex-col gap-2" v-for="(item, index) in listTable2.dataTable" :key="index">
                             <span>{{ item.name }}</span>
                             <div class="flex w-full">
@@ -121,21 +147,35 @@ watch(() => props.datas, loadData, { immediate: true });
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="w-full flex flex-col gap-2" v-if="listTable3 != null">
                     <span class="text-lg font-semibold" :style="`color: ${listTable3.color};`">{{ listTable3.name }}</span>
-                    <div class="flex flex-col gap-2">
-                        <div class="border rounded-lg p-3 flex flex-col gap-2" v-for="(item, index) in listTable3.dataTable" :key="index">
-                            <span>{{ item.name }}</span>
-                            <div class="flex w-full">
-                                <div class="flex flex-col w-full justify-center items-center" v-for="(data, items) in item.data" :key="items">
-                                    <div class="border text-center p-2 w-full" :style="`background-color: ${listTable3.color};`">{{ data.periode }}</div>
-                                    <div class="border text-center p-2 w-full">{{ data.value }}</div>
+                    <DataTable :value="listTable3.dataTable" showGridlines removableSort tableStyle="background-color:#00000;" scrollable scrollHeight="400px">
+                        <Column field="name" sortable :headerStyle="`background-color: ${listTable3.color};`" style="background-color: black; color: white">
+                            <template #header>
+                                <span class="flex justify-center items-center w-full text-center">Nama</span>
+                            </template>
+                        </Column>
+
+                        <Column
+                            v-for="month in ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']"
+                            :key="month"
+                            :field="month"
+                            :headerStyle="`background-color: ${listTable3.color};`"
+                            style="background-color: black; color: white"
+                        >
+                            <template #header>
+                                <span class="flex justify-center items-center w-full text-center">{{ month.toUpperCase() }}</span>
+                            </template>
+                            <template #body="{ data }">
+                                <div class="w-full flex flex-col justify-center items-center">
+                                    <span>{{ data[month]?.value || '0.00' }}</span>
+                                    <small class="text-gray-400">{{ data[month]?.status || 'Unknown' }}</small>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
+                            </template>
+                        </Column>
+                    </DataTable>
                 </div>
             </div>
         </div>
