@@ -44,7 +44,7 @@ watch(() => props.formPush, loadData, { immediate: true });
     <div class="bg-gray-800 p-2 rounded-xl shadow-xl flex h-full gap-3 items-start">
         <div class="flex flex-col h-full w-full">
             <div class="flex items-center gap-3">
-                <span class="font-bold w-full text-[0.8vw]">Saldo Tunai (IDR Miliar)</span>
+                <span class="font-bold w-full text-[0.8vw]">Saldo Kas (IDR Miliar) Bulanan</span>
                 <button
                     @click="routerLink('cash-balance')"
                     class="animate-pulse hover:animate-none p-4 w-[1.5vw] h-[1.5vw] cursor-pointer bg-transparent text-emerald-500 rotate-180 hover:rotate-[-180] hover:bg-black hover:text-amber-500 rounded-full flex items-center justify-center transition-all duration-500"
@@ -61,9 +61,10 @@ watch(() => props.formPush, loadData, { immediate: true });
                         <span class="font-bold text-[0.5vw]">{{ load.difference }}</span>
                     </div>
                     <div class="text-[0.8vw] flex w-full justify-between">
-                        <span class="text-cyan-500 font-bold">s/d {{ load.bulan }}</span>
-                        <span class="text-white font-bold"> Data per Bulan</span>
+                        <span class="font-bold text-cyan-500 text-[0.6vw]">Perbandingan dengan bulan lalu</span>
+                        <span class="text-cyan-500 font-bold text-[0.6vw]">s/d {{ load.bulan }}</span>
                     </div>
+                    <div class="text-[0.8vw] flex w-full justify-between"></div>
                 </div>
             </div>
         </div>

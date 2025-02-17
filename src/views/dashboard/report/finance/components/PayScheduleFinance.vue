@@ -39,7 +39,7 @@ watch(() => props.formPush, loadData, { immediate: true });
     <div class="bg-gray-800 p-2 rounded-xl shadow-xl flex h-full gap-3 items-start">
         <div class="flex flex-col h-full w-full">
             <div class="flex items-center gap-3">
-                <span class="font-bold w-full text-[0.8vw]">Jadwal Tagihan (dlm IDR Miliar)</span>
+                <span class="font-bold w-full text-[0.8vw]">Jadwal Tagihan (IDR Miliar)</span>
                 <button
                     @click="routerLink('cff-pay-schedule')"
                     class="animate-pulse hover:animate-none p-4 w-[1.5vw] h-[1.5vw] cursor-pointer bg-transparent text-emerald-500 rotate-180 hover:rotate-[-180] hover:bg-black hover:text-amber-500 rounded-full flex items-center justify-center transition-all duration-500"

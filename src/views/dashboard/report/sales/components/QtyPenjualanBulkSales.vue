@@ -61,7 +61,7 @@ watch(() => props.formPush, loadData, { immediate: true });
     <div class="bg-gray-800 p-3 rounded-xl shadow-xl flex w-full gap-3 items-start h-full">
         <div class="flex flex-col w-full h-full">
             <div class="flex items-center gap-6 h-full">
-                <span class="text-[0.8vw] font-bold w-full">Qty Penjualan Bulk (dlm MT)</span>
+                <span class="text-[0.8vw] font-bold w-full">Qty Penjualan Bulk (MT) Akumulasi Harian</span>
                 <button
                     @click="routerLink('penjualan-bulk')"
                     class="animate-pulse hover:animate-none p-4 w-[1.5vw] h-[1.5vw] cursor-pointer bg-transparent text-emerald-500 rotate-180 hover:rotate-[-180] hover:bg-black hover:text-amber-500 rounded-full flex items-center justify-center transition-all duration-500"

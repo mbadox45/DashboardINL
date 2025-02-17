@@ -94,7 +94,7 @@ watch(() => load.value, startIndexCycle, { immediate: true });
         <div class="flex flex-col h-full w-full">
             <!-- Header -->
             <div class="flex items-center gap-3">
-                <span class="font-bold w-full text-[0.8vw]">Laporan Produksi (in Kg)</span>
+                <span class="font-bold w-full text-[0.8vw]">Laporan Produksi (Kg) Akumulasi Harian</span>
                 <button
                     @click="routerLink('laporan-produksi-operation')"
                     class="animate-pulse hover:animate-none p-4 w-[1.5vw] h-[1.5vw] cursor-pointer bg-transparent text-emerald-500 rotate-180 hover:rotate-[-180] hover:bg-black hover:text-amber-500 rounded-full flex items-center justify-center transition-all duration-500"

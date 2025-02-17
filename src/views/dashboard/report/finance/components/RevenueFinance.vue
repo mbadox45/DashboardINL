@@ -40,7 +40,7 @@ watch(() => props.formPush, loadData, { immediate: true });
     <div class="bg-gray-800 p-2 rounded-xl shadow-xl min-h-[120px] flex h-full gap-3 items-start">
         <div class="flex flex-col h-full w-full">
             <div class="flex items-center gap-3">
-                <span class="font-bold w-full text-[0.8vw]">Pendapatan (IDR Miliar)</span>
+                <span class="font-bold w-full text-[0.8vw]">Pendapatan (IDR Miliar) Bulanan</span>
                 <button
                     @click="routerLink('revenue')"
                     class="animate-pulse hover:animate-none p-4 w-[1.5vw] h-[1.5vw] cursor-pointer bg-transparent text-emerald-500 rotate-180 hover:rotate-[-180] hover:bg-black hover:text-amber-500 rounded-full flex items-center justify-center transition-all duration-500"
@@ -55,7 +55,7 @@ watch(() => props.formPush, loadData, { immediate: true });
                         <div class="flex gap-2 items-center mb-3 w-full">
                             <div class="font-bold flex flex-col w-full">
                                 <span class="font-bold text-[2vw]" :class="valueColorPersenCondition(load.persen)">{{ load.persen }}%</span>
-                                <span class="text-white text-[0.6vw]">Pencapaian bulan ini</span>
+                                <span class="text-white text-[0.6vw]">Pencapaian (Bulanan)</span>
                             </div>
                         </div>
                         <div class="flex flex-col gap-1 w-full items-end">
