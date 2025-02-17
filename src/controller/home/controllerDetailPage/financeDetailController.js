@@ -213,41 +213,86 @@ export default new (class financeDetailController {
                     const listChart = [];
                     for (let i = 0; i < period.length; i++) {
                         const data = period[i].data;
-                        for (let j = 0; j < data.length; j++) {
-                            listName.push({ name: data[j].name });
+                        if (data.length > 0) {
+                            for (let j = 0; j < data.length; j++) {
+                                listName.push({ name: data[j].name });
+                            }
+                        } else {
+                            continue;
                         }
                     }
                     const uniqueDataName = Array.from(new Map(listName.map((item) => [item.name, item])).values());
+                    console.log(uniqueDataName);
+                    // for (let i = 0; i < uniqueDataName.length; i++) {
+                    //     const dataArray = [];
+                    //     const dataTable = [];
+                    //     for (let j = 0; j < months.length; j++) {
+                    //         const dataPeriod = period.find((item) => item.month == months[j].id);
+                    //         if (dataPeriod != null) {
+                    //             const data = dataPeriod.data;
+                    //             const total = data.filter((item) => item.name === uniqueDataName[i].name).reduce((sum, item) => sum + (Number(item.value) || 0), 0);
+                    //             dataArray.push(Number(valueToBilion(total)));
+                    //             dataTable.push({
+                    //                 periode: moment(months[j].name, 'MMMM').format('MMM'),
+                    //                 value: valueToBilion(total)
+                    //             });
+                    //         } else {
+                    //             dataArray.push(0);
+                    //             dataTable.push({
+                    //                 periode: moment(months[j].name, 'MMMM').format('MMM'),
+                    //                 value: formatCurrency(Number(0).toFixed(2))
+                    //             });
+                    //         }
+                    //     }
+                    //     listChart.push({
+                    //         name: uniqueDataName[i].name,
+                    //         data: dataArray
+                    //     });
+                    //     listTable.push({
+                    //         name: uniqueDataName[i].name,
+                    //         data: dataTable
+                    //     });
+                    // }
                     for (let i = 0; i < uniqueDataName.length; i++) {
                         const dataArray = [];
-                        const dataTable = [];
+                        const tableRow = { name: uniqueDataName[i].name }; // Objek dinamis untuk setiap nama unik
+
                         for (let j = 0; j < months.length; j++) {
                             const dataPeriod = period.find((item) => item.month == months[j].id);
+                            const monthKey = moment(months[j].name, 'MMMM').format('MMM').toLowerCase(); // Contoh: "Jan" → "jan"
+
                             if (dataPeriod != null) {
                                 const data = dataPeriod.data;
-                                const total = data.filter((item) => item.name === uniqueDataName[i].name).reduce((sum, item) => sum + (Number(item.value) || 0), 0);
+                                const total = data.filter((item) => item.name === uniqueDataName[i]).reduce((sum, item) => sum + (Number(item.value) || 0), 0);
+
                                 dataArray.push(Number(valueToBilion(total)));
-                                dataTable.push({
-                                    periode: moment(months[j].name, 'MMMM').format('MMM'),
-                                    value: valueToBilion(total)
-                                });
+
+                                // Menentukan status
+                                const status = data.pay_status ? data.pay_status.name : 'Unknown';
+
+                                tableRow[monthKey] = {
+                                    value: valueToBilion(total),
+                                    status: status
+                                };
                             } else {
                                 dataArray.push(0);
-                                dataTable.push({
-                                    periode: moment(months[j].name, 'MMMM').format('MMM'),
-                                    value: 0
-                                });
+                                tableRow[monthKey] = {
+                                    value: formatCurrency(Number(0).toFixed(2)),
+                                    status: 'Unknown'
+                                };
                             }
                         }
+
                         listChart.push({
                             name: uniqueDataName[i].name,
                             data: dataArray
                         });
-                        listTable.push({
-                            name: uniqueDataName[i].name,
-                            data: dataTable
-                        });
+
+                        listTable.push(tableRow); // Tambahkan ke listTable
                     }
+
+                    console.log(listTable);
+
                     result.chart.push({
                         name: cfoKategori.name + ' ' + year,
                         dataChart: listChart
@@ -285,7 +330,17 @@ export default new (class financeDetailController {
         if (chart.length > 0) {
             // CFF
             const cffChart = chart.find((item) => item.name.includes('Cash Flow Funding'));
-            const data = cffChart.data;
+            // console.log(cffChart);
+            let data = [];
+            if (cffChart != null) {
+                data = cffChart.data;
+            } else {
+                const list = [];
+                for (let i = 0; i < labels.length; i++) {
+                    list.push(0);
+                }
+                data = list;
+            }
             const label = 'Pembayaran Pinjaman Kepada Pihak Berelasi';
             const type = 'bar';
             const color = ['rgba(204, 4, 4, 0.6)'];
