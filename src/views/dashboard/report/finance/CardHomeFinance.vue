@@ -44,8 +44,8 @@ const props = defineProps({
         <gross-profit-margin-finance :datas="datarevenue" :formPush="formPush" />
         <ebitda-margin-finance :datas="datarevenue" :formPush="formPush" />
         <net-profit-margin-finance :datas="datarevenue" :formPush="formPush" />
-        <cash-balance-finance :datas="datacash.cashBalance" :formPush="formPush" />
         <cash-flow-movement-finance :datas="datacash.cashFlowMovement" :formPush="formPush" />
+        <cash-balance-finance :datas="datacash.cashBalance" :formPush="formPush" />
         <pay-schedule-finance :datas="datapayschedule" :formPush="formPush" />
         <kpbn-cpo-finance :datas="datacpokpbn" :formPush="formPush" />
         <kurs-finance :datas="datakurs" :formPush="formPush" />

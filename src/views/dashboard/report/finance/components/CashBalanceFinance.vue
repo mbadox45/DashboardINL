@@ -25,7 +25,7 @@ onMounted(() => {
 
 const loadData = async () => {
     const data = props.datas;
-    load.value = { total: data.value, status: data.status, bulan: data.tanggal };
+    load.value = { total: data.value, status: data.status, bulan: data.tanggal, difference: data.difference };
 };
 
 const routerLink = (path) => {
@@ -44,7 +44,7 @@ watch(() => props.formPush, loadData, { immediate: true });
     <div class="bg-gray-800 p-2 rounded-xl shadow-xl flex h-full gap-3 items-start">
         <div class="flex flex-col h-full w-full">
             <div class="flex items-center gap-3">
-                <span class="font-bold w-full text-[0.8vw]">Saldo Tunai (dlm IDR Miliar)</span>
+                <span class="font-bold w-full text-[0.8vw]">Saldo Tunai (IDR Miliar)</span>
                 <button
                     @click="routerLink('cash-balance')"
                     class="animate-pulse hover:animate-none p-4 w-[1.5vw] h-[1.5vw] cursor-pointer bg-transparent text-emerald-500 rotate-180 hover:rotate-[-180] hover:bg-black hover:text-amber-500 rounded-full flex items-center justify-center transition-all duration-500"
@@ -54,13 +54,15 @@ watch(() => props.formPush, loadData, { immediate: true });
             </div>
             <div class="flex h-full items-center gap-3">
                 <!-- <img src="/images/icon/financial/revenue.png" alt="Icon" class="w-[3vw] h-[3vw] mr-1" /> -->
-                <div class="flex flex-col gap-2">
+                <div class="flex flex-col gap-2 w-full">
                     <div class="flex gap-2 items-center" :class="load.status == 'up' ? 'text-green-500' : load.status == 'down' ? 'text-red-500' : 'text-amber-500'">
                         <span class="font-bold text-[1.5vw]">{{ load.total }}</span>
                         <i :class="`pi pi-sort-${load.status}-fill`" style="font-size: 1vw" />
+                        <span class="font-bold text-[0.5vw]">{{ load.difference }}</span>
                     </div>
-                    <div class="text-[0.8vw] flex flex-col w-full">
+                    <div class="text-[0.8vw] flex w-full justify-between">
                         <span class="text-cyan-500 font-bold">s/d {{ load.bulan }}</span>
+                        <span class="text-white font-bold"> Data per Bulan</span>
                     </div>
                 </div>
             </div>

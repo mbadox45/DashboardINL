@@ -45,7 +45,7 @@ export const valueColorIntCondition = (val) => {
     if (val < 0) {
         result = 'text-red-500';
     } else {
-        result = 'text-amber-500';
+        result = 'text-green-500';
     }
     return result;
 };
