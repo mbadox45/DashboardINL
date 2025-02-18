@@ -10,6 +10,11 @@ const router = createRouter({
             name: 'home',
             component: () => import('@/views/dashboard/report/home/Index.vue')
         },
+        {
+            path: '/test-page',
+            name: 'test-page',
+            component: () => import('@/views/dashboard/report/testPage/Index.vue')
+        },
         // {
         //     path: '/',
         //     component: AppLayouts,
