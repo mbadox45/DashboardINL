@@ -13,7 +13,7 @@ const router = useRouter();
 
 const messages = ref([]);
 const tanggal = ref(moment().format('YYYY-MM-DD'));
-const maxDate = ref(moment().format('YYYY-MM-DD'));
+// const maxDate = ref(moment().format('YYYY-MM-DD'));
 const listJenis = ref([]);
 const jenisProduksi = ref([]);
 const listMatauang = ref([]);
@@ -26,13 +26,22 @@ const listProduct = ref([]);
 const formData = ref([]);
 let count = ref(0);
 
+let today = new Date();
+let month = today.getMonth();
+let year = today.getFullYear();
+let day = today.getDate();
+const maxDate = ref(new Date());
+
 onMounted(() => {
+    maxDate.value.setDate(day);
+    maxDate.value.setMonth(month);
+    maxDate.value.setFullYear(year);
     loadData();
 });
 
 const loadData = async () => {
     await loadJenis();
-    await loadProduct();
+    // await loadProduct();
     // PMG
     await loadCurrency();
 };
@@ -54,15 +63,47 @@ const loadProduct = async () => {
     const produk = response.filter((item) => item.jenis == 'bulk');
     listProduct.value = produk;
     const list = [];
-    for (let i = 0; i < produk.length; i++) {
-        list.push({
-            id_bulky: produk[i].id,
-            item_produksi: produk[i].name,
-            id_mata_uang: pmg.value,
-            tanggal: tanggal.value,
-            nilaiLevy: null,
-            nilaiRouters: null
-        });
+
+    if (!tanggal.value || !pmg.value) return;
+
+    const form = {
+        idMataUang: pmg.value,
+        tanggalAwal: moment(tanggal.value).format('YYYY-MM-DD'),
+        tanggalAkhir: moment(tanggal.value).format('YYYY-MM-DD')
+    };
+    const responseLevyReuters = await levyRoutersPenjualanController.pengecekanDataUpdate(form);
+    // console.log(responseLevyReuters);
+    if (responseLevyReuters != null) {
+        for (let i = 0; i < produk.length; i++) {
+            const levy = responseLevyReuters.find((item) => item.id_bulky == produk[i].id && item.id_mata_uang == pmg.value && item.type == 'levy');
+            const reuters = responseLevyReuters.find((item) => item.id_bulky == produk[i].id && item.id_mata_uang == pmg.value && item.type == 'reuters');
+            // console.log(levy, reuters);
+            list.push({
+                idLevy: levy == null ? null : levy.id,
+                idRouters: reuters == null ? null : reuters.id,
+                id_bulky: produk[i].id,
+                item_produksi: produk[i].name,
+                id_mata_uang: pmg.value,
+                tanggal: tanggal.value,
+                nilaiLevy: levy == null ? null : levy.nilai,
+                nilaiRouters: reuters == null ? null : reuters.nilai,
+                statusLevy: levy == null ? 'add' : 'update',
+                statusRouters: reuters == null ? 'add' : 'update'
+            });
+        }
+    } else {
+        for (let i = 0; i < produk.length; i++) {
+            list.push({
+                id_bulky: produk[i].id,
+                item_produksi: produk[i].name,
+                id_mata_uang: pmg.value,
+                tanggal: tanggal.value,
+                nilaiLevy: null,
+                nilaiRouters: null,
+                statusLevy: 'add',
+                statusRouters: 'add'
+            });
+        }
     }
     formData.value = list;
 };
@@ -187,11 +228,11 @@ const postData = async (cond) => {
                     <div class="flex gap-3 w-full">
                         <div class="flex flex-col gap-1 w-full">
                             <label for="date" class="font-bold">Tanggal <small class="text-red-500 font-bold">*</small></label>
-                            <DatePicker v-model="tanggal" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" />
+                            <DatePicker v-model="tanggal" dateFormat="yy-mm-dd" :maxDate="maxDate" showIcon placeholder="Please input Date" @update:modelValue="loadProduct" />
                         </div>
                         <div class="flex flex-col gap-1 w-full">
                             <label for="date" class="font-bold">Mata Uang <small class="text-red-500 font-bold">*</small></label>
-                            <Select v-model="pmg" filter :options="listMatauang" optionLabel="name" optionValue="id" placeholder="Pilih Mata Uang" class="w-full" />
+                            <Select v-model="pmg" filter :options="listMatauang" optionLabel="name" optionValue="id" placeholder="Pilih Mata Uang" class="w-full" @change="loadProduct" />
                         </div>
                     </div>
                     <!-- <div class="flex flex-col gap-1">

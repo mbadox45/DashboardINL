@@ -12,18 +12,17 @@ const props = defineProps({
     }
 });
 
-const load = ref({ name: '', icon: '', nilai: 0, persen: 0, versus: '', link: null, colspan: null });
+const load = ref({ karyawanPria: 0, karyawanWanita: 0, karyawanTetap: 0, karyawanTidakTetap: 0, karyawanTotal: 0, safeManhours: 0 });
 
 const loadData = async () => {
     const data = props.datas;
     load.value = {
-        name: data.name,
-        icon: data.icon,
-        nilai: data.value,
-        persen: null,
-        versus: data.versus,
-        link: data.link,
-        colspan: data.colspan
+        karyawanPria: data.karyawanPria,
+        karyawanWanita: data.karyawanWanita,
+        karyawanTetap: data.karyawanTetap,
+        karyawanTidakTetap: data.karyawanTidakTetap,
+        karyawanTotal: data.karyawanTotal,
+        safeManhours: data.safeManhours
     };
 };
 
@@ -69,28 +68,28 @@ const routerLink = (path) => {
                             <div class="flex gap-4 w-full items-center font-bold">
                                 <img src="/images/icon/sdm/man.png" alt="Male" class="w-[3vw] h-[3vw]" />
                                 <div class="flex flex-col text-blue-500">
-                                    <span class="text-[1.4vw]">100</span>
+                                    <span class="text-[1.4vw]">{{ load.karyawanPria }}</span>
                                     <span class="text-[0.8vw] text-gray-400">Pria</span>
                                 </div>
                             </div>
                             <div class="flex gap-4 w-full items-center font-bold">
                                 <div class="flex flex-col items-center w-full text-green-500">
                                     <span class="text-[0.8vw] text-gray-400">Total</span>
-                                    <span class="text-[1.4vw]">200</span>
+                                    <span class="text-[1.4vw]">{{ load.karyawanTotal }}</span>
                                 </div>
                             </div>
                             <div class="flex flex-row-reverse gap-4 w-full items-center font-bold">
                                 <img src="/images/icon/sdm/woman.png" alt="Female" class="w-[3vw] h-[3vw]" />
                                 <div class="flex flex-col text-pink-500">
-                                    <span class="text-[1.4vw]">100</span>
+                                    <span class="text-[1.4vw]">{{ load.karyawanWanita }}</span>
                                     <span class="text-[0.8vw] text-gray-400">Wanita</span>
                                 </div>
                             </div>
                         </div>
                         <div class="flex gap-2 w-full items-center text-[0.8vw] font-bold text-amber-500">
-                            <span class="w-full">Tetap: 100</span>
-                            <span class="w-full">Tidak Tetap: 100</span>
-                            <span class="w-full">Safe Manhours: 500,000,000</span>
+                            <span class="w-full">Tetap: {{ load.karyawanTetap }}</span>
+                            <span class="w-full">Tidak Tetap: {{ load.karyawanTidakTetap }}</span>
+                            <span class="w-full">Safe Manhours: {{ load.safeManhours }}</span>
                         </div>
                     </div>
                 </div>

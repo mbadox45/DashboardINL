@@ -22,7 +22,7 @@ const load = ref({ value: 0, labaKotor: 0, labaKotorLastMonth: 0, gpmPercent: 0,
 
 const loadData = async () => {
     const data = props.datas;
-    console.log(data);
+    // console.log(data);
     load.value = {
         value: 0,
         labaKotor: data.labaKotor,
@@ -34,6 +34,9 @@ const loadData = async () => {
         gpmRkapPercent: data.gpmRkapPercent,
         tanggal: data.tanggal
     };
+
+    // console.log(valueColorPerbandinganCondition(load.value.labaKotor, load.value.labaKotorLastMonth).result);
+    // console.log(load.value.labaKotor, load.value.labaKotorLastMonth);
 };
 
 const routerLink = (path) => {

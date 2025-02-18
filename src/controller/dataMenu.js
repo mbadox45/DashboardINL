@@ -4,7 +4,7 @@ export default new (class dataMenu {
             label: 'Home',
             items: [
                 { label: 'Main Dashboard', icon: 'pi pi-fw pi-objects-column', to: '/' },
-                { label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/dashboard' }
+                { label: 'Home', icon: 'pi pi-fw pi-home', to: '/dashboard' }
             ]
         };
     };

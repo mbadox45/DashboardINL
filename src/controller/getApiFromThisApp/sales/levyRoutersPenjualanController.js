@@ -1,5 +1,8 @@
 import levyRoutersPenjualanAPI from '@/api/thisAPI/sales/levyRoutersPenjualanAPI';
+import moment from 'moment';
 import productMasterController from '../master/productMasterController';
+import levyDutyPenjualanController from './levyDutyPenjualanController';
+import marketRoutersPenjualanController from './marketRoutersPenjualanController';
 
 export default new (class levyRoutersPenjualanController {
     getByPeriod = async (form) => {
@@ -47,14 +50,16 @@ export default new (class levyRoutersPenjualanController {
                 const months = response[0].months;
                 if (months != null) {
                     const kurs = months[0].kurs;
-                    for (let k = 0; k < kurs.length; k++) {
-                        listKurs.push({
-                            id: kurs[k].id,
-                            id_mata_uang: kurs[k].id_mata_uang,
-                            mata_uang: kurs[k].mata_uang,
-                            tanggal: kurs[k].tanggal,
-                            value: kurs[k].value
-                        });
+                    if (kurs.length > 0) {
+                        for (let k = 0; k < kurs.length; k++) {
+                            listKurs.push({
+                                id: kurs[k].id,
+                                id_mata_uang: kurs[k].id_mata_uang,
+                                mata_uang: kurs[k].mata_uang,
+                                tanggal: kurs[k].tanggal,
+                                value: kurs[k].value
+                            });
+                        }
                     }
 
                     const products = months[0].products;
@@ -101,60 +106,120 @@ export default new (class levyRoutersPenjualanController {
                     }
                 }
 
-                if (listKurs.length > 0 && listBulk.length > 0) {
-                    for (let i = 0; i < listKurs.length; i++) {
-                        const productData = {};
+                const start = form.tanggalAwal;
+                const end = form.tanggalAkhir;
+                const totalDays = Number(moment(end).diff(moment(start), 'days')) + 1;
+                // console.log(totalDays);
+                for (let i = 0; i < totalDays; i++) {
+                    const tanggal = moment(start).add(i, 'days').format('YYYY-MM-DD');
+                    console.log(tanggal);
 
-                        for (let k = 0; k < listBulk.length; k++) {
-                            let nilaiLevy = 0;
-                            let nilaiReuters = 0;
-                            let nilaiExcld = 0;
-                            let nilaiIdr = 0;
+                    const productData = {};
+                    for (let k = 0; k < listBulk.length; k++) {
+                        let nilaiLevy = 0;
+                        let nilaiReuters = 0;
+                        let nilaiExcld = 0;
+                        let nilaiIdr = 0;
 
-                            const bulkName = listBulk[k].name.trim().toLowerCase(); // Normalisasi nama
+                        const bulkName = listBulk[k].name.trim().toLowerCase(); // Normalisasi nama
 
-                            // Levy Duty
-                            const levyDuty = listLevy.find((item) => item.tanggal === listKurs[i].tanggal && item.id_bulky === listBulk[k].id);
-                            if (levyDuty) {
-                                nilaiLevy = levyDuty.nilai;
-                            }
-
-                            // Market Reuters
-                            const market = listMarket.find((item) => item.tanggal === listKurs[i].tanggal && item.id_bulky === listBulk[k].id);
-                            if (market) {
-                                nilaiReuters = market.nilai;
-                            }
-
-                            // Market Excld Levy & Duty
-                            const excld = listExcld.find((item) => item.tanggal === listKurs[i].tanggal && item.name === bulkName);
-                            if (excld) {
-                                nilaiExcld = excld.nilai;
-                            }
-
-                            // Market IDR
-                            const idr = listMarketIdr.find((item) => item.tanggal === listKurs[i].tanggal && item.name === bulkName);
-                            if (idr) {
-                                nilaiIdr = idr.nilai;
-                            }
-
-                            // Simpan data dalam productData sesuai dengan productList
-                            productData[listBulk[k].id] = {
-                                name: listBulk[k].name,
-                                reuters: nilaiReuters,
-                                levy: nilaiLevy,
-                                excld: nilaiExcld,
-                                idr: nilaiIdr
-                            };
+                        // Levy Duty
+                        const levyDuty = listLevy.find((item) => item.tanggal === tanggal && item.id_bulky === listBulk[k].id);
+                        if (levyDuty) {
+                            nilaiLevy = levyDuty.nilai;
                         }
 
-                        listTable.push({
-                            tanggal: listKurs[i].tanggal,
-                            id_mata_uang: listKurs[i].id_mata_uang,
-                            value: listKurs[i].value,
-                            productData: productData
-                        });
+                        // Market Reuters
+                        const market = listMarket.find((item) => item.tanggal === tanggal && item.id_bulky === listBulk[k].id);
+                        if (market) {
+                            nilaiReuters = market.nilai;
+                        }
+
+                        // Market Excld Levy & Duty
+                        const excld = listExcld.find((item) => item.tanggal === tanggal && item.name === bulkName);
+                        if (excld) {
+                            nilaiExcld = excld.nilai;
+                        }
+
+                        // Market IDR
+                        const idr = listMarketIdr.find((item) => item.tanggal === tanggal && item.name === bulkName);
+                        if (idr) {
+                            nilaiIdr = idr.nilai;
+                        }
+
+                        // Simpan data dalam productData sesuai dengan productList
+                        productData[listBulk[k].id] = {
+                            name: listBulk[k].name,
+                            reuters: nilaiReuters,
+                            levy: nilaiLevy,
+                            excld: nilaiExcld,
+                            idr: nilaiIdr
+                        };
                     }
+
+                    const kurs = listKurs.length <= 0 ? null : listKurs.find((item) => item.tanggal == tanggal && item.id_mata_uang == form.idMataUang);
+                    listTable.push({
+                        tanggal: tanggal,
+                        id_mata_uang: form.idMataUang,
+                        value: kurs == null ? 0 : kurs.value,
+                        productData: productData
+                    });
                 }
+                // console.log(listTable);
+                // if (listKurs.length > 0 && listBulk.length > 0) {
+                //     for (let i = 0; i < listKurs.length; i++) {
+                //         const productData = {};
+
+                //         for (let k = 0; k < listBulk.length; k++) {
+                //             let nilaiLevy = 0;
+                //             let nilaiReuters = 0;
+                //             let nilaiExcld = 0;
+                //             let nilaiIdr = 0;
+
+                //             const bulkName = listBulk[k].name.trim().toLowerCase(); // Normalisasi nama
+
+                //             // Levy Duty
+                //             const levyDuty = listLevy.find((item) => item.tanggal === listKurs[i].tanggal && item.id_bulky === listBulk[k].id);
+                //             if (levyDuty) {
+                //                 nilaiLevy = levyDuty.nilai;
+                //             }
+
+                //             // Market Reuters
+                //             const market = listMarket.find((item) => item.tanggal === listKurs[i].tanggal && item.id_bulky === listBulk[k].id);
+                //             if (market) {
+                //                 nilaiReuters = market.nilai;
+                //             }
+
+                //             // Market Excld Levy & Duty
+                //             const excld = listExcld.find((item) => item.tanggal === listKurs[i].tanggal && item.name === bulkName);
+                //             if (excld) {
+                //                 nilaiExcld = excld.nilai;
+                //             }
+
+                //             // Market IDR
+                //             const idr = listMarketIdr.find((item) => item.tanggal === listKurs[i].tanggal && item.name === bulkName);
+                //             if (idr) {
+                //                 nilaiIdr = idr.nilai;
+                //             }
+
+                //             // Simpan data dalam productData sesuai dengan productList
+                //             productData[listBulk[k].id] = {
+                //                 name: listBulk[k].name,
+                //                 reuters: nilaiReuters,
+                //                 levy: nilaiLevy,
+                //                 excld: nilaiExcld,
+                //                 idr: nilaiIdr
+                //             };
+                //         }
+
+                //         listTable.push({
+                //             tanggal: listKurs[i].tanggal,
+                //             id_mata_uang: listKurs[i].id_mata_uang,
+                //             value: listKurs[i].value,
+                //             productData: productData
+                //         });
+                //     }
+                // }
                 result = {
                     dataTable: listTable,
                     productList: listBulk
@@ -195,19 +260,53 @@ export default new (class levyRoutersPenjualanController {
                     // Tambah 1 hari
                     currentDate.setDate(currentDate.getDate() + 1);
                 }
-                // return months[0].kurs.map((kurs) => ({
-                //     tanggal: kurs.tanggal,
-                //     marketReuters: listProduct.map((product) => product.marketReuters.find((m) => m.tanggal === kurs.tanggal)),
-                //     levyduty: listProduct.map((product) => product.levyduty.find((l) => l.tanggal === kurs.tanggal)),
-                //     marketReutersExcldLevyDuty: listProduct.map((product) => product.marketReutersExcldLevyDuty.find((m) => m.tanggal === kurs.tanggal)),
-                //     marketIdr: listProduct.map((product) => product.marketIdr.find((m) => m.tanggal === kurs.tanggal))
-                // }));
                 return dates;
             } else {
                 return [];
             }
         } catch (error) {
             return [];
+        }
+    };
+    pengecekanDataUpdate = async (form) => {
+        try {
+            const result = [];
+            const response = await this.getByPeriod(form);
+            if (response != null) {
+                for (let i = 0; i < response.length; i++) {
+                    const months = response[i].months;
+                    for (let j = 0; j < months.length; j++) {
+                        const products = months[j].products;
+                        for (let k = 0; k < products.length; k++) {
+                            const levy = products[k].levyduty;
+                            for (let l = 0; l < levy.length; l++) {
+                                result.push({
+                                    id: levy[l].id,
+                                    id_bulky: levy[l].id_bulky,
+                                    id_mata_uang: levy[l].id_mata_uang,
+                                    nilai: Number(levy[l].nilai),
+                                    tanggal: levy[l].tanggal,
+                                    type: 'levy'
+                                });
+                            }
+                            const reuters = products[k].marketReuters;
+                            for (let l = 0; l < reuters.length; l++) {
+                                result.push({
+                                    id: reuters[l].id,
+                                    id_bulky: reuters[l].id_bulky,
+                                    id_mata_uang: reuters[l].id_mata_uang,
+                                    nilai: Number(reuters[l].nilai),
+                                    tanggal: reuters[l].tanggal,
+                                    type: 'reuters'
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            return result;
+        } catch (error) {
+            return null;
         }
     };
     postData = async (form) => {
@@ -232,22 +331,30 @@ export default new (class levyRoutersPenjualanController {
                     for (let i = 0; i < list.length; i++) {
                         const form = {
                             id_bulky: list[i].id_bulky,
-                            tanggal: list[i].tanggal,
+                            tanggal: moment(list[i].tanggal).format('YYYY-MM-DD'),
                             nilai: list[i].nilaiLevy,
                             id_mata_uang: list[i].id_mata_uang
                         };
-                        await levyDutyPenjualanController.addPost(form);
+                        if (list[i].statusLevy == 'add') {
+                            await levyDutyPenjualanController.addPost(form);
+                        } else {
+                            await levyDutyPenjualanController.updatePost(list[i].idLevy, form);
+                        }
                     }
                     for (let i = 0; i < list.length; i++) {
                         const form = {
                             id_bulky: list[i].id_bulky,
-                            tanggal: list[i].tanggal,
-                            nilai: list[i].nilaiLevy,
+                            tanggal: moment(list[i].tanggal).format('YYYY-MM-DD'),
+                            nilai: list[i].nilaiRouters,
                             id_mata_uang: list[i].id_mata_uang
                         };
-                        await marketRoutersPenjualanController.addPost(form);
+                        if (list[i].statusRouters == 'add') {
+                            await marketRoutersPenjualanController.addPost(form);
+                        } else {
+                            await marketRoutersPenjualanController.updatePost(list[i].idRouters, form);
+                        }
                     }
-                    msg = { severity: 'success', content: 'Data berhasil di tambahkan', icon: 'pi-check-circle' };
+                    msg = { severity: 'success', content: 'Data berhasil di simpan', icon: 'pi-check-circle' };
                     return msg;
                 } else {
                     return msg;

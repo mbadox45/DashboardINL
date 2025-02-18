@@ -36,8 +36,8 @@ const op = ref();
 
 const beforeDate = ref(moment().format('YYYY-MM-01'));
 const now = ref(moment().format('YYYY-MM-DD'));
-// const beforeDate = ref('2023-01-01');
-// const now = ref(moment().format('2025-01-28'));
+// const beforeDate = ref('2024-12-01');
+// const now = ref(moment().format('2024-12-31'));
 const dates2 = ref(moment().format('YYYY-MM'));
 const dates = ref([moment(beforeDate.value).toDate(), moment(now.value).toDate()]);
 
@@ -72,7 +72,7 @@ const loadData = async () => {
         await loadCurrency();
         await loadProduk();
         const data = await levyRoutersPenjualanController.loadTable2(form);
-        console.log(data);
+        // console.log(data);
         listTable.value.dataTable = data.dataTable;
         listTable.value.productList = data.productList;
         loading.value = false;
@@ -286,8 +286,8 @@ const submitData = async () => {
         <div class="flex gap-2 items-center justify-between w-full font-bold">
             <span class="text-3xl">Levy Duty & Market Routers</span>
             <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-emerald-500 hover:bg-emerald-700 text-white rounded-full flex gap-2">
-                <i class="pi pi-plus"></i>
-                <span>Tambah Data</span>
+                <i class="pi pi-database"></i>
+                <span>Update Data</span>
             </button>
         </div>
         <Drawer v-model:visible="drawerCond" position="right" class="!w-full md:!w-[30rem]">

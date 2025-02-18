@@ -7,6 +7,7 @@ import { onMounted, ref } from 'vue';
 import financeHomeController from '@/controller/home/controllerHomePage/financeHomeController';
 import operationHomeController from '@/controller/home/controllerHomePage/operationHomeController';
 import salesHomeController from '@/controller/home/controllerHomePage/salesHomeController';
+import sdmHomeController from '@/controller/home/controllerHomePage/sdmHomeController';
 import supplyChainHomeController from '@/controller/home/controllerHomePage/supplyChainHomeController';
 
 // Components
@@ -55,6 +56,9 @@ const dataMarketReuters = ref({});
 // Sales Var Data
 const dataPenjualanBulk = ref({});
 const dataPenjualanRitel = ref({});
+
+// SDM
+const dataSDM = ref({});
 
 const formData = ref({
     idPmg: 1,
@@ -168,6 +172,10 @@ const loadDataControllerSales = async (form) => {
     dataPenjualanRitel.value = penjualanSalesRitel;
     const penjualanSalesBulk = await salesHomeController.laporanPenjualanBulk(form);
     dataPenjualanBulk.value = penjualanSalesBulk;
+
+    const sdm = await sdmHomeController.sdm(form);
+    dataSDM.value = sdm;
+    // console.log(sdm);
 };
 
 const updateDates = async (dates) => {
@@ -251,7 +259,7 @@ const loadDataSCM = async () => {
                         <div class="grid grid-cols-3 gap-2">
                             <!-- <card-scm-values v-for="(item, index) in listCardSCM" :key="index" :datas="item" :style="`animation: fadein 1s ease-in-out`" /> -->
                             <market-reuters :formPush="formData" :datas="dataMarketReuters" />
-                            <sdm-view class="col-span-2" />
+                            <sdm-view class="col-span-2" :datas="dataSDM" />
                         </div>
                         <card-home-material :formPush="formData" :laporanmaterial="dataLaporanMaterial" />
                     </div>

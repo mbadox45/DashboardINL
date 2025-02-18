@@ -33,6 +33,7 @@ export const valueColorPerbandinganCondition = (val1, val2) => {
         result = total;
         icon = 'pi pi-sort-up-fill';
     }
+    // console.log(color, )
     return {
         color: color,
         result: result,
