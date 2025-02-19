@@ -148,7 +148,7 @@ const showDrawer = async (data) => {
             formData.value.id = data.id;
             formData.value.tanki_id = data.tanki_id;
             formData.value.id_bulky = data.id_bulky;
-            formData.value.tanggal = data.tanggal;
+            formData.value.tanggal = moment(data.tanggal).format('YYYY-MM-DD');
             formData.value.remarks = data.remarks;
             formData.value.umur = Number(data.umur);
             formData.value.qty = Number(data.qty);
@@ -194,6 +194,7 @@ const submitData = async () => {
     if (!formData.value.tanki_id || !formData.value.tanggal || !formData.value.remarks || !formData.value.umur || !formData.value.qty || !formData.value.id_bulky) {
         messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     } else {
+        formData.value.tanggal = moment(formData.value.tanggal).format('YYYY-MM-DD');
         if (statusForm.value == 'add') {
             const response = await bulkStockScmController.addPost(formData.value);
             // const load = response.data;
