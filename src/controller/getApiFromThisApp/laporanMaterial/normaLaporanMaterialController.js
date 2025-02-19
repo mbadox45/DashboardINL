@@ -170,6 +170,7 @@ export default new (class laporanMaterialController {
                 }
                 if (kondisi == true) {
                     for (let i = 0; i < list.length; i++) {
+                        // console.log(list[i]);
                         await this.addPost(list[i]);
                     }
                     msg = { severity: 'success', content: 'Data berhasil di tambahkan', icon: 'pi-check-circle' };

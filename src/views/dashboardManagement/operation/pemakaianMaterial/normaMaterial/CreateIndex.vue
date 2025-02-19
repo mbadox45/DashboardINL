@@ -68,7 +68,7 @@ const loadForm = () => {
             item_material_id: listProd[i].id,
             item_produksi: listProd[i].name,
             pmg_id: pmg.value,
-            tanggal: tanggal.value,
+            tanggal: moment(tanggal.value).format('YYYY-MM-01'),
             qty: null,
             satuan: null
         });
@@ -80,7 +80,7 @@ const resetForm = () => {
     formData.value = [];
     jenis.value = null;
     pmg.value = null;
-    tanggal.value = moment().format('YYYY-MM-DD');
+    tanggal.value = moment().format('YYYY-MM-01');
 };
 
 const postData = async (cond) => {
@@ -154,7 +154,7 @@ const postData = async (cond) => {
                     <div class="flex gap-3 w-full">
                         <div class="flex flex-col gap-1 w-full">
                             <label for="date" class="font-bold">Tanggal <small class="text-red-500 font-bold">*</small></label>
-                            <DatePicker v-model="tanggal" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" />
+                            <DatePicker v-model="tanggal" showIcon view="month" dateFormat="yy-mm" placeholder="Please input period" />
                         </div>
                         <div class="flex flex-col gap-1 w-full">
                             <label for="pmg" class="font-bold">PMG <small class="text-red-500 font-bold">*</small></label>
