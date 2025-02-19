@@ -3,7 +3,6 @@ import { formatCurrency } from '@/controller/dummyController';
 import cashFlowScheduleController from '@/controller/getApiFromThisApp/cashFlowSchedule/cashFlowScheduleController';
 import kategoriCashFlowScheduleController from '@/controller/getApiFromThisApp/cashFlowSchedule/kategoriCashFlowScheduleController';
 import payStatusCashFlowScheduleController from '@/controller/getApiFromThisApp/cashFlowSchedule/payStatusCashFlowScheduleController';
-import bebanProdCpoOlahController from '@/controller/getApiFromThisApp/cpoOlah/bebanProdCpoOlahController';
 // import pmgMasterController from '@/controller/getApiFromThisApp/master/pmgMasterController';
 import { FilterMatchMode } from '@primevue/core/api';
 import moment from 'moment';
@@ -133,7 +132,7 @@ const showDrawer = async (data) => {
         drawerCond.value = true;
         messages.value = [];
         if (data != null) {
-            const response = await bebanProdCpoOlahController.getByID(data.id);
+            const response = await cashFlowScheduleController.getByID(data.id);
             console.log(data);
             const history = response.history;
             const list = [];

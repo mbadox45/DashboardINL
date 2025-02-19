@@ -267,7 +267,7 @@ const submitData = async () => {
                     <DatePicker v-model="formData.tanggal" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" showButtonBar :manualInput="false" />
                 </div>
                 <div class="flex flex-col gap-1">
-                    <label for="kapasitas">Inventory ({{ optionButton == 0 ? 'MT' : 'Pouch' }})<small class="text-red-500 font-bold">*</small></label>
+                    <label for="kapasitas">Inventory ({{ optionButton == 0 ? 'Kg' : 'Pouch' }})<small class="text-red-500 font-bold">*</small></label>
                     <InputNumber v-model="formData.inventory" inputId="minmaxfraction" placeholder="1,000,000" :minFractionDigits="0" :maxFractionDigits="2" fluid />
                 </div>
                 <div class="flex flex-row-reverse w-full gap-3">

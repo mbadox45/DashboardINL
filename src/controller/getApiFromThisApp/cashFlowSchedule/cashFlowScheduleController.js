@@ -79,44 +79,64 @@ export default new (class cashFlowScheduleController {
                 // console.log(response);
                 const kategori = response.kategori;
                 const bulan = bulanKalendar;
-                const cff = kategori.find((item) => item.name.toLowerCase().includes('funding'));
-                const cfi = kategori.find((item) => item.name.toLowerCase().includes('investment'));
-                if (cff != null && cfi != null) {
-                    for (let i = 0; i < bulan.length; i++) {
-                        const dataCFF = cff.period.find((item) => item.month == bulan[i].id) == null ? null : cff.period.find((item) => item.month == bulan[i].id);
-                        const dataCFI = cfi.period.find((item) => item.month == bulan[i].id) == null ? null : cfi.period.find((item) => item.month == bulan[i].id);
-                        list.push({
-                            month: bulan[i].name,
-                            items: [
-                                { name: cff.name, data: dataCFF == null ? [] : dataCFF.data, year: dataCFF == null ? years : dataCFF.year, total: dataCFF == null ? 0 : dataCFF.total },
-                                { name: cfi.name, data: dataCFI == null ? [] : dataCFI.data, year: dataCFI == null ? years : dataCFI.year, total: dataCFI == null ? 0 : dataCFI.total }
-                            ]
-                        });
+                for (let i = 0; i < bulan.length; i++) {
+                    const items = [];
+                    for (let j = 0; j < kategori.length; j++) {
+                        const period = kategori[j].period;
+                        if (period.length > 0) {
+                            const data = period.find((item) => item.month == bulan[i].id);
+                            items.push({
+                                name: kategori[j].name,
+                                data: data == null ? [] : data.data,
+                                year: data == null ? years : data.year,
+                                total: data == null ? 0 : data.total
+                            });
+                        }
                     }
-                } else if (cff == null && cfi != null) {
-                    for (let i = 0; i < bulan.length; i++) {
-                        const dataCFI = cfi.period.find((item) => item.month == bulan[i].id) == null ? null : cfi.period.find((item) => item.month == bulan[i].id);
-                        list.push({
-                            month: bulan[i].name,
-                            items: [{ name: cfi.name, data: dataCFI == null ? [] : dataCFI.data, year: dataCFI == null ? years : dataCFI.year, total: dataCFI == null ? 0 : dataCFI.total }]
-                        });
-                    }
-                } else if (cff != null && cfi == null) {
-                    for (let i = 0; i < bulan.length; i++) {
-                        const dataCFF = cff.period.find((item) => item.month == bulan[i].id) == null ? null : cff.period.find((item) => item.month == bulan[i].id);
-                        list.push({
-                            month: bulan[i].name,
-                            items: [{ name: cff.name, data: dataCFF == null ? [] : dataCFF.data, year: dataCFF == null ? years : dataCFF.year, total: dataCFF == null ? 0 : dataCFF.total }]
-                        });
-                    }
-                } else {
-                    for (let i = 0; i < bulan.length; i++) {
-                        list.push({
-                            month: bulan[i].name,
-                            items: []
-                        });
-                    }
+                    list.push({
+                        month: bulan[i].name,
+                        items: items
+                    });
                 }
+                // const cff = kategori.find((item) => item.name.toLowerCase().includes('funding'));
+                // const cfi = kategori.find((item) => item.name.toLowerCase().includes('investment'));
+                // if (cff != null && cfi != null) {
+                //     for (let i = 0; i < bulan.length; i++) {
+                //         const dataCFF = cff.period.find((item) => item.month == bulan[i].id) == null ? null : cff.period.find((item) => item.month == bulan[i].id);
+                //         const dataCFI = cfi.period.find((item) => item.month == bulan[i].id) == null ? null : cfi.period.find((item) => item.month == bulan[i].id);
+                //         list.push({
+                //             month: bulan[i].name,
+                //             items: [
+                //                 { name: cff.name, data: dataCFF == null ? [] : dataCFF.data, year: dataCFF == null ? years : dataCFF.year, total: dataCFF == null ? 0 : dataCFF.total },
+                //                 { name: cfi.name, data: dataCFI == null ? [] : dataCFI.data, year: dataCFI == null ? years : dataCFI.year, total: dataCFI == null ? 0 : dataCFI.total }
+                //             ]
+                //         });
+                //     }
+                // } else if (cff == null && cfi != null) {
+                //     for (let i = 0; i < bulan.length; i++) {
+                //         const dataCFI = cfi.period.find((item) => item.month == bulan[i].id) == null ? null : cfi.period.find((item) => item.month == bulan[i].id);
+                //         list.push({
+                //             month: bulan[i].name,
+                //             items: [{ name: cfi.name, data: dataCFI == null ? [] : dataCFI.data, year: dataCFI == null ? years : dataCFI.year, total: dataCFI == null ? 0 : dataCFI.total }]
+                //         });
+                //     }
+                // } else if (cff != null && cfi == null) {
+                //     for (let i = 0; i < bulan.length; i++) {
+                //         const dataCFF = cff.period.find((item) => item.month == bulan[i].id) == null ? null : cff.period.find((item) => item.month == bulan[i].id);
+                //         list.push({
+                //             month: bulan[i].name,
+                //             items: [{ name: cff.name, data: dataCFF == null ? [] : dataCFF.data, year: dataCFF == null ? years : dataCFF.year, total: dataCFF == null ? 0 : dataCFF.total }]
+                //         });
+                //     }
+                // } else {
+                //     for (let i = 0; i < bulan.length; i++) {
+                //         list.push({
+                //             month: bulan[i].name,
+                //             items: []
+                //         });
+                //     }
+                // }
+                console.log(list);
                 return list;
             } else {
                 return [];
