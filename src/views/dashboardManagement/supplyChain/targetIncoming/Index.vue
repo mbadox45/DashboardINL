@@ -150,13 +150,13 @@ const showDrawer = async (data) => {
             }
             logFile.value = list;
             formData.value.id = data.id;
-            formData.value.tanggal = response.tanggal;
+            formData.value.tanggal = moment(response.tanggal).format('YYYY-MM-DD');
             formData.value.qty = Number(response.qty);
             statusForm.value = 'edit';
         } else {
             logFile.value = [];
             formData.value.id = null;
-            formData.value.tanggal = moment().format('YYYY-MM-DD');
+            formData.value.tanggal = moment().format('YYYY-MM-01');
             formData.value.qty = null;
             statusForm.value = 'add';
         }
@@ -165,7 +165,7 @@ const showDrawer = async (data) => {
         drawerCond.value = true;
         logFile.value = [];
         formData.value.id = null;
-        formData.value.tanggal = moment().format('YYYY-MM-DD');
+        formData.value.tanggal = moment().format('YYYY-MM-01');
         formData.value.qty = null;
         statusForm.value = 'add';
     }
@@ -174,15 +174,13 @@ const showDrawer = async (data) => {
 const refreshForm = () => {
     messages.value = [];
     formData.value.id_mata_uang = null;
-    formData.value.tanggal = moment().format('YYYY-MM-DD');
+    formData.value.tanggal = moment().format('YYYY-MM-01');
     formData.value.value = null;
 };
 
 const submitData = async () => {
-    if (!formData.value.tanggal || !formData.value.qty) {
-        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
-    } else {
-        formData.value.tanggal = moment(formData.value.tanggal).format('YYYY-MM-DD');
+    if (formData.value.tanggal != null && formData.value.qty != null) {
+        formData.value.tanggal = moment(formData.value.tanggal).format('YYYY-MM-01');
         if (statusForm.value == 'add') {
             const response = await targetIncomingScmController.addPost(formData.value);
             if (response.status == true) {
@@ -211,6 +209,8 @@ const submitData = async () => {
                 messages.value = [{ severity: 'error', content: response.msg, id: count.value++, icon: 'pi-times-circle' }];
             }
         }
+    } else {
+        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     }
 };
 </script>
@@ -239,7 +239,7 @@ const submitData = async () => {
                 </transition-group>
                 <div class="flex flex-col gap-1">
                     <label for="date">Tanggal <small class="text-red-500 font-bold">*</small></label>
-                    <DatePicker v-model="formData.tanggal" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" />
+                    <DatePicker v-model="formData.tanggal" showIcon view="month" dateFormat="yy-mm" placeholder="Please input period" class="w-full" />
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="value">Jumlah (Kg) <small class="text-red-500 font-bold">*</small></label>
