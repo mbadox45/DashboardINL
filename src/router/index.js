@@ -582,7 +582,8 @@ const router = createRouter({
                         // finance: true,
                         // operation: true
                         // sales: true,
-                        scm: true
+                        sourcing: true
+                        // scm: true
                         // sdm: true
                     }
                 },
@@ -596,7 +597,8 @@ const router = createRouter({
                         // finance: true,
                         // operation: true
                         // sales: true,
-                        scm: true
+                        sourcing: true
+                        // scm: true
                         // sdm: true
                     }
                 },
@@ -610,21 +612,8 @@ const router = createRouter({
                         // finance: true,
                         // operation: true
                         // sales: true,
-                        scm: true
-                        // sdm: true
-                    }
-                },
-                {
-                    path: '/scm/saldo-pe',
-                    name: 'saldo-pe',
-                    component: () => import('@/views/dashboardManagement/supplyChain/saldoPe/Index.vue'),
-                    meta: {
-                        requiresAuth: true,
-                        allUser: true,
-                        // finance: true,
-                        // operation: true
-                        // sales: true,
-                        scm: true
+                        sourcing: true
+                        // scm: true
                         // sdm: true
                     }
                 },
@@ -632,6 +621,21 @@ const router = createRouter({
                     path: '/scm/outstanding-cpo',
                     name: 'outstanding-cpo',
                     component: () => import('@/views/dashboardManagement/supplyChain/outstandingCpo/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true,
+                        // finance: true,
+                        // operation: true
+                        // sales: true,
+                        // scm: true
+                        sourcing: true
+                        // sdm: true
+                    }
+                },
+                {
+                    path: '/scm/saldo-pe',
+                    name: 'saldo-pe',
+                    component: () => import('@/views/dashboardManagement/supplyChain/saldoPe/Index.vue'),
                     meta: {
                         requiresAuth: true,
                         allUser: true,
