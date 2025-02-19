@@ -76,8 +76,8 @@ const loadData = async () => {
             listTable.value = bulk.products;
         }
 
-        await loadUraian();
-        await loadCustomer();
+        // await loadUraian();
+        // await loadCustomer();
     } catch (error) {
         listTable.value = [];
     }
@@ -95,6 +95,8 @@ const loadCustomer = async () => {
 
 const showDrawer = async (data) => {
     try {
+        await loadUraian();
+        await loadCustomer();
         drawerCond.value = true;
         messages.value = [];
         if (data != null) {
@@ -210,9 +212,11 @@ const selectButton = async (val) => {
 };
 
 const submitData = async () => {
+    formData.value.customer_id != null || !formData.value.product_id || !formData.value.tanggal || !formData.value.qty || !formData.value.harga_satuan || !formData.value.margin_percent;
     if (!formData.value.customer_id || !formData.value.product_id || !formData.value.tanggal || !formData.value.qty || !formData.value.harga_satuan || !formData.value.margin_percent) {
         messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     } else {
+        formData.value.tanggal = moment(formData.value.tanggal).format('YYYY-MM-DD');
         if (statusForm.value == 'add') {
             const response = await laporanPenjualanController.addPost(formData.value);
             // const load = response.data;
@@ -276,11 +280,11 @@ const submitData = async () => {
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="lokasi">Produk <small class="text-red-500 font-bold">*</small></label>
-                    <Select v-model="formData.product_id" :options="listProduct" optionLabel="name" optionValue="id" placeholder="Pilih Produk" class="w-full" />
+                    <Select v-model="formData.product_id" :options="listProduct" optionLabel="name" filter optionValue="id" placeholder="Pilih Produk" class="w-full" />
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="date">Customer <small class="text-red-500 font-bold">*</small></label>
-                    <Select v-model="formData.customer_id" :options="listCustomer" optionLabel="name" optionValue="id" placeholder="Pilih Customer" class="w-full" />
+                    <Select v-model="formData.customer_id" :options="listCustomer" optionLabel="name" filter optionValue="id" placeholder="Pilih Customer" class="w-full" />
                 </div>
                 <div class="flex flex-col gap-1 w-full">
                     <label for="date" class="font-bold">Tanggal <small class="text-red-500 font-bold">*</small></label>

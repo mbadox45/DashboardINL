@@ -134,7 +134,7 @@ const showDrawer = async (data) => {
             formData.value.uraian_id = response.uraian_id;
             formData.value.product_id = response.product_id;
             formData.value.qty = Number(data.qty);
-            formData.value.tanggal = data.tanggal;
+            formData.value.tanggal = moment(data.tanggal).format('YYYY-MM-DD');
             statusForm.value = 'edit';
         } else {
             logFile.value = [];
@@ -211,6 +211,7 @@ const submitData = async () => {
     if (!formData.value.uraian_id || !formData.value.product_id || !formData.value.tanggal || !formData.value.qty) {
         messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     } else {
+        formData.value.tanggal = moment(formData.value.tanggal).format('YYYY-MM-DD');
         if (statusForm.value == 'add') {
             const response = await targetPenjualanController.addPost(formData.value);
             // const load = response.data;
