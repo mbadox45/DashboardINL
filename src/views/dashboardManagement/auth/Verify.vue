@@ -62,6 +62,8 @@ const loadData = async () => {
                         roles = 'scm';
                     } else if (cekAkses.level_akses == 4) {
                         roles = 'sdm';
+                    } else if (cekAkses.level_akses == 3) {
+                        roles = 'sourcing';
                     } else {
                         roles = 'viewer';
                     }

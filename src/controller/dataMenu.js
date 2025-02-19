@@ -125,20 +125,31 @@ export default new (class dataMenu {
             ]
         };
     };
+    sourcing = () => {
+        return {
+            label: 'Sourcing CPO',
+            items: [
+                { icon: 'pi pi-fw pi-asterisk', label: 'Source CPO', to: '/scm/source-cpo' },
+                { icon: 'pi pi-fw pi-bullseye', label: 'Target Incoming CPO', to: '/scm/target-incoming' },
+                { icon: 'pi pi-fw pi-arrow-down-right', label: 'Incoming CPO', to: '/scm/incoming-cpo' },
+                { icon: 'pi pi-fw pi-arrow-up-right', label: 'Outstanding CPO', to: '/scm/outstanding-cpo' }
+            ]
+        };
+    };
     scm = () => {
         return {
             label: 'Supply Chain',
             items: [
-                {
-                    label: 'CPO',
-                    icon: 'pi pi-fw pi-bullseye',
-                    items: [
-                        { label: 'Source CPO', to: '/scm/source-cpo' },
-                        { label: 'Target Incoming CPO', to: '/scm/target-incoming' },
-                        { label: 'Incoming CPO', to: '/scm/incoming-cpo' },
-                        { label: 'Outstanding CPO', to: '/scm/outstanding-cpo' }
-                    ]
-                },
+                // {
+                //     label: 'CPO',
+                //     icon: 'pi pi-fw pi-bullseye',
+                //     items: [
+                //         { label: 'Source CPO', to: '/scm/source-cpo' },
+                //         { label: 'Target Incoming CPO', to: '/scm/target-incoming' },
+                //         { label: 'Incoming CPO', to: '/scm/incoming-cpo' },
+                //         { label: 'Outstanding CPO', to: '/scm/outstanding-cpo' }
+                //     ]
+                // },
                 { label: 'Saldo PE', icon: 'pi pi-fw pi-arrow-down-left-and-arrow-up-right-to-center', to: '/scm/saldo-pe' },
                 {
                     label: 'Stok',

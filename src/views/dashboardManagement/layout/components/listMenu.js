@@ -5,7 +5,7 @@ export const menuAllAccess = () => {
     const result = [];
 
     if (rolesUser == 'allUser') {
-        result.push(dataMenu.home(), dataMenu.finance(), dataMenu.operation(), dataMenu.sales(), dataMenu.scm(), dataMenu.sdm(), dataMenu.master());
+        result.push(dataMenu.home(), dataMenu.finance(), dataMenu.operation(), dataMenu.sales(), dataMenu.sourcing(), dataMenu.scm(), dataMenu.sdm(), dataMenu.master());
     } else if (rolesUser == 'finance') {
         result.push(dataMenu.home(), dataMenu.finance(), dataMenu.master());
     } else if (rolesUser == 'operation') {
@@ -14,6 +14,8 @@ export const menuAllAccess = () => {
         result.push(dataMenu.home(), dataMenu.sales(), dataMenu.master());
     } else if (rolesUser == 'scm') {
         result.push(dataMenu.home(), dataMenu.scm(), dataMenu.master());
+    } else if (rolesUser == 'sourcing') {
+        result.push(dataMenu.home(), dataMenu.sourcing(), dataMenu.master());
     } else if (rolesUser == 'sdm') {
         result.push(dataMenu.home(), dataMenu.sdm(), dataMenu.master());
     } else {
