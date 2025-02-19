@@ -220,7 +220,7 @@ const submitData = async () => {
     if (!formData.value.pmg_id || !formData.value.tanggal || !formData.value.uraian_id || !formData.value.value) {
         messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     } else {
-        formData.value.tanggal = moment(formData.value.tanggal).format('YYYY-MM-DD');
+        formData.value.tanggal = moment(formData.value.tanggal).format('YYYY-MM-01');
         if (statusForm.value == 'add') {
             const response = await targetProdCpoOlahController.addPost(formData.value);
             if (response.status == true) {
@@ -285,7 +285,8 @@ const submitData = async () => {
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="date">Tanggal <small class="text-red-500 font-bold">*</small></label>
-                    <DatePicker v-model="formData.tanggal" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" />
+                    <DatePicker v-model="formData.tanggal" showIcon view="month" dateFormat="yy-mm" placeholder="Please input period" class="w-full" />
+                    <!-- <DatePicker v-model="formData.tanggal" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" /> -->
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="date">Target CPO Olah (Kg) <small class="text-red-500 font-bold">*</small></label>

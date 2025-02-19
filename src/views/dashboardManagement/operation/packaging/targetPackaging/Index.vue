@@ -85,13 +85,12 @@ const loadJenis = async () => {
         const response = await jenisLaporanPackagingController.getAll();
         const list = [];
         for (let i = 0; i < response.length; i++) {
+            list.push({
+                id: response[i].id,
+                name: response[i].name
+            });
             const items = response[i].item_packaging;
-            for (let j = 0; j < items.length; j++) {
-                list.push({
-                    id: items[j].id,
-                    name: `(${response[i].name}) - ${items[j].name}`
-                });
-            }
+            for (let j = 0; j < items.length; j++) {}
         }
         listJenis.value = list;
     } catch (error) {
@@ -231,7 +230,7 @@ const submitData = async () => {
     if (!formData.value.packaging_id || !formData.value.tanggal || !formData.value.uraian_id || !formData.value.value || !formData.value.jenis_id) {
         messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     } else {
-        formData.value.tanggal = moment(formData.value.tanggal).format('YYYY-MM-DD');
+        formData.value.tanggal = moment(formData.value.tanggal).format('YYYY-MM-01');
         if (statusForm.value == 'add') {
             const response = await targetPackagingController.addPost(formData.value);
             if (response.status == true) {
@@ -300,7 +299,8 @@ const submitData = async () => {
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="date">Tanggal <small class="text-red-500 font-bold">*</small></label>
-                    <DatePicker v-model="formData.tanggal" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" />
+                    <DatePicker v-model="formData.tanggal" showIcon view="month" dateFormat="yy-mm" placeholder="Please input period" class="w-full" />
+                    <!-- <DatePicker v-model="formData.tanggal" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" /> -->
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="date">Nilai (Box) <small class="text-red-500 font-bold">*</small></label>
