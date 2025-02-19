@@ -405,7 +405,7 @@ const submitData = async () => {
                     <Column field="qty" sortable style="width: 15%; font-size: 0.8vw" headerStyle="background-color:rgb(251 207 232)">
                         <template #header>
                             <div class="flex w-full items-center justify-center font-bold text-black">
-                                <span>Norma / MT CPO Olah</span>
+                                <span>Norma</span>
                             </div>
                         </template>
                         <template #body="{ data }">

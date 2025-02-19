@@ -175,9 +175,7 @@ const refreshForm = () => {
 };
 
 const submitData = async () => {
-    if (!formData.value.tanki_id || !formData.value.tanggal || !formData.value.remarks || !formData.value.umur || !formData.value.qty) {
-        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
-    } else {
+    if (formData.value.tanki_id != null && formData.value.tanggal != null && formData.value.remarks != null && ((formData.value.umur != null) == formData.value.qty) != null) {
         if (statusForm.value == 'add') {
             const response = await cpoStockScmController.addPost(formData.value);
             // const load = response.data;
@@ -193,7 +191,7 @@ const submitData = async () => {
                 messages.value = [{ severity: 'error', content: 'Proses gagal, silahkan hubungi tim IT', id: count.value++, icon: 'pi-times-circle' }];
             }
         } else {
-            console.log(formData.value);
+            // console.log(formData.value);
             const response = await cpoStockScmController.updatePost(formData.value.id, formData.value);
             // const load = response.data;
             if (response.status == true) {
@@ -208,6 +206,8 @@ const submitData = async () => {
                 messages.value = [{ severity: 'error', content: 'Proses gagal, silahkan hubungi tim IT', id: count.value++, icon: 'pi-times-circle' }];
             }
         }
+    } else {
+        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     }
 };
 </script>

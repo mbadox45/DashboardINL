@@ -22,7 +22,7 @@ let count = ref(0);
 
 const formData = ref({
     id: null,
-    tanggal: null,
+    tanggal: moment().format('YYYY-MM-DD'),
     saldo_awal: null,
     saldo_pakai: null
 });
@@ -116,14 +116,14 @@ const showDrawer = async (data) => {
             formData.value.id = data.id;
             formData.value.saldo_awal = Number(data.saldo_awal);
             formData.value.saldo_pakai = Number(data.saldo_pakai);
-            formData.value.tanggal = data.tanggal;
+            formData.value.tanggal = moment(data.tanggal).format('YYYY-MM-DD');
             statusForm.value = 'edit';
         } else {
             logFile.value = [];
             formData.value.id = null;
             formData.value.saldo_awal = null;
             formData.value.saldo_pakai = null;
-            formData.value.tanggal = null;
+            formData.value.tanggal = moment().format('YYYY-MM-DD');
             statusForm.value = 'add';
         }
     } catch (error) {
@@ -133,7 +133,7 @@ const showDrawer = async (data) => {
         formData.value.id = null;
         formData.value.saldo_awal = null;
         formData.value.saldo_pakai = null;
-        formData.value.tanggal = null;
+        formData.value.tanggal = moment().format('YYYY-MM-DD');
         statusForm.value = 'add';
     }
 };
@@ -141,13 +141,14 @@ const showDrawer = async (data) => {
 const refreshForm = () => {
     formData.value.saldo_awal = null;
     formData.value.saldo_pakai = null;
-    formData.value.tanggal = null;
+    formData.value.tanggal = moment().format('YYYY-MM-DD');
 };
 
 const submitData = async () => {
     if (formData.value.saldo_awal == null || formData.value.saldo_pakai == null || !formData.value.tanggal) {
         messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     } else {
+        formData.value.tanggal = moment(formData.value.tanggal).format('YYYY-MM-DD');
         if (statusForm.value == 'add') {
             const response = await saldoPeScmController.addPost(formData.value);
             // const load = response.data;
@@ -163,7 +164,7 @@ const submitData = async () => {
                 messages.value = [{ severity: 'error', content: 'Proses gagal, silahkan hubungi tim IT', id: count.value++, icon: 'pi-times-circle' }];
             }
         } else {
-            console.log(formData.value);
+            // console.log(formData.value);
             const response = await saldoPeScmController.updatePost(formData.value.id, formData.value);
             // const load = response.data;
             if (response.status == true) {

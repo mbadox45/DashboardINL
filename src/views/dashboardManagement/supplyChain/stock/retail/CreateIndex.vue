@@ -45,7 +45,7 @@ const loadJenis = async () => {
                 warehouse_id: response[i].id,
                 item_produksi: response[i].name,
                 id_ritel: jenis.value,
-                tanggal: tanggal.value,
+                tanggal: moment(tanggal.value).format('YYYY-MM-DD'),
                 qty: null,
                 umur: null,
                 remarks: null
