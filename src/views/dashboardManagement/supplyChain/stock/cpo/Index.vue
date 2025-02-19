@@ -62,6 +62,7 @@ const loadData = async () => {
 
 const loadProduk = async () => {
     const produk = await productStorageScmController.getByJenis('tanki');
+    console.log(produk);
     const list = [];
     for (let i = 0; i < produk.length; i++) {
         list.push({
@@ -111,6 +112,7 @@ const convertDate = (dateString) => {
 
 const showDrawer = async (data) => {
     try {
+        await loadProduk();
         drawerCond.value = true;
         messages.value = [];
         if (data != null) {
@@ -137,7 +139,7 @@ const showDrawer = async (data) => {
             logFile.value = list;
             formData.value.id = data.id;
             formData.value.tanki_id = data.tanki_id;
-            formData.value.tanggal = data.tanggal;
+            formData.value.tanggal = moment(data.tanggal).format('YYYY-MM-DD');
             formData.value.remarks = data.remarks;
             formData.value.umur = Number(data.umur);
             formData.value.qty = Number(data.qty);
@@ -176,7 +178,10 @@ const refreshForm = () => {
 
 const submitData = async () => {
     if (formData.value.tanki_id != null && formData.value.tanggal != null && formData.value.remarks != null && ((formData.value.umur != null) == formData.value.qty) != null) {
+        // console.log(formData.value);
+        formData.value.tanggal = moment(formData.value.tanggal).format('YYYY-MM-DD');
         if (statusForm.value == 'add') {
+            // messages.value = [{ severity: 'success', content: 'Data berhasil di tambahkan', id: count.value++, icon: 'pi-check-circle' }];
             const response = await cpoStockScmController.addPost(formData.value);
             // const load = response.data;
             if (response.status == true) {
@@ -192,6 +197,7 @@ const submitData = async () => {
             }
         } else {
             // console.log(formData.value);
+            // messages.value = [{ severity: 'success', content: 'Data berhasil di simpan', id: count.value++, icon: 'pi-check-circle' }];
             const response = await cpoStockScmController.updatePost(formData.value.id, formData.value);
             // const load = response.data;
             if (response.status == true) {
@@ -240,7 +246,7 @@ const submitData = async () => {
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="date">Tangki <small class="text-red-500 font-bold">*</small></label>
-                    <Select v-model="formData.tanki_id" :options="listProduk" optionLabel="name" optionValue="id" placeholder="Pilih Tangki" class="w-full" />
+                    <Select v-model="formData.tanki_id" :options="listProduk" optionLabel="name" optionValue="id" placeholder="Pilih Tangki" filter class="w-full" />
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="umur">Umur (Hari) <small class="text-red-500 font-bold">*</small></label>
