@@ -124,7 +124,7 @@ const showDrawer = async (data) => {
             logFile.value = list;
             formData.value.id = data.id;
             formData.value.id_product = data.id_product;
-            formData.value.tanggal = data.tanggal;
+            formData.value.tanggal = moment(data.tanggal).format('YYYY-MM-DD');
             formData.value.spot = Number(data.spot);
             statusForm.value = 'edit';
         } else {
@@ -197,9 +197,8 @@ const selectButton = async (val) => {
 };
 
 const submitData = async () => {
-    if (!formData.value.id_product || !formData.value.tanggal || !formData.value.spot) {
-        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
-    } else {
+    if (formData.value.id_product != null && formData.value.tanggal != null && formData.value.spot != null) {
+        formData.value.tanggal = moment(formData.value.tanggal).format('YYYY-MM-DD');
         if (statusForm.value == 'add') {
             const response = await hargaSpotSalesController.addPost(formData.value);
             // const load = response.data;
@@ -229,6 +228,8 @@ const submitData = async () => {
                 messages.value = [{ severity: 'error', content: 'Proses gagal, silahkan hubungi tim IT', id: count.value++, icon: 'pi-times-circle' }];
             }
         }
+    } else {
+        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     }
 };
 </script>
@@ -268,7 +269,7 @@ const submitData = async () => {
                     <DatePicker v-model="formData.tanggal" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" showButtonBar :manualInput="false" />
                 </div>
                 <div class="flex flex-col gap-1">
-                    <label for="kapasitas">Spot ({{ optionButton == 0 ? 'MT' : 'Pouch' }}) <small class="text-red-500 font-bold">*</small></label>
+                    <label for="kapasitas">Spot ({{ optionButton == 0 ? 'Kg' : 'Pouch' }}) <small class="text-red-500 font-bold">*</small></label>
                     <InputNumber v-model="formData.spot" inputId="minmaxfraction" placeholder="1,000,000" :minFractionDigits="0" :maxFractionDigits="2" fluid />
                 </div>
                 <div class="flex flex-row-reverse w-full gap-3">
