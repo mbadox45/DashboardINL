@@ -719,12 +719,12 @@ const router = createRouter({
                     component: () => import('@/views/dashboardManagement/masterPage/produk/Index.vue'),
                     meta: {
                         requiresAuth: true,
-                        allUser: true
-                        // finance: true,
-                        // operation: true,
-                        // sales: true,
-                        // scm: true,
-                        // sdm: true
+                        allUser: true,
+                        finance: true,
+                        operation: true,
+                        sales: true,
+                        scm: true,
+                        sdm: true
                     }
                 },
                 {
@@ -733,12 +733,12 @@ const router = createRouter({
                     component: () => import('@/views/dashboardManagement/masterPage/produkStorage/Index.vue'),
                     meta: {
                         requiresAuth: true,
-                        allUser: true
-                        // finance: true,
-                        // operation: true,
-                        // sales: true,
-                        // scm: true,
-                        // sdm: true
+                        allUser: true,
+                        finance: true,
+                        operation: true,
+                        sales: true,
+                        scm: true,
+                        sdm: true
                     }
                 },
                 {
@@ -747,12 +747,12 @@ const router = createRouter({
                     component: () => import('@/views/dashboardManagement/masterPage/lokasi/Index.vue'),
                     meta: {
                         requiresAuth: true,
-                        allUser: true
-                        // finance: true,
-                        // operation: true,
-                        // sales: true,
-                        // scm: true,
-                        // sdm: true
+                        allUser: true,
+                        finance: true,
+                        operation: true,
+                        sales: true,
+                        scm: true,
+                        sdm: true
                     }
                 },
                 {
@@ -761,12 +761,12 @@ const router = createRouter({
                     component: () => import('@/views/dashboardManagement/masterPage/pmg/Index.vue'),
                     meta: {
                         requiresAuth: true,
-                        allUser: true
-                        // finance: true,
-                        // operation: true,
-                        // sales: true,
-                        // scm: true,
-                        // sdm: true
+                        allUser: true,
+                        finance: true,
+                        operation: true,
+                        sales: true,
+                        scm: true,
+                        sdm: true
                     }
                 },
                 {
@@ -775,12 +775,12 @@ const router = createRouter({
                     component: () => import('@/views/dashboardManagement/masterPage/uraianBebanProd/Index.vue'),
                     meta: {
                         requiresAuth: true,
-                        allUser: true
-                        // finance: true,
-                        // operation: true,
-                        // sales: true,
-                        // scm: true,
-                        // sdm: true
+                        allUser: true,
+                        finance: true,
+                        operation: true,
+                        sales: true,
+                        scm: true,
+                        sdm: true
                     }
                 },
                 {
@@ -789,12 +789,12 @@ const router = createRouter({
                     component: () => import('@/views/dashboardManagement/masterPage/uraianTargetProd/Index.vue'),
                     meta: {
                         requiresAuth: true,
-                        allUser: true
-                        // finance: true,
-                        // operation: true,
-                        // sales: true,
-                        // scm: true,
-                        // sdm: true
+                        allUser: true,
+                        finance: true,
+                        operation: true,
+                        sales: true,
+                        scm: true,
+                        sdm: true
                     }
                 },
                 {
@@ -803,12 +803,12 @@ const router = createRouter({
                     component: () => import('@/views/dashboardManagement/masterPage/partner/supplier/Index.vue'),
                     meta: {
                         requiresAuth: true,
-                        allUser: true
-                        // finance: true,
-                        // operation: true,
-                        // sales: true,
-                        // scm: true,
-                        // sdm: true
+                        allUser: true,
+                        finance: true,
+                        operation: true,
+                        sales: true,
+                        scm: true,
+                        sdm: true
                     }
                 },
                 {
@@ -817,12 +817,12 @@ const router = createRouter({
                     component: () => import('@/views/dashboardManagement/masterPage/partner/customer/Index.vue'),
                     meta: {
                         requiresAuth: true,
-                        allUser: true
-                        // finance: true,
-                        // operation: true,
-                        // sales: true,
-                        // scm: true,
-                        // sdm: true
+                        allUser: true,
+                        finance: true,
+                        operation: true,
+                        sales: true,
+                        scm: true,
+                        sdm: true
                     }
                 }
             ]
