@@ -67,7 +67,7 @@ const loadForm = () => {
             item_material_id: listProd[i].id,
             item_produksi: listProd[i].name,
             pmg_id: pmg.value,
-            tanggal: tanggal.value,
+            tanggal: moment(tanggal.value).format('YYYY-MM-DD'),
             qty: null
         });
     }

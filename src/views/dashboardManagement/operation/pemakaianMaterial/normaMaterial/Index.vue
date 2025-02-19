@@ -64,7 +64,7 @@ const loadData = async () => {
         const loadPMG = await pmgMasterController.getAll();
         pmg.value = loadPMG;
 
-        const data = await normaLaporanMaterialController.getAll();
+        const data = await normaLaporanMaterialController.getByPeriod(form);
         // console.log(data);
         listTable.value = data;
     } catch (error) {

@@ -13,7 +13,7 @@ export default new (class normaLaporanMaterialAPI {
         return httpCommonThisAPI.get('norma-material');
     }
     getByPeriod(date) {
-        return httpCommonThisAPI.get('norma-material/period', date);
+        return httpCommonThisAPI.post('norma-material/period', date);
     }
     getByID(id) {
         return httpCommonThisAPI.get(`norma-material/get/${id}`);
