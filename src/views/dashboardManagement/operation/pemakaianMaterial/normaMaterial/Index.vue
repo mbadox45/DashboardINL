@@ -29,10 +29,10 @@ const listJenis = ref([]);
 
 const op = ref();
 
-// const beforeDate = ref(moment().format('YYYY-MM-01'));
-// const now = ref(moment().format('YYYY-MM-DD'));
-const beforeDate = ref('2024-01-01');
-const now = ref('2024-01-30');
+const beforeDate = ref(moment().format('YYYY-MM-01'));
+const now = ref(moment().format('YYYY-MM-DD'));
+// const beforeDate = ref('2024-01-01');
+// const now = ref('2024-01-30');
 const dates = ref([moment(beforeDate.value).toDate(), moment(now.value).toDate()]);
 
 let count = ref(0);
