@@ -67,7 +67,7 @@ const loadForm = () => {
             item_packaging_id: listProd[i].id,
             item_produksi: listProd[i].name,
             packaging_id: pmg.value,
-            tanggal: tanggal.value,
+            tanggal: moment(tanggal.value).format('YYYY-MM-DD'),
             qty: null
         });
     }
@@ -87,7 +87,18 @@ const postData = async (cond) => {
         // window.location.replace(`${URL_WEB}operation/laporan-produksi`);
     } else {
         loadings.value = true;
-        const response = await laporanPackagingController.postData(formData.value);
+        const form = [];
+        const list = formData.value;
+        for (let i = 0; i < list.length; i++) {
+            form.push({
+                item_packaging_id: list[i].item_packaging_id,
+                item_produksi: list[i].item_produksi,
+                packaging_id: pmg.value,
+                tanggal: moment(tanggal.value).format('YYYY-MM-DD'),
+                qty: list[i].qty
+            });
+        }
+        const response = await laporanPackagingController.postData(form);
         messages.value = [{ severity: response.severity, content: response.content, id: count.value++, icon: response.icon }];
         if (response.severity == 'success') {
             setTimeout(function () {

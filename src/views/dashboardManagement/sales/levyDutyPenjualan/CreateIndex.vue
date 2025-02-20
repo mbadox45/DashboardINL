@@ -94,6 +94,8 @@ const loadProduct = async () => {
     } else {
         for (let i = 0; i < produk.length; i++) {
             list.push({
+                idLevy: null,
+                idRouters: null,
                 id_bulky: produk[i].id,
                 item_produksi: produk[i].name,
                 id_mata_uang: pmg.value,
@@ -135,21 +137,6 @@ const loadJenis = async () => {
     }
 };
 
-const loadForm = () => {
-    const listProd = jenisProduksi.value.filter((item) => item.jenis_id == jenis.value);
-    const list = [];
-    for (let i = 0; i < listProd.length; i++) {
-        list.push({
-            item_produksi_id: listProd[i].id,
-            item_produksi: listProd[i].name,
-            pmg_id: pmg.value,
-            tanggal: tanggal.value,
-            qty: null
-        });
-    }
-    formData.value = list;
-};
-
 const resetForm = () => {
     formData.value = [];
     jenis.value = null;
@@ -163,6 +150,22 @@ const postData = async (cond) => {
         // window.location.replace(`${URL_WEB}operation/laporan-produksi`);
     } else {
         loadings.value = true;
+        const form = [];
+        const list = formData.value;
+        for (let i = 0; i < list.length; i++) {
+            form.push({
+                idLevy: list[i].idLevy,
+                idRouters: list[i].idRouters,
+                id_bulky: list[i].id_bulky,
+                item_produksi: list[i].item_produksi,
+                id_mata_uang: pmg.value,
+                tanggal: moment(tanggal.value).format('YYYY-MM-DD'),
+                nilaiLevy: list[i].nilaiLevy,
+                nilaiRouters: list[i].nilaiRouters,
+                statusLevy: list[i].statusLevy,
+                statusRouters: list[i].statusRouters
+            });
+        }
         const response = await levyRoutersPenjualanController.postData(formData.value);
         messages.value = [{ severity: response.severity, content: response.content, id: count.value++, icon: response.icon }];
         if (response.severity == 'success') {

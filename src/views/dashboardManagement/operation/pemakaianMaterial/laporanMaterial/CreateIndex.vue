@@ -87,7 +87,18 @@ const postData = async (cond) => {
         // window.location.replace(`${URL_WEB}operation/laporan-material`);
     } else {
         loadings.value = true;
-        const response = await laporanMaterialController.postData(formData.value);
+        const form = [];
+        const list = formData.value;
+        for (let i = 0; i < list.length; i++) {
+            form.push({
+                item_material_id: list[i].item_material_id,
+                item_produksi: list[i].item_produksi,
+                pmg_id: pmg.value,
+                tanggal: moment(tanggal.value).format('YYYY-MM-DD'),
+                qty: list[i].qty
+            });
+        }
+        const response = await laporanMaterialController.postData(form);
         messages.value = [{ severity: response.severity, content: response.content, id: count.value++, icon: response.icon }];
         if (response.severity == 'success') {
             setTimeout(function () {
