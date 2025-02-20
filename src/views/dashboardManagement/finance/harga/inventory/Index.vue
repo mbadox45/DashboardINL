@@ -196,9 +196,8 @@ const selectButton = async (val) => {
 };
 
 const submitData = async () => {
-    if (!formData.value.id_product || !formData.value.tanggal || !formData.value.inventory) {
-        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
-    } else {
+    if (formData.value.id_product != null && formData.value.tanggal != null && formData.value.inventory != null) {
+        formData.value.tanggal = moment(formData.value.tanggal).format('YYYY-MM-DD');
         if (statusForm.value == 'add') {
             const response = await hargaFinanceController.addPost(formData.value);
             // const load = response.data;
@@ -228,6 +227,8 @@ const submitData = async () => {
                 messages.value = [{ severity: 'error', content: 'Proses gagal, silahkan hubungi tim IT', id: count.value++, icon: 'pi-times-circle' }];
             }
         }
+    } else {
+        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     }
 };
 </script>

@@ -207,9 +207,7 @@ const refreshForm = () => {
 };
 
 const submitData = async () => {
-    if (!formData.value.id_mata_uang || !formData.value.tanggal || !formData.value.value) {
-        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
-    } else {
+    if (formData.value.id_mata_uang != null && formData.value.tanggal != null && formData.value.value != null) {
         formData.value.tanggal = moment(formData.value.tanggal).format('YYYY-MM-DD');
         if (statusForm.value == 'add') {
             const response = await kursController.addPost(formData.value);
@@ -239,6 +237,8 @@ const submitData = async () => {
                 messages.value = [{ severity: 'error', content: response.msg, id: count.value++, icon: 'pi-times-circle' }];
             }
         }
+    } else {
+        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     }
 };
 </script>

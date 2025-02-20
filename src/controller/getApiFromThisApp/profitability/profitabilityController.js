@@ -13,7 +13,6 @@ export default new (class profitabilityController {
                 return msg_warning;
             }
         } catch (error) {
-            console.log(error);
             if (error.status == 400) {
                 return {
                     status: false,
@@ -29,7 +28,6 @@ export default new (class profitabilityController {
         try {
             const response = await profitabilityAPI.updatePost(id, form);
             const load = response.data;
-            console.log(load);
             if (load.success == true) {
                 return msg_success;
             } else {
@@ -73,7 +71,6 @@ export default new (class profitabilityController {
         try {
             const response = await this.getByPeriod(form);
             const years = moment(form.tanggalAwal).format('YYYY');
-            console.log(response);
             if (response != null) {
                 const list = [];
                 // Last Year
@@ -82,7 +79,6 @@ export default new (class profitabilityController {
                 const thisYear = response.thisYear;
 
                 list.push({ name: `Last Year ${Number(years) - 1}`, items: lastYear.months }, { name: `This Year ${Number(years)}`, items: thisYear.months });
-                console.log(list);
                 return list;
             } else {
                 return [];
@@ -106,7 +102,6 @@ export default new (class profitabilityController {
                     } else {
                         msg = { severity: 'warn', content: `Harap dilengkapi terlebih dahulu`, icon: 'pi-exclamation-triangle' };
                         kondisi = false;
-                        console.log('test');
                         break;
                     }
                 }

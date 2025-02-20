@@ -2,18 +2,22 @@
 import { onMounted, ref } from 'vue';
 
 const chartData = ref([
-    ['Province', 'Popularity', { role: 'tooltip', p: { html: true } }],
-    ['ID-JK', 200, '<div style="padding:5px"><b>Jakarta</b><br>Popularity: 200</div>'],
-    ['ID-YO', 300, '<b>Yogyakarta</b><br>300'],
-    ['ID-BT', 400, '<b>Banten</b><br>400'],
-    ['ID-SS', 500, '<b>Sumatera Selatan</b><br>500'],
-    ['ID-JT', 600, '<b>Jawa Tengah</b><br>600'],
-    ['ID-AC', 700, '<b>Aceh</b><br>700']
+    ['Country', 'Popularity'],
+    ['ID', 200],
+    ['TH', 600],
+    ['SG', 300],
+    ['RU', 400]
+    // ['Province', 'Popularity', { role: 'tooltip', p: { html: true } }],
+    // ['ID-JK', 200, '<div style="padding:5px"><b>Jakarta</b><br>Popularity: 200</div>'],
+    // ['ID-JK', 600, '<div style="padding:5px"><b>DKI Jakarta</b><br>Popularity: 600</div>'],
+    // ['ID-YO', 300, '<div style="padding:5px"><b>Yogyakarta</b><br>Popularity: 300</div>'],
+    // ['ID-BT', 400, '<div style="padding:5px"><b>Banten</b><br>Popularity: 400</div>']
 ]);
 
 const chartOptions = ref({
-    region: 'ID',
-    resolution: 'provinces',
+    region: 'world',
+    // region: 'ID',
+    // resolution: 'provinces',
     displayMode: 'auto',
     colorAxis: {
         colors: ['#1dd1a1', '#feca57', '#ff6b6b']
@@ -72,8 +76,8 @@ const drawChart = () => {
 </script>
 
 <template>
-    <div class="flex flex-col gap-3 w-full h-screen items-center justify-center p-3">
-        <h2>Peta Wilayah Provinsi di Indonesia</h2>
+    <div class="flex flex-col gap-3 w-full h-screen items-center justify-center p-3 bg-slate-950 text-white">
+        <span class="font-bold text-3xl">Peta Wilayah Provinsi di Indonesia</span>
         <div id="geo-chart" style="width: 100%; height: 600px"></div>
     </div>
 </template>

@@ -209,7 +209,6 @@ const refreshForm = () => {
 };
 
 const submitData = async () => {
-    // if (!formData.value.pmg_id || !formData.value.tanggal || !formData.value.kategori_id || !formData.value.value) {
     if (!formData.value.tanggal || !formData.value.kategori_id || !formData.value.value) {
         messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     } else {

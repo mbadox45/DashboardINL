@@ -53,21 +53,6 @@ const loadJenis = async () => {
     }
 };
 
-// const loadForm = () => {
-//     const listProd = jenisProduksi.value.filter((item) => item.jenis_id == jenis.value);
-//     const list = [];
-//     for (let i = 0; i < listProd.length; i++) {
-//         list.push({
-//             item_produksi_id: listProd[i].id,
-//             item_produksi: listProd[i].name,
-//             pmg_id: pmg.value,
-//             tanggal: tanggal.value,
-//             qty: null
-//         });
-//     }
-//     formData.value = list;
-// };
-
 const resetForm = () => {
     formData.value = [];
     jenis.value = null;
@@ -80,8 +65,17 @@ const postData = async (cond) => {
         router.push('/finance/profitability');
     } else {
         loadings.value = true;
-        console.log(formData.value);
-        const response = await profitabilityController.postData(formData.value);
+        const form = [];
+        const list = formData.value;
+        for (let i = 0; i < list.length; i++) {
+            form.push({
+                kategori_id: list[i].kategori_id,
+                item_produksi: list[i].item_produksi,
+                tanggal: moment(tanggal.value).format('YYYY-MM-DD'),
+                value: list[i].value
+            });
+        }
+        const response = await profitabilityController.postData(form);
         messages.value = [{ severity: response.severity, content: response.content, id: count.value++, icon: response.icon }];
         if (response.severity == 'success') {
             setTimeout(function () {

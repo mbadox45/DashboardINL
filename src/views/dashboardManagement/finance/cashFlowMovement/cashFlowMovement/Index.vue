@@ -70,7 +70,6 @@ const loadData = async () => {
         listTable.value = data.listTable;
         latestCashBalance.value = data.latestCashBalance;
 
-        console.log(latestCashBalance.value);
         totalTable.value = {
             cpoOlah: 0,
             totalCost: 0,
@@ -213,10 +212,7 @@ const refreshForm = () => {
 };
 
 const submitData = async () => {
-    // if (!formData.value.pmg_id || !formData.value.tanggal || !formData.value.kategori_id || !formData.value.value) {
-    if (!formData.value.tanggal || !formData.value.kategori_id || !formData.value.value) {
-        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
-    } else {
+    if (formData.value.tanggal != null && formData.value.kategori_id != null && formData.value.value != null) {
         formData.value.tanggal = moment(formData.value.tanggal).format('YYYY-MM-DD');
         if (statusForm.value == 'add') {
             const response = await cashFlowMovementController.addPost(formData.value);
@@ -246,6 +242,8 @@ const submitData = async () => {
                 messages.value = [{ severity: 'error', content: response.msg, id: count.value++, icon: 'pi-times-circle' }];
             }
         }
+    } else {
+        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     }
 };
 </script>
