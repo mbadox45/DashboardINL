@@ -2,57 +2,68 @@
 import { onMounted, ref } from 'vue';
 
 const chartData = ref([
-    ['Province', 'Popularity', { role: 'tooltip' }],
-    ['ID-JK', 200, 'Jakarta'], // Jakarta
-    ['ID-YO', 300, 'Yogyakarta'], // Yogyakarta
-    ['ID-BT', 400, 'Banten'], // Banten
-    ['ID-SN', 500, 'South Sumatra'], // South Sumatra
-    ['ID-JT', 600, 'Central Java'], // Central Java
-    ['ID-AC', 700, 'Aceh'] // Aceh
+    ['Province', 'Popularity', { role: 'tooltip', p: { html: true } }],
+    ['ID-JK', 200, '<div style="padding:5px"><b>Jakarta</b><br>Popularity: 200</div>'],
+    ['ID-YO', 300, '<b>Yogyakarta</b><br>300'],
+    ['ID-BT', 400, '<b>Banten</b><br>400'],
+    ['ID-SS', 500, '<b>Sumatera Selatan</b><br>500'],
+    ['ID-JT', 600, '<b>Jawa Tengah</b><br>600'],
+    ['ID-AC', 700, '<b>Aceh</b><br>700']
 ]);
 
 const chartOptions = ref({
-    region: 'ID', // Country code for Indonesia
-    displayMode: 'markers', // Display the provinces as markers
-    colorAxis: { colors: ['#e0f7fa', '#00796b'] }, // Color scale
-    sizeAxis: { minValue: 0, maxValue: 700 }, // Adjust the size scale
-    tooltip: { trigger: 'selection' } // Show tooltips when hovering over markers
+    region: 'ID',
+    resolution: 'provinces',
+    displayMode: 'auto',
+    colorAxis: {
+        colors: ['#1dd1a1', '#feca57', '#ff6b6b']
+    },
+    tooltip: {
+        isHtml: true
+    },
+    magnifyingGlass: {
+        enable: true,
+        zoomFactor: 10
+    },
+    enableRegionInteractivity: true,
+    backgroundColor: {
+        fill: '#006994',
+        stroke: 'yellow',
+        strokeWidth: 20
+    },
+    datalessRegionColor: '#D3D3D3'
+    // sizeAxis: { minValue: 0, maxValue: 700 },
 });
 
 // Load Google Charts
 onMounted(() => {
-    // Dynamically load Google Charts library if not already loaded
     if (typeof google === 'undefined') {
         const script = document.createElement('script');
-        script.src = 'https://www.gstatic.com/charts/loader.js'; // Correct URL for Google Charts
+        script.src = 'https://www.gstatic.com/charts/loader.js';
         script.onload = () => {
-            // Once the script is loaded, load the GeoChart package
-            google.charts.load('current', {
-                packages: ['geochart']
-            });
-
-            // Now that Google Charts is loaded, set the callback to draw the chart
+            google.charts.load('current', { packages: ['geochart'] });
             google.charts.setOnLoadCallback(drawChart);
         };
         document.head.appendChild(script);
     } else {
-        console.log('Google Visualization is already loaded');
-        google.charts.load('current', {
-            packages: ['geochart']
-        });
-        google.charts.setOnLoadCallback(drawChart); // Call drawChart if already loaded
+        google.charts.load('current', { packages: ['geochart'] });
+        google.charts.setOnLoadCallback(drawChart);
     }
 });
 
 // Function to draw the chart
 const drawChart = () => {
-    // Ensure google.visualization is available
     if (google && google.visualization) {
         const data = google.visualization.arrayToDataTable(chartData.value);
         const options = chartOptions.value;
 
-        // Render the GeoChart
         const chart = new google.visualization.GeoChart(document.getElementById('geo-chart'));
+
+        // Event listener for clicking a province to "zoom in"
+        google.visualization.events.addListener(chart, 'regionClick', (event) => {
+            // alert(`You clicked on ${event.region}`);
+        });
+
         chart.draw(data, options);
     } else {
         console.error('Google Visualization API not loaded yet!');
@@ -63,7 +74,6 @@ const drawChart = () => {
 <template>
     <div class="flex flex-col gap-3 w-full h-screen items-center justify-center p-3">
         <h2>Peta Wilayah Provinsi di Indonesia</h2>
-        <!-- Create a div for the Google GeoChart -->
         <div id="geo-chart" style="width: 100%; height: 600px"></div>
     </div>
 </template>
