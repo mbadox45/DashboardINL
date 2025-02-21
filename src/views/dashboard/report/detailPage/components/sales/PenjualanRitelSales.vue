@@ -57,8 +57,11 @@ const loadData = async () => {
             };
 
             const lokasi = response.lokasi;
-            const list = [['Provinsi', 'Region', 'Quantity (Box)']];
+            let list = [['Provinsi', 'Quantity (Box)']];
+
+            // const list = [['Provinsi', 'Region', 'Quantity (Box)']];
             if (lokasi.length > 0) {
+                list = [['Provinsi', 'Region', 'Quantity (Box)']];
                 const datatabel = [];
                 const negara = lokasi.find((item) => item.code == 'ID');
                 if (negara != null) {
