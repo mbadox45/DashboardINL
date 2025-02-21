@@ -1,6 +1,5 @@
 <script setup>
-// import { formatCurrency } from '@/controller/dummyController';
-import { formatCurrency } from '@/controller/dummyController';
+import { formatCurrency, valueColorPersenCondition, valueToBilion } from '@/controller/dummyController';
 import { defineProps, onMounted, ref, watch } from 'vue';
 import VueApexCharts from 'vue3-apexcharts';
 
@@ -26,17 +25,8 @@ const cashBalanceLastYear = ref([]);
 const listPackaging = ref([]);
 const listChartPackaging = ref([]);
 
-const worldChartData = ref([
-    ['Country', 'Quantity (MT)']
-    // ['Indonesia', 1200],
-    // ['Thailand', 1600],
-    // ['Singapore', 1300],
-    // ['Russia', 1400],
-    // ['Oman', 1600],
-    // ['New Zealand', 1100],
-    // ['China', 1500],
-    // ['Laos', 1450]
-]);
+const worldChartData = ref([['Country', 'Quantity (MT)']]);
+const listTable = ref([]);
 
 const worldChartOptions = ref({
     region: 'world',
@@ -48,7 +38,7 @@ const worldChartOptions = ref({
         format: '0 MT' // Menambahkan label "MT" pada legenda
     },
     width: '100%',
-    height: 500
+    height: 520
 });
 
 let worldChartInstance = null;
@@ -71,15 +61,24 @@ const loadData = async () => {
                 totalValueKategori: responseTotal.totalValueKategori
             };
             const lokasi = response.lokasi;
+            // console.log(lokasi);
             if (lokasi.length > 0) {
                 const list = [['Country', 'Quantity (MT)']];
+                const datatabel = [];
                 for (let i = 0; i < lokasi.length; i++) {
                     list.push([lokasi[i].negara, lokasi[i].qty]);
+                    datatabel.push({
+                        country: lokasi[i].negara,
+                        code: lokasi[i].code.toLowerCase(),
+                        qty: formatCurrency(Number(lokasi[i].qty).toFixed(2)),
+                        value: valueToBilion(lokasi[i].value)
+                    });
                 }
+                listTable.value = datatabel;
                 worldChartData.value = list;
             }
         }
-        geoChart();
+        await geoChart();
     } catch (error) {
         // console.error('Error loading data:', error);
         listPackaging.value = [];
@@ -89,7 +88,7 @@ const loadData = async () => {
             totalQtyTargetKategori: 0,
             totalValueKategori: 0
         };
-        geoChart();
+        await geoChart();
     } finally {
         isLoading.value = false; // Turn off the loading state after the data has loaded
     }
@@ -110,17 +109,40 @@ const geoChart = async () => {
     }
 };
 
+// const drawCharts = () => {
+//     if (google && google.visualization) {
+//         // Draw World Map
+//         const worldData = google.visualization.arrayToDataTable(worldChartData.value);
+//         worldChartInstance = new google.visualization.GeoChart(document.getElementById('geo-chart-world'));
+//         worldChartInstance.draw(worldData, worldChartOptions.value);
+//     } else {
+//         console.error('Google Visualization API not loaded yet!');
+//     }
+// };
+
 const drawCharts = () => {
     if (google && google.visualization) {
-        // Draw World Map
         const worldData = google.visualization.arrayToDataTable(worldChartData.value);
         worldChartInstance = new google.visualization.GeoChart(document.getElementById('geo-chart-world'));
-        worldChartInstance.draw(worldData, worldChartOptions.value);
 
-        // // Draw Indonesia Map
-        // const indonesiaData = google.visualization.arrayToDataTable(indonesiaChartData.value);
-        // indonesiaChartInstance = new google.visualization.GeoChart(document.getElementById('geo-chart-indonesia'));
-        // indonesiaChartInstance.draw(indonesiaData, indonesiaChartOptions.value);
+        // Tambahkan event listener untuk zoom-in dan zoom-out
+        google.visualization.events.addListener(worldChartInstance, 'regionClick', (event) => {
+            const clickedRegion = event.region; // Kode negara (ISO-3166)
+
+            if (worldChartOptions.value.region === clickedRegion) {
+                // Jika negara yang sama diklik dua kali, reset ke tampilan dunia
+                worldChartOptions.value.region = 'world';
+                worldChartOptions.value.resolution = 'countries';
+            } else {
+                // Zoom in ke negara yang diklik
+                worldChartOptions.value.region = clickedRegion;
+                worldChartOptions.value.resolution = 'region'; // Ubah resolusi ke level provinsi
+            }
+
+            setTimeout(() => drawCharts(), 200); // Beri jeda agar animasi lebih smooth
+        });
+
+        worldChartInstance.draw(worldData, worldChartOptions.value);
     } else {
         console.error('Google Visualization API not loaded yet!');
     }
@@ -148,19 +170,46 @@ watch(() => props.datas, loadData, { immediate: true });
                 <div class="col-span-3 p-2 rounded-xl border-black border-4 flex justify-center" :style="`background-color:${bgColorMaps}`">
                     <div id="geo-chart-world" style="width: 80%; height: 100%; cursor: pointer; border-radius: 25px"></div>
                 </div>
-                <div class="p-2 rounded-xl bg-black flex justify-center">
+                <div class="p-5 rounded-xl bg-black flex flex-col gap-5 w-full items-center">
                     <span class="font-bold text-xl">Detail Penjualan</span>
+                    <div class="w-full max-h-[430px] overflow-y-auto p-3">
+                        <DataView :value="listTable" class="w-full">
+                            <template #list="slotProps">
+                                <div class="flex flex-col gap-3 bg-black text-white w-full">
+                                    <div v-for="(item, index) in slotProps.items" :key="index" class="flex items-center justify-between gap-2 w-full rounded-lg bg-slate-900 p-4">
+                                        <div class="flex flex-col items-center w-1/3 gap-1">
+                                            <img :src="`https://flagcdn.com/w80/${item.code.toLowerCase()}.png`" :alt="item.country" />
+                                            <span class="font-bold text-[0.6vw]">{{ item.country }}</span>
+                                        </div>
+                                        <div class="flex w-full gap-3">
+                                            <div class="flex flex-col w-full items-end">
+                                                <span class="text-[0.8vw] font-bold">{{ item.qty }}</span>
+                                                <span class="text-[0.6vw] text-right">Jumlah (MT)</span>
+                                            </div>
+                                            <div class="flex flex-col w-full items-end">
+                                                <div class="flex gap-2 justify-between items-center">
+                                                    <span class="text-[0.8vw] font-bold">Rp</span>
+                                                    <span class="text-[0.8vw] font-bold">{{ item.value }}</span>
+                                                </div>
+                                                <span class="text-[0.6vw] text-right">Nilai Penjualan (Miliar)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                        </DataView>
+                    </div>
                 </div>
             </div>
             <div class="grid grid-cols-2 gap-8">
                 <div class="col-span-2 flex items-center gap-3 bg-black rounded-xl py-6 px-8">
                     <div class="flex flex-col items-end w-full font-bold p-4">
-                        <span class="text-[3.6vw] text-cyan-500">{{ formatCurrency(Number(total.percentageQtyToTargetKategori).toFixed(2)) }}%</span>
-                        <span class="text-[0.9vw] text-cyan-700">Total Persentase Pencapaian</span>
+                        <span class="text-[3.6vw]" :class="valueColorPersenCondition(Number(total.percentageQtyToTargetKategori))">{{ formatCurrency(Number(total.percentageQtyToTargetKategori).toFixed(2)) }}%</span>
+                        <span class="text-[0.9vw]">Total Persentase Pencapaian</span>
                     </div>
                     <div class="flex flex-col items-end w-full font-bold p-4 text-amber-500">
-                        <span class="text-[3.6vw] text-amber-500">{{ formatCurrency(Number(total.totalQtyTargetKategori).toFixed(2)) }}</span>
-                        <span class="text-[0.9vw] text-amber-700">Total RKAP Bulk</span>
+                        <span class="text-[3.6vw] text-green-500">{{ formatCurrency(Number(total.totalQtyTargetKategori).toFixed(2)) }}</span>
+                        <span class="text-[0.9vw] text-green-700">Total RKAP Bulk</span>
                     </div>
                     <div class="flex flex-col gap-2 w-full">
                         <div class="flex flex-col items-end w-full font-bold p-4">
@@ -168,8 +217,8 @@ watch(() => props.datas, loadData, { immediate: true });
                             <span class="text-[0.8vw] text-slate-500">Total Jumlah Penjualan</span>
                         </div>
                         <div class="flex flex-col items-end w-full font-bold p-4">
-                            <span class="text-[1.6vw] text-emerald-500">{{ formatCurrency(Number(total.totalValueKategori).toFixed(2)) }}</span>
-                            <span class="text-[0.8vw] text-emerald-700">Total Nilai Penjualan (IDR)</span>
+                            <span class="text-[1.6vw] text-slate-300">{{ formatCurrency(Number(total.totalValueKategori).toFixed(2)) }}</span>
+                            <span class="text-[0.8vw] text-slate-500">Total Nilai Penjualan (IDR)</span>
                         </div>
                     </div>
                 </div>

@@ -107,7 +107,10 @@ const changeDate = () => {
     if (list != null) {
         if (list.length > 1) {
             start = moment(list[0], 'YYYY-MM-DD').format('YYYY-MM-DD');
-            const lastDayOfMonth = moment(list[0], 'YYYY-MM-DD').endOf('month').format('YYYY-MM-DD');
+            let lastDayOfMonth = moment(list[0], 'YYYY-MM-DD').endOf('month').format('YYYY-MM-DD');
+            if (moment(start).format('YYYY') === moment().format('YYYY') && moment(start).format('MM') === moment().format('MM')) {
+                lastDayOfMonth = moment().format('YYYY-MM-DD');
+            }
             end = moment(list[1] === null ? lastDayOfMonth : list[1], 'YYYY-MM-DD').format('YYYY-MM-DD');
         } else {
             start = beforeDate.value;

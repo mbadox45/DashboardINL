@@ -36,17 +36,27 @@ export default new (class salesDetailController {
             // Laporan by Location
             const listLokasi = [];
             const laporanLokasi = await laporanPenjualanController.getByLocation(form);
-            // if (laporanLokasi != null) {
-            //     const bulkLokasi = laporanLokasi.bulk;
-            //     for (let i = 0; i < bulkLokasi.length; i++) {
-            //         listLokasi.push({
-            //             code: bulkLokasi[i].code,
-            //             negara: bulkLokasi[i].negara,
-            //             qty: bulkLokasi[i].qty,
-            //             value: bulkLokasi[i].value
-            //         });
-            //     }
-            // }
+            if (laporanLokasi != null) {
+                const ritelLokasi = laporanLokasi.ritel;
+                for (let i = 0; i < ritelLokasi.length; i++) {
+                    let totalQty = 0;
+                    let totalValue = 0;
+                    const provinsi = ritelLokasi[i].provinsi;
+                    if (provinsi.length > 0) {
+                        for (let j = 0; j < provinsi.length; j++) {
+                            totalQty += Number(provinsi[i].qty);
+                            totalValue += Number(provinsi[i].value);
+                        }
+                    }
+                    listLokasi.push({
+                        code: ritelLokasi[i].code,
+                        negara: ritelLokasi[i].negara,
+                        qty: totalQty,
+                        value: totalValue,
+                        provinsi: ritelLokasi[i].provinsi
+                    });
+                }
+            }
             // console.log(laporanLokasi);
 
             // For List

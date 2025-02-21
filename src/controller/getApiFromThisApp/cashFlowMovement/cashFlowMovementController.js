@@ -13,7 +13,6 @@ export default new (class cashFlowMovementController {
                 return msg_warning;
             }
         } catch (error) {
-            console.log(error);
             if (error.status == 400) {
                 return {
                     status: false,
@@ -29,7 +28,6 @@ export default new (class cashFlowMovementController {
         try {
             const response = await cashFlowMovementAPI.updatePost(id, form);
             const load = response.data;
-            console.log(load);
             if (load.success == true) {
                 return msg_success;
             } else {
@@ -106,9 +104,6 @@ export default new (class cashFlowMovementController {
                     ].sort((a, b) => (a.name === 'Starting Cash Balanced' ? -1 : b.name === 'Starting Cash Balanced' ? 1 : 0))
                 }));
 
-                // console.log(lastYearData);
-                // console.log(thisYearData);
-
                 list.push({ name: `Last Year ${Number(years) - 1}`, items: lastYearData }, { name: `This Year ${Number(years)}`, items: thisYearData });
 
                 const result = {
@@ -139,7 +134,6 @@ export default new (class cashFlowMovementController {
                     } else {
                         msg = { severity: 'warn', content: `Harap dilengkapi terlebih dahulu`, icon: 'pi-exclamation-triangle' };
                         kondisi = false;
-                        console.log('test');
                         break;
                     }
                 }

@@ -14,7 +14,6 @@ export default new (class cashFlowScheduleController {
                 return msg_warning;
             }
         } catch (error) {
-            console.log(error);
             if (error.status == 400) {
                 return {
                     status: false,
@@ -30,7 +29,6 @@ export default new (class cashFlowScheduleController {
         try {
             const response = await cashFlowScheduleAPI.updatePost(id, form);
             const load = response.data;
-            console.log(load);
             if (load.success == true) {
                 return msg_success;
             } else {
@@ -76,7 +74,6 @@ export default new (class cashFlowScheduleController {
             const years = moment(form.tanggalAwal).format('YYYY');
             if (response != null) {
                 const list = [];
-                // console.log(response);
                 const kategori = response.kategori;
                 const bulan = bulanKalendar;
                 for (let i = 0; i < bulan.length; i++) {
@@ -98,45 +95,6 @@ export default new (class cashFlowScheduleController {
                         items: items
                     });
                 }
-                // const cff = kategori.find((item) => item.name.toLowerCase().includes('funding'));
-                // const cfi = kategori.find((item) => item.name.toLowerCase().includes('investment'));
-                // if (cff != null && cfi != null) {
-                //     for (let i = 0; i < bulan.length; i++) {
-                //         const dataCFF = cff.period.find((item) => item.month == bulan[i].id) == null ? null : cff.period.find((item) => item.month == bulan[i].id);
-                //         const dataCFI = cfi.period.find((item) => item.month == bulan[i].id) == null ? null : cfi.period.find((item) => item.month == bulan[i].id);
-                //         list.push({
-                //             month: bulan[i].name,
-                //             items: [
-                //                 { name: cff.name, data: dataCFF == null ? [] : dataCFF.data, year: dataCFF == null ? years : dataCFF.year, total: dataCFF == null ? 0 : dataCFF.total },
-                //                 { name: cfi.name, data: dataCFI == null ? [] : dataCFI.data, year: dataCFI == null ? years : dataCFI.year, total: dataCFI == null ? 0 : dataCFI.total }
-                //             ]
-                //         });
-                //     }
-                // } else if (cff == null && cfi != null) {
-                //     for (let i = 0; i < bulan.length; i++) {
-                //         const dataCFI = cfi.period.find((item) => item.month == bulan[i].id) == null ? null : cfi.period.find((item) => item.month == bulan[i].id);
-                //         list.push({
-                //             month: bulan[i].name,
-                //             items: [{ name: cfi.name, data: dataCFI == null ? [] : dataCFI.data, year: dataCFI == null ? years : dataCFI.year, total: dataCFI == null ? 0 : dataCFI.total }]
-                //         });
-                //     }
-                // } else if (cff != null && cfi == null) {
-                //     for (let i = 0; i < bulan.length; i++) {
-                //         const dataCFF = cff.period.find((item) => item.month == bulan[i].id) == null ? null : cff.period.find((item) => item.month == bulan[i].id);
-                //         list.push({
-                //             month: bulan[i].name,
-                //             items: [{ name: cff.name, data: dataCFF == null ? [] : dataCFF.data, year: dataCFF == null ? years : dataCFF.year, total: dataCFF == null ? 0 : dataCFF.total }]
-                //         });
-                //     }
-                // } else {
-                //     for (let i = 0; i < bulan.length; i++) {
-                //         list.push({
-                //             month: bulan[i].name,
-                //             items: []
-                //         });
-                //     }
-                // }
-                console.log(list);
                 return list;
             } else {
                 return [];

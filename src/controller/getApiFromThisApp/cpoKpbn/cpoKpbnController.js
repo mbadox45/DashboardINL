@@ -13,7 +13,6 @@ export default new (class cpoKpbnController {
                 return msg_warning;
             }
         } catch (error) {
-            console.log(error);
             if (error.status == 400) {
                 return {
                     status: false,

@@ -19,7 +19,6 @@ export default new (class kategoriCashFlowScheduleController {
         try {
             const response = await kategoriCashFlowScheduleAPI.updatePost(id, form);
             const load = response.data;
-            console.log(load);
             if (load.success == true) {
                 return msg_success;
             } else {

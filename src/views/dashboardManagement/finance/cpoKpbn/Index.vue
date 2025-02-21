@@ -24,10 +24,13 @@ const listMataUang = ref([]);
 
 const op = ref();
 
+let today = new Date();
+let month = today.getMonth();
+let year = today.getFullYear();
+let day = today.getDate();
+const maxDate = ref(new Date());
 const beforeDate = ref(moment().format('YYYY-MM-01'));
 const now = ref(moment().format('YYYY-MM-DD'));
-// const beforeDate = ref('2023-01-01');
-// const now = ref(moment().format('2025-01-31'));
 const dates = ref([moment(beforeDate.value).toDate(), moment(now.value).toDate()]);
 
 const initFilters = () => {
@@ -46,6 +49,9 @@ const formData = ref({
 });
 
 onMounted(() => {
+    maxDate.value.setDate(day);
+    maxDate.value.setMonth(month);
+    maxDate.value.setFullYear(year);
     loadData();
 });
 
@@ -100,7 +106,10 @@ const changeDate = async () => {
     if (list != null) {
         if (list.length > 1) {
             start = moment(list[0], 'YYYY-MM-DD').format('YYYY-MM-DD');
-            const lastDayOfMonth = moment(list[0], 'YYYY-MM-DD').endOf('month').format('YYYY-MM-DD');
+            let lastDayOfMonth = moment(list[0], 'YYYY-MM-DD').endOf('month').format('YYYY-MM-DD');
+            if (moment(start).format('YYYY') === moment().format('YYYY') && moment(start).format('MM') === moment().format('MM')) {
+                lastDayOfMonth = moment().format('YYYY-MM-DD');
+            }
             end = moment(list[1] === null ? lastDayOfMonth : list[1], 'YYYY-MM-DD').format('YYYY-MM-DD');
         } else {
             start = beforeDate.value;
@@ -240,10 +249,10 @@ const submitData = async () => {
     <div class="flex flex-col w-full gap-8">
         <div class="flex gap-2 items-center justify-between w-full font-bold">
             <span class="text-3xl">CPO KPBN</span>
-            <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-emerald-500 hover:bg-emerald-700 text-white rounded-full flex gap-2">
+            <!-- <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-emerald-500 hover:bg-emerald-700 text-white rounded-full flex gap-2">
                 <i class="pi pi-plus"></i>
                 <span>Tambah Data</span>
-            </button>
+            </button> -->
         </div>
         <Drawer v-model:visible="drawerCond" position="right" class="!w-full md:!w-[30rem]">
             <template #header>
@@ -401,7 +410,7 @@ const submitData = async () => {
                                             </div>
                                         </template>
                                     </Column>
-                                    <Column field="id" style="width: 5%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
+                                    <!-- <Column field="id" style="width: 5%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                                         <template #body="{ data }">
                                             <div class="flex items-center justify-center w-full">
                                                 <button @click="showDrawer(data)" class="p-3 border rounded-full flex text-black bg-teal-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
@@ -409,7 +418,7 @@ const submitData = async () => {
                                                 </button>
                                             </div>
                                         </template>
-                                    </Column>
+                                    </Column> -->
                                 </DataTable>
                             </Panel>
                         </div>
