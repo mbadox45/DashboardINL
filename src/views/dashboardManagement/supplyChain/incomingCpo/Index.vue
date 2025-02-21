@@ -57,12 +57,31 @@ const loadData = async () => {
             tanggalAwal: beforeDate.value,
             tanggalAkhir: now.value
         };
-        const data = await incomingCpoScmController.loadTable(form);
-        listTable.value = data.data;
-        totalTable.value = {
-            totalQty: data.totalQty,
-            totalValue: data.totalValue
-        };
+        const response = await incomingCpoScmController.loadTable(form);
+        if (response != null) {
+            const res = response.data;
+            const list = [];
+            if (res.length > 0) {
+                for (let i = 0; i < res.length; i++) {
+                    list.push({
+                        period: `${res[i].month} ${res[i].year}`,
+                        year: res[i].year,
+                        month: res[i].month,
+                        monthQty: res[i].monthQty,
+                        monthValue: res[i].monthValue,
+                        target: res[i].target,
+                        remaining: res[i].remaining,
+                        detail: res[i].detail
+                    });
+                }
+            }
+            console.log(list);
+            listTable.value = list;
+            totalTable.value = {
+                totalQty: response.totalQty,
+                totalValue: response.totalValue
+            };
+        }
 
         // get Select Option
         const loadPMG = await sourceCpoScmController.getAll();
@@ -361,7 +380,7 @@ const submitData = async () => {
                                 </template>
                                 <template #body="{ data }">
                                     <div class="flex w-full justify-end">
-                                        <span>{{ formatCurrency(data.target.toFixed(2)) }}</span>
+                                        <span>{{ formatCurrency(Number(data.target).toFixed(2)) }}</span>
                                     </div>
                                 </template>
                             </Column>
@@ -409,7 +428,7 @@ const submitData = async () => {
                                 </Row>
                             </ColumnGroup>
                             <template #expansion="{ data }">
-                                <DataTable :value="data.detail" showGridlines paginator dataKey="period" :rows="10">
+                                <DataTable :value="data.detail" showGridlines paginator dataKey="id" :rows="10">
                                     <Column field="tanggal" sortable style="width: 25%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                                         <template #header>
                                             <div class="flex w-full justify-center text-black">
