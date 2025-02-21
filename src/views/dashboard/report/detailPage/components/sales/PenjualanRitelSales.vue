@@ -28,7 +28,7 @@ const listTable = ref([]);
 const indonesiaChartOptions = ref({
     region: 'ID', // Fokus ke Indonesia
     resolution: 'provinces', // Menampilkan provinsi
-    displayMode: 'region',
+    displayMode: 'auto',
     colorAxis: { colors: ['#1dd1a1', '#feca57', '#ff6b6b'] },
     backgroundColor: { fill: bgColorMaps },
     datalessRegionColor: '#7b7d7d',
