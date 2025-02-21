@@ -20,10 +20,7 @@ const total = ref({
 const bgColorMaps = ref('#00274D');
 
 const isLoading = ref(true);
-const cashBalanceThisYear = ref([]);
-const cashBalanceLastYear = ref([]);
 const listPackaging = ref([]);
-const listChartPackaging = ref([]);
 
 const worldChartData = ref([['Country', 'Quantity (MT)']]);
 const listTable = ref([]);
@@ -108,17 +105,6 @@ const geoChart = async () => {
         google.charts.setOnLoadCallback(drawCharts);
     }
 };
-
-// const drawCharts = () => {
-//     if (google && google.visualization) {
-//         // Draw World Map
-//         const worldData = google.visualization.arrayToDataTable(worldChartData.value);
-//         worldChartInstance = new google.visualization.GeoChart(document.getElementById('geo-chart-world'));
-//         worldChartInstance.draw(worldData, worldChartOptions.value);
-//     } else {
-//         console.error('Google Visualization API not loaded yet!');
-//     }
-// };
 
 const drawCharts = () => {
     if (google && google.visualization) {
@@ -205,19 +191,19 @@ watch(() => props.datas, loadData, { immediate: true });
                 <div class="col-span-2 flex items-center gap-3 bg-black rounded-xl py-6 px-8">
                     <div class="flex flex-col items-end w-full font-bold p-4">
                         <span class="text-[3.6vw]" :class="valueColorPersenCondition(Number(total.percentageQtyToTargetKategori))">{{ formatCurrency(Number(total.percentageQtyToTargetKategori).toFixed(2)) }}%</span>
-                        <span class="text-[0.9vw]">Total Persentase Pencapaian</span>
+                        <span class="text-[0.9vw]">Persentase Pencapaian</span>
                     </div>
                     <div class="flex flex-col items-end w-full font-bold p-4 text-amber-500">
                         <span class="text-[3.6vw] text-green-500">{{ formatCurrency(Number(total.totalQtyTargetKategori).toFixed(2)) }}</span>
-                        <span class="text-[0.9vw] text-green-700">Total RKAP Bulk</span>
+                        <span class="text-[0.9vw] text-green-700">Target RKAP Penjualan Bulk (MT)</span>
                     </div>
                     <div class="flex flex-col gap-2 w-full">
                         <div class="flex flex-col items-end w-full font-bold p-4">
                             <span class="text-[1.6vw] text-slate-300">{{ formatCurrency(Number(total.totalQtyKategori).toFixed(2)) }}</span>
-                            <span class="text-[0.8vw] text-slate-500">Total Jumlah Penjualan</span>
+                            <span class="text-[0.8vw] text-slate-500">Total Jumlah Penjualan (MT)</span>
                         </div>
                         <div class="flex flex-col items-end w-full font-bold p-4">
-                            <span class="text-[1.6vw] text-slate-300">{{ formatCurrency(Number(total.totalValueKategori).toFixed(2)) }}</span>
+                            <span class="text-[1.6vw] text-slate-300">IDR {{ formatCurrency(Number(total.totalValueKategori).toFixed(2)) }}</span>
                             <span class="text-[0.8vw] text-slate-500">Total Nilai Penjualan (IDR)</span>
                         </div>
                     </div>
@@ -239,12 +225,12 @@ watch(() => props.datas, loadData, { immediate: true });
                                 <span class="text-[0.8vw]">Realisasi</span>
                             </div>
                             <div class="flex flex-col items-end font-bold p-2 rounded-lg bg-pink-700">
-                                <span class="text-[1vw]">{{ formatCurrency(Number(item.hargaSatuan).toFixed(2)) }}</span>
-                                <span class="text-[0.8vw]">Harga Satuan (IDR)</span>
+                                <span class="text-[1vw]">IDR {{ formatCurrency(Number(item.hargaSatuan).toFixed(2)) }}</span>
+                                <span class="text-[0.8vw]">Harga Satuan</span>
                             </div>
                             <div class="flex flex-col items-end font-bold p-2 rounded-lg bg-cyan-700">
-                                <span class="text-[1vw]">{{ formatCurrency(Number(item.total).toFixed(2)) }}</span>
-                                <span class="text-[0.8vw]">Total (IDR)</span>
+                                <span class="text-[1vw]">IDR {{ formatCurrency(Number(item.total).toFixed(2)) }}</span>
+                                <span class="text-[0.8vw]">Nilai</span>
                             </div>
                         </div>
                     </div>

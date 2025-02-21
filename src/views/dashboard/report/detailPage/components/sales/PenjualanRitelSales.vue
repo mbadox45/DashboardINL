@@ -28,7 +28,7 @@ const listTable = ref([]);
 const indonesiaChartOptions = ref({
     region: 'ID', // Fokus ke Indonesia
     resolution: 'provinces', // Menampilkan provinsi
-    displayMode: 'auto',
+    displayMode: 'region',
     colorAxis: { colors: ['#1dd1a1', '#feca57', '#ff6b6b'] },
     backgroundColor: { fill: bgColorMaps },
     datalessRegionColor: '#7b7d7d',
@@ -110,17 +110,6 @@ const geoChart = async () => {
     }
 };
 
-// const drawCharts = () => {
-//     if (google && google.visualization) {
-//         // Draw Indonesia Map
-//         const indonesiaData = google.visualization.arrayToDataTable(indonesiaChartData.value);
-//         indonesiaChartInstance = new google.visualization.GeoChart(document.getElementById('geo-chart-indonesia'));
-//         indonesiaChartInstance.draw(indonesiaData, indonesiaChartOptions.value);
-//     } else {
-//         console.error('Google Visualization API not loaded yet!');
-//     }
-// };
-
 const drawCharts = () => {
     if (!google || !google.visualization) {
         console.error('Google Visualization API not loaded yet!');
@@ -130,7 +119,6 @@ const drawCharts = () => {
     const indonesiaData = google.visualization.arrayToDataTable(indonesiaChartData.value);
     indonesiaChartInstance = new google.visualization.GeoChart(document.getElementById('geo-chart-indonesia'));
 
-    // Debugging: Cek apakah elemen grafik ada
     if (!document.getElementById('geo-chart-indonesia')) {
         console.error('Element geo-chart-indonesia tidak ditemukan!');
         return;
@@ -140,7 +128,6 @@ const drawCharts = () => {
         const clickedRegion = event.region; // Kode negara (ISO-3166)
 
         if (indonesiaChartOptions.value.region === clickedRegion) {
-            // Jika negara yang sama diklik dua kali, reset ke tampilan dunia
             indonesiaChartOptions.value.region = 'ID';
             indonesiaChartOptions.value.resolution = 'region';
         } else {
@@ -152,21 +139,6 @@ const drawCharts = () => {
         setTimeout(() => drawCharts(), 200); // Beri jeda agar animasi lebih smooth
     });
 
-    // google.visualization.events.addListener(indonesiaChartInstance, 'regionClick', (event) => {
-    //     console.log('Clicked region:', event.region); // Debugging sementara
-
-    //     if (event.region && event.region.startsWith('ID-')) {
-    //         // Pastikan perubahan reaktif diperbarui dengan Vue
-    //         indonesiaChartOptions.value = { ...indonesiaChartOptions.value, region: event.region };
-    //     } else {
-    //         indonesiaChartOptions.value = { ...indonesiaChartOptions.value, region: 'ID' };
-    //     }
-
-    //     // Redraw chart dengan opsi terbaru
-    //     indonesiaChartInstance.draw(indonesiaData, indonesiaChartOptions.value);
-    // });
-
-    // Gambar chart pertama kali
     indonesiaChartInstance.draw(indonesiaData, indonesiaChartOptions.value);
 };
 
@@ -224,19 +196,19 @@ watch(() => props.datas, loadData, { immediate: true });
                 <div class="col-span-2 flex items-center gap-3 bg-black rounded-xl py-6 px-8">
                     <div class="flex flex-col items-end w-full font-bold p-4">
                         <span class="text-[3.6vw]" :class="valueColorPersenCondition(Number(total.percentageQtyToTargetKategori))">{{ formatCurrency(Number(total.percentageQtyToTargetKategori).toFixed(2)) }}%</span>
-                        <span class="text-[0.9vw]">Total Persentase Pencapaian</span>
+                        <span class="text-[0.9vw]">Persentase Pencapaian</span>
                     </div>
                     <div class="flex flex-col items-end w-full font-bold p-4 text-amber-500">
                         <span class="text-[3.6vw] text-green-500">{{ formatCurrency(Number(total.totalQtyTargetKategori).toFixed(2)) }}</span>
-                        <span class="text-[0.9vw] text-green-700">Total RKAP Ritel</span>
+                        <span class="text-[0.9vw] text-green-700">Target RKAP Penjualan Ritel (Box)</span>
                     </div>
                     <div class="flex flex-col gap-2 w-full">
                         <div class="flex flex-col items-end w-full font-bold p-4">
                             <span class="text-[1.6vw] text-slate-300">{{ formatCurrency(Number(total.totalQtyKategori).toFixed(2)) }}</span>
-                            <span class="text-[0.8vw] text-slate-500">Total Jumlah Penjualan</span>
+                            <span class="text-[0.8vw] text-slate-500">Total Jumlah Penjualan (Box)</span>
                         </div>
                         <div class="flex flex-col items-end w-full font-bold p-4">
-                            <span class="text-[1.6vw] text-slate-300">{{ formatCurrency(Number(total.totalValueKategori).toFixed(2)) }}</span>
+                            <span class="text-[1.6vw] text-slate-300">IDR {{ formatCurrency(Number(total.totalValueKategori).toFixed(2)) }}</span>
                             <span class="text-[0.8vw] text-slate-500">Total Nilai Penjualan</span>
                         </div>
                     </div>
@@ -258,12 +230,12 @@ watch(() => props.datas, loadData, { immediate: true });
                                 <span class="text-[0.8vw]">Realisasi</span>
                             </div>
                             <div class="flex flex-col items-end font-bold p-2 rounded-lg bg-pink-700">
-                                <span class="text-[1vw]">{{ formatCurrency(Number(item.hargaSatuan).toFixed(2)) }}</span>
-                                <span class="text-[0.8vw]">Harga Satuan (IDR)</span>
+                                <span class="text-[1vw]">IDR {{ formatCurrency(Number(item.hargaSatuan).toFixed(2)) }}</span>
+                                <span class="text-[0.8vw]">Harga Satuan</span>
                             </div>
                             <div class="flex flex-col items-end font-bold p-2 rounded-lg bg-cyan-700">
-                                <span class="text-[1vw]">{{ formatCurrency(Number(item.total).toFixed(2)) }}</span>
-                                <span class="text-[0.8vw]">Total (IDR)</span>
+                                <span class="text-[1vw]">IDR {{ formatCurrency(Number(item.total).toFixed(2)) }}</span>
+                                <span class="text-[0.8vw]">Nilai</span>
                             </div>
                         </div>
                     </div>
