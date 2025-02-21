@@ -18,6 +18,9 @@ export default new (class laporanPenjualanAPI {
     getByPeriod(date) {
         return httpCommonThisAPI.post('laporan-penjualan/period', date);
     }
+    getByLocation(date) {
+        return httpCommonThisAPI.post('laporan-penjualan/location', date);
+    }
     getByID(id) {
         return httpCommonThisAPI.get(`laporan-penjualan/get/${id}`);
     }

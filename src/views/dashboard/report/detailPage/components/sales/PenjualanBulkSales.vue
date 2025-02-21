@@ -18,11 +18,40 @@ const total = ref({
     totalValueKategori: 0
 });
 
+const bgColorMaps = ref('#00274D');
+
 const isLoading = ref(true);
 const cashBalanceThisYear = ref([]);
 const cashBalanceLastYear = ref([]);
 const listPackaging = ref([]);
 const listChartPackaging = ref([]);
+
+const worldChartData = ref([
+    ['Country', 'Quantity (MT)']
+    // ['Indonesia', 1200],
+    // ['Thailand', 1600],
+    // ['Singapore', 1300],
+    // ['Russia', 1400],
+    // ['Oman', 1600],
+    // ['New Zealand', 1100],
+    // ['China', 1500],
+    // ['Laos', 1450]
+]);
+
+const worldChartOptions = ref({
+    region: 'world',
+    displayMode: 'auto',
+    backgroundColor: { fill: bgColorMaps },
+    datalessRegionColor: '#7b7d7d',
+    colorAxis: {
+        colors: ['#1dd1a1', '#feca57', '#ff6b6b'],
+        format: '0 MT' // Menambahkan label "MT" pada legenda
+    },
+    width: '100%',
+    height: 500
+});
+
+let worldChartInstance = null;
 
 onMounted(() => {
     loadData();
@@ -41,9 +70,18 @@ const loadData = async () => {
                 totalQtyTargetKategori: responseTotal.totalQtyTargetKategori,
                 totalValueKategori: responseTotal.totalValueKategori
             };
+            const lokasi = response.lokasi;
+            if (lokasi.length > 0) {
+                const list = [['Country', 'Quantity (MT)']];
+                for (let i = 0; i < lokasi.length; i++) {
+                    list.push([lokasi[i].negara, lokasi[i].qty]);
+                }
+                worldChartData.value = list;
+            }
         }
+        geoChart();
     } catch (error) {
-        console.error('Error loading data:', error);
+        // console.error('Error loading data:', error);
         listPackaging.value = [];
         total.value = {
             percentageQtyToTargetKategori: 0,
@@ -51,8 +89,40 @@ const loadData = async () => {
             totalQtyTargetKategori: 0,
             totalValueKategori: 0
         };
+        geoChart();
     } finally {
         isLoading.value = false; // Turn off the loading state after the data has loaded
+    }
+};
+
+const geoChart = async () => {
+    if (typeof google === 'undefined') {
+        const script = document.createElement('script');
+        script.src = 'https://www.gstatic.com/charts/loader.js';
+        script.onload = () => {
+            google.charts.load('current', { packages: ['geochart'] });
+            google.charts.setOnLoadCallback(drawCharts);
+        };
+        document.head.appendChild(script);
+    } else {
+        google.charts.load('current', { packages: ['geochart'] });
+        google.charts.setOnLoadCallback(drawCharts);
+    }
+};
+
+const drawCharts = () => {
+    if (google && google.visualization) {
+        // Draw World Map
+        const worldData = google.visualization.arrayToDataTable(worldChartData.value);
+        worldChartInstance = new google.visualization.GeoChart(document.getElementById('geo-chart-world'));
+        worldChartInstance.draw(worldData, worldChartOptions.value);
+
+        // // Draw Indonesia Map
+        // const indonesiaData = google.visualization.arrayToDataTable(indonesiaChartData.value);
+        // indonesiaChartInstance = new google.visualization.GeoChart(document.getElementById('geo-chart-indonesia'));
+        // indonesiaChartInstance.draw(indonesiaData, indonesiaChartOptions.value);
+    } else {
+        console.error('Google Visualization API not loaded yet!');
     }
 };
 
@@ -62,7 +132,7 @@ watch(() => props.datas, loadData, { immediate: true });
 <template>
     <div class="flex flex-col w-full items-center gap-4">
         <!-- Chart Title -->
-        <span class="text-[1.5vw] font-bold uppercase">
+        <span class="text-[1.3vw] font-bold uppercase">
             <!-- {{ listdata.name || 'Loading...' }} -->
             Laporan Penjualan Bulk (dlm MT)
         </span>
@@ -74,6 +144,14 @@ watch(() => props.datas, loadData, { immediate: true });
 
         <div v-else class="w-full flex flex-col gap-4">
             <Divider />
+            <div class="grid grid-cols-4 gap-3">
+                <div class="col-span-3 p-2 rounded-xl border-black border-4 flex justify-center" :style="`background-color:${bgColorMaps}`">
+                    <div id="geo-chart-world" style="width: 80%; height: 100%; cursor: pointer; border-radius: 25px"></div>
+                </div>
+                <div class="p-2 rounded-xl bg-black flex justify-center">
+                    <span class="font-bold text-xl">Detail Penjualan</span>
+                </div>
+            </div>
             <div class="grid grid-cols-2 gap-8">
                 <div class="col-span-2 flex items-center gap-3 bg-black rounded-xl py-6 px-8">
                     <div class="flex flex-col items-end w-full font-bold p-4">

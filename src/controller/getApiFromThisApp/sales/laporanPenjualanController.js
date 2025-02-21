@@ -49,19 +49,19 @@ export default new (class laporanPenjualanController {
             return null;
         }
     };
-    // getByJenis = async (jenis) => {
-    //     try {
-    //         const response = await targetPenjualanAPI.getByJenis(jenis);
-    //         const load = response.data;
-    //         const data = load.data;
-    //         return data;
-    //     } catch (error) {
-    //         return null;
-    //     }
-    // };
     getByPeriod = async (form) => {
         try {
             const response = await laporanPenjualanAPI.getByPeriod(form);
+            const load = response.data;
+            const data = load.data;
+            return data;
+        } catch (error) {
+            return null;
+        }
+    };
+    getByLocation = async (form) => {
+        try {
+            const response = await laporanPenjualanAPI.getByLocation(form);
             const load = response.data;
             const data = load.data;
             return data;

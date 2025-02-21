@@ -33,6 +33,22 @@ export default new (class salesDetailController {
 
             const ritel = product.filter((item) => item.jenis == 'ritel');
 
+            // Laporan by Location
+            const listLokasi = [];
+            const laporanLokasi = await laporanPenjualanController.getByLocation(form);
+            // if (laporanLokasi != null) {
+            //     const bulkLokasi = laporanLokasi.bulk;
+            //     for (let i = 0; i < bulkLokasi.length; i++) {
+            //         listLokasi.push({
+            //             code: bulkLokasi[i].code,
+            //             negara: bulkLokasi[i].negara,
+            //             qty: bulkLokasi[i].qty,
+            //             value: bulkLokasi[i].value
+            //         });
+            //     }
+            // }
+            // console.log(laporanLokasi);
+
             // For List
             if (ritel != null) {
                 for (let i = 0; i < ritel.length; i++) {
@@ -72,7 +88,8 @@ export default new (class salesDetailController {
 
             return {
                 total: total,
-                data: listAll
+                data: listAll,
+                lokasi: listLokasi
             };
         } catch (error) {
             return null;
@@ -106,6 +123,21 @@ export default new (class salesDetailController {
             const product = await productMasterController.getAll();
 
             const bulk = product.filter((item) => item.jenis == 'bulk');
+
+            // Laporan by Location
+            const listLokasi = [];
+            const laporanLokasi = await laporanPenjualanController.getByLocation(form);
+            if (laporanLokasi != null) {
+                const bulkLokasi = laporanLokasi.bulk;
+                for (let i = 0; i < bulkLokasi.length; i++) {
+                    listLokasi.push({
+                        code: bulkLokasi[i].code,
+                        negara: bulkLokasi[i].negara,
+                        qty: Number((Number(bulkLokasi[i].qty) / 1000).toFixed(2)),
+                        value: bulkLokasi[i].value
+                    });
+                }
+            }
 
             // For List
             if (bulk != null) {
@@ -146,7 +178,8 @@ export default new (class salesDetailController {
 
             return {
                 total: total,
-                data: listAll
+                data: listAll,
+                lokasi: listLokasi
             };
         } catch (error) {
             return null;
