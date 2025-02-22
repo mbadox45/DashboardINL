@@ -103,7 +103,6 @@ export default new (class financeDetailController {
             };
             const response = await cashFlowScheduleController.getByPeriod(form);
             const year = moment(form.tanggalAkhir).format('YYYY');
-            // console.log(year);
             if (response != null) {
                 const kategori = response.kategori;
                 const cffKategori = kategori.find((item) => item.name.toLowerCase().includes('cash flow funding'));
@@ -123,7 +122,6 @@ export default new (class financeDetailController {
                     const dataArray = [];
                     for (let i = 0; i < months.length; i++) {
                         const dataPeriod = period.find((item) => item.month == months[i].id);
-                        // console.log(dataPeriod);
                         if (dataPeriod != null) {
                             const data = dataPeriod.data;
                             const total = data.filter((item) => item.name === uniqueDataName[0].name).reduce((sum, item) => sum + (Number(item.value) || 0), 0);
@@ -169,7 +167,6 @@ export default new (class financeDetailController {
                         for (let i = 0; i < uniqueDataName.length; i++) {
                             const dataArray = [];
                             const tableRow = { name: uniqueDataName[i].name }; // Objek dinamis untuk setiap nama unik
-                            // console.log(tableRow);
                             for (let j = 0; j < months.length; j++) {
                                 const dataPeriod = period.find((item) => item.month == months[j].id);
                                 const monthKey = moment(months[j].name, 'MMMM').format('MMM').toLowerCase(); // Contoh: "Jan" → "jan"
@@ -331,8 +328,6 @@ export default new (class financeDetailController {
                         }
                     }
 
-                    console.log(listChart);
-
                     result.chart.push({
                         name: cfoKategori.name + ' ' + year,
                         dataChart: listChart
@@ -344,7 +339,6 @@ export default new (class financeDetailController {
                     });
                 }
             }
-            // console.log(result);
             return result;
         } catch (error) {
             const result = {
@@ -370,7 +364,6 @@ export default new (class financeDetailController {
         if (chart.length > 0) {
             // CFF
             const cffChart = chart.find((item) => item.name.includes('Cash Flow Funding'));
-            // console.log(cffChart);
             let data = [];
             if (cffChart != null) {
                 data = cffChart.data;
@@ -473,7 +466,6 @@ export default new (class financeDetailController {
                     const chartCff = [];
                     for (let i = 0; i < months.length; i++) {
                         const month = data.find((item) => item.month == months[i].id);
-                        // console.log(month);
                         if (month !== undefined && month !== null) {
                             const detail = month.detail;
                             if (detail.length > 0) {
@@ -551,7 +543,6 @@ export default new (class financeDetailController {
                     const chartCff = [];
                     for (let i = 0; i < months.length; i++) {
                         const month = data.find((item) => item.month == months[i].id);
-                        // console.log(month);
                         if (month !== undefined && month !== null) {
                             const detail = month.detail;
                             if (detail.length > 0) {
@@ -824,7 +815,7 @@ export default new (class financeDetailController {
                 chart: [],
                 table: [],
                 latest: {
-                    labaBersihLastMonth: 0,
+                    labaBersih: 0,
                     targetLabaBersihRkap: 0,
                     npmRkapPercent: 0
                 }
@@ -895,7 +886,7 @@ export default new (class financeDetailController {
 
                 const latestMonth = response.latestMonth;
                 if (latestMonth != null) {
-                    result.latest.labaBersihLastMonth = latestMonth.labaBersihLastMonth;
+                    result.latest.labaBersih = latestMonth.labaBersih;
                     result.latest.targetLabaBersihRkap = latestMonth.targetLabaBersihRkap;
                     result.latest.npmRkapPercent = latestMonth.npmRkapPercent;
                 }
@@ -909,7 +900,7 @@ export default new (class financeDetailController {
                 chart: [],
                 table: [],
                 latest: {
-                    labaBersihLastMonth: 0,
+                    labaBersih: 0,
                     targetLabaBersihRkap: 0,
                     npmRkapPercent: 0
                 }
@@ -970,11 +961,10 @@ export default new (class financeDetailController {
             }
         }
 
-        // console.log(response.table, listChart);
         const latest = response.latest;
         // const gpmRkapPercent = 90;
         const ebitdaRkapPercent = latest.npmRkapPercent;
-        const series = [Number(ebitdaRkapPercent) > 0 ? Number(Number(ebitdaRkapPercent).toFixed(1)) : Number(Number(ebitdaRkapPercent).toFixed(1) * -1)];
+        const series = [Number(ebitdaRkapPercent) > 0 ? Number(Number(ebitdaRkapPercent).toFixed(2)) : Number(Number(ebitdaRkapPercent).toFixed(2) * -1)];
         const chartData = halfRadialChartApex2(['Target RKAP'], Number(ebitdaRkapPercent));
         return {
             table: response.table,
@@ -982,7 +972,7 @@ export default new (class financeDetailController {
             latest: {
                 chart: chartData,
                 series: series,
-                labaBersihLastMonth: valueToBilion(latest.labaBersihLastMonth),
+                labaBersih: valueToBilion(latest.labaBersih),
                 targetLabaBersihRkap: valueToBilion(latest.targetLabaBersihRkap)
             }
         };
@@ -993,7 +983,7 @@ export default new (class financeDetailController {
                 chart: [],
                 table: [],
                 latest: {
-                    totalEbitda: 0,
+                    ebitda: 0,
                     targetEbitdaRkap: 0,
                     ebitdaRkapPercent: 0
                 }
@@ -1064,7 +1054,7 @@ export default new (class financeDetailController {
 
                 const latestMonth = response.latestMonth;
                 if (latestMonth != null) {
-                    result.latest.totalEbitda = latestMonth.ebitdaLastMonth;
+                    result.latest.ebitda = latestMonth.ebitda;
                     result.latest.targetEbitdaRkap = latestMonth.targetEbitdaRkap;
                     result.latest.ebitdaRkapPercent = latestMonth.ebitdaRkapPercent;
                 }
@@ -1078,7 +1068,7 @@ export default new (class financeDetailController {
                 chart: [],
                 table: [],
                 latest: {
-                    totalEbitda: 0,
+                    ebitda: 0,
                     targetEbitdaRkap: 0,
                     ebitdaRkapPercent: 0
                 }
@@ -1138,11 +1128,11 @@ export default new (class financeDetailController {
                 });
             }
         }
-        // console.log(response.table, listChart);
         const latest = response.latest;
+        console.log(latest);
         // const gpmRkapPercent = 90;
         const ebitdaRkapPercent = latest.ebitdaRkapPercent;
-        const series = [Number(ebitdaRkapPercent) > 0 ? Number(Number(ebitdaRkapPercent).toFixed(1)) : Number(Number(ebitdaRkapPercent).toFixed(1) * -1)];
+        const series = [Number(ebitdaRkapPercent) > 0 ? Number(Number(ebitdaRkapPercent).toFixed(2)) : Number(Number(ebitdaRkapPercent).toFixed(2) * -1)];
         const chartData = halfRadialChartApex2(['Target RKAP'], Number(ebitdaRkapPercent));
 
         return {
@@ -1152,7 +1142,7 @@ export default new (class financeDetailController {
                 chart: chartData,
                 series: series,
                 targetEbitdaRkap: valueToBilion(latest.targetEbitdaRkap),
-                totalEbitda: valueToBilion(latest.totalEbitda)
+                ebitda: valueToBilion(latest.ebitda)
             }
         };
     };
@@ -1265,7 +1255,6 @@ export default new (class financeDetailController {
 
         // Chart
         const chart = response.chart;
-        console.log(chart);
         const color = [
             { colorChart: ['rgba(217, 70, 239, 0.6)', 'rgba(0, 188, 212, 1)'], colorLabel: ['#a21caf', '#1a5276'] },
             { colorChart: ['rgba(105, 115, 132, 0.6)', 'rgba(251, 191, 36, 1)'], colorLabel: ['#2d3748', '#b45309'] }
@@ -1317,9 +1306,8 @@ export default new (class financeDetailController {
         const latest = response.latest;
         // const gpmRkapPercent = 90;
         const gpmRkapPercent = latest.gpmRkapPercent;
-        const series = [Number(gpmRkapPercent) > 0 ? Number(Number(gpmRkapPercent).toFixed(1)) : Number(Number(gpmRkapPercent).toFixed(1) * -1)];
+        const series = [Number(gpmRkapPercent) > 0 ? Number(Number(gpmRkapPercent).toFixed(2)) : Number(Number(gpmRkapPercent).toFixed(2) * -1)];
         const chartData = halfRadialChartApex2(['Target RKAP'], Number(gpmRkapPercent));
-        // console.log(response.table, listChart);
         return {
             table: response.table,
             chart: listChart,
@@ -1327,6 +1315,7 @@ export default new (class financeDetailController {
                 chart: chartData,
                 series: series,
                 targetLabaKotorRkap: valueToBilion(latest.targetLabaKotorRkap),
+                labaKotor: valueToBilion(latest.labaKotor),
                 totalLabaKotor: valueToBilion(latest.totalLabaKotor)
             }
         };
@@ -1380,7 +1369,6 @@ export default new (class financeDetailController {
                     result.chart.dataNow = dataNowChart;
                     result.chart.dataTarget = dataTargetChart;
                     result.tabel.dataNow = dataNowTable;
-                    // console.log(dataNowChart, dataTargetChart, dataNowTable);
                 }
                 const monthsLasttMonth = response.lastYear;
                 if (monthsLasttMonth != null) {
