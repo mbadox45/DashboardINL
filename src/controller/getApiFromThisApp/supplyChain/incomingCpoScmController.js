@@ -88,6 +88,7 @@ export default new (class incomingCpoScmController {
                         target: data[i].target
                     });
                 }
+                // console.log(list);
                 return {
                     data: list,
                     totalQty: response.totalQty,

@@ -1,4 +1,4 @@
-import { barChartApex, barHorizontalChartApex, lineChartApex } from '@/controller/chartStyle/chartDummy';
+import { barHorizontalChartApex, lineChartApex, stackedChartOptionsApex } from '@/controller/chartStyle/chartDummy';
 import { formatCurrency } from '@/controller/dummyController';
 import productMasterController from '@/controller/getApiFromThisApp/master/productMasterController';
 import levyRoutersPenjualanController from '@/controller/getApiFromThisApp/sales/levyRoutersPenjualanController';
@@ -277,6 +277,7 @@ export default new (class scmDetailController {
                 const data = result.data;
                 for (let i = 0; i < data.length; i++) {
                     qty.push(Number(data[i].monthQty));
+                    // target.push(Number(10096354));
                     target.push(Number(data[i].target));
                     label.push(moment(`${data[i].month} ${data[i].year}`, 'M YYYY').format('MMMM YYYY'));
                     list.push({
@@ -289,9 +290,15 @@ export default new (class scmDetailController {
                 }
 
                 series.push({ name: 'Qty', data: qty }, { name: 'target', data: target });
-                chart = barChartApex(label);
+
+                chart = stackedChartOptionsApex('', label, null);
+                // console.log(stackedChartOptionsApex('', label, null));
             }
-            return { table: list, series: series, chart: chart };
+            const dataSeries = series.map((dataItem) => ({
+                name: dataItem.name,
+                data: dataItem.data
+            }));
+            return { table: list, series: dataSeries, chart: chart };
         } catch (error) {
             return null;
         }
