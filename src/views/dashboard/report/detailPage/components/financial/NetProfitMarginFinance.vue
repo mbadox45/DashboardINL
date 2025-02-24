@@ -11,7 +11,7 @@ const listLatest = ref({
     chart: null,
     series: [],
     targetLabaBersihRkap: formatCurrency(Number(0).toFixed(2)),
-    labaBersihLastMonth: formatCurrency(Number(0).toFixed(2))
+    labaBersih: formatCurrency(Number(0).toFixed(2))
 });
 
 const formData = JSON.parse(localStorage.getItem('formData'));
@@ -53,7 +53,7 @@ const loadData = async () => {
                 chart: latest.chart,
                 series: latest.series,
                 targetLabaBersihRkap: formatCurrency(Number(latest.targetLabaBersihRkap).toFixed(2)),
-                labaBersihLastMonth: formatCurrency(Number(latest.labaBersihLastMonth).toFixed(2))
+                labaBersih: formatCurrency(Number(latest.labaBersih).toFixed(2))
             };
         }
     } catch (error) {
@@ -89,12 +89,12 @@ watch(() => props.datas, loadData, { immediate: true });
                 </div>
                 <div class="w-full grid grid-cols-2 item-center gap-3">
                     <div class="flex flex-col items-end w-full bg-cyan-200 p-3 rounded-lg">
-                        <span class="text-cyan-700 text-[2vw] font-bold">{{ listLatest.labaBersihLastMonth }}</span>
+                        <span class="text-cyan-700 text-[2vw] font-bold">{{ listLatest.labaBersih }}</span>
                         <span class="text-cyan-800">Laba Bersih {{ tanggalTerakhir }}</span>
                     </div>
                     <div class="flex flex-col items-end w-full bg-amber-200 p-3 rounded-lg">
                         <span class="text-amber-700 text-[2vw] font-bold">{{ listLatest.targetLabaBersihRkap }}</span>
-                        <span class="text-amber-800">Target RKAP Laba Bersih</span>
+                        <span class="text-amber-800">Target RKAP {{ tanggalTerakhir }}</span>
                     </div>
                 </div>
             </div>

@@ -11,7 +11,7 @@ const listLatest = ref({
     chart: null,
     series: [],
     targetEbitdaRkap: formatCurrency(Number(0).toFixed(2)),
-    totalEbitda: formatCurrency(Number(0).toFixed(2)),
+    ebitda: formatCurrency(Number(0).toFixed(2)),
     ebitdaLastMonth: formatCurrency(Number(0).toFixed(2)),
     ebitda: formatCurrency(Number(0).toFixed(2))
 });
@@ -55,7 +55,7 @@ const loadData = async () => {
                 chart: latest.chart,
                 series: latest.series,
                 targetEbitdaRkap: formatCurrency(Number(latest.targetEbitdaRkap).toFixed(2)),
-                totalEbitda: formatCurrency(Number(latest.totalEbitda).toFixed(2)),
+                ebitda: formatCurrency(Number(latest.ebitda).toFixed(2)),
                 ebitdaLastMonth: formatCurrency(Number(latest.ebitdaLastMonth).toFixed(2)),
                 ebitda: formatCurrency(Number(latest.ebitda).toFixed(2))
             };
@@ -93,12 +93,12 @@ watch(() => props.datas, loadData, { immediate: true });
                 </div>
                 <div class="w-full grid grid-cols-2 item-center gap-3">
                     <div class="flex flex-col items-end w-full bg-cyan-200 p-3 rounded-lg">
-                        <span class="text-cyan-700 text-[2vw] font-bold">{{ listLatest.totalEbitda }}</span>
+                        <span class="text-cyan-700 text-[2vw] font-bold">{{ listLatest.ebitda }}</span>
                         <span class="text-cyan-800">EBITDA {{ tanggalTerakhir }}</span>
                     </div>
                     <div class="flex flex-col items-end w-full bg-amber-200 p-3 rounded-lg">
                         <span class="text-amber-700 text-[2vw] font-bold">{{ listLatest.targetEbitdaRkap }}</span>
-                        <span class="text-amber-800">Target RKAP EBITDA</span>
+                        <span class="text-amber-800">Target RKAP {{ tanggalTerakhir }}</span>
                     </div>
                 </div>
             </div>

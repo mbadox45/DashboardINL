@@ -1,5 +1,6 @@
 <script setup>
 import { formatCurrency } from '@/controller/dummyController';
+import moment from 'moment';
 import { defineProps, onMounted, ref, watch } from 'vue';
 import VueApexCharts from 'vue3-apexcharts';
 
@@ -10,8 +11,11 @@ const listLatest = ref({
     chart: null,
     series: [],
     targetLabaKotorRkap: formatCurrency(Number(0).toFixed(2)),
-    totalLabaKotor: formatCurrency(Number(0).toFixed(2))
+    labaKotor: formatCurrency(Number(0).toFixed(2))
 });
+
+const formData = JSON.parse(localStorage.getItem('formData'));
+const tanggalTerakhir = ref(formData == null ? moment().format('MMMM YYYY') : moment(formData.now).format('MMMM YYYY'));
 
 const props = defineProps({
     datas: {
@@ -45,11 +49,12 @@ const loadData = async () => {
             listChart.value = list;
             listTable.value = response.table;
             const latest = response.latest;
+            console.log(latest);
             listLatest.value = {
                 chart: latest.chart,
                 series: latest.series,
                 targetLabaKotorRkap: formatCurrency(Number(latest.targetLabaKotorRkap).toFixed(2)),
-                totalLabaKotor: formatCurrency(Number(latest.totalLabaKotor).toFixed(2))
+                labaKotor: formatCurrency(Number(latest.labaKotor).toFixed(2))
             };
         }
     } catch (error) {
@@ -85,12 +90,12 @@ watch(() => props.datas, loadData, { immediate: true });
                 </div>
                 <div class="w-full flex item-center gap-3">
                     <div class="flex flex-col items-end w-full bg-pink-300 p-3 rounded-lg">
-                        <span class="text-pink-600 text-[2vw] font-bold">{{ listLatest.totalLabaKotor }}</span>
-                        <span class="text-pink-700">Total Laba Kotor</span>
+                        <span class="text-pink-600 text-[2vw] font-bold">{{ listLatest.labaKotor }}</span>
+                        <span class="text-pink-700">Laba Kotor {{ tanggalTerakhir }}</span>
                     </div>
                     <div class="flex flex-col items-end w-full bg-amber-200 p-3 rounded-lg">
                         <span class="text-amber-600 text-[2vw] font-bold">{{ listLatest.targetLabaKotorRkap }}</span>
-                        <span class="text-amber-700">Target RKAP Laba Kotor</span>
+                        <span class="text-amber-700">Target RKAP {{ tanggalTerakhir }}</span>
                     </div>
                 </div>
             </div>
