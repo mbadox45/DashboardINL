@@ -191,9 +191,7 @@ const refreshForm = () => {
 };
 
 const submitData = async () => {
-    if (!formData.value.tanki_id || !formData.value.tanggal || !formData.value.remarks || !formData.value.umur || !formData.value.qty || !formData.value.id_bulky) {
-        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
-    } else {
+    if (formData.value.tanki_id != null && formData.value.tanggal != null && formData.value.remarks != null && formData.value.umur != null && formData.value.qty != null && formData.value.id_bulky != null) {
         formData.value.tanggal = moment(formData.value.tanggal).format('YYYY-MM-DD');
         if (statusForm.value == 'add') {
             const response = await bulkStockScmController.addPost(formData.value);
@@ -225,6 +223,8 @@ const submitData = async () => {
                 messages.value = [{ severity: 'error', content: 'Proses gagal, silahkan hubungi tim IT', id: count.value++, icon: 'pi-times-circle' }];
             }
         }
+    } else {
+        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     }
 };
 </script>

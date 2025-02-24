@@ -227,9 +227,7 @@ const refreshForm = () => {
 };
 
 const submitData = async () => {
-    if (!formData.value.packaging_id || !formData.value.tanggal || !formData.value.uraian_id || !formData.value.value || !formData.value.jenis_id) {
-        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
-    } else {
+    if (formData.value.packaging_id != null && formData.value.tanggal != null && formData.value.uraian_id != null && formData.value.value != null && formData.value.jenis_id != null) {
         formData.value.tanggal = moment(formData.value.tanggal).format('YYYY-MM-01');
         if (statusForm.value == 'add') {
             const response = await targetPackagingController.addPost(formData.value);
@@ -259,6 +257,8 @@ const submitData = async () => {
                 messages.value = [{ severity: 'error', content: response.msg, id: count.value++, icon: 'pi-times-circle' }];
             }
         }
+    } else {
+        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     }
 };
 </script>
