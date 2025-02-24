@@ -239,8 +239,8 @@ const router = createRouter({
                     meta: {
                         requiresAuth: true,
                         allUser: true,
-                        // finance: true,
-                        operation: true
+                        finance: true
+                        // operation: true
                         // sales: true,
                         // scm: true,
                         // sdm: true
