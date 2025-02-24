@@ -204,9 +204,7 @@ const refreshForm = () => {
 };
 
 const submitData = async () => {
-    if (!formData.value.id_ritel || !formData.value.tanggal || !formData.value.remarks || !formData.value.umur || !formData.value.qty || !formData.value.warehouse_id) {
-        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
-    } else {
+    if (formData.value.id_ritel != null && formData.value.tanggal != null && formData.value.remarks != null && formData.value.umur != null && formData.value.qty != null && formData.value.warehouse_id != null) {
         if (statusForm.value == 'add') {
             const response = await retailStockScmController.addPost(formData.value);
             // const load = response.data;
@@ -237,6 +235,8 @@ const submitData = async () => {
                 messages.value = [{ severity: 'error', content: 'Proses gagal, silahkan hubungi tim IT', id: count.value++, icon: 'pi-times-circle' }];
             }
         }
+    } else {
+        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     }
 };
 </script>

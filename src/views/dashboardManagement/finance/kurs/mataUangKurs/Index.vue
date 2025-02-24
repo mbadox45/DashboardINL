@@ -1,5 +1,6 @@
 <script setup>
 import mataUangKursController from '@/controller/getApiFromThisApp/kurs/mataUangKursController';
+import { FilterMatchMode } from '@primevue/core/api';
 import moment from 'moment';
 import { onMounted, ref } from 'vue';
 
@@ -10,6 +11,7 @@ const messages = ref([]);
 const statusForm = ref('add');
 const timeResponse = ref(3000);
 const loadingSave = ref(false);
+const loadingData = ref(false);
 const logFile = ref([]);
 
 let count = ref(0);
@@ -21,16 +23,26 @@ const formData = ref({
     remark: null
 });
 
+const initFilters = () => {
+    search.value = {
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS }
+    };
+};
+initFilters();
+
 onMounted(() => {
     loadData();
 });
 
 const loadData = async () => {
+    loadingData.value = true;
     try {
         const data = await mataUangKursController.getAll();
         listTable.value = data;
+        loadingData.value = false;
     } catch (error) {
         listTable.value = [];
+        loadingData.value = false;
     }
 };
 
@@ -141,10 +153,10 @@ const submitData = async () => {
     <div class="flex flex-col w-full gap-8">
         <div class="flex gap-2 items-center justify-between w-full font-bold">
             <span class="text-3xl">Mata Uang</span>
-            <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-emerald-500 hover:bg-emerald-700 text-white rounded-full flex gap-2">
+            <!-- <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-emerald-500 hover:bg-emerald-700 text-white rounded-full flex gap-2">
                 <i class="pi pi-plus"></i>
                 <span>Tambah Mata Uang</span>
-            </button>
+            </button> -->
         </div>
         <Drawer v-model:visible="drawerCond" position="right" class="!w-full md:!w-[30rem]">
             <template #header>
@@ -213,10 +225,21 @@ const submitData = async () => {
         </Drawer>
         <Card>
             <template #title>
-                <div class="flex gap-2 items-center mb-5"></div>
+                <div class="flex gap-2 items-center mb-5">
+                    <InputGroup>
+                        <InputText placeholder="Search Components" v-model="search['global'].value" />
+                        <InputGroupAddon>
+                            <i class="pi pi-search" />
+                        </InputGroupAddon>
+                    </InputGroup>
+                </div>
             </template>
             <template #content>
-                <DataTable :value="listTable" showGridlines paginator :rows="10">
+                <div v-if="loadingData == true" class="flex w-full justify-center font-bold">
+                    <span>Loading Data ...</span>
+                </div>
+                <DataTable v-else :value="listTable" v-model:filters="search" showGridlines paginator :rows="10">
+                    <template #empty> Data not found </template>
                     <Column field="name" sortable style="width: 15%; font-size: 0.9vw" headerStyle="background-color:rgb(251 207 232)">
                         <template #header>
                             <div class="flex w-full justify-start text-black">
@@ -253,7 +276,7 @@ const submitData = async () => {
                             </div>
                         </template>
                     </Column>
-                    <Column field="remark" style="width: 5%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
+                    <!-- <Column field="remark" style="width: 5%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                         <template #body="{ data }">
                             <div class="flex items-center justify-center w-full">
                                 <button @click="showDrawer(data)" class="p-3 border rounded-full flex bg-teal-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
@@ -261,7 +284,7 @@ const submitData = async () => {
                                 </button>
                             </div>
                         </template>
-                    </Column>
+                    </Column> -->
                 </DataTable>
             </template>
         </Card>

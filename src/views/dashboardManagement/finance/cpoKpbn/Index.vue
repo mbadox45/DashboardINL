@@ -18,6 +18,7 @@ const listTable = ref([]);
 const totalTable = ref({ cpoOlah: 0, totalCost: 0, totalHargaSatuan: 0 });
 const search = ref();
 const expandedRows = ref([]);
+const loadingData = ref(false);
 
 const selectedMataUang = ref(1);
 const listMataUang = ref([]);
@@ -56,6 +57,7 @@ onMounted(() => {
 });
 
 const loadData = async () => {
+    loadingData.value = true;
     try {
         // Change Picker
         const form = {
@@ -65,19 +67,10 @@ const loadData = async () => {
         };
         await loadCurrency();
         const data = await cpoKpbnController.loadTable(form);
-        const list = [];
-        // for (let i = 0; i < data.length; i++) {
-        //     const uang = load.find((item) => item.id == data[i].id_mata_uang);
-        //     list.push({
-        //         id: data[i].id,
-        //         id_mata_uang: data[i].id_mata_uang,
-        //         mata_uang: uang.name,
-        //         tanggal: data[i].tanggal,
-        //         value: data[i].value
-        //     });
-        // }
         listTable.value = data;
+        loadingData.value = false;
     } catch (error) {
+        loadingData.value = false;
         listTable.value = [];
     }
 };
@@ -320,11 +313,11 @@ const submitData = async () => {
                 <div class="flex flex-col gap-2 w-full">
                     <div class="flex flex-col gap-1 w-full items-start">
                         <label for="pmg" class="text-[0.8vw]">Mata Uang Asing</label>
-                        <Select v-model="selectedMataUang" :options="listMataUang" optionLabel="name" optionValue="id" placeholder="Select a Currency" class="w-full" />
+                        <Select v-model="selectedMataUang" :options="listMataUang" optionLabel="name" optionValue="id" filter placeholder="Select a Currency" class="w-full" />
                     </div>
                     <div class="flex flex-col gap-1 w-full items-start">
                         <label for="pmg" class="text-[0.8vw]">Pilih Periode</label>
-                        <DatePicker v-model="dates" selectionMode="range" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :manualInput="false" placeholder="Select Date Range" class="w-full" />
+                        <DatePicker v-model="dates" selectionMode="range" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :manualInput="false" :maxDate="maxDate" placeholder="Select Date Range" class="w-full" />
                     </div>
                 </div>
                 <Divider />
