@@ -23,6 +23,7 @@ const latestCashBalance = ref({});
 const totalTable = ref({ cpoOlah: 0, totalCost: 0, totalHargaSatuan: 0 });
 const search = ref();
 const expandedRows = ref([]);
+const loadingData = ref(false);
 
 // const selectedPmg = ref(1);
 const pmg = ref([]);
@@ -30,10 +31,13 @@ const listUraian = ref([]);
 
 const op = ref();
 
+let today = new Date();
+let month = today.getMonth();
+let year = today.getFullYear();
+let day = today.getDate();
+const maxDate = ref(new Date());
 const beforeDate = ref(moment().format('YYYY-MM-01'));
 const now = ref(moment().format('YYYY-MM-DD'));
-// const beforeDate = ref('2024-01-01');
-// const now = ref(moment().format('2024-01-01'));
 const dates = ref([moment(beforeDate.value).toDate(), moment(now.value).toDate()]);
 
 const initFilters = () => {
@@ -54,10 +58,14 @@ const formData = ref({
 });
 
 onMounted(() => {
+    maxDate.value.setDate(day);
+    maxDate.value.setMonth(month);
+    maxDate.value.setFullYear(year);
     loadData();
 });
 
 const loadData = async () => {
+    loadingData.value = true;
     try {
         // Change Picker
         const form = {
@@ -81,7 +89,9 @@ const loadData = async () => {
         const uraian = await kategoriCashFlowMovementController.getAll();
         listUraian.value = uraian;
         pmg.value = loadPMG;
+        loadingData.value = false;
     } catch (error) {
+        loadingData.value = false;
         listTable.value = [];
         totalTable.value = {
             cpoOlah: 0,
@@ -335,7 +345,7 @@ const submitData = async () => {
                     </div> -->
                     <div class="flex flex-col gap-1 w-full items-start">
                         <label for="pmg" class="text-[0.8vw]">Pilih Periode</label>
-                        <DatePicker v-model="dates" selectionMode="range" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :manualInput="false" placeholder="Select Date Range" class="w-full" />
+                        <DatePicker v-model="dates" selectionMode="range" showIcon iconDisplay="input" :maxDate="maxDate" dateFormat="yy-mm-dd" :manualInput="false" placeholder="Select Date Range" class="w-full" />
                     </div>
                 </div>
                 <Divider />
@@ -359,8 +369,14 @@ const submitData = async () => {
                 </div>
             </template>
             <template #content>
-                <ScrollPanel style="width: 100%; height: 35vw">
-                    <div class="flex items-start w-full gap-3">
+                <div v-if="loadingData == true" class="flex w-full justify-center font-bold">
+                    <span>Loading Data ...</span>
+                </div>
+                <ScrollPanel v-else style="width: 100%; height: 35vw">
+                    <div v-if="listTable.length < 1" class="flex w-full justify-center items-center font-bold">
+                        <span>- Data not found -</span>
+                    </div>
+                    <div v-else class="flex items-start w-full gap-3">
                         <Panel v-for="(item, index) in listTable" :key="index" toggleable :collapsed="true" class="w-full">
                             <template #header>
                                 <span class="text-[0.9vw] font-bold italic">{{ item.name }}</span>

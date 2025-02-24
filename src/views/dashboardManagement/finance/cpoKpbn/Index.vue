@@ -338,84 +338,92 @@ const submitData = async () => {
                 </div>
             </template>
             <template #content>
-                <div class="flex flex-col gap-4">
-                    <Panel v-for="(item, index) in listTable" :key="index" toggleable class="w-full">
-                        <template #header>
-                            <span class="text-[0.9vw] font-bold italic">Tahun {{ item.year }}</span>
-                        </template>
-                        <div class="flex flex-col gap-3">
-                            <Panel v-for="(months, index) in item.months" :key="index" toggleable :collapsed="true" class="w-full">
-                                <template #header>
-                                    <div class="flex w-full items-center justify-between gap-3 pr-2">
-                                        <span class="text-[0.9vw] font-bold italic">{{ moment(months.month > 9 ? `2024-${months.month.toString()}-01` : `2024-0${months.month.toString()}-01`).format('MMMM') }}</span>
-                                        <div class="flex gap-3 text-[0.8vw]">
-                                            <span class="px-3 py-1 rounded-full bg-teal-200 text-black"><span class="font-bold">Rata - Rata (Asing)</span> - {{ formatCurrency(months.averageAsing.toFixed(2)) }}</span>
-                                            <span class="px-3 py-1 rounded-full bg-teal-200 text-black"><span class="font-bold">Rata - Rata (IDR)</span> - {{ formatCurrency(months.average.toFixed(2)) }}</span>
+                <div v-if="loadingData == true" class="flex w-full justify-center font-bold">
+                    <span>Loading Data ...</span>
+                </div>
+                <div v-else class="flex w-full">
+                    <div v-if="listTable.length < 1" class="flex w-full justify-center items-center font-bold">
+                        <span>- Data not found -</span>
+                    </div>
+                    <div v-else class="flex flex-col w-full gap-4">
+                        <Panel v-for="(item, index) in listTable" :key="index" toggleable class="w-full">
+                            <template #header>
+                                <span class="text-[0.9vw] font-bold italic">Tahun {{ item.year }}</span>
+                            </template>
+                            <div class="flex flex-col gap-3">
+                                <Panel v-for="(months, index) in item.months" :key="index" toggleable :collapsed="true" class="w-full">
+                                    <template #header>
+                                        <div class="flex w-full items-center justify-between gap-3 pr-2">
+                                            <span class="text-[0.9vw] font-bold italic">{{ moment(months.month > 9 ? `2024-${months.month.toString()}-01` : `2024-0${months.month.toString()}-01`).format('MMMM') }}</span>
+                                            <div class="flex gap-3 text-[0.8vw]">
+                                                <span class="px-3 py-1 rounded-full bg-teal-200 text-black"><span class="font-bold">Rata - Rata (Asing)</span> - {{ formatCurrency(months.averageAsing.toFixed(2)) }}</span>
+                                                <span class="px-3 py-1 rounded-full bg-teal-200 text-black"><span class="font-bold">Rata - Rata (IDR)</span> - {{ formatCurrency(months.average.toFixed(2)) }}</span>
+                                            </div>
                                         </div>
-                                    </div>
-                                </template>
-                                <DataTable :value="months.detail" showGridlines paginator :rows="10">
-                                    <Column field="tanggal" sortable style="width: 15%; font-size: 0.9vw" headerStyle="background-color:rgb(251 207 232)">
-                                        <template #header>
-                                            <div class="flex w-full justify-center text-black">
-                                                <span>Tanggal</span>
-                                            </div>
-                                        </template>
-                                        <template #body="{ data }">
-                                            <div class="flex w-full justify-start">
-                                                <span>{{ moment(data.tanggal).format('DD MMM YYYY') }}</span>
-                                            </div>
-                                        </template>
-                                    </Column>
-                                    <Column field="kurs" sortable style="width: 25%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
-                                        <template #header>
-                                            <div class="flex w-full justify-center text-black">
-                                                <span>Kurs</span>
-                                            </div>
-                                        </template>
-                                        <template #body="{ data }">
-                                            <div class="flex w-full justify-end">
-                                                <span class="">{{ formatCurrency(Number(data.kurs).toFixed(2)) }}</span>
-                                            </div>
-                                        </template>
-                                    </Column>
-                                    <Column field="valueAsing" sortable style="width: 25%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
-                                        <template #header>
-                                            <div class="flex w-full justify-center text-black">
-                                                <span>Nilai Asing / Ton</span>
-                                            </div>
-                                        </template>
-                                        <template #body="{ data }">
-                                            <div class="flex w-full justify-end">
-                                                <span class="">{{ formatCurrency(Number(data.valueAsing).toFixed(2)) }}</span>
-                                            </div>
-                                        </template>
-                                    </Column>
-                                    <Column field="value" sortable style="width: 25%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
-                                        <template #header>
-                                            <div class="flex w-full justify-center text-black">
-                                                <span>Nilai IDR / Kg</span>
-                                            </div>
-                                        </template>
-                                        <template #body="{ data }">
-                                            <div class="flex w-full justify-end">
-                                                <span class="">{{ formatCurrency(Number(data.value).toFixed(2)) }}</span>
-                                            </div>
-                                        </template>
-                                    </Column>
-                                    <!-- <Column field="id" style="width: 5%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
-                                        <template #body="{ data }">
-                                            <div class="flex items-center justify-center w-full">
-                                                <button @click="showDrawer(data)" class="p-3 border rounded-full flex text-black bg-teal-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
-                                                    <i class="pi pi-pencil" style="font-size: 0.7vw"></i>
-                                                </button>
-                                            </div>
-                                        </template>
-                                    </Column> -->
-                                </DataTable>
-                            </Panel>
-                        </div>
-                    </Panel>
+                                    </template>
+                                    <DataTable :value="months.detail" showGridlines paginator :rows="10">
+                                        <Column field="tanggal" sortable style="width: 15%; font-size: 0.9vw" headerStyle="background-color:rgb(251 207 232)">
+                                            <template #header>
+                                                <div class="flex w-full justify-center text-black">
+                                                    <span>Tanggal</span>
+                                                </div>
+                                            </template>
+                                            <template #body="{ data }">
+                                                <div class="flex w-full justify-start">
+                                                    <span>{{ moment(data.tanggal).format('DD MMM YYYY') }}</span>
+                                                </div>
+                                            </template>
+                                        </Column>
+                                        <Column field="kurs" sortable style="width: 25%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
+                                            <template #header>
+                                                <div class="flex w-full justify-center text-black">
+                                                    <span>Kurs</span>
+                                                </div>
+                                            </template>
+                                            <template #body="{ data }">
+                                                <div class="flex w-full justify-end">
+                                                    <span class="">{{ formatCurrency(Number(data.kurs).toFixed(2)) }}</span>
+                                                </div>
+                                            </template>
+                                        </Column>
+                                        <Column field="valueAsing" sortable style="width: 25%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
+                                            <template #header>
+                                                <div class="flex w-full justify-center text-black">
+                                                    <span>Nilai Asing / Ton</span>
+                                                </div>
+                                            </template>
+                                            <template #body="{ data }">
+                                                <div class="flex w-full justify-end">
+                                                    <span class="">{{ formatCurrency(Number(data.valueAsing).toFixed(2)) }}</span>
+                                                </div>
+                                            </template>
+                                        </Column>
+                                        <Column field="value" sortable style="width: 25%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
+                                            <template #header>
+                                                <div class="flex w-full justify-center text-black">
+                                                    <span>Nilai IDR / Kg</span>
+                                                </div>
+                                            </template>
+                                            <template #body="{ data }">
+                                                <div class="flex w-full justify-end">
+                                                    <span class="">{{ formatCurrency(Number(data.value).toFixed(2)) }}</span>
+                                                </div>
+                                            </template>
+                                        </Column>
+                                        <!-- <Column field="id" style="width: 5%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
+                                            <template #body="{ data }">
+                                                <div class="flex items-center justify-center w-full">
+                                                    <button @click="showDrawer(data)" class="p-3 border rounded-full flex text-black bg-teal-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
+                                                        <i class="pi pi-pencil" style="font-size: 0.7vw"></i>
+                                                    </button>
+                                                </div>
+                                            </template>
+                                        </Column> -->
+                                    </DataTable>
+                                </Panel>
+                            </div>
+                        </Panel>
+                    </div>
                 </div>
             </template>
         </Card>

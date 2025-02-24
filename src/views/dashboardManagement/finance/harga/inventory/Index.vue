@@ -19,6 +19,7 @@ const logFile = ref([]);
 const listLokasi = ref([]);
 const allData = ref();
 const listProduct = ref([]);
+const loadingData = ref(false);
 
 let count = ref(0);
 
@@ -35,10 +36,13 @@ const optionButton = ref(0);
 
 const op = ref();
 
+let today = new Date();
+let month = today.getMonth();
+let year = today.getFullYear();
+let day = today.getDate();
+const maxDate = ref(new Date());
 const beforeDate = ref(moment().format('YYYY-MM-01'));
 const now = ref(moment().format('YYYY-MM-DD'));
-// const beforeDate = ref('2024-01-01');
-// const now = ref(moment().format('2024-02-28'));
 const dates = ref([moment(beforeDate.value).toDate(), moment(now.value).toDate()]);
 
 const initFilters = () => {
@@ -49,10 +53,14 @@ const initFilters = () => {
 initFilters();
 
 onMounted(() => {
+    maxDate.value.setDate(day);
+    maxDate.value.setMonth(month);
+    maxDate.value.setFullYear(year);
     loadData();
 });
 
 const loadData = async () => {
+    loadingData.value = true;
     try {
         const form = {
             idMataUang: selectedMataUang.value,
@@ -74,7 +82,9 @@ const loadData = async () => {
         listLokasi.value = lokasi;
 
         await loadCurrency();
+        loadingData.value = false;
     } catch (error) {
+        loadingData.value = false;
         listTable.value = [];
     }
 };
@@ -316,11 +326,11 @@ const submitData = async () => {
                 <div class="flex flex-col gap-2 w-full">
                     <div class="flex flex-col gap-1 w-full items-start">
                         <label for="pmg" class="text-[0.8vw]">Mata Uang Asing</label>
-                        <Select v-model="selectedMataUang" :options="listMataUang" optionLabel="name" optionValue="id" placeholder="Select a Currency" class="w-full" />
+                        <Select v-model="selectedMataUang" filter :options="listMataUang" optionLabel="name" optionValue="id" placeholder="Select a Currency" class="w-full" />
                     </div>
                     <div class="flex flex-col gap-1 w-full items-start">
                         <label for="pmg" class="text-[0.8vw]">Pilih Periode</label>
-                        <DatePicker v-model="dates" selectionMode="range" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :manualInput="false" placeholder="Select Date Range" class="w-full" />
+                        <DatePicker v-model="dates" selectionMode="range" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :manualInput="false" :maxDate="maxDate" placeholder="Select Date Range" class="w-full" />
                     </div>
                 </div>
                 <Divider />
@@ -347,7 +357,10 @@ const submitData = async () => {
                 </div>
             </template>
             <template #content>
-                <div class="flex flex-col gap-3">
+                <div v-if="loadingData == true" class="flex w-full justify-center font-bold">
+                    <span>Loading Data ...</span>
+                </div>
+                <div v-else class="flex flex-col gap-3">
                     <InputGroup>
                         <InputText placeholder="Cari" v-model="search['global'].value" />
                         <InputGroupAddon>
@@ -355,6 +368,11 @@ const submitData = async () => {
                         </InputGroupAddon>
                     </InputGroup>
                     <DataTable :value="listTable" v-model:filters="search" showGridlines paginator :rows="10" dataKey="period">
+                        <template #empty>
+                            <div class="flex w-full justify-center items-center font-bold">
+                                <span>- Data not found -</span>
+                            </div>
+                        </template>
                         <Column field="product" sortable style="width: 15%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                             <template #header>
                                 <div class="flex w-full justify-center text-black">

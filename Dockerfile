@@ -13,8 +13,8 @@ RUN npm install
 # Copy the rest of the application files
 COPY . .
 
-# Expose port 8481
-EXPOSE 8481
+# Expose port 8881
+EXPOSE 8881
 
 # Command to run the Vue.js application
 CMD ["npm", "run", "dev"]

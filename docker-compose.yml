@@ -6,7 +6,7 @@ services:
             context: "."
         container_name: fe_dashboardinl-app
         ports:
-            - 8881:8481
+            - 8881:8881
         networks:
             backend:
                 aliases:
