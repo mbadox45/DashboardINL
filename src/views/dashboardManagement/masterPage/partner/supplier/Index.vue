@@ -127,9 +127,7 @@ const refreshForm = () => {
 };
 
 const submitData = async () => {
-    if (!formData.value.name || !formData.value.email || !formData.value.kontak || !formData.value.kota || !formData.value.provinsi || !formData.value.negara || !formData.value.alamat) {
-        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
-    } else {
+    if (formData.value.name != null && formData.value.email != null && formData.value.kontak != null && formData.value.kota != null && formData.value.provinsi != null && formData.value.negara != null && formData.value.alamat != null) {
         if (statusForm.value == 'add') {
             const response = await supplierPartnerMasterController.addPost(formData.value);
             // const load = response.data;
@@ -161,6 +159,8 @@ const submitData = async () => {
                 messages.value = [{ severity: 'error', content: 'Proses gagal, silahkan hubungi tim IT', id: count.value++, icon: 'pi-times-circle' }];
             }
         }
+    } else {
+        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     }
 };
 </script>
