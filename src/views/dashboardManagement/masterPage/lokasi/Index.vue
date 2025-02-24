@@ -90,9 +90,7 @@ const refreshForm = () => {
 };
 
 const submitData = async () => {
-    if (!formData.value.name) {
-        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
-    } else {
+    if (formData.value.name != null) {
         if (statusForm.value == 'add') {
             const response = await lokasiMasterController.addPost(formData.value);
             // const load = response.data;
@@ -124,6 +122,8 @@ const submitData = async () => {
                 messages.value = [{ severity: 'error', content: 'Proses gagal, silahkan hubungi tim IT', id: count.value++, icon: 'pi-times-circle' }];
             }
         }
+    } else {
+        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     }
 };
 

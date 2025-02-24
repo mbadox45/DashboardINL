@@ -109,10 +109,8 @@ const refreshForm = () => {
 };
 
 const submitData = async () => {
-    console.log(statusForm.value, formData.value);
-    if (!formData.value.nama || !formData.value.lokasi) {
-        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
-    } else {
+    // console.log(statusForm.value, formData.value);
+    if (formData.value.nama != null && formData.value.lokasi != null) {
         if (statusForm.value == 'add') {
             const response = await pmgMasterController.addPost(formData.value);
             // const load = response.data;
@@ -131,7 +129,6 @@ const submitData = async () => {
             console.log(formData.value);
             const response = await pmgMasterController.updatePost(formData.value.id, formData.value);
             // const load = response.data;
-            console.log(response);
             if (response.status == true) {
                 messages.value = [{ severity: 'success', content: 'Data berhasil di simpan', id: count.value++, icon: 'pi-check-circle' }];
                 loadingSave.value = true;
@@ -144,6 +141,8 @@ const submitData = async () => {
                 messages.value = [{ severity: 'error', content: 'Proses gagal, silahkan hubungi tim IT', id: count.value++, icon: 'pi-times-circle' }];
             }
         }
+    } else {
+        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     }
 };
 

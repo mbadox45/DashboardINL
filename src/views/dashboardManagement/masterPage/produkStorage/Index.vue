@@ -124,9 +124,7 @@ const valueCondition = () => {
 };
 
 const submitData = async () => {
-    if (!formData.value.name || !formData.value.jenis || !formData.value.kapasitas || !formData.value.id_lokasi) {
-        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
-    } else {
+    if (formData.value.name != null && formData.value.jenis != null && formData.value.kapasitas != null && formData.value.id_lokasi != null) {
         if (statusForm.value == 'add') {
             const response = await productStorageScmController.addPost(formData.value);
             // const load = response.data;
@@ -158,6 +156,8 @@ const submitData = async () => {
                 messages.value = [{ severity: 'error', content: 'Proses gagal, silahkan hubungi tim IT', id: count.value++, icon: 'pi-times-circle' }];
             }
         }
+    } else {
+        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     }
 };
 </script>

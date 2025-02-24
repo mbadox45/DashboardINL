@@ -196,6 +196,10 @@ const submitData = async () => {
                     <InputText v-model="formData.kontak" placeholder="Please input Contact" />
                 </div>
                 <div class="flex flex-col gap-1">
+                    <label for="kontak">Email <small class="text-red-500 font-bold">*</small></label>
+                    <InputText v-model="formData.email" placeholder="Please input Email" />
+                </div>
+                <div class="flex flex-col gap-1">
                     <label for="negara">Negara <small class="text-red-500 font-bold">*</small></label>
                     <InputText v-model="formData.negara" placeholder="Please input Country" />
                 </div>

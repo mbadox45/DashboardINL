@@ -125,12 +125,9 @@ const valueCondition = () => {
 };
 
 const submitData = async () => {
-    if (!formData.value.name || !formData.value.konversi_pallet || !formData.value.konversi_pouch || !formData.value.konversi_ton) {
-        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
-    } else {
+    if (formData.value.name != null && formData.value.konversi_pallet != null && formData.value.konversi_pouch != null && formData.value.konversi_ton != null) {
         if (statusForm.value == 'add') {
             const response = await productMasterController.addPost(formData.value);
-            // const load = response.data;
             if (response.status == true) {
                 messages.value = [{ severity: 'success', content: 'Data berhasil di tambahkan', id: count.value++, icon: 'pi-check-circle' }];
                 loadingSave.value = true;
@@ -143,10 +140,7 @@ const submitData = async () => {
                 messages.value = [{ severity: 'error', content: 'Proses gagal, silahkan hubungi tim IT', id: count.value++, icon: 'pi-times-circle' }];
             }
         } else {
-            console.log(formData.value);
             const response = await productMasterController.updatePost(formData.value.id, formData.value);
-            // const load = response.data;
-            console.log(response);
             if (response.status == true) {
                 messages.value = [{ severity: 'success', content: 'Data berhasil di simpan', id: count.value++, icon: 'pi-check-circle' }];
                 loadingSave.value = true;
@@ -159,6 +153,8 @@ const submitData = async () => {
                 messages.value = [{ severity: 'error', content: 'Proses gagal, silahkan hubungi tim IT', id: count.value++, icon: 'pi-times-circle' }];
             }
         }
+    } else {
+        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     }
 };
 </script>
