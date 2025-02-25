@@ -3,8 +3,10 @@ import { formatCurrency } from '@/controller/dummyController';
 import kursController from '@/controller/getApiFromThisApp/kurs/kursController';
 import mataUangKursController from '@/controller/getApiFromThisApp/kurs/mataUangKursController';
 import { FilterMatchMode } from '@primevue/core/api';
+import FileSaver from 'file-saver';
 import moment from 'moment';
 import { onMounted, ref } from 'vue';
+import * as XLSX from 'xlsx';
 
 const drawerCond = ref(false);
 const messages = ref([]);
@@ -32,8 +34,6 @@ let day = today.getDate();
 const maxDate = ref(new Date());
 const beforeDate = ref(moment().format('YYYY-MM-01'));
 const now = ref(moment().format('YYYY-MM-DD'));
-// const beforeDate = ref('2024-01-01');
-// const now = ref(moment().format('2024-01-01'));
 const dates = ref([moment(beforeDate.value).toDate(), moment(now.value).toDate()]);
 
 const initFilters = () => {
@@ -104,6 +104,30 @@ const loadCurrency = async () => {
 
 const toggle = async (event) => {
     op.value.toggle(event);
+};
+
+const exportToExcel = () => {
+    const { saveAs } = FileSaver; // Ambil saveAs dari FileSaver
+    if (listTable.value.length === 0) {
+        messages.value = [{ severity: 'warn', content: 'Tidak ada data untuk diekspor!', id: count.value++, icon: 'pi-exclamation-triangle' }];
+        return;
+    }
+
+    const exportData = listTable.value.map((item) => ({
+        ID: item.id,
+        'Mata Uang': item.mata_uang,
+        Tanggal: item.tanggal,
+        Nilai: item.value
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Data Kurs');
+
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const data = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
+
+    saveAs(data, `Data-Kurs-${new Date().toISOString().split('T')[0]}.xlsx`);
 };
 
 const changeDate = async () => {
@@ -259,10 +283,10 @@ const submitData = async () => {
     <div class="flex flex-col w-full gap-8">
         <div class="flex gap-2 items-center justify-between w-full font-bold">
             <span class="text-3xl">Kurs</span>
-            <!-- <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-emerald-500 hover:bg-emerald-700 text-white rounded-full flex gap-2">
-                <i class="pi pi-plus"></i>
-                <span>Tambah Data</span>
-            </button> -->
+            <button v-if="loadingData == false" @click="exportToExcel" class="px-3 py-2 border rounded-lg bg-emerald-500 text-white hover:shadow-md hover:bg-emerald-600 transition-all duration-300 shadow-sm flex items-center gap-2 justify-center">
+                <i class="pi pi-file-excel"></i>
+                <span>Export ke Excel</span>
+            </button>
         </div>
         <Drawer v-model:visible="drawerCond" position="right" class="!w-full md:!w-[30rem]">
             <template #header>
@@ -356,12 +380,6 @@ const submitData = async () => {
                         </button>
                         <Chip :label="`${moment(beforeDate).format('DD MMM YYYY')} - ${moment(now).format('DD MMM YYYY')}`" icon="pi pi-calendar" style="font-size: 0.6vw" class="font-bold" />
                     </div>
-                    <!-- <InputGroup>
-                        <InputText placeholder="Search Components" v-model="search['global'].value" />
-                        <InputGroupAddon>
-                            <i class="pi pi-search" />
-                        </InputGroupAddon>
-                    </InputGroup> -->
                 </div>
             </template>
             <template #content>
@@ -410,15 +428,6 @@ const submitData = async () => {
                             </div>
                         </template>
                     </Column>
-                    <!-- <Column field="value" style="width: 5%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
-                        <template #body="{ data }">
-                            <div class="flex items-center justify-center w-full">
-                                <button @click="showDrawer(data)" class="p-3 border rounded-full flex bg-teal-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
-                                    <i class="pi pi-pencil" style="font-size: 0.7vw"></i>
-                                </button>
-                            </div>
-                        </template>
-                    </Column> -->
                 </DataTable>
             </template>
         </Card>

@@ -8,7 +8,7 @@ import { defineConfig } from 'vite';
 // https://vitejs.dev/config/
 export default defineConfig({
     optimizeDeps: {
-        include: ['apexcharts', 'vue3-apexcharts', 'crypto-js'],
+        include: ['apexcharts', 'vue3-apexcharts', 'crypto-js', 'file-saver'],
         noDiscovery: true
     },
     plugins: [

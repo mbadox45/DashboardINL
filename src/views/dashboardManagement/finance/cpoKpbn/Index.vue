@@ -3,8 +3,10 @@ import { formatCurrency } from '@/controller/dummyController';
 import cpoKpbnController from '@/controller/getApiFromThisApp/cpoKpbn/cpoKpbnController';
 import mataUangKursController from '@/controller/getApiFromThisApp/kurs/mataUangKursController';
 import { FilterMatchMode } from '@primevue/core/api';
+import FileSaver from 'file-saver';
 import moment from 'moment';
 import { onMounted, ref } from 'vue';
+import * as XLSX from 'xlsx';
 
 const drawerCond = ref(false);
 const messages = ref([]);
@@ -89,6 +91,36 @@ const loadCurrency = async () => {
 
 const toggle = async (event) => {
     op.value.toggle(event);
+};
+
+const exportToExcel = async () => {
+    const { saveAs } = FileSaver; // Ambil saveAs dari FileSaver
+    const form = {
+        idMataUang: selectedMataUang.value,
+        tanggalAwal: beforeDate.value,
+        tanggalAkhir: now.value
+    };
+    const response = await cpoKpbnController.loadToExportTable(form);
+
+    if (response.length === 0) {
+        messages.value = [{ severity: 'warn', content: 'Tidak ada data untuk diekspor!', id: count.value++, icon: 'pi-exclamation-triangle' }];
+        return;
+    }
+    const exportData = response.map((item) => ({
+        Tanggal: item.tanggal,
+        Kurs: item.kurs,
+        'Nilai IDR / Kg': item.value,
+        'Nilai Asing / Ton': item.valueAsing
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Data CPO KPBN');
+
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const data = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
+
+    saveAs(data, `Data-CPO-KPBN-${moment().format('YYYY-MM-DD-HHmmss')}.xlsx`);
 };
 
 const changeDate = async () => {
@@ -242,10 +274,10 @@ const submitData = async () => {
     <div class="flex flex-col w-full gap-8">
         <div class="flex gap-2 items-center justify-between w-full font-bold">
             <span class="text-3xl">CPO KPBN</span>
-            <!-- <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-emerald-500 hover:bg-emerald-700 text-white rounded-full flex gap-2">
-                <i class="pi pi-plus"></i>
-                <span>Tambah Data</span>
-            </button> -->
+            <button v-if="loadingData == false" @click="exportToExcel" class="px-3 py-2 border rounded-lg bg-emerald-500 text-white hover:shadow-md hover:bg-emerald-600 transition-all duration-300 shadow-sm flex items-center gap-2 justify-center">
+                <i class="pi pi-file-excel"></i>
+                <span>Export ke Excel</span>
+            </button>
         </div>
         <Drawer v-model:visible="drawerCond" position="right" class="!w-full md:!w-[30rem]">
             <template #header>

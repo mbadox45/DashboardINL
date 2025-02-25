@@ -82,4 +82,32 @@ export default new (class cpoKpbnController {
             return [];
         }
     };
+    loadToExportTable = async (form) => {
+        try {
+            const list = [];
+            const response = await this.getByPeriod(form);
+            if (response != null) {
+                const data = response.years;
+                if (data != null) {
+                    for (let i = 0; i < data.length; i++) {
+                        const months = data[i].months;
+                        for (let j = 0; j < months.length; j++) {
+                            const detail = months[j].detail;
+                            for (let k = 0; k < detail.length; k++) {
+                                list.push({
+                                    kurs: detail[k].kurs,
+                                    tanggal: detail[k].tanggal,
+                                    value: detail[k].value,
+                                    valueAsing: detail[k].valueAsing
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            return list;
+        } catch (error) {
+            return [];
+        }
+    };
 })();
