@@ -34,11 +34,14 @@ const listMataUang = ref([]);
 
 const op = ref();
 
+let today = new Date();
+let month = today.getMonth();
+let year = today.getFullYear();
+let day = today.getDate();
+const maxDate = ref(new Date());
 const beforeDate = ref(moment().format('YYYY-MM-01'));
 const now = ref(moment().format('YYYY-MM-DD'));
-// const beforeDate = ref('2024-12-01');
-// const now = ref(moment().format('2024-12-31'));
-const dates2 = ref(moment().format('YYYY-MM'));
+const dates2 = ref(moment().toDate());
 const dates = ref([moment(beforeDate.value).toDate(), moment(now.value).toDate()]);
 
 const initFilters = () => {
@@ -57,6 +60,9 @@ const formData = ref({
 });
 
 onMounted(() => {
+    maxDate.value.setDate(day);
+    maxDate.value.setMonth(month);
+    maxDate.value.setFullYear(year);
     loadData();
 });
 
@@ -356,11 +362,11 @@ const submitData = async () => {
                 <div class="flex flex-col gap-2 w-full">
                     <div class="flex flex-col gap-1 w-full items-start">
                         <label for="pmg" class="text-[0.8vw]">Pilih Mata Uang</label>
-                        <Select v-model="selectedMataUang" :options="listMataUang" optionLabel="name" optionValue="id" placeholder="Select a Currency" class="w-full" />
+                        <Select v-model="selectedMataUang" filter :options="listMataUang" optionLabel="name" optionValue="id" placeholder="Select a Currency" class="w-full" />
                     </div>
                     <div class="flex flex-col gap-1 w-full items-start">
                         <label for="pmg" class="text-[0.8vw]">Pilih Periode</label>
-                        <DatePicker v-model="dates2" showIcon view="month" dateFormat="yy-mm" placeholder="Select Date Range" class="w-full" />
+                        <DatePicker v-model="dates2" showIcon view="month" dateFormat="yy-mm" :maxDate="maxDate" placeholder="Select Date Range" class="w-full" />
                     </div>
                 </div>
                 <Divider />

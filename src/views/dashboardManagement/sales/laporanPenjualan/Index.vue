@@ -17,6 +17,7 @@ const timeResponse = ref(3000);
 const loadingSave = ref(false);
 const logFile = ref([]);
 const allData = ref();
+const loadingData = ref(false);
 
 const listProduct = ref([]);
 const listUraian = ref([]);
@@ -39,10 +40,13 @@ const optionButton = ref(0);
 
 const op = ref();
 
+let today = new Date();
+let month = today.getMonth();
+let year = today.getFullYear();
+let day = today.getDate();
+const maxDate = ref(new Date());
 const beforeDate = ref(moment().format('YYYY-MM-01'));
 const now = ref(moment().format('YYYY-MM-DD'));
-// const beforeDate = ref('2024-01-01');
-// const now = ref(moment().format('2024-02-28'));
 const dates = ref([moment(beforeDate.value).toDate(), moment(now.value).toDate()]);
 
 const initFilters = () => {
@@ -53,10 +57,14 @@ const initFilters = () => {
 initFilters();
 
 onMounted(() => {
+    maxDate.value.setDate(day);
+    maxDate.value.setMonth(month);
+    maxDate.value.setFullYear(year);
     loadData();
 });
 
 const loadData = async () => {
+    loadingData.value = true;
     try {
         const form = {
             tanggalAwal: beforeDate.value,
@@ -76,9 +84,11 @@ const loadData = async () => {
             listTable.value = bulk.products;
         }
 
+        loadingData.value = false;
         // await loadUraian();
         // await loadCustomer();
     } catch (error) {
+        loadingData.value = false;
         listTable.value = [];
     }
 };
@@ -129,7 +139,7 @@ const showDrawer = async (data) => {
             formData.value.qty = Number(data.qty);
             formData.value.harga_satuan = Number(data.harga_satuan);
             formData.value.margin_percent = Number(data.margin_percent);
-            formData.value.tanggal = data.tanggal;
+            formData.value.tanggal = moment(data.tanggal, 'YYYY-MM-DD').toDate();
             statusForm.value = 'edit';
         } else {
             logFile.value = [];
@@ -212,10 +222,7 @@ const selectButton = async (val) => {
 };
 
 const submitData = async () => {
-    formData.value.customer_id != null || !formData.value.product_id || !formData.value.tanggal || !formData.value.qty || !formData.value.harga_satuan || !formData.value.margin_percent;
-    if (!formData.value.customer_id || !formData.value.product_id || !formData.value.tanggal || !formData.value.qty || !formData.value.harga_satuan || !formData.value.margin_percent) {
-        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
-    } else {
+    if (formData.value.customer_id != null && formData.value.product_id != null && formData.value.tanggal != null && formData.value.qty != null && formData.value.harga_satuan != null && formData.value.margin_percent != null) {
         formData.value.tanggal = moment(formData.value.tanggal).format('YYYY-MM-DD');
         if (statusForm.value == 'add') {
             const response = await laporanPenjualanController.addPost(formData.value);
@@ -235,7 +242,6 @@ const submitData = async () => {
             console.log(formData.value);
             const response = await laporanPenjualanController.updatePost(formData.value.id, formData.value);
             // const load = response.data;
-            console.log(response);
             if (response.status == true) {
                 messages.value = [{ severity: 'success', content: 'Data berhasil di simpan', id: count.value++, icon: 'pi-check-circle' }];
                 loadingSave.value = true;
@@ -248,6 +254,8 @@ const submitData = async () => {
                 messages.value = [{ severity: 'error', content: 'Proses gagal, silahkan hubungi tim IT', id: count.value++, icon: 'pi-times-circle' }];
             }
         }
+    } else {
+        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     }
 };
 </script>
@@ -288,7 +296,7 @@ const submitData = async () => {
                 </div>
                 <div class="flex flex-col gap-1 w-full">
                     <label for="date" class="font-bold">Tanggal <small class="text-red-500 font-bold">*</small></label>
-                    <DatePicker v-model="formData.tanggal" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" />
+                    <DatePicker v-model="formData.tanggal" dateFormat="yy-mm-dd" :maxDate="maxDate" showIcon placeholder="Please input Date" />
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="kapasitas">Jumlah <small class="text-red-500 font-bold">*</small></label>
@@ -347,7 +355,7 @@ const submitData = async () => {
                 <div class="flex flex-col gap-2 w-full">
                     <div class="flex flex-col gap-1 w-full items-start">
                         <label for="pmg" class="text-[0.8vw]">Pilih Periode</label>
-                        <DatePicker v-model="dates" selectionMode="range" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :manualInput="false" placeholder="Select Date Range" class="w-full" />
+                        <DatePicker v-model="dates" selectionMode="range" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :maxDate="maxDate" :manualInput="false" placeholder="Select Date Range" class="w-full" />
                     </div>
                 </div>
                 <Divider />
@@ -380,7 +388,10 @@ const submitData = async () => {
                 </div>
             </template>
             <template #content>
-                <div class="flex flex-col gap-3">
+                <div v-if="loadingData == true" class="flex w-full justify-center font-bold">
+                    <span>Loading Data ...</span>
+                </div>
+                <div v-else class="flex flex-col gap-3">
                     <InputGroup>
                         <InputText placeholder="Search Components" v-model="search['global'].value" />
                         <InputGroupAddon>
@@ -388,7 +399,10 @@ const submitData = async () => {
                         </InputGroupAddon>
                     </InputGroup>
                     <ScrollPanel style="width: 100%; height: 35vw">
-                        <div class="flex flex-col gap-3">
+                        <div v-if="listTable.length < 1" class="flex w-full justify-center items-center font-bold">
+                            <span>- Data not found -</span>
+                        </div>
+                        <div v-else class="flex flex-col gap-3">
                             <Panel v-for="(item, index) in listTable" :key="index" toggleable :collapsed="true">
                                 <template #header>
                                     <span class="text-[0.9vw] font-bold italic">{{ item.name }}</span>
