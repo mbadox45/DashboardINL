@@ -257,17 +257,19 @@ export default new (class operationHomeController {
                 result.cpoOlah = formatCurrency(Number(cpoOlah).toFixed(2));
             }
 
+            // console.log(target);
             if (target != null) {
                 const summary = target.summary;
                 if (summary.length > 0) {
                     const rkap = summary.find((item) => item.nama.toLowerCase().includes('rkap'));
                     const utility = summary.find((item) => item.nama.toLowerCase().includes('utility'));
-                    result.kapasitasUtility = formatCurrency(Number(utility.value).toFixed(2));
-                    result.kapasitasUtilityPercentage = formatCurrency(Number(utility.percentage).toFixed(2));
-                    result.rkap = formatCurrency(Number(rkap.value).toFixed(2));
-                    result.rkapPercentage = formatCurrency(Number(rkap.percentage).toFixed(2));
+                    result.kapasitasUtility = utility == null ? formatCurrency(Number(0).toFixed(2)) : formatCurrency(Number(utility.value).toFixed(2));
+                    result.kapasitasUtilityPercentage = utility == null ? formatCurrency(Number(0).toFixed(2)) : formatCurrency(Number(utility.percentage).toFixed(2));
+                    result.rkap = rkap == null ? formatCurrency(Number(0).toFixed(2)) : formatCurrency(Number(rkap.value).toFixed(2));
+                    result.rkapPercentage = rkap == null ? formatCurrency(Number(0).toFixed(2)) : formatCurrency(Number(rkap.percentage).toFixed(2));
                 }
             }
+            // console.log(result);
 
             return result;
         } catch (error) {

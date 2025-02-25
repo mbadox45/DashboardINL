@@ -20,18 +20,21 @@ const listTable = ref([]);
 const totalTable = ref({ cpoOlah: 0, totalCost: 0, totalHargaSatuan: 0 });
 const search = ref();
 const expandedRows = ref([]);
+const loadingData = ref(false);
 
 const selectedPmg = ref(1);
-// const pmg = ref([]);
 const listPayment = ref([]);
 const listKategori = ref([]);
 
 const op = ref();
 
+let today = new Date();
+let month = today.getMonth();
+let year = today.getFullYear();
+let day = today.getDate();
+const maxDate = ref(new Date());
 const beforeDate = ref(moment().format('YYYY-MM-01'));
 const now = ref(moment().format('YYYY-MM-DD'));
-// const beforeDate = ref('2024-01-01');
-// const now = ref(moment().format('2024-01-01'));
 const dates = ref([moment(beforeDate.value).toDate(), moment(now.value).toDate()]);
 
 const initFilters = () => {
@@ -54,10 +57,14 @@ const formData = ref({
 });
 
 onMounted(() => {
+    maxDate.value.setDate(day);
+    maxDate.value.setMonth(month);
+    maxDate.value.setFullYear(year);
     loadData();
 });
 
 const loadData = async () => {
+    loadingData.value = true;
     try {
         // Change Picker
         const form = {
@@ -74,13 +81,13 @@ const loadData = async () => {
         };
 
         // get Select Option
-        // const loadPMG = await pmgMasterController.getAll();
         const pay = await payStatusCashFlowScheduleController.getAll();
         const kategori = await kategoriCashFlowScheduleController.getAll();
         listKategori.value = kategori;
         listPayment.value = pay;
-        // pmg.value = loadPMG;
+        loadingData.value = false;
     } catch (error) {
+        loadingData.value = false;
         listTable.value = [];
         totalTable.value = {
             cpoOlah: 0,
@@ -218,9 +225,7 @@ const refreshForm = () => {
 };
 
 const submitData = async () => {
-    if (!formData.value.tanggal || !formData.value.pay_status_id || !formData.value.value || !formData.value.name || !formData.value.kategori_id) {
-        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
-    } else {
+    if (formData.value.tanggal != null && formData.value.pay_status_id != null && formData.value.value != null && formData.value.name != null && formData.value.kategori_id != null) {
         formData.value.tanggal = moment(formData.value.tanggal).format('YYYY-MM-DD');
         if (statusForm.value == 'add') {
             const response = await cashFlowScheduleController.addPost(formData.value);
@@ -250,6 +255,8 @@ const submitData = async () => {
                 messages.value = [{ severity: 'error', content: response.msg, id: count.value++, icon: 'pi-times-circle' }];
             }
         }
+    } else {
+        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     }
 };
 </script>
@@ -349,7 +356,7 @@ const submitData = async () => {
                     </div> -->
                     <div class="flex flex-col gap-1 w-full items-start">
                         <label for="pmg" class="text-[0.8vw]">Pilih Periode</label>
-                        <DatePicker v-model="dates" selectionMode="range" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :manualInput="false" placeholder="Select Date Range" class="w-full" />
+                        <DatePicker v-model="dates" selectionMode="range" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :manualInput="false" :maxDate="maxDate" placeholder="Select Date Range" class="w-full" />
                     </div>
                 </div>
                 <Divider />
@@ -376,8 +383,14 @@ const submitData = async () => {
                 </div>
             </template>
             <template #content>
-                <ScrollPanel style="width: 100%; height: 35vw">
-                    <div class="flex flex-col gap-3">
+                <div v-if="loadingData == true" class="flex w-full justify-center font-bold">
+                    <span>Loading Data ...</span>
+                </div>
+                <ScrollPanel v-else style="width: 100%; height: 35vw">
+                    <div v-if="listTable.length < 1" class="flex w-full justify-center items-center font-bold">
+                        <span>- Data not found -</span>
+                    </div>
+                    <div v-else class="flex flex-col gap-3">
                         <Panel v-for="(item, index) in listTable" :key="index" toggleable :collapsed="true">
                             <template #header>
                                 <span class="text-[0.9vw] font-bold italic">{{ item.month }}</span>

@@ -115,11 +115,21 @@ watch(() => props.datas, loadData, { immediate: true });
                         </Column>
                         <Column field="labaBersih" sortable :headerStyle="`background-color: ${item.color};`" style="background-color: black; color: white">
                             <template #header>
-                                <span class="flex justify-center items-center w-full text-center">Laba Bersih (Bn)</span>
+                                <span class="flex justify-center items-center w-full text-center">Laba Bersih (IDR Miliar)</span>
                             </template>
                             <template #body="{ data }">
                                 <div class="w-full flex justify-center items-center">
                                     <span>{{ data.labaBersih }}</span>
+                                </div>
+                            </template>
+                        </Column>
+                        <Column field="target" sortable :headerStyle="`background-color: ${item.color};`" style="background-color: black; color: white">
+                            <template #header>
+                                <span class="flex justify-center items-center w-full text-center">Target Laba Bersih (IDR Miliar)</span>
+                            </template>
+                            <template #body="{ data }">
+                                <div class="w-full flex justify-center items-center">
+                                    <span>{{ data.target }}</span>
                                 </div>
                             </template>
                         </Column>

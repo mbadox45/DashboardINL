@@ -119,11 +119,21 @@ watch(() => props.datas, loadData, { immediate: true });
                         </Column>
                         <Column field="ebitda" sortable :headerStyle="`background-color: ${item.color};`" style="background-color: black; color: white">
                             <template #header>
-                                <span class="flex justify-center items-center w-full text-center">EBITDA (Bn)</span>
+                                <span class="flex justify-center items-center w-full text-center">EBITDA (IDR Miliar)</span>
                             </template>
                             <template #body="{ data }">
                                 <div class="w-full flex justify-center items-center">
                                     <span>{{ data.ebitda }}</span>
+                                </div>
+                            </template>
+                        </Column>
+                        <Column field="target" sortable :headerStyle="`background-color: ${item.color};`" style="background-color: black; color: white">
+                            <template #header>
+                                <span class="flex justify-center items-center w-full text-center">Target EBITDA (IDR Miliar)</span>
+                            </template>
+                            <template #body="{ data }">
+                                <div class="w-full flex justify-center items-center">
+                                    <span>{{ data.target }}</span>
                                 </div>
                             </template>
                         </Column>

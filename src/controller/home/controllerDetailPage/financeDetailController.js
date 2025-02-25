@@ -838,6 +838,7 @@ export default new (class financeDetailController {
                             list.push({
                                 periode: months[i].name,
                                 labaBersih: formatCurrency(valueToBilion(data.labaBersih)),
+                                target: formatCurrency(valueToBilion(data.targetLabaBersihRkap)),
                                 npmPercent: formatCurrency(Number(data.npmPercent).toFixed(2))
                             });
                         } else {
@@ -846,6 +847,7 @@ export default new (class financeDetailController {
                             list.push({
                                 periode: months[i].name,
                                 labaBersih: 0,
+                                target: 0,
                                 npmPercent: 0
                             });
                         }
@@ -868,6 +870,7 @@ export default new (class financeDetailController {
                             list.push({
                                 periode: months[i].name,
                                 labaBersih: formatCurrency(valueToBilion(data.labaBersih)),
+                                target: formatCurrency(valueToBilion(data.targetLabaBersihRkap)),
                                 npmPercent: formatCurrency(Number(data.npmPercent).toFixed(2))
                             });
                         } else {
@@ -876,6 +879,7 @@ export default new (class financeDetailController {
                             list.push({
                                 periode: months[i].name,
                                 labaBersih: 0,
+                                target: 0,
                                 npmPercent: 0
                             });
                         }
@@ -1005,7 +1009,8 @@ export default new (class financeDetailController {
                             dataGpm.push(Number(Number(data.ebitdaPercent).toFixed(2)));
                             list.push({
                                 periode: months[i].name,
-                                ebitda: formatCurrency(valueToBilion(data.ebitda)),
+                                ebitda: formatCurrency(valueToBilion(data.targetEbitdaRkap)),
+                                target: formatCurrency(valueToBilion(data.ebitda)),
                                 ebitdaPersen: formatCurrency(Number(data.ebitdaPercent).toFixed(2))
                             });
                         } else {
@@ -1014,6 +1019,7 @@ export default new (class financeDetailController {
                             list.push({
                                 periode: months[i].name,
                                 ebitda: 0,
+                                target: 0,
                                 ebitdaPersen: 0
                             });
                         }
@@ -1036,6 +1042,7 @@ export default new (class financeDetailController {
                             list.push({
                                 periode: months[i].name,
                                 ebitda: formatCurrency(valueToBilion(data.ebitda)),
+                                target: formatCurrency(valueToBilion(data.targetEbitdaRkap)),
                                 ebitdaPersen: formatCurrency(Number(data.ebitdaPercent).toFixed(2))
                             });
                         } else {
@@ -1044,6 +1051,7 @@ export default new (class financeDetailController {
                             list.push({
                                 periode: months[i].name,
                                 ebitda: 0,
+                                target: 0,
                                 ebitdaPersen: 0
                             });
                         }
@@ -1177,6 +1185,7 @@ export default new (class financeDetailController {
                             list.push({
                                 periode: months[i].name,
                                 labakotor: formatCurrency(valueToBilion(data.labaKotor)),
+                                target: formatCurrency(valueToBilion(data.targetLabaKotorRkap)),
                                 gpm: formatCurrency(Number(data.gpmPercent).toFixed(2))
                             });
                         } else {
@@ -1185,6 +1194,7 @@ export default new (class financeDetailController {
                             list.push({
                                 periode: months[i].name,
                                 labakotor: 0,
+                                target: 0,
                                 gpm: 0
                             });
                         }
@@ -1207,6 +1217,7 @@ export default new (class financeDetailController {
                             list.push({
                                 periode: months[i].name,
                                 labakotor: formatCurrency(valueToBilion(data.labaKotor)),
+                                target: formatCurrency(valueToBilion(data.targetLabaKotorRkap)),
                                 gpm: formatCurrency(Number(data.gpmPercent).toFixed(2))
                             });
                         } else {
@@ -1215,6 +1226,7 @@ export default new (class financeDetailController {
                             list.push({
                                 periode: months[i].name,
                                 labakotor: 0,
+                                target: 0,
                                 gpm: 0
                             });
                         }

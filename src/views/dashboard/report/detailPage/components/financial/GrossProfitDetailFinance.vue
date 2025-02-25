@@ -118,6 +118,21 @@ watch(() => props.datas, loadData, { immediate: true });
                             <template #header>
                                 <span class="flex justify-center items-center w-full text-center">Laba Kotor (IDR Miliar)</span>
                             </template>
+                            <template #body="{ data }">
+                                <div class="w-full flex justify-center items-center">
+                                    <span>{{ data.labakotor }}</span>
+                                </div>
+                            </template>
+                        </Column>
+                        <Column field="target" sortable :headerStyle="`background-color: ${item.color};`" style="background-color: black; color: white">
+                            <template #header>
+                                <span class="flex justify-center items-center w-full text-center">Target Laba Kotor (IDR Miliar)</span>
+                            </template>
+                            <template #body="{ data }">
+                                <div class="w-full flex justify-center items-center">
+                                    <span>{{ data.target }}</span>
+                                </div>
+                            </template>
                         </Column>
                         <Column field="gpm" sortable :headerStyle="`background-color: ${item.color};`" style="background-color: black; color: white">
                             <template #header>

@@ -424,12 +424,13 @@ export default new (class financeHomeController {
         try {
             const response = await profitabilityController.getByPeriod(form);
             if (response != null) {
+                // console.log(response);
                 const monthsThisYear = response.latestMonth;
                 // If thisYear has data, get the latest month
                 if (monthsThisYear != null) {
                     const thisYearLatestMonth = {
                         month: monthsThisYear.month,
-                        tanggal: moment(form.tanggalAkhir).format('MMM YYYY'),
+                        tanggal: moment(`${monthsThisYear.month}-${monthsThisYear.year}`, 'M-YYYY').format('MMM YYYY'),
                         pendapatan: valueToBilion(monthsThisYear.pendapatan),
                         targetPendapatanRkap: valueToBilion(monthsThisYear.targetPendapatanRkap),
                         persenPendapatan: Number(monthsThisYear.targetPendapatanRkap) == 0 ? 0 : ((Number(monthsThisYear.pendapatan) / Number(monthsThisYear.targetPendapatanRkap)) * 100).toFixed(0),
