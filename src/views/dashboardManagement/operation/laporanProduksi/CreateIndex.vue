@@ -10,7 +10,6 @@ const router = useRouter();
 
 const messages = ref([]);
 const tanggal = ref(moment().format('YYYY-MM-DD'));
-const maxDate = ref(moment().format('YYYY-MM-DD'));
 const listJenis = ref([]);
 const jenisProduksi = ref([]);
 const listPmg = ref([]);
@@ -22,7 +21,16 @@ const setTime = ref(3000);
 const formData = ref([]);
 let count = ref(0);
 
+let today = new Date();
+let month = today.getMonth();
+let year = today.getFullYear();
+let day = today.getDate();
+const maxDate = ref(new Date());
+
 onMounted(() => {
+    maxDate.value.setDate(day);
+    maxDate.value.setMonth(month);
+    maxDate.value.setFullYear(year);
     loadData();
 });
 
@@ -164,7 +172,7 @@ const postData = async (cond) => {
                     <div class="flex gap-3 w-full">
                         <div class="flex flex-col gap-1 w-full">
                             <label for="date" class="font-bold">Tanggal <small class="text-red-500 font-bold">*</small></label>
-                            <DatePicker v-model="tanggal" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" />
+                            <DatePicker v-model="tanggal" dateFormat="yy-mm-dd" :maxDate="maxDate" showIcon placeholder="Please input Date" />
                         </div>
                         <div class="flex flex-col gap-1 w-full">
                             <label for="date" class="font-bold">PMG <small class="text-red-500 font-bold">*</small></label>

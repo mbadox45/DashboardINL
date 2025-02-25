@@ -79,41 +79,46 @@ export default new (class laporanPackagingController {
                     const listItems = [];
                     const kategori = response[i].kategori_data;
                     const bahan_olah = kategori.find((item) => item.kategori == 'bahan_olah');
-                    // console.log(bahan_olah);
                     const produk_hasil = kategori.find((item) => item.kategori == 'produk_hasil');
                     const others = kategori.find((item) => item.kategori == 'others');
 
                     // Bahan Baku
-                    if (bahan_olah.items != null) {
-                        for (let j = 0; j < bahan_olah.items.length; j++) {
-                            listItems.push({
-                                id: `${response[i].jenis_laporan} ${bahan_olah.items[j].name}`,
-                                name: `${bahan_olah.items[j].name} (Olah)`,
-                                totalQty: bahan_olah.items[j].totalQty,
-                                detail: bahan_olah.items[j].detail
-                            });
+                    if (bahan_olah != null) {
+                        if (bahan_olah.items != null) {
+                            for (let j = 0; j < bahan_olah.items.length; j++) {
+                                listItems.push({
+                                    id: `${response[i].jenis_laporan} ${bahan_olah.items[j].name}`,
+                                    name: `${bahan_olah.items[j].name} (Olah)`,
+                                    totalQty: bahan_olah.items[j].totalQty,
+                                    detail: bahan_olah.items[j].detail
+                                });
+                            }
                         }
                     }
                     // Produk Hasil
-                    if (produk_hasil.items != null) {
-                        for (let j = 0; j < produk_hasil.items.length; j++) {
-                            listItems.push({
-                                id: `${response[i].jenis_laporan} ${produk_hasil.items[j].name}`,
-                                name: `${produk_hasil.items[j].name} (Box)`,
-                                totalQty: produk_hasil.items[j].totalQty,
-                                detail: produk_hasil.items[j].detail
-                            });
+                    if (produk_hasil != null) {
+                        if (produk_hasil.items != null) {
+                            for (let j = 0; j < produk_hasil.items.length; j++) {
+                                listItems.push({
+                                    id: `${response[i].jenis_laporan} ${produk_hasil.items[j].name}`,
+                                    name: `${produk_hasil.items[j].name} (Box)`,
+                                    totalQty: produk_hasil.items[j].totalQty,
+                                    detail: produk_hasil.items[j].detail
+                                });
+                            }
                         }
                     }
                     // Others
-                    if (others.items != null) {
-                        for (let j = 0; j < others.items.length; j++) {
-                            listItems.push({
-                                id: `${response[i].jenis_laporan} ${others.items[j].name}`,
-                                name: `${others.items[j].name}`,
-                                totalQty: others.items[j].totalQty,
-                                detail: others.items[j].detail
-                            });
+                    if (others != null) {
+                        if (others.items != null) {
+                            for (let j = 0; j < others.items.length; j++) {
+                                listItems.push({
+                                    id: `${response[i].jenis_laporan} ${others.items[j].name}`,
+                                    name: `${others.items[j].name}`,
+                                    totalQty: others.items[j].totalQty,
+                                    detail: others.items[j].detail
+                                });
+                            }
                         }
                     }
                     list.push({

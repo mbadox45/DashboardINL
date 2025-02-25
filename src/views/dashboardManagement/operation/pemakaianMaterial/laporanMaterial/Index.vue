@@ -21,6 +21,7 @@ const listTable = ref([]);
 const totalTable = ref({ cpoOlah: 0, totalCost: 0, totalHargaSatuan: 0 });
 const search = ref();
 const expandedRows = ref([]);
+const loadingData = ref(false);
 
 const selectedPmg = ref(1);
 const pmg = ref([]);
@@ -28,10 +29,13 @@ const listJenis = ref([]);
 
 const op = ref();
 
+let today = new Date();
+let month = today.getMonth();
+let year = today.getFullYear();
+let day = today.getDate();
+const maxDate = ref(new Date());
 const beforeDate = ref(moment().format('YYYY-MM-01'));
 const now = ref(moment().format('YYYY-MM-DD'));
-// const beforeDate = ref('2024-01-01');
-// const now = ref('2024-01-30');
 const dates = ref([moment(beforeDate.value).toDate(), moment(now.value).toDate()]);
 
 let count = ref(0);
@@ -45,10 +49,14 @@ const formData = ref({
 });
 
 onMounted(() => {
+    maxDate.value.setDate(day);
+    maxDate.value.setMonth(month);
+    maxDate.value.setFullYear(year);
     loadData();
 });
 
 const loadData = async () => {
+    loadingData.value = true;
     try {
         // Change Picker
         const form = {
@@ -65,7 +73,9 @@ const loadData = async () => {
 
         const data = await laporanMaterialController.loadTable(form);
         listTable.value = data;
+        loadingData.value = false;
     } catch (error) {
+        loadingData.value = false;
         listTable.value = [];
     }
 };
@@ -177,7 +187,7 @@ const showDrawer = async (data) => {
             formData.value.id = data.id;
             formData.value.item_material_id = data.item_material_id;
             formData.value.pmg_id = data.pmg_id;
-            formData.value.tanggal = data.tanggal;
+            formData.value.tanggal = moment(data.tanggal, 'YYYY-MM-DD').toDate();
             formData.value.qty = Number(data.qty);
             statusForm.value = 'edit';
         } else {
@@ -215,7 +225,7 @@ const refreshForm = () => {
 };
 
 const submitData = async () => {
-    if (!formData.value.pmg_id || !formData.value.tanggal || !formData.value.item_material_id || !formData.value.qty) {
+    if (formData.value.pmg_id != null && formData.value.tanggal != null && formData.value.item_material_id != null && formData.value.qty != null) {
         messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     } else {
         formData.value.tanggal = moment(formData.value.tanggal).format('YYYY-MM-DD');
@@ -283,7 +293,7 @@ const submitData = async () => {
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="date">Tanggal <small class="text-red-500 font-bold">*</small></label>
-                    <DatePicker v-model="formData.tanggal" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" />
+                    <DatePicker v-model="formData.tanggal" dateFormat="yy-mm-dd" :maxDate="maxDate" showIcon placeholder="Please input Date" />
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="date">Quantity <small class="text-red-500 font-bold">*</small></label>

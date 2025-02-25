@@ -22,6 +22,7 @@ const listTable = ref([]);
 const totalTable = ref({ cpoOlah: 0, totalCost: 0, totalHargaSatuan: 0 });
 const search = ref({ global: { value: null, matchMode: FilterMatchMode.CONTAINS } });
 const expandedRows = ref([]);
+const loadingData = ref(false);
 
 const selectedPmg = ref(1);
 const pmg = ref([]);
@@ -29,10 +30,13 @@ const listJenis = ref([]);
 
 const op = ref();
 
+let today = new Date();
+let month = today.getMonth();
+let year = today.getFullYear();
+let day = today.getDate();
+const maxDate = ref(new Date());
 const beforeDate = ref(moment().format('YYYY-MM-01'));
 const now = ref(moment().format('YYYY-MM-DD'));
-// const beforeDate = ref('2024-01-01');
-// const now = ref('2024-01-30');
 const dates = ref([moment(beforeDate.value).toDate(), moment(now.value).toDate()]);
 
 let count = ref(0);
@@ -46,10 +50,14 @@ const formData = ref({
 });
 
 onMounted(() => {
+    maxDate.value.setDate(day);
+    maxDate.value.setMonth(month);
+    maxDate.value.setFullYear(year);
     loadData();
 });
 
 const loadData = async () => {
+    loadingData.value = true;
     try {
         // Change Picker
         const form = {
@@ -65,9 +73,10 @@ const loadData = async () => {
         pmg.value = loadPMG;
 
         const data = await normaLaporanMaterialController.getByPeriod(form);
-        // console.log(data);
         listTable.value = data;
+        loadingData.value = false;
     } catch (error) {
+        loadingData.value = false;
         listTable.value = [];
     }
 };
@@ -178,7 +187,7 @@ const showDrawer = async (data) => {
             formData.value.id = data.id;
             formData.value.item_material_id = data.item_material_id;
             formData.value.pmg_id = data.pmg_id;
-            formData.value.tanggal = data.tanggal;
+            formData.value.tanggal = moment(data.tanggal, 'YYYY-MM-DD').toDate();
             formData.value.qty = Number(data.qty);
             statusForm.value = 'edit';
         } else {
@@ -215,10 +224,8 @@ const refreshForm = () => {
 };
 
 const submitData = async () => {
-    if (!formData.value.pmg_id || !formData.value.tanggal || !formData.value.item_material_id || !formData.value.qty) {
-        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
-    } else {
-        formData.value.tanggal = moment(formData.value.tanggal).format('YYYY-MM-DD');
+    if (formData.value.pmg_id != null && formData.value.tanggal != null && formData.value.item_material_id != null && formData.value.qty != null) {
+        formData.value.tanggal = moment(formData.value.tanggal).format('YYYY-MM-01');
         if (statusForm.value == 'add') {
             const response = await normaLaporanMaterialController.addPost(formData.value);
             if (response.status == true) {
@@ -247,6 +254,8 @@ const submitData = async () => {
                 messages.value = [{ severity: 'error', content: response.msg, id: count.value++, icon: 'pi-times-circle' }];
             }
         }
+    } else {
+        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     }
 };
 </script>
@@ -283,7 +292,7 @@ const submitData = async () => {
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="date">Tanggal <small class="text-red-500 font-bold">*</small></label>
-                    <DatePicker v-model="formData.tanggal" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" />
+                    <DatePicker v-model="formData.tanggal" view="month" dateFormat="yy-mm" :maxDate="maxDate" showIcon placeholder="Please input Period" />
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="date">Quantity <small class="text-red-500 font-bold">*</small></label>
@@ -338,7 +347,7 @@ const submitData = async () => {
                     </div>
                     <div class="flex flex-col gap-1 w-full items-start">
                         <label for="pmg" class="text-[0.8vw]">Pilih Periode</label>
-                        <DatePicker v-model="dates" selectionMode="range" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :manualInput="false" placeholder="Select Date Range" class="w-full" />
+                        <DatePicker v-model="dates" selectionMode="range" :maxDate="maxDate" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :manualInput="false" placeholder="Select Date Range" class="w-full" />
                     </div>
                 </div>
                 <Divider />
@@ -365,7 +374,15 @@ const submitData = async () => {
                 </div>
             </template>
             <template #content>
-                <DataTable v-model:filters="search" :value="listTable" showGridlines paginator :rows="10" dataKey="id" :globalFilterFields="['item_material.name', 'satuan']">
+                <div v-if="loadingData == true" class="flex w-full justify-center font-bold">
+                    <span>Loading Data ...</span>
+                </div>
+                <DataTable v-else v-model:filters="search" :value="listTable" showGridlines paginator :rows="10" dataKey="id" :globalFilterFields="['item_material.name', 'satuan']">
+                    <template #empty>
+                        <div class="flex w-full justify-center">
+                            <span class="text-red-500 font-bold">Data tidak tersedia, silahkan select data di periode lain. </span>
+                        </div>
+                    </template>
                     <Column field="item_material" sortable style="width: 25%; font-size: 0.8vw" headerStyle="background-color:rgb(251 207 232)">
                         <template #header>
                             <div class="flex w-full items-center justify-center font-bold text-black">

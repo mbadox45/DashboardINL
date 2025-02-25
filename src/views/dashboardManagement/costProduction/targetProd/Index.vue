@@ -195,7 +195,7 @@ const showDrawer = async (data) => {
             formData.value.id = data.id;
             formData.value.uraian_id = data.uraian_id;
             formData.value.pmg_id = data.pmg_id;
-            formData.value.tanggal = data.tanggal;
+            formData.value.tanggal = moment(data.tanggal, 'YYYY-MM-DD').toDate();
             formData.value.value = Number(data.value);
             statusForm.value = 'edit';
         } else {
