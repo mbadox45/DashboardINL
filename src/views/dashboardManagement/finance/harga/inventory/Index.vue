@@ -134,7 +134,7 @@ const showDrawer = async (data) => {
             logFile.value = list;
             formData.value.id = data.id;
             formData.value.id_product = data.id_product;
-            formData.value.tanggal = data.tanggal;
+            formData.value.tanggal = moment(data.tanggal, 'YYYY-MM-DD').toDate();
             formData.value.inventory = Number(data.inventory);
             statusForm.value = 'edit';
         } else {
@@ -275,7 +275,7 @@ const submitData = async () => {
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="date">Tanggal <small class="text-red-500 font-bold">*</small></label>
-                    <DatePicker v-model="formData.tanggal" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" showButtonBar :manualInput="false" />
+                    <DatePicker v-model="formData.tanggal" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" showButtonBar :maxDate="maxDate" :manualInput="false" />
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="kapasitas">Inventory ({{ optionButton == 0 ? 'Kg' : 'Pouch' }})<small class="text-red-500 font-bold">*</small></label>

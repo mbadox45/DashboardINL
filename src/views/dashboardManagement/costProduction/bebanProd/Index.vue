@@ -19,6 +19,7 @@ const listTable = ref([]);
 const totalTable = ref({ cpoOlah: 0, totalCost: 0, totalHargaSatuan: 0 });
 const search = ref();
 const expandedRows = ref([]);
+const loadingData = ref(false);
 
 const selectedPmg = ref(1);
 const pmg = ref([]);
@@ -26,6 +27,11 @@ const listUraian = ref([]);
 
 const op = ref();
 
+let today = new Date();
+let month = today.getMonth();
+let year = today.getFullYear();
+let day = today.getDate();
+const maxDate = ref(new Date());
 const beforeDate = ref(moment().format('YYYY-MM-01'));
 const now = ref(moment().format('YYYY-MM-DD'));
 const dates = ref([moment(beforeDate.value).toDate(), moment(now.value).toDate()]);
@@ -48,10 +54,14 @@ const formData = ref({
 });
 
 onMounted(() => {
+    maxDate.value.setDate(day);
+    maxDate.value.setMonth(month);
+    maxDate.value.setFullYear(year);
     loadData();
 });
 
 const loadData = async () => {
+    loadingData.value = true;
     try {
         // Change Picker
         const form = {
@@ -72,7 +82,9 @@ const loadData = async () => {
         const uraian = await uraianBebanProdMasterController.getAll();
         listUraian.value = uraian;
         pmg.value = loadPMG;
+        loadingData.value = false;
     } catch (error) {
+        loadingData.value = false;
         listTable.value = [];
         totalTable.value = {
             cpoOlah: 0,
@@ -169,7 +181,7 @@ const showDrawer = async (data, mainData) => {
             formData.value.id = data.id;
             formData.value.uraian_id = uraian.id;
             formData.value.pmg_id = listPmg.id;
-            formData.value.tanggal = data.tanggal;
+            formData.value.tanggal = moment(data.tanggal, 'YYYY-MM-DD').toDate();
             formData.value.value = data.value;
             statusForm.value = 'edit';
         } else {
@@ -203,10 +215,8 @@ const refreshForm = () => {
 };
 
 const submitData = async () => {
-    if (!formData.value.pmg_id || !formData.value.tanggal || !formData.value.uraian_id || !formData.value.value) {
-        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
-    } else {
-        formData.value.tanggal = moment(formData.value.tanggal).format('YYYY-MM-DD');
+    if (formData.value.pmg_id != null && formData.value.tanggal != null && formData.value.uraian_id != null && formData.value.value != null) {
+        formData.value.tanggal = moment(formData.value.tanggal).format('YYYY-MM-01');
         if (statusForm.value == 'add') {
             const response = await bebanProdCpoOlahController.addPost(formData.value);
             if (response.status == true) {
@@ -235,6 +245,8 @@ const submitData = async () => {
                 messages.value = [{ severity: 'error', content: response.msg, id: count.value++, icon: 'pi-times-circle' }];
             }
         }
+    } else {
+        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     }
 };
 </script>
@@ -270,8 +282,8 @@ const submitData = async () => {
                     <Select v-model="formData.pmg_id" :options="pmg" optionLabel="nama" optionValue="id" placeholder="Pilih PMG" class="w-full" />
                 </div>
                 <div class="flex flex-col gap-1">
-                    <label for="date">Tanggal <small class="text-red-500 font-bold">*</small></label>
-                    <DatePicker v-model="formData.tanggal" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" />
+                    <label for="date">Periode <small class="text-red-500 font-bold">*</small></label>
+                    <DatePicker v-model="formData.tanggal" view="month" dateFormat="yy-mm" :maxDate="maxDate" showIcon placeholder="Please input Date" />
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="date">Biaya Produksi (IDR) <small class="text-red-500 font-bold">*</small></label>
@@ -326,7 +338,7 @@ const submitData = async () => {
                     </div>
                     <div class="flex flex-col gap-1 w-full items-start">
                         <label for="pmg" class="text-[0.8vw]">Pilih Periode</label>
-                        <DatePicker v-model="dates" selectionMode="range" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :manualInput="false" placeholder="Select Date Range" class="w-full" />
+                        <DatePicker v-model="dates" selectionMode="range" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :maxDate="maxDate" :manualInput="false" placeholder="Select Date Range" class="w-full" />
                     </div>
                 </div>
                 <Divider />
@@ -356,7 +368,11 @@ const submitData = async () => {
                 </div>
             </template>
             <template #content>
+                <div v-if="loadingData == true" class="flex w-full justify-center font-bold">
+                    <span>Loading Data ...</span>
+                </div>
                 <DataTable
+                    v-else
                     v-model:filters="search"
                     v-model:expandedRows="expandedRows"
                     showGridlines

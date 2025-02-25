@@ -186,7 +186,7 @@ const showDrawer = async (data) => {
             formData.value.id = data.id;
             formData.value.kategori_id = response.kategori_id;
             // formData.value.pmg_id = response.pmg_id;
-            formData.value.tanggal = response.tanggal;
+            formData.value.tanggal = moment(response.tanggal, 'YYYY-MM-DD').toDate();
             formData.value.value = Number(response.value);
             statusForm.value = 'edit';
         } else {
@@ -195,7 +195,7 @@ const showDrawer = async (data) => {
             formData.value.id = null;
             formData.value.kategori_id = null;
             // formData.value.pmg_id = null;
-            formData.value.tanggal = moment().format('YYYY-MM-DD');
+            formData.value.tanggal = moment().format('YYYY-MM-DD').toDate();
             formData.value.value = null;
             statusForm.value = 'add';
         }
@@ -207,7 +207,7 @@ const showDrawer = async (data) => {
         formData.value.id = null;
         formData.value.kategori_id = null;
         // formData.value.pmg_id = null;
-        formData.value.tanggal = moment().format('YYYY-MM-DD');
+        formData.value.tanggal = moment().format('YYYY-MM-DD').toDate();
         formData.value.value = null;
         statusForm.value = 'add';
     }
@@ -217,7 +217,7 @@ const refreshForm = () => {
     messages.value = [];
     formData.value.kategori_id = null;
     // formData.value.pmg_id = null;
-    formData.value.tanggal = moment().format('YYYY-MM-DD');
+    formData.value.tanggal = moment().format('YYYY-MM-DD').toDate();
     formData.value.value = null;
 };
 
@@ -290,7 +290,7 @@ const submitData = async () => {
                 </div> -->
                 <div class="flex flex-col gap-1">
                     <label for="date">Tanggal <small class="text-red-500 font-bold">*</small></label>
-                    <DatePicker v-model="formData.tanggal" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" />
+                    <DatePicker v-model="formData.tanggal" dateFormat="yy-mm-dd" showIcon :maxDate="maxDate" placeholder="Please input Date" />
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="value">Value <small class="text-red-500 font-bold">*</small></label>

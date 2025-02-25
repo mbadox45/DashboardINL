@@ -140,7 +140,7 @@ const showDrawer = async (data) => {
         messages.value = [];
         if (data != null) {
             const response = await cashFlowScheduleController.getByID(data.id);
-            console.log(data);
+            // console.log(data);
             const history = response.history;
             const list = [];
             for (let i = 0; i < history.length; i++) {
@@ -185,7 +185,7 @@ const showDrawer = async (data) => {
             formData.value.kategori_id = data.kategori_id;
             formData.value.name = data.name;
             // formData.value.pmg_id = data.pmg_id;
-            formData.value.tanggal = data.tanggal;
+            formData.value.tanggal = moment(data.tanggal, 'YYYY-MM-DD').toDate();
             formData.value.value = data.value;
             statusForm.value = 'edit';
         } else {
@@ -301,7 +301,7 @@ const submitData = async () => {
                 </div> -->
                 <div class="flex flex-col gap-1">
                     <label for="date">Tanggal <small class="text-red-500 font-bold">*</small></label>
-                    <DatePicker v-model="formData.tanggal" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" />
+                    <DatePicker v-model="formData.tanggal" dateFormat="yy-mm-dd" :maxDate="maxDate" showIcon placeholder="Please input Date" />
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="date">Nilai (IDR) <small class="text-red-500 font-bold">*</small></label>
