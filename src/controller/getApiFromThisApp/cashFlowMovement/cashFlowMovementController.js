@@ -67,6 +67,67 @@ export default new (class cashFlowMovementController {
             return null;
         }
     };
+    loadToExportTable = async (form) => {
+        try {
+            const list = [];
+            const response = await this.getByPeriod(form);
+            if (response != null) {
+                const lastYear = response.lastYear;
+                if (lastYear != null) {
+                    const data = lastYear.data;
+                    if (data.length > 0) {
+                        for (let i = 0; i < data.length; i++) {
+                            list.push({
+                                name: 'Ending Cash Balance',
+                                value: data[i].ending_cash_balanced,
+                                status: '',
+                                bulan: moment(data[i].month, 'M').format('MMMM'),
+                                year: lastYear.year
+                            });
+                            const detail = data[i].detail;
+                            for (let j = 0; j < detail.length; j++) {
+                                list.push({
+                                    name: detail[j].name,
+                                    value: detail[j].value,
+                                    status: detail[j].nilai,
+                                    bulan: moment(data[i].month, 'M').format('MMMM'),
+                                    year: lastYear.year
+                                });
+                            }
+                        }
+                    }
+                }
+                const thisYear = response.thisYear;
+                if (thisYear != null) {
+                    const data = thisYear.data;
+                    if (data.length > 0) {
+                        for (let i = 0; i < data.length; i++) {
+                            list.push({
+                                name: 'Ending Cash Balance',
+                                value: data[i].ending_cash_balanced,
+                                status: '',
+                                bulan: moment(data[i].month, 'M').format('MMMM'),
+                                year: thisYear.year
+                            });
+                            const detail = data[i].detail;
+                            for (let j = 0; j < detail.length; j++) {
+                                list.push({
+                                    name: detail[j].name,
+                                    value: detail[j].value,
+                                    status: detail[j].nilai,
+                                    bulan: moment(data[i].month, 'M').format('MMMM'),
+                                    year: thisYear.year
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            return list;
+        } catch (error) {
+            return [];
+        }
+    };
     loadTable = async (form) => {
         try {
             const response = await this.getByPeriod(form);

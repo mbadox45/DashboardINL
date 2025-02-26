@@ -5,8 +5,10 @@ import kategoriCashFlowScheduleController from '@/controller/getApiFromThisApp/c
 import payStatusCashFlowScheduleController from '@/controller/getApiFromThisApp/cashFlowSchedule/payStatusCashFlowScheduleController';
 // import pmgMasterController from '@/controller/getApiFromThisApp/master/pmgMasterController';
 import { FilterMatchMode } from '@primevue/core/api';
+import FileSaver from 'file-saver';
 import moment from 'moment';
 import { onMounted, ref } from 'vue';
+import * as XLSX from 'xlsx';
 
 const drawerCond = ref(false);
 const messages = ref([]);
@@ -99,6 +101,36 @@ const loadData = async () => {
 
 const toggle = async (event) => {
     op.value.toggle(event);
+};
+
+const exportToExcel = async () => {
+    const { saveAs } = FileSaver;
+    const form = {
+        tanggalAwal: beforeDate.value,
+        tanggalAkhir: now.value
+    };
+    const response = await cashFlowScheduleController.loadToExportTable(form);
+
+    if (response.length === 0) {
+        messages.value = [{ severity: 'warn', content: 'Tidak ada data untuk diekspor!', id: count.value++, icon: 'pi-exclamation-triangle' }];
+        return;
+    }
+    const exportData = response.map((item) => ({
+        Nama: item.name,
+        Kategori: item.kategori,
+        Tanggal: item.tanggal,
+        Status: item.status,
+        'Nilai (IDR)': item.value
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Data Dashboard INL Edge');
+
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const data = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
+
+    saveAs(data, `Data-Cash-Flow-Schedule-${moment().format('YYYY-MM-DD-HHmmss')}.xlsx`);
 };
 
 const changeDate = async () => {
@@ -265,10 +297,20 @@ const submitData = async () => {
     <div class="flex flex-col w-full gap-8">
         <div class="flex gap-2 items-center justify-between w-full font-bold">
             <span class="text-3xl">Cash Flow Schedule</span>
-            <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-emerald-500 hover:bg-emerald-700 text-white rounded-full flex gap-2">
-                <i class="pi pi-plus"></i>
-                <span>Tambah Data</span>
-            </button>
+            <div class="flex gap-3">
+                <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-blue-500 hover:bg-blue-700 text-white rounded-lg flex gap-2">
+                    <i class="pi pi-plus"></i>
+                    <span>Tambah Data</span>
+                </button>
+                <button
+                    v-if="loadingData == false"
+                    @click="exportToExcel"
+                    class="px-3 py-2 border rounded-lg bg-emerald-500 text-white hover:shadow-md hover:bg-emerald-600 transition-all duration-300 shadow-sm flex items-center gap-2 justify-center"
+                >
+                    <i class="pi pi-file-excel"></i>
+                    <span>Export ke Excel</span>
+                </button>
+            </div>
         </div>
         <Drawer v-model:visible="drawerCond" position="right" class="!w-full md:!w-[30rem]">
             <template #header>

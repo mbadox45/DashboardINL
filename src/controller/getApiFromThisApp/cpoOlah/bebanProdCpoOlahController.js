@@ -69,6 +69,30 @@ export default new (class bebanProdCpoOlahController {
             return null;
         }
     };
+    loadToExportTable = async (form) => {
+        try {
+            const list = [];
+            const response = await this.getByPeriod(form);
+            if (response != null) {
+                const detail = response.detail;
+                for (let i = 0; i < detail.length; i++) {
+                    const details = detail[i].details;
+                    for (let j = 0; j < details.length; j++) {
+                        list.push({
+                            uraian: detail[i].uraian,
+                            pmg: detail[i].pmg,
+                            tanggal: details[j].tanggal,
+                            value: Number(details[j].value),
+                            hargaSatuan: Number(details[j].hargaSatuan)
+                        });
+                    }
+                }
+            }
+            return list;
+        } catch (error) {
+            return [];
+        }
+    };
     loadTable = async (form) => {
         try {
             const response = await this.getByPeriod(form);

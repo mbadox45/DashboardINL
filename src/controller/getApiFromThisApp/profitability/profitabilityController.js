@@ -67,6 +67,48 @@ export default new (class profitabilityController {
             return null;
         }
     };
+    loadToExportTable = async (form) => {
+        try {
+            const list = [];
+            const response = await this.getByPeriod(form);
+            if (response != null) {
+                const lastYear = response.lastYear;
+                if (lastYear != null) {
+                    const months = lastYear.months;
+                    for (let i = 0; i < months.length; i++) {
+                        const details = months[i].details;
+                        for (let j = 0; j < details.length; j++) {
+                            list.push({
+                                name: details[j].name,
+                                bulan: moment(months[i].month, 'M').format('MMMM'),
+                                tahun: lastYear.year,
+                                value: Number(details[j].value)
+                            });
+                        }
+                    }
+                }
+
+                const thisYear = response.thisYear;
+                if (thisYear != null) {
+                    const months = thisYear.months;
+                    for (let i = 0; i < months.length; i++) {
+                        const details = months[i].details;
+                        for (let j = 0; j < details.length; j++) {
+                            list.push({
+                                name: details[j].name,
+                                bulan: moment(months[i].month, 'M').format('MMMM'),
+                                tahun: thisYear.year,
+                                value: Number(details[j].value)
+                            });
+                        }
+                    }
+                }
+            }
+            return list;
+        } catch (error) {
+            return [];
+        }
+    };
     loadTable = async (form) => {
         try {
             const response = await this.getByPeriod(form);
