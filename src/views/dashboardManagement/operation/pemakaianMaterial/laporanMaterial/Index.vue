@@ -3,9 +3,11 @@ import { formatCurrency } from '@/controller/dummyController';
 import jenisLaporanMaterialController from '@/controller/getApiFromThisApp/laporanMaterial/jenisLaporanMaterialController';
 import laporanMaterialController from '@/controller/getApiFromThisApp/laporanMaterial/laporanMaterialController';
 import pmgMasterController from '@/controller/getApiFromThisApp/master/pmgMasterController';
+import FileSaver from 'file-saver';
 import moment from 'moment';
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import * as XLSX from 'xlsx';
 
 const router = useRouter();
 
@@ -110,6 +112,63 @@ const filteredList = computed(() => {
 
 const toggle = async (event) => {
     op.value.toggle(event);
+};
+
+const exportToExcel = async () => {
+    const { saveAs } = FileSaver;
+    const form = {
+        idPmg: selectedPmg.value,
+        tanggalAwal: beforeDate.value,
+        tanggalAkhir: now.value
+    };
+    const response = await laporanMaterialController.loadToExportTable(form);
+
+    // Laporan
+    if (response.laporan.length === 0 && response.norma.length === 0) {
+        messages.value = [{ severity: 'warn', content: 'Tidak ada data untuk diekspor!', id: count.value++, icon: 'pi-exclamation-triangle' }];
+        return;
+    }
+
+    // 🔹 Format data untuk sheet "Data Laporan Material"
+    const exportDataLaporan = response.laporan.map((item) => ({
+        Tanggal: item.tanggal,
+        'Jenis Produksi': item.jenis,
+        Item: item.material,
+        PMG: item.pmg,
+        Kategori: item.kategori,
+        Quantity: item.qty
+    }));
+
+    // 🔹 Format data untuk sheet "Data Norma" (pastikan `response.norma` ada)
+    const exportDataNorma = response.norma
+        ? response.norma.map((item) => ({
+              Tanggal: item.tanggal,
+              'Jenis Laporan': item.jenis,
+              Material: item.material,
+              Kategori: item.kategori,
+              Satuan: item.satuan,
+              Quantity: item.qty
+          }))
+        : [];
+
+    // 🔹 Buat workbook dan sheets
+    const workbook = XLSX.utils.book_new();
+
+    // 🔹 Tambahkan sheet "Data Laporan Material"
+    const worksheetLaporan = XLSX.utils.json_to_sheet(exportDataLaporan);
+    XLSX.utils.book_append_sheet(workbook, worksheetLaporan, 'Data Laporan Material');
+
+    // 🔹 Tambahkan sheet "Data Norma" jika ada data
+    if (exportDataNorma.length > 0) {
+        const worksheetNorma = XLSX.utils.json_to_sheet(exportDataNorma);
+        XLSX.utils.book_append_sheet(workbook, worksheetNorma, 'Data Norma');
+    }
+
+    // 🔹 Simpan file Excel
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const data = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
+
+    saveAs(data, `Data-Laporan-${moment().format('YYYY-MM-DD-HHmmss')}.xlsx`);
 };
 
 const changeDate = async () => {
@@ -265,10 +324,20 @@ const submitData = async () => {
     <div class="flex flex-col w-full gap-8">
         <div class="flex gap-2 items-center justify-between w-full font-bold">
             <span class="text-4xl">Laporan Material</span>
-            <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-emerald-500 hover:bg-emerald-700 text-white rounded-full flex gap-2">
-                <i class="pi pi-plus"></i>
-                <span>Tambah Laporan</span>
-            </button>
+            <div class="flex gap-3">
+                <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-blue-500 hover:bg-blue-700 text-white rounded-lg flex gap-2">
+                    <i class="pi pi-plus"></i>
+                    <span>Tambah Data</span>
+                </button>
+                <button
+                    v-if="loadingData == false"
+                    @click="exportToExcel"
+                    class="px-3 py-2 border rounded-lg bg-emerald-500 text-white hover:shadow-md hover:bg-emerald-600 transition-all duration-300 shadow-sm flex items-center gap-2 justify-center"
+                >
+                    <i class="pi pi-file-excel"></i>
+                    <span>Export ke Excel</span>
+                </button>
+            </div>
         </div>
         <Drawer v-model:visible="drawerCond" position="right" class="!w-full md:!w-[30rem]">
             <template #header>

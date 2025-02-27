@@ -69,6 +69,123 @@ export default new (class laporanProduksiController {
             return null;
         }
     };
+    loadToExportTable = async (form) => {
+        try {
+            const list = [];
+            const response = await this.getByPeriod(form);
+            if (response != null) {
+                for (let i = 0; i < response.length; i++) {
+                    const kategori = response[i].kategori_data;
+                    const bahan_olah = kategori.find((item) => item.kategori == 'bahan_olah');
+                    const produk_hasil = kategori.find((item) => item.kategori == 'produk_hasil');
+                    const others = kategori.find((item) => item.kategori == 'others');
+
+                    // Bahan Baku
+                    if (bahan_olah != null) {
+                        const items = bahan_olah.items;
+                        for (let j = 0; j < items.length; j++) {
+                            const detail = items[j].detail;
+                            for (let k = 0; k < detail.length; k++) {
+                                list.push({
+                                    tanggal: detail[k].tanggal,
+                                    qty: Number(detail[k].qty),
+                                    item: `${items[j].name} (Olah)`,
+                                    kategori: bahan_olah.kategori,
+                                    pmg: detail[k].pmg.nama,
+                                    jenis: response[i].jenis_laporan
+                                });
+                            }
+                            list.push({
+                                tanggal: '',
+                                qty: Number(items[j].totalQty),
+                                item: `Total ${items[j].name} (Olah)`,
+                                kategori: bahan_olah.kategori,
+                                pmg: '',
+                                jenis: response[i].jenis_laporan
+                            });
+                        }
+                    }
+                    // Produk Hasil
+                    if (produk_hasil != null) {
+                        const items = produk_hasil.items;
+                        for (let j = 0; j < items.length; j++) {
+                            const detail = items[j].detail;
+                            for (let k = 0; k < detail.length; k++) {
+                                list.push({
+                                    tanggal: detail[k].tanggal,
+                                    qty: Number(detail[k].qty),
+                                    item: `${items[j].name} (Produksi)`,
+                                    kategori: produk_hasil.kategori,
+                                    pmg: detail[k].pmg.nama,
+                                    jenis: response[i].jenis_laporan
+                                });
+                            }
+                            list.push({
+                                tanggal: '',
+                                qty: Number(items[j].totalQty),
+                                item: `Total ${items[j].name} (Produksi)`,
+                                kategori: produk_hasil.kategori,
+                                pmg: '',
+                                jenis: response[i].jenis_laporan
+                            });
+                            list.push({
+                                tanggal: '',
+                                qty: Number(items[j].yieldPercentage),
+                                item: `${items[j].name} (Yield Percentage %)`,
+                                kategori: produk_hasil.kategori,
+                                pmg: '',
+                                jenis: response[i].jenis_laporan
+                            });
+                        }
+                    }
+                    // Others
+                    if (others != null) {
+                        const items = others.items;
+                        for (let j = 0; j < items.length; j++) {
+                            const detail = items[j].detail;
+                            for (let k = 0; k < detail.length; k++) {
+                                list.push({
+                                    tanggal: detail[k].tanggal,
+                                    qty: Number(detail[k].qty),
+                                    item: `${items[j].name}`,
+                                    kategori: others.kategori,
+                                    pmg: detail[k].pmg.nama,
+                                    jenis: response[i].jenis_laporan
+                                });
+                            }
+                            list.push({
+                                tanggal: '',
+                                qty: Number(items[j].totalQty),
+                                item: `Total ${items[j].name}`,
+                                kategori: others.kategori,
+                                pmg: '',
+                                jenis: response[i].jenis_laporan
+                            });
+                        }
+                    }
+                    list.push({
+                        tanggal: '',
+                        qty: Number(response[i].losses),
+                        item: `Losses (Kg)`,
+                        kategori: '',
+                        pmg: '',
+                        jenis: response[i].jenis_laporan
+                    });
+                    list.push({
+                        tanggal: '',
+                        qty: Number(response[i].lossesPercentage),
+                        item: `Losses (Yield Percentage %)`,
+                        kategori: '',
+                        pmg: '',
+                        jenis: response[i].jenis_laporan
+                    });
+                }
+            }
+            return list;
+        } catch (error) {
+            return [];
+        }
+    };
     loadTable = async (form) => {
         try {
             const response = await this.getByPeriod(form);

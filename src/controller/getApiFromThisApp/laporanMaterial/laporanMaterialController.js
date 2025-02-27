@@ -69,6 +69,65 @@ export default new (class laporanMaterialController {
             return null;
         }
     };
+    loadToExportTable = async (form) => {
+        try {
+            const list = {
+                laporan: [],
+                norma: []
+            };
+            const response = await this.getByPeriod(form);
+            if (response != null) {
+                const laporan_material = response.laporan_material;
+                if (laporan_material != null) {
+                    for (let i = 0; i < laporan_material.length; i++) {
+                        const kategori_data = laporan_material[i].kategori_data;
+                        for (let j = 0; j < kategori_data.length; j++) {
+                            const materials = kategori_data[j].materials;
+                            for (let k = 0; k < materials.length; k++) {
+                                const detail = materials[k].detail;
+                                for (let l = 0; l < detail.length; l++) {
+                                    list.laporan.push({
+                                        tanggal: detail[l].tanggal,
+                                        pmg: `PMG ${detail[l].pmg_id}`,
+                                        qty: Number(detail[l].qty),
+                                        material: materials[k].name,
+                                        kategori: kategori_data[j].kategori,
+                                        jenis: laporan_material[i].jenis_laporan
+                                    });
+                                }
+                            }
+                        }
+                    }
+                }
+
+                const norma = response.norma;
+                if (norma != null) {
+                    for (let i = 0; i < norma.length; i++) {
+                        const materials = norma[i].materials;
+                        for (let k = 0; k < materials.length; k++) {
+                            const detail = materials[k].details;
+                            for (let l = 0; l < detail.length; l++) {
+                                list.norma.push({
+                                    tanggal: detail[l].tanggal,
+                                    qty: Number(detail[l].qty),
+                                    material: materials[k].name,
+                                    satuan: detail[l].satuan,
+                                    kategori: materials[k].kategori,
+                                    jenis: norma[i].jenis_laporan
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            return list;
+        } catch (error) {
+            return {
+                laporan: [],
+                norma: []
+            };
+        }
+    };
     loadTable = async (form) => {
         try {
             const response = await this.getByPeriod(form);
@@ -79,79 +138,6 @@ export default new (class laporanMaterialController {
             } else {
                 return [];
             }
-            // if (response != null) {
-            //     const list = [];
-            //     console.log(response);
-            //     for (let i = 0; i < response.length; i++) {
-            //         const listItems = [];
-            //         const kategori = response[i].kategori_data;
-            //         const bahan_olah = kategori.find((item) => item.kategori == 'bahan_olah');
-            //         const produk_hasil = kategori.find((item) => item.kategori == 'produk_hasil');
-            //         const others = kategori.find((item) => item.kategori == 'others');
-
-            //         // Bahan Baku
-            //         if (bahan_olah.items != null) {
-            //             for (let j = 0; j < bahan_olah.items.length; j++) {
-            //                 listItems.push({
-            //                     id: `${response[i].jenis_laporan} ${bahan_olah.items[j].name}`,
-            //                     name: `${bahan_olah.items[j].name} (Olah)`,
-            //                     totalQty: bahan_olah.items[j].totalQty,
-            //                     detail: bahan_olah.items[j].detail
-            //                 });
-            //             }
-            //         }
-            //         // Produk Hasil
-            //         if (produk_hasil.items != null) {
-            //             for (let j = 0; j < produk_hasil.items.length; j++) {
-            //                 listItems.push({
-            //                     id: `${response[i].jenis_laporan} ${produk_hasil.items[j].name}`,
-            //                     name: `${produk_hasil.items[j].name} (Produksi)`,
-            //                     totalQty: produk_hasil.items[j].totalQty,
-            //                     detail: produk_hasil.items[j].detail
-            //                 });
-            //                 listItems.push({
-            //                     id: `${response[i].jenis_laporan} ${produk_hasil.items[j].name} (Yield Percentage %)`,
-            //                     name: `${produk_hasil.items[j].name} (Yield Percentage %)`,
-            //                     totalQty: produk_hasil.items[j].yieldPercentage,
-            //                     detail: []
-            //                 });
-            //             }
-            //         }
-            //         // Others
-            //         if (others.items != null) {
-            //             for (let j = 0; j < others.items.length; j++) {
-            //                 listItems.push({
-            //                     id: `${response[i].jenis_laporan} ${others.items[j].name}`,
-            //                     name: `${others.items[j].name}`,
-            //                     totalQty: others.items[j].totalQty,
-            //                     detail: others.items[j].detail
-            //                 });
-            //             }
-            //         }
-            //         listItems.push({
-            //             id: `${response[i].jenis_laporan} Losses (Kg)`,
-            //             name: `Losses (Kg)`,
-            //             totalQty: response[i].losses,
-            //             detail: []
-            //         });
-            //         listItems.push({
-            //             id: `${response[i].jenis_laporan} Losses (Yield Percentage %)`,
-            //             name: `Losses (Yield Percentage %)`,
-            //             totalQty: response[i].lossesPercentage,
-            //             detail: []
-            //         });
-            //         list.push({
-            //             jenis_laporan: response[i].jenis_laporan,
-            //             losses: response[i].losses,
-            //             lossesPercentage: response[i].lossesPercentage,
-            //             items: listItems
-            //         });
-            //     }
-            //     // const data = response.detail;
-            //     return list;
-            // } else {
-            //     return [];
-            // }
         } catch (error) {
             return [];
         }

@@ -68,6 +68,28 @@ export default new (class laporanPackagingController {
             return null;
         }
     };
+    loadToExportTable = async (form) => {
+        try {
+            const list = [];
+            const response = await this.getByPeriod(form);
+            if (response != null) {
+                const dataPeriod = response.dataPeriod;
+                for (let i = 0; i < dataPeriod.length; i++) {
+                    list.push({
+                        tanggal: dataPeriod[i].tanggal,
+                        qty: Number(dataPeriod[i].qty),
+                        kategori: dataPeriod[i].item_packaging.kategori,
+                        item: dataPeriod[i].item_packaging.name,
+                        jenis: dataPeriod[i].item_packaging.jenis_laporan.name,
+                        packaging: dataPeriod[i].packaging.nama
+                    });
+                }
+            }
+            return list;
+        } catch (error) {
+            return [];
+        }
+    };
     loadTable = async (form) => {
         try {
             const data = await this.getByPeriod(form);

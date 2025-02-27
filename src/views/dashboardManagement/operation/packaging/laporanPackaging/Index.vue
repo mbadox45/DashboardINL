@@ -3,9 +3,11 @@ import { formatCurrency } from '@/controller/dummyController';
 import jenisLaporanPackagingController from '@/controller/getApiFromThisApp/packaging/jenisLaporanPackagingController';
 import laporanPackagingController from '@/controller/getApiFromThisApp/packaging/laporanPackagingController';
 import packagingController from '@/controller/getApiFromThisApp/packaging/packagingController';
+import FileSaver from 'file-saver';
 import moment from 'moment';
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import * as XLSX from 'xlsx';
 
 const router = useRouter();
 const drawerCond = ref(false);
@@ -108,6 +110,38 @@ const filteredList = computed(() => {
 
 const toggle = async (event) => {
     op.value.toggle(event);
+};
+
+const exportToExcel = async () => {
+    const { saveAs } = FileSaver;
+    const form = {
+        idPackaging: selectedPmg.value,
+        tanggalAwal: beforeDate.value,
+        tanggalAkhir: now.value
+    };
+    const response = await laporanPackagingController.loadToExportTable(form);
+
+    if (response.length === 0) {
+        messages.value = [{ severity: 'warn', content: 'Tidak ada data untuk diekspor!', id: count.value++, icon: 'pi-exclamation-triangle' }];
+        return;
+    }
+    const exportData = response.map((item) => ({
+        Tanggal: item.tanggal,
+        'Jenis Produk': item.jenis,
+        Item: item.item,
+        Packaging: item.packaging,
+        Kategori: item.kategori,
+        Jumlah: item.qty
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Data Dashboard INL Edge');
+
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const data = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
+
+    saveAs(data, `Data-Laporan-Packaging-${moment().format('YYYY-MM-DD-HHmmss')}.xlsx`);
 };
 
 const changeDate = async () => {
@@ -261,10 +295,20 @@ const submitData = async () => {
     <div class="flex flex-col w-full gap-8">
         <div class="flex gap-2 items-center justify-between w-full font-bold">
             <span class="text-4xl">Laporan Packaging</span>
-            <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-emerald-500 hover:bg-emerald-700 text-white rounded-full flex gap-2">
-                <i class="pi pi-plus"></i>
-                <span>Tambah Laporan</span>
-            </button>
+            <div class="flex gap-3">
+                <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-blue-500 hover:bg-blue-700 text-white rounded-lg flex gap-2">
+                    <i class="pi pi-plus"></i>
+                    <span>Tambah Data</span>
+                </button>
+                <button
+                    v-if="loadingTable == false"
+                    @click="exportToExcel"
+                    class="px-3 py-2 border rounded-lg bg-emerald-500 text-white hover:shadow-md hover:bg-emerald-600 transition-all duration-300 shadow-sm flex items-center gap-2 justify-center"
+                >
+                    <i class="pi pi-file-excel"></i>
+                    <span>Export ke Excel</span>
+                </button>
+            </div>
         </div>
         <Drawer v-model:visible="drawerCond" position="right" class="!w-full md:!w-[30rem]">
             <template #header>
