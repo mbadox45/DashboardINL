@@ -69,6 +69,44 @@ export default new (class incomingCpoScmController {
             return null;
         }
     };
+    loadToExportTable = async (form) => {
+        try {
+            const list = [];
+            const response = await this.getByPeriod(form);
+            if (response != null) {
+                const data = response.data;
+                for (let i = 0; i < data.length; i++) {
+                    const detail = data[i].detail;
+                    for (let j = 0; j < detail.length; j++) {
+                        list.push({
+                            tanggal: detail[j].tanggal,
+                            qty: Number(detail[j].qty),
+                            harga: Number(detail[j].harga),
+                            value: Number(detail[j].value),
+                            source: detail[j].source.name
+                        });
+                    }
+                    list.push({
+                        tanggal: '',
+                        qty: Number(data[i].monthQty),
+                        harga: '',
+                        value: Number(data[i].monthValue),
+                        source: 'Total'
+                    });
+                    list.push({
+                        tanggal: '',
+                        qty: '',
+                        harga: '',
+                        value: Number(data[i].target),
+                        source: `Target ${moment(data[i].month + ' ' + data[i].year, 'M YYYY').format('MMMM YYYY')}`
+                    });
+                }
+            }
+            return list;
+        } catch (error) {
+            return [];
+        }
+    };
     loadTable = async (form) => {
         try {
             const response = await this.getByPeriod(form);

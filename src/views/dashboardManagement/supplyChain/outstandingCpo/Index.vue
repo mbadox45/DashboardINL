@@ -4,8 +4,10 @@ import { jenisTable, listStatus } from '@/controller/getApiFromThisApp/dummy/var
 import supplierPartnerMasterController from '@/controller/getApiFromThisApp/master/supplierPartnerMasterController';
 import outstandingCpoScmController from '@/controller/getApiFromThisApp/supplyChain/outstandingCpoScmController';
 import { FilterMatchMode } from '@primevue/core/api';
+import FileSaver from 'file-saver';
 import moment from 'moment';
 import { onMounted, ref } from 'vue';
+import * as XLSX from 'xlsx';
 
 const listTable = ref([]);
 const search = ref({ global: { value: null, matchMode: FilterMatchMode.CONTAINS } });
@@ -21,6 +23,7 @@ const totalTable = ref({
     totalQty: 0,
     totalValue: 0
 });
+const loadingData = ref(false);
 
 let count = ref(0);
 
@@ -38,6 +41,7 @@ onMounted(() => {
 });
 
 const loadData = async () => {
+    loadingData.value = true;
     try {
         const data = await outstandingCpoScmController.loadTable(jenis.value);
         listTable.value = data.data;
@@ -47,13 +51,45 @@ const loadData = async () => {
         };
         const source = await supplierPartnerMasterController.getAll();
         listSupplier.value = source;
+        loadingData.value = false;
     } catch (error) {
+        loadingData.value = false;
         listTable.value = [];
         totalTable.value = {
             totalQty: 0,
             totalValue: 0
         };
     }
+};
+
+const exportToExcel = () => {
+    const { saveAs } = FileSaver; // Ambil saveAs dari FileSaver
+    if (listTable.value.length === 0) {
+        messages.value = [{ severity: 'warn', content: 'Tidak ada data untuk diekspor!', id: count.value++, icon: 'pi-exclamation-triangle' }];
+        return;
+    }
+
+    const exportData = listTable.value.map((item) => ({
+        Kontrak: item.kontrak,
+        Supplier: item.supplier.name,
+        'Harga Satuan (IDR)': Number(item.harga),
+        'Jumlah (Kg)': Number(item.qty),
+        'Nilai (IDR)': Number(item.value),
+        Email: item.supplier.email,
+        Kontak: item.supplier.kontak,
+        Kota: item.supplier.kota,
+        Provinsi: item.supplier.provinsi,
+        Negara: item.supplier.negara
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Data Dashboard INL Edge');
+
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const data = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
+
+    saveAs(data, `Data-Outstanding-CPO-${moment().format('YYYY-MM-DD-HHmmss')}.xlsx`);
 };
 
 const showDrawer = async (data) => {
@@ -124,9 +160,7 @@ const refreshForm = () => {
 };
 
 const submitData = async () => {
-    if (!formData.value.kontrak || !formData.value.supplier_id || formData.value.harga == null || !formData.value.qty == null) {
-        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
-    } else {
+    if (formData.value.kontrak != null && formData.value.supplier_id != null && formData.value.harga != null && formData.value.qty != null) {
         if (statusForm.value == 'add') {
             const response = await outstandingCpoScmController.addPost(formData.value);
             // const load = response.data;
@@ -156,6 +190,8 @@ const submitData = async () => {
                 messages.value = [{ severity: 'error', content: 'Proses gagal, silahkan hubungi tim IT', id: count.value++, icon: 'pi-times-circle' }];
             }
         }
+    } else {
+        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     }
 };
 </script>
@@ -164,10 +200,20 @@ const submitData = async () => {
     <div class="flex flex-col w-full gap-8">
         <div class="flex gap-2 items-center justify-between w-full font-bold">
             <span class="text-3xl">Outstanding CPO</span>
-            <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-emerald-500 hover:bg-emerald-700 text-white rounded-full flex gap-2">
-                <i class="pi pi-plus"></i>
-                <span>Tambah Data</span>
-            </button>
+            <div class="flex gap-3">
+                <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-blue-500 hover:bg-blue-700 text-white rounded-lg flex gap-2">
+                    <i class="pi pi-plus"></i>
+                    <span>Tambah Data</span>
+                </button>
+                <button
+                    v-if="loadingData == false"
+                    @click="exportToExcel"
+                    class="px-3 py-2 border rounded-lg bg-emerald-500 text-white hover:shadow-md hover:bg-emerald-600 transition-all duration-300 shadow-sm flex items-center gap-2 justify-center"
+                >
+                    <i class="pi pi-file-excel"></i>
+                    <span>Export ke Excel</span>
+                </button>
+            </div>
         </div>
         <Drawer v-model:visible="drawerCond" position="right" class="!w-full md:!w-[30rem]">
             <template #header>
@@ -261,7 +307,15 @@ const submitData = async () => {
                 </div>
             </template>
             <template #content>
-                <DataTable v-model:filters="search" :value="listTable" showGridlines :globalFilterFields="['kontrak', 'supplier.name']" paginator :rows="10">
+                <div v-if="loadingData == true" class="flex w-full justify-center font-bold">
+                    <span>Loading Data ...</span>
+                </div>
+                <DataTable v-else v-model:filters="search" :value="listTable" showGridlines :globalFilterFields="['kontrak', 'supplier.name']" paginator :rows="10">
+                    <template #empty>
+                        <div class="flex w-full justify-center items-center font-bold">
+                            <span>- Data not found -</span>
+                        </div>
+                    </template>
                     <Column field="supplier.name" sortable style="width: 25%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
                         <template #header>
                             <div class="flex w-full justify-center text-black">

@@ -72,7 +72,6 @@ export default new (class bulkStockScmController {
     loadTable = async (form) => {
         try {
             const response = await this.getByPeriod(form);
-            console.log(response);
             const years = moment(form.tanggalAwal).format('YYYY');
             const data = response.details;
             if (data != null) {

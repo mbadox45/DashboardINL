@@ -2,8 +2,10 @@
 import { formatCurrency } from '@/controller/dummyController';
 import targetIncomingScmController from '@/controller/getApiFromThisApp/supplyChain/targetIncomingScmController';
 import { FilterMatchMode } from '@primevue/core/api';
+import FileSaver from 'file-saver';
 import moment from 'moment';
 import { onMounted, ref } from 'vue';
+import * as XLSX from 'xlsx';
 
 const drawerCond = ref(false);
 const messages = ref([]);
@@ -17,16 +19,20 @@ const listTable = ref([]);
 const totalTable = ref({ cpoOlah: 0, totalCost: 0, totalHargaSatuan: 0 });
 const search = ref();
 const expandedRows = ref([]);
+const loadingData = ref(false);
 
 const selectedMataUang = ref(1);
 const listMataUang = ref([]);
 
 const op = ref();
 
+let today = new Date();
+let month = today.getMonth();
+let year = today.getFullYear();
+let day = today.getDate();
+const maxDate = ref(new Date());
 const beforeDate = ref(moment().format('YYYY-MM-01'));
 const now = ref(moment().format('YYYY-MM-DD'));
-// const beforeDate = ref('2024-01-01');
-// const now = ref(moment().format('2024-05-01'));
 const dates = ref([moment(beforeDate.value).toDate(), moment(now.value).toDate()]);
 
 const initFilters = () => {
@@ -45,10 +51,14 @@ const formData = ref({
 });
 
 onMounted(() => {
+    maxDate.value.setDate(day);
+    maxDate.value.setMonth(month);
+    maxDate.value.setFullYear(year);
     loadData();
 });
 
 const loadData = async () => {
+    loadingData.value = true;
     try {
         // Change Picker
         const form = {
@@ -61,13 +71,37 @@ const loadData = async () => {
         const load = Array.isArray(data) ? data : list;
         // console.log(load);
         listTable.value = load;
+        loadingData.value = false;
     } catch (error) {
+        loadingData.value = false;
         listTable.value = [];
     }
 };
 
 const toggle = async (event) => {
     op.value.toggle(event);
+};
+
+const exportToExcel = () => {
+    const { saveAs } = FileSaver; // Ambil saveAs dari FileSaver
+    if (listTable.value.length === 0) {
+        messages.value = [{ severity: 'warn', content: 'Tidak ada data untuk diekspor!', id: count.value++, icon: 'pi-exclamation-triangle' }];
+        return;
+    }
+
+    const exportData = listTable.value.map((item) => ({
+        Periode: moment(item.tanggal).format('MMMM YYYY'),
+        'Jumlah (Kg)': Number(item.qty).toFixed(2)
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Data Dashboard INL Edge');
+
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const data = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
+
+    saveAs(data, `Data-Target-Incoming-${moment().format('YYYY-MM-DD-HHmmss')}.xlsx`);
 };
 
 const changeDate = async () => {
@@ -219,10 +253,20 @@ const submitData = async () => {
     <div class="flex flex-col w-full gap-8">
         <div class="flex gap-2 items-center justify-between w-full font-bold">
             <span class="text-3xl">Target Incoming CPO</span>
-            <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-emerald-500 hover:bg-emerald-700 text-white rounded-full flex gap-2">
-                <i class="pi pi-plus"></i>
-                <span>Tambah Data</span>
-            </button>
+            <div class="flex gap-3">
+                <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-blue-500 hover:bg-blue-700 text-white rounded-lg flex gap-2">
+                    <i class="pi pi-plus"></i>
+                    <span>Tambah Data</span>
+                </button>
+                <button
+                    v-if="loadingData == false"
+                    @click="exportToExcel"
+                    class="px-3 py-2 border rounded-lg bg-emerald-500 text-white hover:shadow-md hover:bg-emerald-600 transition-all duration-300 shadow-sm flex items-center gap-2 justify-center"
+                >
+                    <i class="pi pi-file-excel"></i>
+                    <span>Export ke Excel</span>
+                </button>
+            </div>
         </div>
         <Drawer v-model:visible="drawerCond" position="right" class="!w-full md:!w-[30rem]">
             <template #header>
@@ -239,7 +283,7 @@ const submitData = async () => {
                 </transition-group>
                 <div class="flex flex-col gap-1">
                     <label for="date">Tanggal <small class="text-red-500 font-bold">*</small></label>
-                    <DatePicker v-model="formData.tanggal" showIcon view="month" dateFormat="yy-mm" placeholder="Please input period" class="w-full" />
+                    <DatePicker v-model="formData.tanggal" :maxDate="maxDate" showIcon view="month" dateFormat="yy-mm" placeholder="Please input period" class="w-full" />
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="value">Jumlah (Kg) <small class="text-red-500 font-bold">*</small></label>
@@ -290,7 +334,7 @@ const submitData = async () => {
                 <div class="flex flex-col gap-2 w-full">
                     <div class="flex flex-col gap-1 w-full items-start">
                         <label for="pmg" class="text-[0.8vw]">Pilih Periode</label>
-                        <DatePicker v-model="dates" selectionMode="range" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :manualInput="false" placeholder="Select Date Range" class="w-full" />
+                        <DatePicker v-model="dates" selectionMode="range" :maxDate="maxDate" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :manualInput="false" placeholder="Select Date Range" class="w-full" />
                     </div>
                 </div>
                 <Divider />
@@ -311,7 +355,15 @@ const submitData = async () => {
                 </div>
             </template>
             <template #content>
-                <DataTable :value="listTable" showGridlines paginator :rows="10">
+                <div v-if="loadingData == true" class="flex w-full justify-center font-bold">
+                    <span>Loading Data ...</span>
+                </div>
+                <DataTable v-else :value="listTable" showGridlines paginator :rows="10">
+                    <template #empty>
+                        <div class="flex w-full justify-center items-center font-bold">
+                            <span>- Data not found -</span>
+                        </div>
+                    </template>
                     <Column field="tanggal" sortable style="width: 15%; font-size: 0.9vw" headerStyle="background-color:rgb(251 207 232)">
                         <template #header>
                             <div class="flex w-full justify-center text-black">

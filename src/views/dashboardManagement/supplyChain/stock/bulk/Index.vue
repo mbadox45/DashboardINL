@@ -4,8 +4,10 @@ import productMasterController from '@/controller/getApiFromThisApp/master/produ
 import productStorageScmController from '@/controller/getApiFromThisApp/supplyChain/productStorageScmController';
 import bulkStockScmController from '@/controller/getApiFromThisApp/supplyChain/stock/bulkStockScmController';
 import { FilterMatchMode } from '@primevue/core/api';
+import FileSaver from 'file-saver';
 import moment from 'moment';
 import { onMounted, ref } from 'vue';
+import * as XLSX from 'xlsx';
 
 const listTable = ref([]);
 const search = ref('');
@@ -17,11 +19,15 @@ const loadingSave = ref(false);
 const logFile = ref([]);
 const listTanki = ref([]);
 const listProduk = ref([]);
+const loadingData = ref(false);
 
+let today = new Date();
+let month = today.getMonth();
+let year = today.getFullYear();
+let day = today.getDate();
+const maxDate = ref(new Date());
 const beforeDate = ref(moment().format('YYYY-MM-01'));
 const now = ref(moment().format('YYYY-MM-DD'));
-// const beforeDate = ref('2024-01-01');
-// const now = ref('2024-02-28');
 const dates = ref([moment(beforeDate.value).toDate(), moment(now.value).toDate()]);
 
 let count = ref(0);
@@ -45,10 +51,14 @@ const initFilters = () => {
 initFilters();
 
 onMounted(() => {
+    maxDate.value.setDate(day);
+    maxDate.value.setMonth(month);
+    maxDate.value.setFullYear(year);
     loadData();
 });
 
 const loadData = async () => {
+    loadingData.value = true;
     try {
         const form = {
             tanggalAwal: beforeDate.value,
@@ -59,7 +69,9 @@ const loadData = async () => {
 
         await loadTanki();
         await loadProduk();
+        loadingData.value = false;
     } catch (error) {
+        loadingData.value = false;
         listTable.value = [];
     }
 };
@@ -89,6 +101,34 @@ const loadProduk = async () => {
 
 const toggle = async (event) => {
     op.value.toggle(event);
+};
+
+const exportToExcel = () => {
+    const { saveAs } = FileSaver; // Ambil saveAs dari FileSaver
+    if (listTable.value.length === 0) {
+        messages.value = [{ severity: 'warn', content: 'Tidak ada data untuk diekspor!', id: count.value++, icon: 'pi-exclamation-triangle' }];
+        return;
+    }
+
+    const exportData = listTable.value.map((item) => ({
+        Tanggal: item.tanggal,
+        Lokasi: item.tanki.lokasi.name,
+        Kapasitas: item.tanki.kapasitas,
+        'No Tangki': item.tanki.name,
+        'Stock (MT)': Number(item.qty),
+        'Space (MT)': item.space,
+        Umur: item.umur,
+        Remark: item.remarks
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Data Dashboard INL Edge');
+
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const data = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
+
+    saveAs(data, `Data-Stock-Bulk-${moment().format('YYYY-MM-DD-HHmmss')}.xlsx`);
 };
 
 const changeDate = async () => {
@@ -233,10 +273,20 @@ const submitData = async () => {
     <div class="flex flex-col w-full gap-8">
         <div class="flex gap-2 items-center justify-between w-full font-bold">
             <span class="text-3xl">Stock Bulky (MT)</span>
-            <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-emerald-500 hover:bg-emerald-700 text-white rounded-full flex gap-2">
-                <i class="pi pi-plus"></i>
-                <span>Tambah Data</span>
-            </button>
+            <div class="flex gap-3">
+                <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-blue-500 hover:bg-blue-700 text-white rounded-lg flex gap-2">
+                    <i class="pi pi-plus"></i>
+                    <span>Tambah Data</span>
+                </button>
+                <button
+                    v-if="loadingData == false"
+                    @click="exportToExcel"
+                    class="px-3 py-2 border rounded-lg bg-emerald-500 text-white hover:shadow-md hover:bg-emerald-600 transition-all duration-300 shadow-sm flex items-center gap-2 justify-center"
+                >
+                    <i class="pi pi-file-excel"></i>
+                    <span>Export ke Excel</span>
+                </button>
+            </div>
         </div>
         <Drawer v-model:visible="drawerCond" position="right" class="!w-full md:!w-[30rem]">
             <template #header>
@@ -253,7 +303,7 @@ const submitData = async () => {
                 </transition-group>
                 <div class="flex flex-col gap-1">
                     <label for="name">Tanggal <small class="text-red-500 font-bold">*</small></label>
-                    <DatePicker v-model="formData.tanggal" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" />
+                    <DatePicker v-model="formData.tanggal" :maxDate="maxDate" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" />
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="tanki">Tangki <small class="text-red-500 font-bold">*</small></label>
@@ -320,7 +370,7 @@ const submitData = async () => {
                 <div class="flex flex-col gap-2 w-full">
                     <div class="flex flex-col gap-1 w-full items-start">
                         <label for="pmg" class="text-[0.8vw]">Pilih Periode</label>
-                        <DatePicker v-model="dates" selectionMode="range" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :manualInput="false" placeholder="Select Date Range" class="w-full" />
+                        <DatePicker v-model="dates" selectionMode="range" :maxDate="maxDate" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :manualInput="false" placeholder="Select Date Range" class="w-full" />
                     </div>
                 </div>
                 <Divider />

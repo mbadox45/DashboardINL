@@ -74,7 +74,6 @@ const loadData = async () => {
         pmg.value = loadPMG;
 
         const data = await laporanProduksiController.loadTable(form);
-        console.log(data);
         listTable.value = data;
         loadingData.value = false;
     } catch (error) {

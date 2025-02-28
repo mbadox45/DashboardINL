@@ -108,7 +108,6 @@ const loadLokasi = async () => {
 
 const loadUraian = async () => {
     const response = await uraianPenjualanController.getAll();
-    console.log(response);
     listUraian.value = response;
 };
 
@@ -118,7 +117,6 @@ const showDrawer = async (data) => {
         messages.value = [];
         if (data != null) {
             const response = await targetPenjualanController.getByID(data.id);
-            console.log(response);
             const history = response.history;
             const list = [];
             for (let i = 0; i < history.length; i++) {
@@ -237,7 +235,6 @@ const submitData = async () => {
             console.log(formData.value);
             const response = await targetPenjualanController.updatePost(formData.value.id, formData.value);
             // const load = response.data;
-            console.log(response);
             if (response.status == true) {
                 messages.value = [{ severity: 'success', content: 'Data berhasil di simpan', id: count.value++, icon: 'pi-check-circle' }];
                 loadingSave.value = true;

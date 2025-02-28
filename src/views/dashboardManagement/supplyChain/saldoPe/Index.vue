@@ -1,8 +1,10 @@
 <script setup>
 import { formatCurrency } from '@/controller/dummyController';
 import saldoPeScmController from '@/controller/getApiFromThisApp/supplyChain/saldoPeScmController';
+import FileSaver from 'file-saver';
 import moment from 'moment';
 import { onMounted, ref } from 'vue';
+import * as XLSX from 'xlsx';
 
 const listTable = ref([]);
 const listAllTable = ref([]);
@@ -14,7 +16,13 @@ const timeResponse = ref(3000);
 const loadingSave = ref(false);
 const logFile = ref([]);
 const dataLatest = ref({ saldo_awal: null, saldo_pakai: null, saldo_tersedia: null, tanggal: moment().format('DD MMMM YYYY') });
+const loadingData = ref(false);
 
+let today = new Date();
+let month = today.getMonth();
+let year = today.getFullYear();
+let day = today.getDate();
+const maxDate = ref(new Date());
 const beforeDate = ref(moment().subtract(30, 'days').format('YYYY-MM-DD')); // 30 hari ke belakang
 const now = ref(moment().format('YYYY-MM-DD')); // Tanggal hari ini
 
@@ -28,10 +36,14 @@ const formData = ref({
 });
 
 onMounted(() => {
+    maxDate.value.setDate(day);
+    maxDate.value.setMonth(month);
+    maxDate.value.setFullYear(year);
     loadData();
 });
 
 const loadData = async () => {
+    loadingData.value = true;
     try {
         const data = await saldoPeScmController.getAll();
 
@@ -39,7 +51,6 @@ const loadData = async () => {
         listAllTable.value = data;
         const sortedData = data.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
         const lastDate = sortedData[0];
-        console.log(lastDate);
         if (lastDate != null) {
             dataLatest.value = {
                 saldo_awal: formatCurrency(Number(lastDate.saldo_awal).toFixed(2)),
@@ -48,14 +59,41 @@ const loadData = async () => {
                 tanggal: moment(lastDate.tanggal).format('DD MMMM YYYY')
             };
         }
+        loadingData.value = false;
     } catch (error) {
+        loadingData.value = false;
         listTable.value = [];
         listAllTable.value = [];
         dataLatest.value = { saldo_awal: null, saldo_pakai: null, saldo_tersedia: null, tanggal: moment().format('DD MMMM YYYY') };
     }
 };
 
+const exportToExcel = () => {
+    const { saveAs } = FileSaver; // Ambil saveAs dari FileSaver
+    if (listTable.value.length === 0) {
+        messages.value = [{ severity: 'warn', content: 'Tidak ada data untuk diekspor!', id: count.value++, icon: 'pi-exclamation-triangle' }];
+        return;
+    }
+
+    const exportData = listAllTable.value.map((item) => ({
+        Tanggal: item.tanggal,
+        'Saldo Awal': item.saldo_awal,
+        'Saldo Terpakai': item.saldo_pakai,
+        'Saldo Tersedia': item.saldo_tersedia
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Data Dashboard INL Edge');
+
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const data = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
+
+    saveAs(data, `Data-Saldo-PE-${moment().format('YYYY-MM-DD-HHmmss')}.xlsx`);
+};
+
 const changeDate = (cond) => {
+    loadingData.value = true;
     if (cond == 'search') {
         const list = search.value; // Nilai pencarian (array tanggal)
         let start, end;
@@ -70,7 +108,9 @@ const changeDate = (cond) => {
 
         // Filter data berdasarkan rentang tanggal
         listTable.value = list ? listAllTable.value.filter((item) => item.tanggal >= start && item.tanggal <= end) : listAllTable.value;
+        loadingData.value = false;
     } else {
+        loadingData.value = false;
         listTable.value = listAllTable.value;
         search.value = null;
     }
@@ -145,9 +185,7 @@ const refreshForm = () => {
 };
 
 const submitData = async () => {
-    if (formData.value.saldo_awal == null || formData.value.saldo_pakai == null || !formData.value.tanggal) {
-        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
-    } else {
+    if (formData.value.saldo_awal != null && formData.value.saldo_pakai != null && formData.value.tanggal != null) {
         formData.value.tanggal = moment(formData.value.tanggal).format('YYYY-MM-DD');
         if (statusForm.value == 'add') {
             const response = await saldoPeScmController.addPost(formData.value);
@@ -179,6 +217,8 @@ const submitData = async () => {
                 messages.value = [{ severity: 'error', content: 'Proses gagal, silahkan hubungi tim IT', id: count.value++, icon: 'pi-times-circle' }];
             }
         }
+    } else {
+        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     }
 };
 </script>
@@ -187,10 +227,20 @@ const submitData = async () => {
     <div class="flex flex-col w-full gap-8">
         <div class="flex gap-2 items-center justify-between w-full font-bold">
             <span class="text-3xl">Riwayat Saldo PE</span>
-            <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-emerald-500 hover:bg-emerald-700 text-white rounded-full flex gap-2">
-                <i class="pi pi-plus"></i>
-                <span>Tambah Data</span>
-            </button>
+            <div class="flex gap-3">
+                <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-blue-500 hover:bg-blue-700 text-white rounded-lg flex gap-2">
+                    <i class="pi pi-plus"></i>
+                    <span>Tambah Data</span>
+                </button>
+                <button
+                    v-if="loadingData == false"
+                    @click="exportToExcel"
+                    class="px-3 py-2 border rounded-lg bg-emerald-500 text-white hover:shadow-md hover:bg-emerald-600 transition-all duration-300 shadow-sm flex items-center gap-2 justify-center"
+                >
+                    <i class="pi pi-file-excel"></i>
+                    <span>Export ke Excel</span>
+                </button>
+            </div>
         </div>
         <Drawer v-model:visible="drawerCond" position="right" class="!w-full md:!w-[30rem]">
             <template #header>
@@ -207,7 +257,7 @@ const submitData = async () => {
                 </transition-group>
                 <div class="flex flex-col gap-1">
                     <label for="tanggal">Tanggal <small class="text-red-500 font-bold">*</small></label>
-                    <DatePicker v-model="formData.tanggal" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" />
+                    <DatePicker v-model="formData.tanggal" dateFormat="yy-mm-dd" :maxDate="maxDate" showIcon placeholder="Please input Date" />
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="awal">Saldo Awal <small class="text-red-500 font-bold">*</small></label>
@@ -263,7 +313,7 @@ const submitData = async () => {
                     <div class="flex gap-2 items-center mb-5">
                         <span class="text-xl font-bold w-full">List Saldo</span>
                         <InputGroup>
-                            <DatePicker v-model="search" selectionMode="range" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :manualInput="false" placeholder="Select Date Range" class="w-full" />
+                            <DatePicker v-model="search" selectionMode="range" showIcon iconDisplay="input" dateFormat="yy-mm-dd" :maxDate="maxDate" :manualInput="false" placeholder="Select Date Range" class="w-full" />
                             <InputGroupAddon class="cursor-pointer" @click="changeDate('search')">
                                 <i class="pi pi-search" />
                             </InputGroupAddon>

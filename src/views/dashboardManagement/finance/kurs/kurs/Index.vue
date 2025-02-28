@@ -122,12 +122,12 @@ const exportToExcel = () => {
 
     const worksheet = XLSX.utils.json_to_sheet(exportData);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Data Kurs');
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Data Dashboard INL Edge');
 
     const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
     const data = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
 
-    saveAs(data, `Data-Kurs-${new Date().toISOString().split('T')[0]}.xlsx`);
+    saveAs(data, `Data-Kurs-${moment().format('YYYY-MM-DD-HHmmss')}.xlsx`);
 };
 
 const changeDate = async () => {
