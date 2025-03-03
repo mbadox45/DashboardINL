@@ -295,9 +295,10 @@ export default new (class financeHomeController {
                 }
 
                 // Cash Flow Movement
-                if (response?.thisYear?.data) {
-                    const dataCashFlowMovement = response?.thisYear?.data;
-                    const thisMonth = dataCashFlowMovement[dataCashFlowMovement.length - 1];
+                if (response?.latestMonth?.data) {
+                    const dataCashFlowMovement = response?.latestMonth?.data;
+                    const tanggal = `${response?.latestMonth?.month} ${response?.latestMonth?.year}`;
+                    const thisMonth = dataCashFlowMovement;
                     if (thisMonth.detail.length > 0) {
                         const starting = thisMonth.detail.find((item) => item.name.toLowerCase().includes('starting'));
                         const cfoIn = thisMonth.detail.find((item) => item.name.toLowerCase().includes('operating in'));
@@ -328,7 +329,8 @@ export default new (class financeHomeController {
                             cfiStatus: cfi.nilai,
                             cff: valueToBilion(Number(cff.value)),
                             cffStatus: cff.nilai,
-                            total: valueToBilion(Number(total))
+                            total: valueToBilion(Number(total)),
+                            tanggal: moment(tanggal, 'M YYYY').format('MMMM YYYY')
                         };
                     } else {
                         cashFlowMovement = {
@@ -340,6 +342,7 @@ export default new (class financeHomeController {
                             cfiStatus: 'negative',
                             cff: 0,
                             cffStatus: 'negative',
+                            tanggal: moment(tanggal, 'M YYYY').format('MMMM YYYY'),
                             total: 0
                         };
                     }
@@ -359,6 +362,7 @@ export default new (class financeHomeController {
                         cfiStatus: 'negative',
                         cff: 0,
                         cffStatus: 'negative',
+                        tanggal: moment().format('MMMM YYYY'),
                         total: 0
                     };
                 }
@@ -385,6 +389,7 @@ export default new (class financeHomeController {
                     cfiStatus: 'equals',
                     cff: 0,
                     cffStatus: 'equals',
+                    tanggal: moment().format('MMMM YYYY'),
                     total: 0
                 };
                 const result = {
@@ -410,6 +415,7 @@ export default new (class financeHomeController {
                 cfiStatus: 'equals',
                 cff: 0,
                 cffStatus: 'equals',
+                tanggal: moment().format('MMMM YYYY'),
                 total: 0
             };
             const result = {

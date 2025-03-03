@@ -62,92 +62,48 @@ export default new (class operationHomeController {
             ];
             const jenis = await jenisLaporanMaterialController.getAll();
             const response = await laporanMaterialController.getByPeriod(form);
-            const norma = response.norma;
-            const laporan = response.laporan_material;
-            // console.log(jenis, response, norma, laporan);
-            if (norma != null && laporan != null) {
+            if (response != null) {
                 const list = [];
-                const nilaiNorma = [];
-                for (let i = 0; i < norma.length; i++) {
-                    const material = norma[i].materials;
-                    for (let j = 0; j < material.length; j++) {
-                        nilaiNorma.push({
-                            jenisLaporan: norma[i].jenis_laporan,
-                            materialsName: material[j].name,
-                            kategori: material[j].kategori,
-                            value: material[j].totalQty,
-                            totalPemakaian: null,
-                            selisih: null
+
+                const laporan = response.laporan_material;
+                if (laporan != null) {
+                    for (let i = 0; i < laporan.length; i++) {
+                        const listOutgoing = [];
+                        const listIncoming = [];
+                        const kategori = laporan[i].kategori_data;
+                        const outgoing = kategori.find((item) => item.kategori != 'incoming');
+                        if (outgoing != null) {
+                            const materials = outgoing.materials;
+                            for (let j = 0; j < materials.length; j++) {
+                                listOutgoing.push({
+                                    name: materials[j].name,
+                                    value: formatCurrency(Number(materials[j].totalQty).toFixed(2)),
+                                    norma: formatCurrency(Number(materials[j].norma).toFixed(2)),
+                                    usage: formatCurrency(Number(materials[j].usage).toFixed(2)),
+                                    color: materials[j].color
+                                });
+                            }
+                        }
+                        const incoming = kategori.find((item) => item.kategori == 'incoming');
+                        if (incoming != null) {
+                            const materials = incoming.materials;
+                            for (let j = 0; j < materials.length; j++) {
+                                listIncoming.push({
+                                    name: materials[j].name,
+                                    value: formatCurrency(Number(materials[j].totalQty).toFixed(2))
+                                });
+                            }
+                        }
+
+                        list.push({
+                            jenisMaterial: laporan[i].jenis_laporan,
+                            outgoing: listOutgoing,
+                            incoming: listIncoming,
+                            totalPemakaian: formatCurrency(Number(laporan[i].totalPemakaian).toFixed(2)),
+                            selisih: formatCurrency(Number(laporan[i].selisih).toFixed(2))
                         });
                     }
                 }
-                const nilaiLaporan = [];
-                for (let i = 0; i < laporan.length; i++) {
-                    const kategori = laporan[i].kategori_data;
-                    for (let j = 0; j < kategori.length; j++) {
-                        const material = kategori[j].materials;
-                        for (let k = 0; k < material.length; k++) {
-                            nilaiLaporan.push({
-                                jenisLaporan: laporan[i].jenis_laporan,
-                                materialsName: material[k].name,
-                                kategori: kategori[j].kategori,
-                                value: material[k].totalQty,
-                                usage: material[k].usage,
-                                color: material[k].color,
-                                totalPemakaian: formatCurrency(Number(laporan[i].totalPemakaian).toFixed(2)),
-                                selisih: formatCurrency(Number(laporan[i].selisih).toFixed(2))
-                            });
-                        }
-                    }
-                }
-
-                // console.log(nilaiNorma, nilaiLaporan);
-
-                for (let i = 0; i < jenis.length; i++) {
-                    const laporanNilai = nilaiLaporan.filter((item) => item.jenisLaporan.toLowerCase().includes(jenis[i].name.toLowerCase()));
-                    const normaNilai = nilaiNorma.filter((item) => item.jenisLaporan.toLowerCase().includes(jenis[i].name.toLowerCase()));
-                    const outgoing = [];
-                    for (let j = 0; j < normaNilai.length; j++) {
-                        const material = laporanNilai.find((item) => item.materialsName.toLowerCase().includes(normaNilai[j].materialsName.toLowerCase()));
-                        // console.log(material);
-                        if (material != null) {
-                            outgoing.push({
-                                name: normaNilai[j].materialsName,
-                                value: formatCurrency(Number(material.value).toFixed(2)),
-                                norma: formatCurrency(Number(normaNilai[j].value).toFixed(2)),
-                                usage: formatCurrency(Number(material.usage).toFixed(2)),
-                                color: material.color
-                            });
-                        } else {
-                            outgoing.push({
-                                name: normaNilai[j].materialsName,
-                                value: 0,
-                                norma: formatCurrency(Number(normaNilai[j].value).toFixed(2)),
-                                usage: 0,
-                                color: ''
-                            });
-                        }
-                    }
-                    const listIncoming = [];
-                    if (laporanNilai.filter((item) => item.kategori.toLowerCase().includes('incoming')).length > 0) {
-                        const incoming = laporanNilai.filter((item) => item.kategori.toLowerCase().includes('incoming'));
-                        // console.log(incoming);
-                        for (let j = 0; j < incoming.length; j++) {
-                            listIncoming.push({
-                                name: incoming[j].materialsName,
-                                value: formatCurrency(Number(incoming[j].value).toFixed(2))
-                            });
-                        }
-                    }
-                    list.push({
-                        jenisMaterial: jenis[i].name,
-                        outgoing: outgoing,
-                        incoming: listIncoming,
-                        totalPemakaian: laporanNilai[0].totalPemakaian,
-                        selisih: laporanNilai[0].selisih
-                    });
-                }
-                // console.log(list);
                 result = list;
             }
             return result;

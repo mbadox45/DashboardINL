@@ -17,11 +17,11 @@ const props = defineProps({
     }
 });
 
-const load = ref({ total: 0, cff: 0, cffStatus: '', cfi: 0, cfiStatus: '', cfoIn: 0, cfoInStatus: '', cfoOut: 0, cfoOutStatus: '' });
+const load = ref({ total: 0, cff: 0, cffStatus: '', cfi: 0, cfiStatus: '', cfoIn: 0, cfoInStatus: '', cfoOut: 0, cfoOutStatus: '', tanggal: '' });
 
 const loadData = async () => {
     const data = props.datas;
-    load.value = { total: data.total, cff: data.cff, cffStatus: data.cffStatus, cfi: data.cfi, cfiStatus: data.cfiStatus, cfoIn: data.cfoIn, cfoInStatus: data.cfoInStatus, cfoOut: data.cfoOut, cfoOutStatus: data.cfoOutStatus };
+    load.value = { tanggal: data.tanggal, total: data.total, cff: data.cff, cffStatus: data.cffStatus, cfi: data.cfi, cfiStatus: data.cfiStatus, cfoIn: data.cfoIn, cfoInStatus: data.cfoInStatus, cfoOut: data.cfoOut, cfoOutStatus: data.cfoOutStatus };
 };
 
 const routerLink = (path) => {
@@ -51,8 +51,9 @@ watch(() => props.formPush, loadData, { immediate: true });
             <div class="flex h-full items-center gap-3">
                 <!-- <img src="/images/icon/financial/revenue.png" alt="Icon" class="w-[3vw] h-[3vw] mr-1" /> -->
                 <div class="flex flex-col gap-2 w-full">
-                    <div class="flex gap-2 items-center" :class="valueColorIntCondition(load.total)">
-                        <span class="font-bold text-[1.2vw]">{{ load.total }}</span>
+                    <div class="flex gap-2 items-center justify-between" :class="valueColorIntCondition(load.total)">
+                        <span class="font-bold text-[1.2vw] w-full">{{ load.total }}</span>
+                        <span class="font-bold text-[0.8vw] w-full text-cyan-500"> s/d {{ load.tanggal }}</span>
                     </div>
                     <div class="text-[0.8vw] flex gap-3 w-full">
                         <div class="flex flex-col w-full">
