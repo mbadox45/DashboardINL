@@ -5,9 +5,11 @@ import mataUangKursController from '@/controller/getApiFromThisApp/kurs/mataUang
 import productMasterController from '@/controller/getApiFromThisApp/master/productMasterController';
 import levyRoutersPenjualanController from '@/controller/getApiFromThisApp/sales/levyRoutersPenjualanController';
 import { FilterMatchMode } from '@primevue/core/api';
+import FileSaver from 'file-saver';
 import moment from 'moment';
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import * as XLSX from 'xlsx';
 
 const router = useRouter();
 
@@ -23,7 +25,8 @@ const listProduct = ref([]);
 // const listTable = ref([]);
 const listTable = ref({
     dataTable: [],
-    productList: []
+    productList: [],
+    mataUang: 'USD'
 });
 const totalTable = ref({ cpoOlah: 0, totalCost: 0, totalHargaSatuan: 0 });
 const search = ref();
@@ -78,9 +81,10 @@ const loadData = async () => {
         await loadCurrency();
         await loadProduk();
         const data = await levyRoutersPenjualanController.loadTable2(form);
-        // console.log(data);
+        console.log(data.dataTable);
         listTable.value.dataTable = data.dataTable;
         listTable.value.productList = data.productList;
+        listTable.value.mataUang = data.kurs;
         loading.value = false;
     } catch (error) {
         loading.value = false;
@@ -122,6 +126,38 @@ const loadCurrency = async () => {
 
 const toggle = async (event) => {
     op.value.toggle(event);
+};
+
+const exportToExcel = () => {
+    const { saveAs } = FileSaver; // Ambil saveAs dari FileSaver
+    if (listTable.value.length === 0) {
+        messages.value = [{ severity: 'warn', content: 'Tidak ada data untuk diekspor!', id: count.value++, icon: 'pi-exclamation-triangle' }];
+        return;
+    }
+
+    const response = listTable.value.dataTable;
+
+    const formattedData = response.map((entry) => {
+        return Object.values(entry.productData).reduce(
+            (acc, item) => {
+                acc[`${item.name} (Market Reuters [${listTable.value.mataUang}])`] = item.reuters;
+                acc[`${item.name} (Levy Duty [${listTable.value.mataUang}])`] = item.levy;
+                acc[`${item.name} (Market Excld Levy & Duty [${listTable.value.mataUang}])`] = item.excld;
+                acc[`${item.name} (Market IDR)`] = item.idr;
+                return acc;
+            },
+            { Tanggal: entry.tanggal, 'Kurs (Jisdor)': entry.value }
+        ); // Initial Value
+    });
+
+    const worksheet = XLSX.utils.json_to_sheet(formattedData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Data Dashboard INL Edge');
+
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const data = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
+
+    saveAs(data, `Data-Levy-Duty-&-Market-Reuters-${moment().format('YYYY-MM-DD-HHmmss')}.xlsx`);
 };
 
 const changeDate = async () => {
@@ -291,10 +327,16 @@ const submitData = async () => {
     <div class="flex flex-col w-full gap-8">
         <div class="flex gap-2 items-center justify-between w-full font-bold">
             <span class="text-3xl">Levy Duty & Market Routers</span>
-            <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-emerald-500 hover:bg-emerald-700 text-white rounded-full flex gap-2">
-                <i class="pi pi-database"></i>
-                <span>Update Data</span>
-            </button>
+            <div class="flex gap-3">
+                <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-blue-500 hover:bg-blue-700 text-white rounded-lg flex gap-2">
+                    <i class="pi pi-database"></i>
+                    <span>Update Data</span>
+                </button>
+                <button v-if="loading == false" @click="exportToExcel" class="px-3 py-2 border rounded-lg bg-emerald-500 text-white hover:shadow-md hover:bg-emerald-600 transition-all duration-300 shadow-sm flex items-center gap-2 justify-center">
+                    <i class="pi pi-file-excel"></i>
+                    <span>Export ke Excel</span>
+                </button>
+            </div>
         </div>
         <Drawer v-model:visible="drawerCond" position="right" class="!w-full md:!w-[30rem]">
             <template #header>
@@ -422,7 +464,7 @@ const submitData = async () => {
                                         <Column :headerStyle="`background-color: ${product.color}; border-color:white;`">
                                             <template #header>
                                                 <div class="text-center w-full flex justify-center font-bold text-black">
-                                                    <small>Market Reuters (USD)</small>
+                                                    <small>Market Reuters ({{ listTable.mataUang }})</small>
                                                 </div>
                                             </template>
                                         </Column>
@@ -436,7 +478,7 @@ const submitData = async () => {
                                         <Column :headerStyle="`background-color: ${product.color}; border-color:white;`">
                                             <template #header>
                                                 <div class="text-center w-full flex justify-center font-bold text-black">
-                                                    <small>Market Excld Levy & Duty (USD)</small>
+                                                    <small>Market Excld Levy & Duty ({{ listTable.mataUang }})</small>
                                                 </div>
                                             </template>
                                         </Column>
@@ -468,7 +510,7 @@ const submitData = async () => {
                                 <Column style="min-width: 13rem">
                                     <template #body="{ data }">
                                         <div class="flex justify-between">
-                                            <small>USD</small>
+                                            <small>{{ listTable.mataUang }}</small>
                                             <small>{{ formatCurrency(Number(data.productData?.[product.id]?.reuters).toFixed(2)) ?? '-' }}</small>
                                         </div>
                                     </template>
@@ -477,7 +519,7 @@ const submitData = async () => {
                                 <Column style="min-width: 13rem">
                                     <template #body="{ data }">
                                         <div class="flex justify-between">
-                                            <small>USD</small>
+                                            <small>{{ listTable.mataUang }}</small>
                                             <small>{{ formatCurrency(Number(data.productData?.[product.id]?.levy).toFixed(2)) ?? '-' }}</small>
                                         </div>
                                     </template>
@@ -485,7 +527,7 @@ const submitData = async () => {
                                 <Column style="min-width: 13rem">
                                     <template #body="{ data }">
                                         <div class="flex justify-between">
-                                            <small>USD</small>
+                                            <small>{{ listTable.mataUang }}</small>
                                             <small>{{ formatCurrency(Number(data.productData?.[product.id]?.excld).toFixed(2)) ?? '-' }}</small>
                                         </div>
                                     </template>
