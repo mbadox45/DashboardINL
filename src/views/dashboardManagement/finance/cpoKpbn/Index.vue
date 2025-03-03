@@ -5,8 +5,11 @@ import mataUangKursController from '@/controller/getApiFromThisApp/kurs/mataUang
 import { FilterMatchMode } from '@primevue/core/api';
 import FileSaver from 'file-saver';
 import moment from 'moment';
+import { useToast } from 'primevue/usetoast';
 import { onMounted, ref } from 'vue';
 import * as XLSX from 'xlsx';
+
+const toast = useToast();
 
 const drawerCond = ref(false);
 const messages = ref([]);
@@ -103,7 +106,7 @@ const exportToExcel = async () => {
     const response = await cpoKpbnController.loadToExportTable(form);
 
     if (response.length === 0) {
-        messages.value = [{ severity: 'warn', content: 'Tidak ada data untuk diekspor!', id: count.value++, icon: 'pi-exclamation-triangle' }];
+        toast.add({ severity: 'warn', summary: 'Info Message', detail: 'Tidak ada data untuk diekspor!', life: 3000 });
         return;
     }
     const exportData = response.map((item) => ({
@@ -272,6 +275,7 @@ const submitData = async () => {
 
 <template>
     <div class="flex flex-col w-full gap-8">
+        <Toast />
         <div class="flex gap-2 items-center justify-between w-full font-bold">
             <span class="text-3xl">CPO KPBN</span>
             <button v-if="loadingData == false" @click="exportToExcel" class="px-3 py-2 border rounded-lg bg-emerald-500 text-white hover:shadow-md hover:bg-emerald-600 transition-all duration-300 shadow-sm flex items-center gap-2 justify-center">

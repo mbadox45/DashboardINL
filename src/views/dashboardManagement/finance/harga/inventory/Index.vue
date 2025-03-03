@@ -7,8 +7,11 @@ import productMasterController from '@/controller/getApiFromThisApp/master/produ
 import { FilterMatchMode } from '@primevue/core/api';
 import FileSaver from 'file-saver';
 import moment from 'moment';
+import { useToast } from 'primevue/usetoast';
 import { onMounted, ref } from 'vue';
 import * as XLSX from 'xlsx';
+
+const toast = useToast();
 
 const listTable = ref([]);
 const search = ref('');
@@ -172,7 +175,7 @@ const toggle = async (event) => {
 const exportToExcel = () => {
     const { saveAs } = FileSaver; // Ambil saveAs dari FileSaver
     if (listTable.value.length === 0) {
-        messages.value = [{ severity: 'warn', content: 'Tidak ada data untuk diekspor!', id: count.value++, icon: 'pi-exclamation-triangle' }];
+        toast.add({ severity: 'warn', summary: 'Info Message', detail: 'Tidak ada data untuk diekspor!', life: 3000 });
         return;
     }
 
@@ -272,6 +275,7 @@ const submitData = async () => {
 
 <template>
     <div class="flex flex-col w-full gap-8">
+        <Toast />
         <div class="flex gap-2 items-center justify-between w-full font-bold">
             <span class="text-3xl">Harga Inventory</span>
             <div class="flex gap-3">
