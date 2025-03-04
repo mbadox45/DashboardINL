@@ -273,12 +273,14 @@ export default new (class scmDetailController {
             const result = await incomingCpoScmController.getByPeriod(form);
             if (result != null) {
                 const target = [];
+                const remaining = [];
                 const qty = [];
                 const data = result.data;
                 for (let i = 0; i < data.length; i++) {
                     qty.push(Number(data[i].monthQty));
                     // target.push(Number(10096354));
                     target.push(Number(data[i].target));
+                    remaining.push(Number(data[i].remaining));
                     label.push(moment(`${data[i].month} ${data[i].year}`, 'M YYYY').format('MMMM YYYY'));
                     list.push({
                         qty: formatCurrency(Number(data[i].monthQty).toFixed(2)),
@@ -289,7 +291,7 @@ export default new (class scmDetailController {
                     });
                 }
 
-                series.push({ name: 'Qty', data: qty }, { name: 'target', data: target });
+                series.push({ name: 'Jumlah', data: qty }, { name: 'Sisa', data: remaining });
 
                 chart = stackedChartOptionsApex('', label, null);
                 // console.log(stackedChartOptionsApex('', label, null));
