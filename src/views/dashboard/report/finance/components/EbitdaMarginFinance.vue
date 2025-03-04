@@ -30,7 +30,9 @@ const loadData = async () => {
         nilaiPercen2: data.ebitdaPercentLastMonth,
         targetEbitdaRkap: data.targetEbitdaRkap,
         ebitdaRkapPercent: data.ebitdaRkapPercent,
-        tanggal: data.tanggal
+        tanggal: data.tanggal,
+        year: data.year,
+        lastMonth: data.lastMonth
     };
 };
 
@@ -63,11 +65,11 @@ watch(() => props.formPush, loadData, { immediate: true });
                     <div class="font-bold flex w-full flex-col items-center">
                         <div class="flex flex-col gap-2 h-full w-full">
                             <span class="font-bold text-[1.2vw]" :class="valueColorPersenCondition(load.ebitdaRkapPercent)">{{ load.ebitdaRkapPercent }}%</span>
-                            <span class="text-white text-[0.6vw]">Pencapaian (Bulan ini)</span>
+                            <span class="text-white text-[0.6vw]">Pencapaian {{ load.tanggal }}</span>
                         </div>
                         <div class="flex flex-col gap-2 h-full w-full">
                             <span class="font-bold text-[1.2vw]" :class="valueColorIntCondition(load.total)">{{ load.total }}</span>
-                            <span class="text-white text-[0.6vw]">Akumulasi (Tahun ini)</span>
+                            <span class="text-white text-[0.6vw]">Akumulasi Tahun {{ load.year }}</span>
                         </div>
                     </div>
                     <div class="flex flex-col gap-1 w-full items-center">
@@ -98,7 +100,7 @@ watch(() => props.formPush, loadData, { immediate: true });
                             </div>
                         </div>
                         <div class="flex gap-1 w-full items-center">
-                            <span class="font-bold text-cyan-500 text-[0.6vw]">Perbandingan dengan bulan lalu</span>
+                            <span class="font-bold text-cyan-500 text-[0.6vw]">Perbandingan dengan {{ load.lastMonth }}</span>
                         </div>
                     </div>
                 </div>

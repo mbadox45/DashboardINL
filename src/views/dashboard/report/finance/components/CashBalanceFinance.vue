@@ -25,7 +25,7 @@ onMounted(() => {
 
 const loadData = async () => {
     const data = props.datas;
-    load.value = { total: data.value, status: data.status, bulan: data.tanggal, difference: data.difference };
+    load.value = { total: data.value, status: data.status, bulan: data.tanggal, difference: data.difference, lastMonth: data.lastMonth };
 };
 
 const routerLink = (path) => {
@@ -61,7 +61,7 @@ watch(() => props.formPush, loadData, { immediate: true });
                         <span class="font-bold text-[0.5vw]">{{ load.difference }}</span>
                     </div>
                     <div class="text-[0.8vw] flex w-full justify-between">
-                        <span class="font-bold text-cyan-500 text-[0.6vw]">Perbandingan dengan bulan lalu</span>
+                        <span class="font-bold text-cyan-500 text-[0.6vw]">Perbandingan dengan {{ load.lastMonth }} </span>
                         <span class="text-cyan-500 font-bold text-[0.6vw]">s/d {{ load.bulan }}</span>
                     </div>
                     <div class="text-[0.8vw] flex w-full justify-between"></div>

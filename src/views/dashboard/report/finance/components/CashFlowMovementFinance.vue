@@ -53,7 +53,7 @@ watch(() => props.formPush, loadData, { immediate: true });
                 <div class="flex flex-col gap-2 w-full">
                     <div class="flex gap-2 items-center justify-between" :class="valueColorIntCondition(load.total)">
                         <span class="font-bold text-[1.2vw] w-full">{{ load.total }}</span>
-                        <span class="font-bold text-[0.8vw] w-full text-cyan-500"> s/d {{ load.tanggal }}</span>
+                        <span class="font-bold text-[0.8vw] w-full text-cyan-500"> Periode {{ load.tanggal }}</span>
                     </div>
                     <div class="text-[0.8vw] flex gap-3 w-full">
                         <div class="flex flex-col w-full">

@@ -55,12 +55,12 @@ watch(() => props.formPush, loadData, { immediate: true });
                         <div class="flex gap-2 items-center mb-3 w-full">
                             <div class="font-bold flex flex-col w-full">
                                 <span class="font-bold text-[2vw]" :class="valueColorPersenCondition(load.persen)">{{ load.persen }}%</span>
-                                <span class="text-white text-[0.6vw]">Pencapaian (Bulanan)</span>
+                                <span class="text-white text-[0.6vw]">Pencapaian {{ load.tanggal }}</span>
                             </div>
                         </div>
                         <div class="flex flex-col gap-1 w-full items-end">
                             <div class="font-bold flex flex-col-reverse items-end">
-                                <span class="text-white text-[0.6vw]">Pendapatan</span>
+                                <span class="text-white text-[0.6vw]">Pendapatan {{ load.tanggal }}</span>
                                 <span class="text-[1vw]" :class="valueColorPersenCondition(load.persen)">{{ load.pendapatan }}</span>
                             </div>
                             <div class="font-bold flex flex-col-reverse items-end">
