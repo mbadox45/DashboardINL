@@ -224,9 +224,9 @@ const loadDataSCM = async () => {
                 <div v-if="activePage == 0" class="grid grid-cols-3 gap-2">
                     <div class="col-span-1 flex flex-col gap-2">
                         <images-home />
-                        <card-home-packaging :laporanpackaging="dataLaporanPackaging" :formPush="formData" />
                         <span class="font-bold w-full text-[0.8vw]">Sales & Marketing</span>
                         <card-home-sales :dataritel="dataPenjualanRitel" :databulk="dataPenjualanBulk" :formPush="formData" />
+                        <card-home-packaging :laporanpackaging="dataLaporanPackaging" :formPush="formData" />
                     </div>
                     <div class="col-span-2 flex flex-col gap-3">
                         <div class="flex justify-between items-center">
