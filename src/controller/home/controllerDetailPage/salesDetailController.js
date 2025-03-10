@@ -121,7 +121,7 @@ export default new (class salesDetailController {
             const bulkLaporan = laporan == null ? null : laporan.bulk;
             const produkLaporan = bulkLaporan == null ? null : bulkLaporan.products;
             total.totalQtyKategori = bulkLaporan == null ? 0 : Number(bulkLaporan.totalQtyKategori) / 1000;
-            total.totalValueKategori = bulkLaporan == null ? 0 : Number(bulkLaporan.totalValueKategori) / 1000;
+            total.totalValueKategori = bulkLaporan == null ? 0 : bulkLaporan.totalValueKategori;
 
             // Target
             const target = await targetPenjualanController.getByPeriod(form);
@@ -169,7 +169,7 @@ export default new (class salesDetailController {
                         const detail = produkLaporan.find((item) => item.idProduct == bulk[i].id);
                         if (detail != null) {
                             totalQty = Number(detail.totalQty) / 1000;
-                            totalValue = Number(detail.totalValue) / 1000;
+                            totalValue = Number(detail.totalValue);
                             totalHargaSatuan = detail.totalHargaSatuan;
                         }
                     }

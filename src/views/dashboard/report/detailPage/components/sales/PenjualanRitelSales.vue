@@ -223,15 +223,15 @@ watch(() => props.datas, loadData, { immediate: true });
                         <div class="grid grid-cols-2 gap-2">
                             <div class="flex flex-col items-end font-bold p-2 rounded-lg bg-amber-700">
                                 <span class="text-[1vw]">{{ formatCurrency(Number(item.rkap).toFixed(2)) }}</span>
-                                <span class="text-[0.8vw]">RKAP</span>
+                                <span class="text-[0.8vw]">RKAP (MT)</span>
                             </div>
                             <div class="flex flex-col items-end font-bold p-2 rounded-lg bg-teal-700">
                                 <span class="text-[1vw]">{{ formatCurrency(Number(item.qty).toFixed(2)) }}</span>
-                                <span class="text-[0.8vw]">Realisasi</span>
+                                <span class="text-[0.8vw]">Realisasi (MT)</span>
                             </div>
                             <div class="flex flex-col items-end font-bold p-2 rounded-lg bg-pink-700">
                                 <span class="text-[1vw]">IDR {{ formatCurrency(Number(item.hargaSatuan).toFixed(2)) }}</span>
-                                <span class="text-[0.8vw]">Harga Satuan</span>
+                                <span class="text-[0.8vw]">Harga / Kg</span>
                             </div>
                             <div class="flex flex-col items-end font-bold p-2 rounded-lg bg-cyan-700">
                                 <span class="text-[1vw]">IDR {{ formatCurrency(Number(item.total).toFixed(2)) }}</span>

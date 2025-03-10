@@ -78,13 +78,17 @@ const loadData = async () => {
         const bulk = data.bulk;
 
         const produk = await productMasterController.getAll();
-        if (optionButton.value == 1) {
-            listTable.value = ritel.products;
-            listProduct.value = produk.filter((item) => item.jenis == 'ritel');
-        } else {
-            listProduct.value = produk.filter((item) => item.jenis == 'bulk');
-            listTable.value = bulk.products;
-        }
+        console.log('produk:', produk);
+        // if (optionButton.value == 1) {
+        //     listTable.value = ritel.products;
+        //     listProduct.value = produk.filter((item) => item.jenis == 'ritel');
+        // } else {
+        //     listProduct.value = produk.filter((item) => item.jenis == 'bulk');
+        //     listTable.value = bulk.products;
+        // }
+
+        listProduct.value = [...produk.filter((item) => item.jenis === (optionButton.value == 1 ? 'ritel' : 'bulk'))];
+        listTable.value = [...produk.filter((item) => item.jenis === (optionButton.value == 1 ? ritel.products : bulk.products))];
 
         loadingData.value = false;
         // await loadUraian();
@@ -560,113 +564,6 @@ const submitData = async () => {
                             </Panel>
                         </div>
                     </ScrollPanel>
-                    <!-- <DataTable :value="listTable" v-model:filters="search" showGridlines paginator :rows="10" dataKey="period">
-                        <Column field="name" sortable style="width: 15%; font-size: 0.7vw">
-                            <template #header>
-                                <div class="flex w-full justify-center">
-                                    <span>Product</span>
-                                </div>
-                            </template>
-                            <template #body="{ data }">
-                                <div class="flex w-full justify-start">
-                                    <span>{{ data.name }}</span>
-                                </div>
-                            </template>
-                        </Column>
-                        <Column field="jenis" sortable style="width: 15%; font-size: 0.7vw">
-                            <template #header>
-                                <div class="flex w-full justify-center">
-                                    <span>Product</span>
-                                </div>
-                            </template>
-                            <template #body="{ data }">
-                                <div class="flex w-full justify-start">
-                                    <span class="capitalize">{{ data.jenis }}</span>
-                                </div>
-                            </template>
-                        </Column>
-                        <Column field="totalQty" sortable style="width: 25%; font-size: 0.7vw">
-                            <template #header>
-                                <div class="flex w-full justify-center">
-                                    <span>Quantity</span>
-                                </div>
-                            </template>
-                            <template #body="{ data }">
-                                <div class="flex w-full justify-end">
-                                    <span class="capitalize">{{ formatCurrency(Number(data.totalQty).toFixed(2)) }}</span>
-                                </div>
-                            </template>
-                        </Column>
-                        <Column field="tanggal" sortable style="width: 10%; font-size: 0.7vw">
-                            <template #header>
-                                <div class="flex w-full justify-center">
-                                    <span>Tanggal</span>
-                                </div>
-                            </template>
-                            <template #body="{ data }">
-                                <div class="flex w-full justify-start">
-                                    <span>{{ moment(data.tanggal).format('DD MMM YYYY') }}</span>
-                                </div>
-                            </template>
-                        </Column>
-                        <Column field="spot" sortable style="width: 15%; font-size: 0.7vw">
-                            <template #header>
-                                <div class="flex w-full justify-center">
-                                    <span>Spot</span>
-                                </div>
-                            </template>
-                            <template #body="{ data }">
-                                <div class="flex w-full justify-end">
-                                    <span class="capitalize">{{ formatCurrency(Number(data.spot).toFixed(2)) }}</span>
-                                </div>
-                            </template>
-                        </Column>
-                        <Column field="inventory" sortable style="width: 15%; font-size: 0.7vw">
-                            <template #header>
-                                <div class="flex w-full justify-center">
-                                    <span>Inventory</span>
-                                </div>
-                            </template>
-                            <template #body="{ data }">
-                                <div class="flex w-full justify-end">
-                                    <span class="capitalize">{{ formatCurrency(Number(data.inventory).toFixed(2)) }}</span>
-                                </div>
-                            </template>
-                        </Column>
-                        <Column field="kurs" sortable style="width: 15%; font-size: 0.7vw">
-                            <template #header>
-                                <div class="flex w-full justify-center">
-                                    <span>Kurs</span>
-                                </div>
-                            </template>
-                            <template #body="{ data }">
-                                <div class="flex w-full justify-end">
-                                    <span class="capitalize">{{ formatCurrency(Number(data.kurs).toFixed(2)) }}</span>
-                                </div>
-                            </template>
-                        </Column>
-                        <Column field="hargaAsingSpot" sortable style="width: 15%; font-size: 0.7vw">
-                            <template #header>
-                                <div class="flex w-full justify-center">
-                                    <span>Harga Spot Asing</span>
-                                </div>
-                            </template>
-                            <template #body="{ data }">
-                                <div class="flex w-full justify-end">
-                                    <span class="capitalize">{{ formatCurrency(Number(data.hargaAsingSpot).toFixed(2)) }}</span>
-                                </div>
-                            </template>
-                        </Column>
-                        <Column field="id" style="width: 5%; font-size: 0.7vw">
-                            <template #body="{ data }">
-                                <div class="flex justify-center items center">
-                                    <button @click="showDrawer(data)" class="p-3 border rounded-full flex bg-gray-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
-                                        <i class="pi pi-pencil" style="font-size: 0.6vw"></i>
-                                    </button>
-                                </div>
-                            </template>
-                        </Column>
-                    </DataTable> -->
                 </div>
             </template>
         </Card>
