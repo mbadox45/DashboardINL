@@ -128,7 +128,8 @@ const exportToExcel = async () => {
         Source: item.source,
         'Harga Satuan (IDR/Kg)': item.harga,
         'Jumlah (Kg)': item.qty,
-        'Nilai (IDR)': item.value
+        'Nilai (IDR)': item.value,
+        Remarks: item.remark
     }));
 
     const worksheet = XLSX.utils.json_to_sheet(exportData);
@@ -341,6 +342,10 @@ const submitData = async () => {
                     <label for="harga">Harga / Kg <small class="text-red-500 font-bold">*</small></label>
                     <InputNumber v-model="formData.harga" inputId="minmaxfraction" placeholder="1,000,000" :minFractionDigits="0" :maxFractionDigits="2" fluid />
                 </div>
+                <div class="flex flex-col gap-1">
+                    <label for="remark">Remarks <small class="text-red-500 font-bold">*</small></label>
+                    <InputText v-model="formData.remark" placeholder="Input Remarks" />
+                </div>
                 <div class="flex flex-row-reverse w-full gap-3 mt-3">
                     <button @click="refreshForm" class="px-3 py-2 w-full border rounded-lg hover:shadow-md hover:shadow-black transition-all duration-300 shadow-sm shadow-black flex items-center gap-2 justify-center">
                         <i class="pi pi-refresh"></i><span>Reset</span>
@@ -533,6 +538,18 @@ const submitData = async () => {
                                         <template #body="{ data }">
                                             <div class="flex w-full justify-end">
                                                 <span>{{ formatCurrency(Number(data.qty).toFixed(2)) }}</span>
+                                            </div>
+                                        </template>
+                                    </Column>
+                                    <Column field="remark" sortable style="width: 25%; font-size: 0.7vw" headerStyle="background-color:rgb(251 207 232)">
+                                        <template #header>
+                                            <div class="flex w-full justify-center text-black">
+                                                <span>Remarks</span>
+                                            </div>
+                                        </template>
+                                        <template #body="{ data }">
+                                            <div class="flex w-full justify-end">
+                                                <span>{{ data.remark ?? '-' }}</span>
                                             </div>
                                         </template>
                                     </Column>

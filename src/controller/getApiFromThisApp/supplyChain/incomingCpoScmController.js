@@ -83,7 +83,8 @@ export default new (class incomingCpoScmController {
                             qty: Number(detail[j].qty),
                             harga: Number(detail[j].harga),
                             value: Number(detail[j].value),
-                            source: detail[j].source.name
+                            source: detail[j].source.name,
+                            remark: detail[j].remark ?? '-'
                         });
                     }
                     list.push({
