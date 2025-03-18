@@ -5,7 +5,7 @@ export const menuAllAccess = () => {
     const result = [];
 
     if (rolesUser == 'allUser') {
-        result.push(dataMenu.home(), dataMenu.finance(), dataMenu.operation(), dataMenu.sales(), dataMenu.sourcing(), dataMenu.scm(), dataMenu.sdm(), dataMenu.master());
+        result.push(dataMenu.home(), dataMenu.direksi(), dataMenu.finance(), dataMenu.operation(), dataMenu.sales(), dataMenu.sourcing(), dataMenu.scm(), dataMenu.sdm(), dataMenu.master());
     } else if (rolesUser == 'finance') {
         result.push(dataMenu.home(), dataMenu.finance(), dataMenu.master());
     } else if (rolesUser == 'operation') {

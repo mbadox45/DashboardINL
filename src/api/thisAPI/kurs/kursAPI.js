@@ -15,6 +15,9 @@ export default new (class kursAPI {
     getByPeriod(date) {
         return httpCommonThisAPI.post('kurs/period', date);
     }
+    getByLatest(date) {
+        return httpCommonThisAPI.post('kurs/latest', date);
+    }
     getByID(id) {
         return httpCommonThisAPI.get(`kurs/get/${id}`);
     }

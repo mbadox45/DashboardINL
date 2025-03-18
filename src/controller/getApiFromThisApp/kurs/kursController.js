@@ -69,6 +69,16 @@ export default new (class kursController {
             return null;
         }
     };
+    getByLatest = async (form) => {
+        try {
+            const response = await kursAPI.getByLatest(form);
+            const load = response.data;
+            const data = load.data;
+            return data;
+        } catch (error) {
+            return null;
+        }
+    };
     loadTable = async (form) => {
         try {
             const response = await this.getByPeriod(form);

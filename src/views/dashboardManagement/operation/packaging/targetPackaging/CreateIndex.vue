@@ -2,6 +2,7 @@
 import jenisLaporanPackagingController from '@/controller/getApiFromThisApp/packaging/jenisLaporanPackagingController';
 import laporanPackagingController from '@/controller/getApiFromThisApp/packaging/laporanPackagingController';
 import packagingController from '@/controller/getApiFromThisApp/packaging/packagingController';
+import uraianPackagingController from '@/controller/getApiFromThisApp/packaging/uraianPackagingController';
 import moment from 'moment';
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
@@ -9,7 +10,6 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 const messages = ref([]);
 const tanggal = ref(moment().format('YYYY-MM-DD'));
-const maxDate = ref(moment().format('YYYY-MM-DD'));
 const listJenis = ref([]);
 const jenisProduksi = ref([]);
 const listPmg = ref([]);
@@ -18,10 +18,19 @@ const pmg = ref(null);
 const loadings = ref(false);
 const setTime = ref(3000);
 
+let today = new Date();
+let month = today.getMonth();
+let year = today.getFullYear();
+let day = today.getDate();
+const maxDate = ref(new Date());
+
 const formData = ref([]);
 let count = ref(0);
 
 onMounted(() => {
+    maxDate.value.setDate(day);
+    maxDate.value.setMonth(month);
+    maxDate.value.setFullYear(year);
     loadData();
 });
 
@@ -30,12 +39,13 @@ const loadData = async () => {
     // PMG
     const dataPmg = await packagingController.getAll();
     listPmg.value = dataPmg;
+
+    await loadForm();
 };
 
 const loadJenis = async () => {
     try {
         const response = await jenisLaporanPackagingController.getAll();
-        const listItems = [];
         const list = [];
         for (let i = 0; i < response.length; i++) {
             const items = response[i].item_packaging;
@@ -43,51 +53,57 @@ const loadJenis = async () => {
                 id: response[i].id,
                 name: `${response[i].name}`
             });
-            for (let j = 0; j < items.length; j++) {
-                listItems.push({
-                    id: items[j].id,
-                    jenis_id: response[i].id,
-                    name: `${items[j].name}`
-                });
-            }
         }
         listJenis.value = list;
-        jenisProduksi.value = listItems;
     } catch (error) {
         listJenis.value = [];
-        jenisProduksi.value = [];
     }
 };
 
-const loadForm = () => {
-    const listProd = jenisProduksi.value.filter((item) => item.jenis_id == jenis.value);
-    const list = [];
-    for (let i = 0; i < listProd.length; i++) {
-        list.push({
-            item_packaging_id: listProd[i].id,
-            item_produksi: listProd[i].name,
-            packaging_id: pmg.value,
-            tanggal: tanggal.value,
-            value: null
-        });
+const loadForm = async () => {
+    try {
+        const response = await uraianPackagingController.getAll();
+        const list = [];
+        for (let i = 0; i < response.length; i++) {
+            list.push({
+                item_packaging_id: response[i].id,
+                item_produksi: response[i].nama,
+                packaging_id: pmg.value,
+                tanggal: tanggal.value,
+                value: null
+            });
+        }
+        formData.value = list;
+    } catch (error) {
+        const list = [];
+        formData.value = list;
     }
-    formData.value = list;
 };
 
 const resetForm = () => {
     formData.value = [];
     jenis.value = null;
     pmg.value = null;
-    tanggal.value = moment().format('YYYY-MM-DD');
+    tanggal.value = moment().format('YYYY-MM-01');
 };
 
 const postData = async (cond) => {
     if (cond == 'back') {
         router.push('/operation/packaging/target');
-        // window.location.replace(`${URL_WEB}operation/laporan-produksi`);
     } else {
         loadings.value = true;
-        const response = await laporanPackagingController.postData(formData.value);
+        const form = [];
+        const list = formData.value;
+        for (let i = 0; i < list.length; i++) {
+            form.push({
+                item_packaging_id: list[i].item_packaging_id,
+                item_produksi: list[i].item_produksi,
+                packaging_id: pmg.value,
+                tanggal: moment(tanggal.value).format('YYYY-MM-01'),
+                value: list[i].value
+            });
+        }
+        const response = await laporanPackagingController.postData(form);
         messages.value = [{ severity: response.severity, content: response.content, id: count.value++, icon: response.icon }];
         if (response.severity == 'success') {
             setTimeout(function () {
@@ -105,7 +121,7 @@ const postData = async (cond) => {
 <template>
     <div class="flex flex-col w-full gap-8">
         <div class="flex gap-2 items-center justify-between w-full font-bold">
-            <span class="text-3xl">Form Data (Laporan Packaging)</span>
+            <span class="text-3xl">Form Data (Target Packaging)</span>
             <div class="flex gap-3">
                 <button
                     @click="postData('save')"
@@ -152,7 +168,7 @@ const postData = async (cond) => {
                     <div class="flex gap-3 w-full">
                         <div class="flex flex-col gap-1 w-full">
                             <label for="date" class="font-bold">Tanggal <small class="text-red-500 font-bold">*</small></label>
-                            <DatePicker v-model="tanggal" dateFormat="yy-mm-dd" showIcon placeholder="Please input Date" />
+                            <DatePicker v-model="tanggal" dateFormat="yy-mm" :maxDate="maxDate" view="month" showIcon placeholder="Please input Date" />
                         </div>
                         <div class="flex flex-col gap-1 w-full">
                             <label for="date" class="font-bold">Lokasi Packaging <small class="text-red-500 font-bold">*</small></label>
@@ -161,7 +177,7 @@ const postData = async (cond) => {
                     </div>
                     <div class="flex flex-col gap-1">
                         <label for="date" class="font-bold">Jenis <small class="text-red-500 font-bold">*</small></label>
-                        <Select v-model="jenis" filter :options="listJenis" optionLabel="name" optionValue="id" placeholder="Select a Description" class="w-full" @change="loadForm" />
+                        <Select v-model="jenis" filter :options="listJenis" optionLabel="name" optionValue="id" placeholder="Select a Description" class="w-full" />
                     </div>
                     <Divider align="left" type="solid"><b>Form Item</b></Divider>
                     <ScrollPanel style="width: 100%; height: 22rem">

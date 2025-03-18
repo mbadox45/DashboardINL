@@ -8,6 +8,12 @@ export default new (class dataMenu {
             ]
         };
     };
+    direksi = () => {
+        return {
+            label: 'Direksi',
+            items: [{ label: 'Simulation Calculator', icon: 'pi pi-fw pi-calculator', to: '/director/simulation-calculator' }]
+        };
+    };
     finance = () => {
         return {
             label: 'Finance',

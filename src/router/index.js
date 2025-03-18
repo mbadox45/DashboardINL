@@ -30,6 +30,14 @@ const router = createRouter({
             // }
         },
         {
+            path: '/simulation-calc',
+            name: 'simulation-calc',
+            component: () => import('@/views/dashboard/report/detailPage//components/direksi/Index.vue')
+            // meta: {
+            //     guestOnly: true
+            // }
+        },
+        {
             path: '/',
             component: DashManagement,
             children: [
@@ -46,6 +54,21 @@ const router = createRouter({
                         scm: true,
                         sdm: true,
                         sourcing: true
+                    }
+                },
+                // Direksi
+                {
+                    path: '/director/simulation-calculator',
+                    name: 'simulation-calculator',
+                    component: () => import('@/views/dashboardManagement/direksi/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true
+                        // finance: true
+                        // operation: true
+                        // sales: true,
+                        // scm: true,
+                        // sdm: true
                     }
                 },
                 // Finance
