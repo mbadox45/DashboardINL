@@ -15,4 +15,7 @@ export default new (class simulasiRspAPI {
     getByID(id) {
         return httpCommonThisAPI.get(`sical-rsp-simulation/get/${id}`);
     }
+    getCalculate(data) {
+        return httpCommonThisAPI.post('sical-rsp-simulation/calculate', data);
+    }
 })();

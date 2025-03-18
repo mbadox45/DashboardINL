@@ -3,6 +3,8 @@ import kursController from '@/controller/getApiFromThisApp/kurs/kursController';
 import mataUangKursController from '@/controller/getApiFromThisApp/kurs/mataUangKursController';
 import dmoSicalRspController from '@/controller/getApiFromThisApp/sicalRSP/dmoSicalRspController';
 import masterCostSicalRspController from '@/controller/getApiFromThisApp/sicalRSP/masterCostSicalRspController';
+import pengaliSicalRspController from '@/controller/getApiFromThisApp/sicalRSP/pengaliSicalRspController';
+import simulasiSicalRspController from '@/controller/getApiFromThisApp/sicalRSP/simulasiSicalRspController';
 import utilisasiSicalRspController from '@/controller/getApiFromThisApp/sicalRSP/utilisasiSicalRspController';
 import moment from 'moment';
 import { onMounted, ref } from 'vue';
@@ -12,19 +14,30 @@ const listMasterCost = ref([]);
 const listUtilisasi = ref([]);
 const listKurs = ref([]);
 const listMataUang = ref([]);
+const listPengali = ref([]);
 const nilaiDMO = ref(0);
 const remarkDMO = ref('');
 const nilaiKurs = ref(0);
 const remarkKurs = ref('');
 const labelMataUang = ref('USD');
+const showTable = ref(false);
+const loadingCard1 = ref(false);
+const loadingCard2 = ref(false);
+
+// Table
+const listSimulasi1 = ref([]);
+const listSimulasi2 = ref([]);
+const listSimulasi3 = ref([]);
+const listSimulasi4 = ref([]);
 
 const formData = ref({
     kurs: 0,
     kurs_id: 1,
     dmo: 0,
+    id_dmo: 0,
     margin: 0,
-    offer_buyer: 0,
-    volume: 0,
+    offer_buyer: 973,
+    volume: 12000,
     internal_cost: []
 });
 
@@ -35,15 +48,18 @@ const expectedMargin = ref(0);
 
 onMounted(() => {
     loadAll();
-    loadDMO();
-    loadKursLatest();
 });
 
 const loadAll = async () => {
+    loadingCard1.value = true;
+    await loadKursLatest();
     await loadKurs();
     await loadMasterCost();
     await loadUtilisasi();
+    await loadDMO();
+    await loadPengali();
     await loadInputData();
+    loadingCard1.value = false;
 };
 
 const loadDMO = async () => {
@@ -52,6 +68,7 @@ const loadDMO = async () => {
         nilaiDMO.value = Number(response.value);
         remarkDMO.value = response.remark;
         formData.value.dmo = nilaiDMO.value;
+        formData.value.id_dmo = response.id;
     } catch (error) {
         nilaiDMO.value = 0;
         formData.value.dmo = 0;
@@ -96,6 +113,15 @@ const loadMasterCost = async () => {
     }
 };
 
+const loadPengali = async () => {
+    try {
+        const response = await pengaliSicalRspController.getAll();
+        listPengali.value = response.sort((a, b) => a.id - b.id);
+    } catch (error) {
+        listPengali.value = [];
+    }
+};
+
 const loadUtilisasi = async () => {
     try {
         const response = await utilisasiSicalRspController.getAll();
@@ -106,51 +132,98 @@ const loadUtilisasi = async () => {
 };
 
 const loadInputData = async () => {
-    const master = listMasterCost.value;
-    const list = [];
-    for (let i = 0; i < master.length; i++) {
-        const util = listUtilisasi.value;
-        const listUtil = [];
-        for (let j = 0; j < util.length; j++) {
-            listUtil.push({
-                id: util[j].id,
-                name: util[j].name,
-                value: util[j].value,
-                nilai: 0
+    try {
+        const response = await simulasiSicalRspController.getAll();
+        let data = [];
+        if (response != null) {
+            const dataSical = response.sort((a, b) => b.id - a.id);
+            data = dataSical[0].cost;
+        }
+        const master = listMasterCost.value;
+        const list = [];
+        for (let i = 0; i < master.length; i++) {
+            const util = listUtilisasi.value;
+            const listUtil = [];
+            for (let j = 0; j < util.length; j++) {
+                const cost = data.find((item) => item.id_master_cost == master[i].id && item.id_utilisasi == util[j].id);
+                const nilai = cost == null ? 0 : Number(cost.value);
+                listUtil.push({
+                    id: util[j].id,
+                    name: util[j].name,
+                    value: util[j].value,
+                    nilai: nilai,
+                    nilai_asing: nilai == 0 ? 0 : ((nilai / formData.value.kurs) * 1000).toFixed(2)
+                });
+            }
+            list.push({
+                id: master[i].id,
+                name: master[i].name,
+                util: listUtil
             });
         }
-        list.push({
-            id: master[i].id,
-            name: master[i].name,
-            util: listUtil
-        });
+        formInternal.value = list;
+        loadingCard1.value = false;
+    } catch (error) {
+        const master = listMasterCost.value;
+        const list = [];
+        for (let i = 0; i < master.length; i++) {
+            const util = listUtilisasi.value;
+            const listUtil = [];
+            for (let j = 0; j < util.length; j++) {
+                listUtil.push({
+                    id: util[j].id,
+                    name: util[j].name,
+                    value: util[j].value,
+                    nilai: 0,
+                    nilai_asing: 0
+                });
+            }
+            list.push({
+                id: master[i].id,
+                name: master[i].name,
+                util: listUtil
+            });
+        }
+        formInternal.value = list;
+        loadingCard1.value = false;
     }
-    formInternal.value = list;
 };
 
 const reset = async () => {
-    formData.value = {
-        kurs: nilaiKurs.value,
-        kurs_id: 1,
-        dmo: nilaiDMO.value,
-        margin: 0,
-        offer_buyer: 0,
-        volume: 0,
-        internal_cost: []
-    };
+    formData.value.kurs = nilaiKurs.value;
+    formData.value.kurs_id = 1;
+    formData.value.dmo = nilaiDMO.value;
+    formData.value.margin = 0;
+    formData.value.offer_buyer = 973;
+    formData.value.volume = 12000;
+    formData.value.internal_cost = [];
     const listMU = listMataUang.value.find((item) => item.id == formData.value.kurs_id);
     labelMataUang.value = listMU.name;
+    showTable.value = false;
 };
 
 const loadSimulasi = async () => {
+    loadingCard2.value = true;
     try {
         const listMU = listMataUang.value.find((item) => item.id == formData.value.kurs_id);
         labelMataUang.value = listMU.name;
-        // const response = await simulasiSicalRspController.loadTable({ idMataUang: 1 });
-        // console.log(response);
-        // listSimulasi.value = response;
+
+        // Hasil Kalkulasi
+        const response = await simulasiSicalRspController.simulationCalc2(formData.value, formInternal.value);
+        console.log(response);
+        listSimulasi1.value = response.sim1;
+        listSimulasi2.value = response.sim2;
+        listSimulasi3.value = response.sim3;
+        listSimulasi4.value = response.sim4;
+        showTable.value = true;
+        loadingCard2.value = false;
     } catch (error) {
-        // listSimulasi.value = [];
+        listSimulasi1.value = [];
+        listSimulasi2.value = [];
+        listSimulasi3.value = [];
+        listSimulasi4.value = [];
+        showTable.value = true;
+        loadingCard2.value = false;
     }
 };
 </script>
@@ -160,7 +233,7 @@ const loadSimulasi = async () => {
         <Card style="color: white; --tw-bg-opacity: 1; background-color: rgb(38 38 38 / var(--tw-bg-opacity, 1))">
             <template #title>
                 <div class="flex w-full items-center justify-center">
-                    <span class="font-bold w-full text-3xl">ASUMSI DASAR PERHITUNGAN</span>
+                    <span class="font-bold w-full text-3xl">ASUMSI DASAR PERHITUNGAN - SICAL RSP</span>
                     <div class="flex justify-end w-full gap-2">
                         <Button label="Calculate" icon="pi pi-calculator" severity="danger" @click="loadSimulasi" />
                         <Button label="Reset" icon="pi pi-refresh" severity="info" @click="reset" />
@@ -168,7 +241,10 @@ const loadSimulasi = async () => {
                 </div>
             </template>
             <template #content>
-                <div class="flex w-full gap-10 items-start mb-10">
+                <div v-if="loadingCard1 == true" class="flex w-full gap-10 items-center justify-center min-h-[10rem]">
+                    <span>-- Loading Data --</span>
+                </div>
+                <div v-else class="flex w-full gap-10 items-start">
                     <div class="flex w-full flex-col gap-2">
                         <span class="font-bold text-xl text-neutral-300">INTERNAL COST (HPP) </span>
                         <div class="grid grid-cols-2 gap-7 w-full">
@@ -178,13 +254,13 @@ const loadSimulasi = async () => {
                                     <span class="w-full">{{ util.name }}</span>
                                     <div class="flex gap-1 w-full">
                                         <InputGroup>
-                                            <InputGroupAddon class="font-bold">Rp</InputGroupAddon>
+                                            <InputGroupAddon class="font-bold">IDR</InputGroupAddon>
                                             <InputNumber v-model="util.nilai" placeholder="" class="w-full" />
                                         </InputGroup>
-                                        <InputGroup>
+                                        <!-- <InputGroup>
                                             <InputGroupAddon class="font-bold">{{ labelMataUang }}</InputGroupAddon>
-                                            <InputNumber v-model="util.nilai" placeholder="" class="w-full" disabled />
-                                        </InputGroup>
+                                            <InputNumber v-model="util.nilai_asing" placeholder="" class="w-full" disabled />
+                                        </InputGroup> -->
                                     </div>
                                 </div>
                             </div>
@@ -216,7 +292,7 @@ const loadSimulasi = async () => {
                             </div>
                         </div>
 
-                        <div class="flex flex-col gap-2 w-full">
+                        <div class="flex flex-col gap-1 w-full">
                             <span class="font-bold text-xl uppercase text-neutral-300">OFFER </span>
                             <div class="flex gap-7 w-full">
                                 <div class="flex flex-col gap-1 w-full p-4 rounded-xl bg-emerald-700">
@@ -235,7 +311,7 @@ const loadSimulasi = async () => {
                         </div>
 
                         <div class="flex w-full gap-7">
-                            <div class="flex flex-col gap-2 w-full">
+                            <div class="flex flex-col gap-1 w-full">
                                 <span class="font-bold text-xl uppercase text-neutral-300">Expected Margin </span>
                                 <div class="flex gap-7 w-full">
                                     <div class="flex flex-col gap-1 w-full p-4 rounded-xl bg-pink-700">
@@ -250,7 +326,7 @@ const loadSimulasi = async () => {
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex flex-col gap-2 w-full">
+                            <div class="flex flex-col gap-1 w-full">
                                 <span class="font-bold text-xl uppercase text-neutral-300">Mata Uang </span>
                                 <div class="flex gap-7 w-full">
                                     <div class="flex flex-col gap-1 w-full p-4 rounded-xl bg-cyan-700">
@@ -265,246 +341,537 @@ const loadSimulasi = async () => {
                         </div>
                     </div>
                 </div>
-
-                <!-- <div class="flex w-full bg-pink-200 flex-col gap-2">
-                    <div class="grid grid-cols-6 w-full font-bold">
-                        <div class="text-[0.9vw] col-span-2 text-center flex items-center justify-center bg-slate-800 p-3 border">
-                            <span>ASUMSI DASAR PERHITUNGAN</span>
-                        </div>
-                        <div v-for="(list, index) in listMasterCost" :key="index" class="bg-yellow-400 p-3 border text-black text-center flex flex-col items-center justify-center col-span-1">
-                            <span class="text-[0.9vw]" :class="list.name.toLowerCase().includes('bulk processing') ? 'text-red-700' : 'text-black'">{{ list.name }}</span>
-                            <div class="flex w-full">
-                                <span class="w-full">(IDR)</span>
-                                <span class="w-full" v-if="list.name.toLowerCase().includes('bulk processing')">(USD)</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-7 w-full font-bold text-black">
-                        <div class="font-bold col-span-2 text-center flex items-center p-1">
-                            <span>INTERNAL COST (HPP)</span>
-                        </div>
-                        <div v-for="(list, index) in listMasterCost" :key="index" class="p-1 text-black text-center flex flex-col items-center justify-center" :class="list.name.toLowerCase().includes('bulk processing') ? 'col-span-2' : 'col-span-1'">
-                            <span class="text-[0.7vw]" v-if="list.name.toLowerCase().includes('packaging')">* DMO</span>
-                            <span class="text-[0.7vw]" v-if="list.name.toLowerCase().includes('logistic')">* FOB</span>
-                        </div>
-                        <div class="text-[0.7vw] col-span-1 text-center flex items-center justify-center p-1"></div>
-                    </div>
-                    <div class="grid grid-cols-6 w-full font-bold">
-                        <div class="text-[0.7vw] col-span-1 text-center flex items-center justify-center bg-neutral-800 p-3 border">
-                            <span>STRUKTUR BIAYA PRODUKSI INL (HPP)</span>
-                        </div>
-                        <div class="text-[0.7vw] col-span-1 text-center flex flex-col items-center justify-center bg-neutral-800 p-3 border">
-                            <span class="w-full" v-for="(list, index) in listUtilisasi" :key="index">{{ list.name }}</span>
-                        </div>
-                        <div v-for="(list, index) in listMasterCost" :key="index" class="bg-blue-300 border text-black text-center flex flex-col items-center justify-center col-span-1 w-full">
-                            <div class="grid grid-cols-2 p-1 gap-1 w-full">
-                                <div class="col-span-1 flex w-full">
-                                    <InputNumber placeholder="IDR" class="w-1" />
-                                </div>
-                                <div class="col-span-1 flex w-full">
-                                    <InputNumber placeholder="USD" class="w-1" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-7 w-full font-bold text-black">
-                        <div class="font-bold col-span-8 text-center flex items-center p-2">
-                            <span>EXTERNAL COST (DMO)</span>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-7 w-full font-bold">
-                        <div class="text-[0.8vw] col-span-1 text-center flex flex-col items-center justify-center bg-neutral-800 p-3 border">
-                            <span class="h-full flex items-center">DMO</span>
-                            <span class="h-full flex items-center">Kurs</span>
-                        </div>
-                        <div class="text-[0.8vw] col-span-1 text-center flex flex-col items-center justify-center bg-neutral-800 p-3 border">
-                            <span class="h-full flex items-center">IDR/Kg incl PPN</span>
-                            <span class="h-full flex items-center">IDR / USD </span>
-                        </div>
-                        <div class="text-[0.8vw] text-black col-span-2 text-center flex flex-col items-center bg-blue-300 justify-center p-3 border">
-                            <InputNumber v-model="nilaiDMO" placeholder="DMO" class="w-full" />
-                            <InputNumber v-model="nilaiKurs" placeholder="KURS" class="w-full" />
-                        </div>
-                        <div class="text-[0.8vw] col-span-3 text-center flex flex-col items-center bg-neutral-900 justify-center p-3 border">
-                            <span class="h-full flex items-center">{{ remarkDMO }}</span>
-                            <span class="h-full flex items-center">Diupdate rate kurs yang sesuai</span>
-                        </div>
-                    </div>
-                </div> -->
             </template>
         </Card>
         <Card style="color: white; --tw-bg-opacity: 1; background-color: rgb(38 38 38 / var(--tw-bg-opacity, 1))">
             <template #title>
                 <div class="flex w-full justify-between py-2">
-                    <span class="font-bold">INL SIMULATION CALCULATOR FOR RECOMMENDED SELLING PRICE (SICAL RSP)</span>
+                    <span class="font-bold text-3xl text-pink-500">INL SIMULATION CALCULATOR FOR RECOMMENDED SELLING PRICE (SICAL RSP)</span>
                     <i style="font-size: 1.4vw" class="pi pi-question-circle text-yellow-500"></i>
                 </div>
             </template>
             <template #content>
-                <DataTable :value="listUtilisasi" showGridlines editMode="cell" scrollHeight="550px" dataKey="id">
-                    <template #empty> No customers found. </template>
-                    <template #loading> Loading customers data. Please wait. </template>
+                <div v-if="loadingCard2 == true" class="w-full flex justify-center items-center">
+                    <span>-- Loading Data --</span>
+                </div>
+                <div v-else>
+                    <div v-if="showTable == true" class="flex flex-col gap-5">
+                        <DataTable :value="listSimulasi1" showGridlines editMode="cell" scrollHeight="550px" dataKey="id">
+                            <template #empty>
+                                <div class="flex w-full items-center justify-center">
+                                    <span>-- Data tidak tersedia --</span>
+                                </div>
+                            </template>
+                            <template #loading> Loading customers data. Please wait. </template>
 
-                    <ColumnGroup type="header">
-                        <Row>
-                            <Column :rowspan="3">
-                                <template #header>
-                                    <div class="text-center w-full flex justify-center font-bold text-black">
-                                        <span>Utilisasi</span>
-                                    </div>
-                                </template>
-                            </Column>
+                            <ColumnGroup type="header">
+                                <Row>
+                                    <Column :rowspan="3" headerStyle="background-color:#262626">
+                                        <template #header>
+                                            <div class="text-center w-full flex justify-center font-bold text-white">
+                                                <span>Utilisasi</span>
+                                            </div>
+                                        </template>
+                                    </Column>
 
-                            <!-- Looping Produk -->
-                            <Column v-for="product in listMasterCost" :key="product.id" :colspan="product.name.toLowerCase().includes('packaging') ? 1 : 2">
-                                <template #header>
-                                    <div class="text-center w-full flex justify-center font-bold text-black">
-                                        <span>{{ product.name }}</span>
+                                    <!-- Looping Produk -->
+                                    <Column v-for="product in listMasterCost" :key="product.id" :colspan="2">
+                                        <template #header>
+                                            <div class="text-center w-full flex justify-center font-bold text-black">
+                                                <span>{{ product.name }}</span>
+                                            </div>
+                                        </template>
+                                    </Column>
+                                    <Column :colspan="2">
+                                        <template #header>
+                                            <div class="text-center w-full flex justify-center font-bold text-black">
+                                                <span>Expected Margin</span>
+                                            </div>
+                                        </template>
+                                    </Column>
+                                </Row>
+                                <Row>
+                                    <Column :colspan="listMasterCost.length * 2" headerStyle="background-color:#eab308;">
+                                        <template #header>
+                                            <div class="text-center w-full flex justify-center font-bold text-black">
+                                                <span>COST OF GOOD SOLD / HPP</span>
+                                            </div>
+                                        </template>
+                                    </Column>
+                                    <Column :colspan="2" headerStyle="background-color:#93c5fd;">
+                                        <template #header>
+                                            <div class="text-center w-full flex justify-center font-bold text-black bg-blue-300">
+                                                <span>{{ formData.margin }} %</span>
+                                            </div>
+                                        </template>
+                                    </Column>
+                                </Row>
+                                <Row>
+                                    <!-- Looping Produk -->
+                                    <template v-for="product in listMasterCost" :key="product.id">
+                                        <Column headerStyle="background-color:#dc2626; color:white">
+                                            <template #header>
+                                                <div class="text-center w-full flex justify-center font-bold">
+                                                    <span>IDR</span>
+                                                </div>
+                                            </template>
+                                        </Column>
+                                        <Column headerStyle="background-color:#134e4a; color:white">
+                                            <template #header>
+                                                <div class="text-center w-full flex justify-center font-bold">
+                                                    <span>USD</span>
+                                                </div>
+                                            </template>
+                                        </Column>
+                                    </template>
+                                    <Column headerStyle="background-color:#dc2626; color:white">
+                                        <template #header>
+                                            <div class="text-center w-full flex justify-center font-bold">
+                                                <span>IDR</span>
+                                            </div>
+                                        </template>
+                                    </Column>
+                                    <Column>
+                                        <template #header>
+                                            <div class="text-center w-full flex justify-center font-bold text-black">
+                                                <span>%</span>
+                                            </div>
+                                        </template>
+                                    </Column>
+                                </Row>
+                            </ColumnGroup>
+                            <Column field="name" style="min-width: 13rem">
+                                <template #body="{ data }">
+                                    <div class="flex justify-between items-center gap-2">
+                                        <strong class="text-sm w-full">{{ data.name }}</strong>
                                     </div>
                                 </template>
                             </Column>
-                            <Column :colspan="2">
-                                <template #header>
-                                    <div class="text-center w-full flex justify-center font-bold text-black">
-                                        <span>Expected Margin</span>
-                                    </div>
-                                </template>
-                            </Column>
-                        </Row>
-                        <Row>
-                            <Column :colspan="listMasterCost.length * 2 - 1" headerStyle="background-color:#eab308;">
-                                <template #header>
-                                    <div class="text-center w-full flex justify-center font-bold text-black">
-                                        <span>COST OF GOOD SOLD / HPP</span>
-                                    </div>
-                                </template>
-                            </Column>
-                            <Column :colspan="2" headerStyle="background-color:#93c5fd;">
-                                <template #header>
-                                    <div class="text-center w-full flex justify-center font-bold text-black bg-blue-300">
-                                        <InputGroup>
-                                            <InputNumber v-model="expectedMargin" placeholder="0.0" />
-                                            <InputGroupAddon>%</InputGroupAddon>
-                                        </InputGroup>
-                                    </div>
-                                </template>
-                            </Column>
-                        </Row>
-                        <Row>
-                            <!-- Looping Produk -->
                             <template v-for="product in listMasterCost" :key="product.id">
-                                <Column headerStyle="background-color:#dc2626; color:white">
-                                    <template #header>
-                                        <div class="text-center w-full flex justify-center font-bold">
-                                            <span>IDR</span>
+                                <Column>
+                                    <template #body="{ data }">
+                                        <div class="flex justify-center">
+                                            <small>{{ data.product?.[product.id].value }}</small>
                                         </div>
                                     </template>
                                 </Column>
-                                <Column v-if="!product.name.toLowerCase().includes('packaging')" headerStyle="background-color:#134e4a; color:white">
-                                    <template #header>
-                                        <div class="text-center w-full flex justify-center font-bold">
-                                            <span>USD</span>
+                                <Column>
+                                    <template #body="{ data }">
+                                        <div class="flex justify-center">
+                                            <small>{{ data.product?.[product.id].usd }}</small>
                                         </div>
                                     </template>
                                 </Column>
                             </template>
-                            <Column headerStyle="background-color:#dc2626; color:white">
-                                <template #header>
-                                    <div class="text-center w-full flex justify-center font-bold">
-                                        <span>IDR</span>
+                            <Column field="name">
+                                <template #body="{ data }">
+                                    <div class="flex justify-center items-center w-full gap-2">
+                                        <strong class="text-sm">{{ data.margin }}</strong>
                                     </div>
                                 </template>
                             </Column>
-                            <Column>
-                                <template #header>
-                                    <div class="text-center w-full flex justify-center font-bold text-black">
-                                        <span>%</span>
+                            <Column field="name">
+                                <template #body="{ data }">
+                                    <div class="flex justify-center items-center w-full gap-2">
+                                        <strong class="text-sm">{{ data.marginPercent }}%</strong>
                                     </div>
                                 </template>
                             </Column>
-                        </Row>
-                    </ColumnGroup>
-                    <Column field="name" style="min-width: 13rem">
-                        <template #body="{ data }">
-                            <div class="flex justify-between items-center gap-2">
-                                <strong class="text-sm w-full">{{ data.name }}</strong>
-                            </div>
-                        </template>
-                    </Column>
-                    <template v-for="product in listMasterCost" :key="product.id">
-                        <Column>
-                            <template #body="{ data }">
-                                <div class="flex justify-between">
-                                    <small>{{ data.name }}</small>
+                        </DataTable>
+
+                        <DataTable :value="listSimulasi2" showGridlines editMode="cell" scrollHeight="550px" dataKey="id">
+                            <template #empty>
+                                <div class="flex w-full items-center justify-center">
+                                    <span>-- Data tidak tersedia --</span>
                                 </div>
                             </template>
-                        </Column>
-                        <Column v-if="!product.name.toLowerCase().includes('packaging')">
-                            <template #body="{ data }">
-                                <div class="flex justify-between">
-                                    <small>{{ data.name }}</small>
+                            <template #loading> Loading customers data. Please wait. </template>
+
+                            <ColumnGroup type="header">
+                                <Row>
+                                    <Column :rowspan="3" headerStyle="background-color:#262626">
+                                        <template #header>
+                                            <div class="text-center w-full flex justify-center font-bold text-white">
+                                                <span>Utilisasi</span>
+                                            </div>
+                                        </template>
+                                    </Column>
+
+                                    <!-- Looping Produk -->
+                                    <Column :colspan="4" headerStyle="background-color:#dc2626; color:white">
+                                        <template #header>
+                                            <div class="w-full flex flex-col items-center justify-center font-bold">
+                                                <span>REKOMENDASI Harga Jual TANPA DMO</span>
+                                                <p class="text-center">(DMO ditanggung Buyer / Penjualan Domestik )</p>
+                                            </div>
+                                        </template>
+                                    </Column>
+                                    <Column :colspan="2" :rowspan="2">
+                                        <template #header>
+                                            <div class="w-full flex flex-col items-center justify-center font-bold text-black">
+                                                <span>BIAYA DMO</span>
+                                                <p class="text-center">Kerugian per kg (IDR) atau per Ton (USD) Minyakita</p>
+                                            </div>
+                                        </template>
+                                    </Column>
+                                    <Column :colspan="2 * listPengali.length">
+                                        <template #header>
+                                            <div class="w-full flex flex-col items-center justify-center font-bold text-black">
+                                                <span>BIAYA DMO</span>
+                                                <p class="text-center">(Per KG (IDR) atau per MT (USD) Olein Export ) Dengan Variasi FAKTOR Pengali</p>
+                                            </div>
+                                        </template>
+                                    </Column>
+                                </Row>
+                                <Row>
+                                    <Column :colspan="3">
+                                        <template #header>
+                                            <div class="text-center w-full flex justify-center font-bold text-black">
+                                                <span> FOB Kuala Tanjung</span>
+                                            </div>
+                                        </template>
+                                    </Column>
+                                    <Column>
+                                        <template #header>
+                                            <div class="text-center w-full flex justify-center font-bold text-black">
+                                                <span>LOCO INL</span>
+                                            </div>
+                                        </template>
+                                    </Column>
+                                    <template v-for="pengali in listPengali" :key="pengali.id">
+                                        <Column :colspan="2">
+                                            <template #header>
+                                                <div class="text-center w-full flex justify-center font-bold text-black">
+                                                    <span>{{ pengali.value }}</span>
+                                                </div>
+                                            </template>
+                                        </Column>
+                                    </template>
+                                </Row>
+                                <Row>
+                                    <Column headerStyle="background-color:#dc2626; color:white">
+                                        <template #header>
+                                            <div class="text-center w-full flex justify-center font-bold">
+                                                <span>IDR</span>
+                                            </div>
+                                        </template>
+                                    </Column>
+                                    <Column headerStyle="background-color:#134e4a; color:white">
+                                        <template #header>
+                                            <div class="text-center w-full flex justify-center font-bold">
+                                                <span>USD</span>
+                                            </div>
+                                        </template>
+                                    </Column>
+                                    <Column>
+                                        <template #header>
+                                            <div class="text-center w-full flex justify-center font-bold text-black">
+                                                <span>CPO+</span>
+                                            </div>
+                                        </template>
+                                    </Column>
+                                    <Column>
+                                        <template #header>
+                                            <div class="text-center w-full flex justify-center font-bold text-black">
+                                                <span>CPO+</span>
+                                            </div>
+                                        </template>
+                                    </Column>
+                                    <Column headerStyle="background-color:#dc2626; color:white">
+                                        <template #header>
+                                            <div class="text-center w-full flex justify-center font-bold">
+                                                <span>IDR</span>
+                                            </div>
+                                        </template>
+                                    </Column>
+                                    <Column headerStyle="background-color:#134e4a; color:white">
+                                        <template #header>
+                                            <div class="text-center w-full flex justify-center font-bold">
+                                                <span>USD</span>
+                                            </div>
+                                        </template>
+                                    </Column>
+                                    <template v-for="pengali in listPengali" :key="pengali.id">
+                                        <Column headerStyle="background-color:#dc2626; color:white">
+                                            <template #header>
+                                                <div class="text-center w-full flex justify-center font-bold">
+                                                    <span>IDR</span>
+                                                </div>
+                                            </template>
+                                        </Column>
+                                        <Column headerStyle="background-color:#134e4a; color:white">
+                                            <template #header>
+                                                <div class="text-center w-full flex justify-center font-bold">
+                                                    <span>USD</span>
+                                                </div>
+                                            </template>
+                                        </Column>
+                                    </template>
+                                </Row>
+                            </ColumnGroup>
+                            <Column field="name" style="min-width: 13rem">
+                                <template #body="{ data }">
+                                    <div class="flex justify-between items-center gap-2">
+                                        <strong class="text-sm">{{ data.name }}</strong>
+                                    </div>
+                                </template>
+                            </Column>
+                            <Column field="fobIdr">
+                                <template #body="{ data }">
+                                    <div class="flex justify-center items-center gap-2">
+                                        <strong class="text-sm">{{ data.fobIdr }}</strong>
+                                    </div>
+                                </template>
+                            </Column>
+                            <Column field="name">
+                                <template #body="{ data }">
+                                    <div class="flex justify-center items-center gap-2">
+                                        <strong class="text-sm">{{ data.fobUsd }}</strong>
+                                    </div>
+                                </template>
+                            </Column>
+                            <Column field="name">
+                                <template #body="{ data }">
+                                    <div class="flex justify-center items-center gap-2">
+                                        <strong class="text-sm">{{ data.fobCpo }}</strong>
+                                    </div>
+                                </template>
+                            </Column>
+                            <Column field="name">
+                                <template #body="{ data }">
+                                    <div class="flex justify-center items-center gap-2">
+                                        <strong class="text-sm">{{ data.locoCpo }}</strong>
+                                    </div>
+                                </template>
+                            </Column>
+                            <Column field="name">
+                                <template #body="{ data }">
+                                    <div class="flex justify-center items-center gap-2">
+                                        <strong class="text-sm">{{ data.kerugianIdr }}</strong>
+                                    </div>
+                                </template>
+                            </Column>
+                            <Column field="name">
+                                <template #body="{ data }">
+                                    <div class="flex justify-center items-center gap-2">
+                                        <strong class="text-sm">{{ data.kerugianUsd }}</strong>
+                                    </div>
+                                </template>
+                            </Column>
+                            <template v-for="pengali in listPengali" :key="pengali.id">
+                                <Column field="name">
+                                    <template #body="{ data }">
+                                        <div class="flex justify-center items-center gap-2">
+                                            <strong class="text-sm">{{ data.product?.[pengali.id].idr }}</strong>
+                                        </div>
+                                    </template>
+                                </Column>
+                                <Column field="name">
+                                    <template #body="{ data }">
+                                        <div class="flex justify-center items-center gap-2">
+                                            <strong class="text-sm">{{ data.product?.[pengali.id].usd }}</strong>
+                                        </div>
+                                    </template>
+                                </Column>
+                            </template>
+                        </DataTable>
+
+                        <DataTable :value="listSimulasi3" showGridlines editMode="cell" scrollHeight="550px" dataKey="id">
+                            <template #empty>
+                                <div class="flex w-full items-center justify-center">
+                                    <span>-- Data tidak tersedia --</span>
                                 </div>
                             </template>
-                        </Column>
-                    </template>
-                    <Column field="name">
-                        <template #body="{ data }">
-                            <div class="flex justify-between items-center gap-2">
-                                <strong class="text-sm w-full">{{ data.name }}</strong>
-                                <!-- <Button icon="pi pi-pencil" severity="warning" text /> -->
-                            </div>
-                        </template>
-                    </Column>
-                    <Column field="name">
-                        <template #body="{ data }">
-                            <div class="flex justify-between items-center gap-2">
-                                <strong class="text-sm w-full">{{ data.name }}</strong>
-                                <!-- <Button icon="pi pi-pencil" severity="warning" text /> -->
-                            </div>
-                        </template>
-                    </Column>
-                </DataTable>
-                <!-- <div class="flex w-full flex-col">
-                    <div class="w-full font-bold" :class="`grid grid-cols-${listMasterCost.length * 2 - 1 + 2 + 1}`">
-                        <div class="text-center flex items-center justify-center p-3 border">
-                            <span>Utilisasi</span>
-                        </div>
+                            <template #loading> Loading customers data. Please wait. </template>
+
+                            <ColumnGroup type="header">
+                                <Row>
+                                    <Column :rowspan="3" headerStyle="background-color:#262626">
+                                        <template #header>
+                                            <div class="text-center w-full flex justify-center font-bold text-white">
+                                                <span>Utilisasi</span>
+                                            </div>
+                                        </template>
+                                    </Column>
+
+                                    <!-- Looping Produk -->
+                                    <Column :colspan="listPengali.length * 2 * 2" headerStyle="background-color:#dc2626; color:white">
+                                        <template #header>
+                                            <div class="w-full flex flex-col items-center justify-center font-bold">
+                                                <span>REKOMENDASI Harga Jual DENGAN DMO DITANGGUNG INL</span>
+                                            </div>
+                                        </template>
+                                    </Column>
+                                </Row>
+                                <Row>
+                                    <template v-for="pengali in listPengali" :key="pengali.id">
+                                        <Column :colspan="2">
+                                            <template #header>
+                                                <div class="text-center w-full flex justify-center font-bold text-black">
+                                                    <span>{{ pengali.name }}</span>
+                                                </div>
+                                            </template>
+                                        </Column>
+                                        <Column :colspan="2">
+                                            <template #header>
+                                                <div class="text-center w-full flex justify-center font-bold text-black">
+                                                    <span>CPO +</span>
+                                                </div>
+                                            </template>
+                                        </Column>
+                                    </template>
+                                </Row>
+                                <Row>
+                                    <template v-for="pengali in listPengali" :key="pengali.id">
+                                        <Column headerStyle="background-color:#dc2626; color:white">
+                                            <template #header>
+                                                <div class="text-center w-full flex justify-center font-bold">
+                                                    <span>IDR</span>
+                                                </div>
+                                            </template>
+                                        </Column>
+                                        <Column headerStyle="background-color:#134e4a; color:white">
+                                            <template #header>
+                                                <div class="text-center w-full flex justify-center font-bold">
+                                                    <span>USD</span>
+                                                </div>
+                                            </template>
+                                        </Column>
+                                        <Column headerStyle="background-color:#dc2626; color:white">
+                                            <template #header>
+                                                <div class="text-center w-full flex justify-center font-bold">
+                                                    <span>IDR</span>
+                                                </div>
+                                            </template>
+                                        </Column>
+                                        <Column headerStyle="background-color:#134e4a; color:white">
+                                            <template #header>
+                                                <div class="text-center w-full flex justify-center font-bold">
+                                                    <span>USD</span>
+                                                </div>
+                                            </template>
+                                        </Column>
+                                    </template>
+                                </Row>
+                            </ColumnGroup>
+                            <Column field="name" style="min-width: 13rem">
+                                <template #body="{ data }">
+                                    <div class="flex justify-between items-center gap-2">
+                                        <strong class="text-sm w-full">{{ data.name }}</strong>
+                                    </div>
+                                </template>
+                            </Column>
+
+                            <template v-for="pengali in listPengali" :key="pengali.id">
+                                <Column field="name">
+                                    <template #body="{ data }">
+                                        <div class="flex justify-center items-center gap-2">
+                                            <strong class="text-sm">{{ data.product?.[pengali.id].idr }}</strong>
+                                        </div>
+                                    </template>
+                                </Column>
+                                <Column field="name">
+                                    <template #body="{ data }">
+                                        <div class="flex justify-center items-center gap-2">
+                                            <strong class="text-sm">{{ data.product?.[pengali.id].usd }}</strong>
+                                        </div>
+                                    </template>
+                                </Column>
+                                <Column field="name">
+                                    <template #body="{ data }">
+                                        <div class="flex justify-center items-center gap-2">
+                                            <strong class="text-sm">{{ data.product?.[pengali.id].idrCpoPlus }}</strong>
+                                        </div>
+                                    </template>
+                                </Column>
+                                <Column field="name">
+                                    <template #body="{ data }">
+                                        <div class="flex justify-center items-center gap-2">
+                                            <strong class="text-sm">{{ data.product?.[pengali.id].usdCpoPlus }}</strong>
+                                        </div>
+                                    </template>
+                                </Column>
+                            </template>
+                        </DataTable>
+
+                        <DataTable :value="listSimulasi4" :sortOrder="1" showGridlines rowGroupMode="subheader" groupRowsBy="analisa" sortField="analisa" sortMode="single" dataKey="analisa">
+                            <template #empty>
+                                <div class="flex w-full items-center justify-center">
+                                    <span>-- Data tidak tersedia --</span>
+                                </div>
+                            </template>
+                            <template #loading> Loading customers data. Please wait. </template>
+
+                            <!-- <ColumnGroup type="header">
+                                <Row>
+                                    <Column :rowspan="2" :colspan="2" headerStyle="background-color:#262626">
+                                        <template #header>
+                                            <div class="text-center w-full flex justify-center font-bold text-white">
+                                                <span>ANALISA POTENSI LABA (RUGI)</span>
+                                            </div>
+                                        </template>
+                                    </Column>
+
+                                    <Column :rowspan="2" headerStyle="background-color:#262626">
+                                        <template #header>
+                                            <div class="text-center w-full flex flex-col justify-center font-bold text-white">
+                                                <span>Tanpa DMO</span>
+                                                <span>({{ labelMataUang }})</span>
+                                            </div>
+                                        </template>
+                                    </Column>
+                                    <Column :colspan="listPengali.length" headerStyle="background-color:#262626">
+                                        <template #header>
+                                            <div class="text-center w-full flex gap-2 justify-center font-bold text-white">
+                                                <span>Dengan DMO</span>
+                                                <span>({{ labelMataUang }})</span>
+                                            </div>
+                                        </template>
+                                    </Column>
+                                </Row>
+                                <Row>
+                                    <template v-for="pengali in listPengali" :key="pengali.id">
+                                        <Column>
+                                            <template #header>
+                                                <div class="text-center w-full flex justify-center font-bold text-black">
+                                                    <span>{{ pengali.name }}</span>
+                                                </div>
+                                            </template>
+                                        </Column>
+                                    </template>
+                                </Row>
+                            </ColumnGroup> -->
+                            <Column field="analisa" header="Analisa" :sortable="true">
+                                <template #groupheader="{ data }">
+                                    <div class="p-2 font-bold bg-gray-700 text-white">{{ data.analisa }}</div>
+                                </template>
+                            </Column>
+                            <Column field="name" header="Name" style="min-width: 13rem">
+                                <template #body="{ data }">
+                                    <div class="flex justify-between items-center gap-2">
+                                        <strong class="text-sm w-full">{{ data.name }}</strong>
+                                    </div>
+                                </template>
+                            </Column>
+                            <!-- <Column field="tanpaDOM">
+                                <template #body="{ data }">
+                                    <div class="flex justify-center items-center gap-2">
+                                        <strong class="text-sm">{{ data.tanpaDOM }}</strong>
+                                    </div>
+                                </template>
+                            </Column>
+                            <template v-for="pengali in listPengali" :key="pengali.id">
+                                <Column field="name">
+                                    <template #body="{ data }">
+                                        <div class="flex justify-center items-center gap-2">
+                                            <strong class="text-sm">{{ data.product?.[pengali.id].value }}</strong>
+                                        </div>
+                                    </template>
+                                </Column>
+                            </template> -->
+                        </DataTable>
                     </div>
-                    <div class="w-full font-bold" :class="`grid grid-cols-${listMasterCost.length * 2 - 1 + 2 + 1}`">
-                        <div class="col-span-1 text-center flex items-center justify-center p-3 border">
-                            <span>Utilisasi</span>
-                        </div>
-                        <div
-                            v-for="(list, index) in listMasterCost"
-                            :key="index"
-                            class="p-3 border text-black text-center flex flex-col items-center justify-center"
-                            :class="list.name.toLowerCase().includes('packaging') ? 'col-span-1' : 'col-span-2'"
-                        >
-                            <span class="text-pink-500">{{ list.name }}</span>
-                        </div>
-                        <div class="col-span-2 text-center flex items-center justify-center p-3 border">
-                            <span>Expected Margin</span>
-                        </div>
-                    </div>
-                    <div class="w-full font-bold" :class="`grid grid-cols-${listMasterCost.length * 2 - 1 + 2 + 1}`">
-                        <div class="col-span-1 text-center flex items-center justify-center p-3 border">
-                            <span>%</span>
-                        </div>
-                        <div
-                            v-for="(list, index) in listMasterCost"
-                            :key="index"
-                            class="p-3 border text-black text-center flex flex-col items-center justify-center"
-                            :class="list.name.toLowerCase().includes('packaging') ? 'col-span-1' : 'col-span-2'"
-                        >
-                            <span class="text-pink-500">{{ list.name }}</span>
-                        </div>
-                        <div class="col-span-2 text-center flex items-center justify-center p-3 border">
-                            <span>Expected Margin</span>
-                        </div>
-                    </div>
-                </div> -->
+                </div>
             </template>
         </Card>
     </div>
