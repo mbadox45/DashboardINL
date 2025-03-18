@@ -76,9 +76,10 @@ const loadData = async () => {
         allData.value = data;
         const ritel = data.ritel;
         const bulk = data.bulk;
+        console.log(data);
 
         const produk = await productMasterController.getAll();
-        console.log('produk:', produk);
+        // console.log('produk:', produk);
         // if (optionButton.value == 1) {
         //     listTable.value = ritel.products;
         //     listProduct.value = produk.filter((item) => item.jenis == 'ritel');
@@ -88,7 +89,8 @@ const loadData = async () => {
         // }
 
         listProduct.value = [...produk.filter((item) => item.jenis === (optionButton.value == 1 ? 'ritel' : 'bulk'))];
-        listTable.value = [...produk.filter((item) => item.jenis === (optionButton.value == 1 ? ritel.products : bulk.products))];
+        listTable.value = optionButton.value == 1 ? ritel.products : bulk.products;
+        // listTable.value = [...produk.filter((item) => item.jenis === (optionButton.value == 1 ? ritel.products : bulk.products))];
 
         loadingData.value = false;
         // await loadUraian();
@@ -553,7 +555,7 @@ const submitData = async () => {
                                     </Column>
                                     <ColumnGroup type="footer">
                                         <Row>
-                                            <Column footer="Total :" :colspan="3" footerStyle="text-align:right; font-size:0.7vw;" />
+                                            <Column footer="Total :" :colspan="4" footerStyle="text-align:right; font-size:0.7vw;" />
                                             <Column :footer="formatCurrency(item.totalHargaSatuan.toFixed(2))" footerStyle="text-align:right; background-color:black; color:white; font-size:0.7vw;" />
                                             <Column :footer="formatCurrency(item.totalQty.toFixed(2))" footerStyle="text-align:right; background-color:black; color:white; font-size:0.7vw;" />
                                             <Column :footer="formatCurrency(item.totalValue.toFixed(2))" footerStyle="text-align:right; background-color:black; color:white; font-size:0.7vw;" />
