@@ -439,7 +439,7 @@ const loadSimulasi = async () => {
                             <Column field="name" style="min-width: 13rem">
                                 <template #body="{ data }">
                                     <div class="flex justify-between items-center gap-2">
-                                        <strong class="text-sm w-full">{{ data.name }}</strong>
+                                        <strong class="text-base w-full">{{ data.name }}</strong>
                                     </div>
                                 </template>
                             </Column>
@@ -447,7 +447,7 @@ const loadSimulasi = async () => {
                                 <Column>
                                     <template #body="{ data }">
                                         <div class="flex flex-col justify-center text-center">
-                                            <small class="font-bold">{{ data.product?.[product.id]?.value }}</small>
+                                            <small class="font-bold text-base">{{ data.product?.[product.id]?.value }}</small>
                                             <small v-if="data.product?.[product.id]?.proportion != 0" class="text-gray-500"> ({{ data.product?.[product.id]?.proportion }}%) </small>
                                         </div>
                                     </template>
@@ -455,7 +455,7 @@ const loadSimulasi = async () => {
                                 <Column>
                                     <template #body="{ data }">
                                         <div class="flex justify-center">
-                                            <small class="font-bold">{{ data.product?.[product.id].usd }}</small>
+                                            <small class="font-bold text-base">{{ data.product?.[product.id].usd }}</small>
                                         </div>
                                     </template>
                                 </Column>
@@ -463,14 +463,14 @@ const loadSimulasi = async () => {
                             <Column field="name">
                                 <template #body="{ data }">
                                     <div class="flex justify-center items-center w-full gap-2">
-                                        <strong class="text-sm">{{ data.margin }}</strong>
+                                        <strong class="text-base">{{ data.margin }}</strong>
                                     </div>
                                 </template>
                             </Column>
                             <Column field="name">
                                 <template #body="{ data }">
                                     <div class="flex justify-center items-center w-full gap-2">
-                                        <strong class="text-sm">{{ data.marginPercent }}%</strong>
+                                        <strong class="text-base">{{ data.marginPercent }}%</strong>
                                     </div>
                                 </template>
                             </Column>
@@ -609,42 +609,42 @@ const loadSimulasi = async () => {
                             <Column field="name" style="min-width: 13rem">
                                 <template #body="{ data }">
                                     <div class="flex justify-between items-center gap-2">
-                                        <strong class="text-sm">{{ data.name }}</strong>
+                                        <strong class="text-base">{{ data.name }}</strong>
                                     </div>
                                 </template>
                             </Column>
                             <Column field="fobIdr">
                                 <template #body="{ data }">
                                     <div class="flex justify-center items-center gap-2">
-                                        <strong class="text-sm">{{ data.fobIdr }}</strong>
+                                        <strong class="text-base">{{ data.fobIdr }}</strong>
                                     </div>
                                 </template>
                             </Column>
                             <Column field="name">
                                 <template #body="{ data }">
                                     <div class="flex justify-center items-center gap-2">
-                                        <strong class="text-sm">{{ data.fobUsd }}</strong>
+                                        <strong class="text-base">{{ data.fobUsd }}</strong>
                                     </div>
                                 </template>
                             </Column>
                             <Column field="name">
                                 <template #body="{ data }">
                                     <div class="flex justify-center items-center gap-2">
-                                        <strong class="text-sm">{{ data.fobCpo }}</strong>
+                                        <strong class="text-base">{{ data.fobCpo }}</strong>
                                     </div>
                                 </template>
                             </Column>
                             <Column field="name">
                                 <template #body="{ data }">
                                     <div class="flex justify-center items-center gap-2">
-                                        <strong class="text-sm">{{ data.locoCpo }}</strong>
+                                        <strong class="text-base">{{ data.locoCpo }}</strong>
                                     </div>
                                 </template>
                             </Column>
                             <Column field="name">
                                 <template #body="{ data }">
                                     <div class="flex flex-col justify-center items-center gap-2">
-                                        <strong class="text-sm">{{ data.kerugianIdr }}</strong>
+                                        <strong class="text-base">{{ data.kerugianIdr }}</strong>
                                         <small v-if="data.kerugianProportion && data.kerugianProportion != 0" class="text-gray-500"> ({{ data.kerugianProportion }}%) </small>
                                     </div>
                                 </template>
@@ -652,7 +652,7 @@ const loadSimulasi = async () => {
                             <Column field="name">
                                 <template #body="{ data }">
                                     <div class="flex justify-center items-center gap-2">
-                                        <strong class="text-sm">{{ data.kerugianUsd }}</strong>
+                                        <strong class="text-base">{{ data.kerugianUsd }}</strong>
                                     </div>
                                 </template>
                             </Column>
@@ -660,14 +660,14 @@ const loadSimulasi = async () => {
                                 <Column field="name">
                                     <template #body="{ data }">
                                         <div class="flex justify-center items-center gap-2">
-                                            <strong class="text-sm">{{ data.product?.[pengali.id].idr }}</strong>
+                                            <strong class="text-base">{{ data.product?.[pengali.id].idr }}</strong>
                                         </div>
                                     </template>
                                 </Column>
                                 <Column field="name">
                                     <template #body="{ data }">
                                         <div class="flex justify-center items-center gap-2">
-                                            <strong class="text-sm">{{ data.product?.[pengali.id].usd }}</strong>
+                                            <strong class="text-base">{{ data.product?.[pengali.id].usd }}</strong>
                                         </div>
                                     </template>
                                 </Column>
@@ -755,7 +755,7 @@ const loadSimulasi = async () => {
                             <Column field="name" style="min-width: 13rem">
                                 <template #body="{ data }">
                                     <div class="flex justify-between items-center gap-2">
-                                        <strong class="text-sm w-full">{{ data.name }}</strong>
+                                        <strong class="text-base w-full">{{ data.name }}</strong>
                                     </div>
                                 </template>
                             </Column>
@@ -764,28 +764,28 @@ const loadSimulasi = async () => {
                                 <Column field="name">
                                     <template #body="{ data }">
                                         <div class="flex justify-center items-center gap-2">
-                                            <strong class="text-sm">{{ data.product?.[pengali.id].idr }}</strong>
+                                            <strong class="text-base">{{ data.product?.[pengali.id].idr }}</strong>
                                         </div>
                                     </template>
                                 </Column>
                                 <Column field="name">
                                     <template #body="{ data }">
                                         <div class="flex justify-center items-center gap-2">
-                                            <strong class="text-sm">{{ data.product?.[pengali.id].usd }}</strong>
+                                            <strong class="text-base">{{ data.product?.[pengali.id].usd }}</strong>
                                         </div>
                                     </template>
                                 </Column>
                                 <Column field="name">
                                     <template #body="{ data }">
                                         <div class="flex justify-center items-center gap-2">
-                                            <strong class="text-sm">{{ data.product?.[pengali.id].idrCpoPlus }}</strong>
+                                            <strong class="text-base">{{ data.product?.[pengali.id].idrCpoPlus }}</strong>
                                         </div>
                                     </template>
                                 </Column>
                                 <Column field="name">
                                     <template #body="{ data }">
                                         <div class="flex justify-center items-center gap-2">
-                                            <strong class="text-sm">{{ data.product?.[pengali.id].usdCpoPlus }}</strong>
+                                            <strong class="text-base">{{ data.product?.[pengali.id].usdCpoPlus }}</strong>
                                         </div>
                                     </template>
                                 </Column>
@@ -839,14 +839,14 @@ const loadSimulasi = async () => {
                             <Column field="name" style="min-width: 13rem">
                                 <template #body="{ data }">
                                     <div class="flex justify-between items-center gap-2">
-                                        <strong class="text-sm">{{ data.analisa }}</strong>
+                                        <strong class="text-base">{{ data.analisa }}</strong>
                                     </div>
                                 </template>
                             </Column>
                             <Column field="name" style="min-width: 13rem">
                                 <template #body="{ data }">
                                     <div class="flex justify-between items-center gap-2">
-                                        <strong class="text-sm">{{ data.name }}</strong>
+                                        <strong class="text-base">{{ data.name }}</strong>
                                     </div>
                                 </template>
                             </Column>
@@ -854,7 +854,7 @@ const loadSimulasi = async () => {
                             <Column field="name">
                                 <template #body="{ data }">
                                     <div class="flex justify-center items-center gap-2">
-                                        <strong class="text-sm">{{ data.tanpaDMO }}</strong>
+                                        <strong class="text-base">{{ data.tanpaDMO }}</strong>
                                     </div>
                                 </template>
                             </Column>
@@ -862,7 +862,7 @@ const loadSimulasi = async () => {
                                 <Column field="name">
                                     <template #body="{ data }">
                                         <div class="flex justify-center items-center gap-2">
-                                            <strong class="text-sm">{{ data.product?.[pengali.id].value }}</strong>
+                                            <strong class="text-base">{{ data.product?.[pengali.id].value }}</strong>
                                         </div>
                                     </template>
                                 </Column>
@@ -910,7 +910,7 @@ const loadSimulasi = async () => {
                         <!-- <Column field="tanpaDOM">
                             <template #body="{ data }">
                                 <div class="flex justify-center items-center gap-2">
-                                    <strong class="text-sm">{{ data.tanpaDOM }}</strong>
+                                    <strong class="text-base">{{ data.tanpaDOM }}</strong>
                                 </div>
                             </template>
                         </Column>
@@ -918,7 +918,7 @@ const loadSimulasi = async () => {
                             <Column field="name">
                                 <template #body="{ data }">
                                     <div class="flex justify-center items-center gap-2">
-                                        <strong class="text-sm">{{ data.product?.[pengali.id].value }}</strong>
+                                        <strong class="text-base">{{ data.product?.[pengali.id].value }}</strong>
                                     </div>
                                 </template>
                             </Column>
