@@ -230,13 +230,13 @@ const loadSimulasi = async () => {
 
 <template>
     <div class="flex bg-neutral-950 min-h-screen font-mono text-white app-dark w-full py-8 px-6 flex-col gap-5">
-        <Card style="color: white; --tw-bg-opacity: 1; background-color: rgb(38 38 38 / var(--tw-bg-opacity, 1))">
+        <Card style="color: white; --tw-bg-opacity: 1; background-color: #0b2838">
             <template #title>
                 <div class="flex w-full items-center justify-center">
                     <span class="font-bold w-full text-3xl">ASUMSI DASAR PERHITUNGAN - SICAL RSP</span>
                     <div class="flex justify-end w-full gap-2">
-                        <Button label="Calculate" icon="pi pi-calculator" @click="loadSimulasi" :style="{ backgroundColor: '#b45309', color: 'white', borderColor: '#b45309' }" />
-                        <Button label="Reset" icon="pi pi-refresh" @click="reset" :style="{ backgroundColor: '#134e4a', color: 'white', borderColor: '#134e4a' }" />
+                        <Button label="Calculate" icon="pi pi-calculator" @click="loadSimulasi" :style="{ backgroundColor: '#347928', color: 'white', borderColor: '#6E0B0C' }" />
+                        <Button label="Reset" icon="pi pi-refresh" @click="reset" :style="{ backgroundColor: '#FF9D23', color: 'white', borderColor: '#0b2838' }" />
                     </div>
                 </div>
             </template>
@@ -248,7 +248,7 @@ const loadSimulasi = async () => {
                     <div class="flex w-full flex-col gap-2">
                         <span class="font-bold text-xl text-neutral-300">INTERNAL COST (HPP) </span>
                         <div class="grid grid-cols-2 gap-7 w-full">
-                            <div v-for="(internal, index) in formInternal" :key="index" class="flex flex-col col-span-1 gap-1 w-full p-4 rounded-xl bg-amber-700">
+                            <div v-for="(internal, index) in formInternal" :key="index" class="flex flex-col col-span-1 gap-1 w-full p-4 rounded-xl text-white" :style="{ backgroundColor: '#0B666A' }">
                                 <label class="text-lg font-bold" :for="internal.name">{{ internal.name }}</label>
                                 <div class="flex flex-col w-full" v-for="(util, indexs) in internal.util" :key="indexs">
                                     <span class="w-full">{{ util.name }}</span>
@@ -266,21 +266,21 @@ const loadSimulasi = async () => {
                         <div class="flex flex-col gap-2">
                             <span class="font-bold text-xl text-neutral-300">EXTERNAL COST (DMO) </span>
                             <div class="flex gap-7 w-full">
-                                <div class="flex flex-col gap-1 w-full p-4 rounded-xl bg-amber-700">
+                                <div class="flex flex-col gap-1 w-full p-4 rounded-xl text-white" :style="{ backgroundColor: '#0B666A' }">
                                     <div class="flex w-full justify-between items-center">
                                         <label class="text-lg font-bold" for="dmo">DMO</label>
-                                        <small class="text-neutral-300 font-bold">IDR/Kg incl PPN</small>
+                                        <small class="text-white font-bold">IDR/Kg incl PPN</small>
                                     </div>
                                     <InputNumber v-model="formData.dmo" placeholder="DMO" class="w-full" disabled />
                                     <small class="text-white font-semibold">* {{ remarkDMO }}</small>
                                 </div>
-                                <div class="flex flex-col gap-1 w-full p-4 rounded-xl bg-amber-700">
+                                <div class="flex flex-col gap-1 w-full p-4 rounded-xl text-white" :style="{ backgroundColor: '#0B666A' }">
                                     <div class="flex w-full justify-between items-center">
                                         <div class="flex gap-3 items-center">
                                             <label class="text-lg font-bold" for="dmo">Kurs</label>
                                             <i style="font-size: 0.8vw" class="pi pi-question-circle text-yellow-500" v-tooltip.top="'Nilai Default ' + remarkKurs"></i>
                                         </div>
-                                        <small class="text-neutral-300 font-bold">IDR / {{ labelMataUang }}</small>
+                                        <small class="text-white font-bold">IDR / {{ labelMataUang }}</small>
                                     </div>
                                     <InputNumber v-model="formData.kurs" placeholder="DMO" class="w-full" />
                                     <small class="text-white font-semibold">* Diupdate rate kurs yang sesuai</small>
@@ -291,13 +291,13 @@ const loadSimulasi = async () => {
                         <div class="flex flex-col gap-1 w-full">
                             <span class="font-bold text-xl uppercase text-neutral-300">OFFER </span>
                             <div class="flex gap-7 w-full">
-                                <div class="flex flex-col gap-1 w-full p-4 rounded-xl bg-amber-700">
+                                <div class="flex flex-col gap-1 w-full p-4 rounded-xl" :style="{ backgroundColor: '#2E5077' }">
                                     <div class="flex w-full justify-between items-center">
                                         <label class="text-lg font-bold" for="dmo">Offer dari Buyer</label>
                                     </div>
                                     <InputNumber v-model="formData.offer_buyer" placeholder="Offer dari Buyer" class="w-full" />
                                 </div>
-                                <div class="flex flex-col gap-1 w-full p-4 rounded-xl bg-amber-700">
+                                <div class="flex flex-col gap-1 w-full p-4 rounded-xl" :style="{ backgroundColor: '#2E5077' }">
                                     <div class="flex w-full justify-between items-center">
                                         <label class="text-lg font-bold" for="dmo">Volume</label>
                                     </div>
@@ -310,7 +310,7 @@ const loadSimulasi = async () => {
                             <div class="flex flex-col gap-1 w-full">
                                 <span class="font-bold text-xl uppercase text-neutral-300">Expected Margin </span>
                                 <div class="flex gap-7 w-full">
-                                    <div class="flex flex-col gap-1 w-full p-4 rounded-xl bg-amber-700">
+                                    <div class="flex flex-col gap-1 w-full p-4 rounded-xl" :style="{ backgroundColor: '#2E5077' }">
                                         <div class="flex w-full justify-between items-center">
                                             <label class="text-lg font-bold" for="dmo">Margin</label>
                                             <small class="text-neutral-300 font-bold">%</small>
@@ -325,9 +325,9 @@ const loadSimulasi = async () => {
                             <div class="flex flex-col gap-1 w-full">
                                 <span class="font-bold text-xl uppercase text-neutral-300">Mata Uang </span>
                                 <div class="flex gap-7 w-full">
-                                    <div class="flex flex-col gap-1 w-full p-4 rounded-xl bg-amber-700">
+                                    <div class="flex flex-col gap-1 w-full p-4 rounded-xl" :style="{ backgroundColor: '#2E5077' }">
                                         <div class="flex w-full justify-between items-center">
-                                            <label class="text-lg font-bold" for="dmo">Set Mata Uang</label>
+                                            <label class="text-lg font-bold" for="dmo">Mata Uang</label>
                                             <small class="text-neutral-300 font-bold">%</small>
                                         </div>
                                         <Select v-model="formData.kurs_id" :options="listKurs" optionLabel="name" optionValue="id" filter placeholder="Pilih Mata Uang" class="w-full" />
@@ -339,11 +339,11 @@ const loadSimulasi = async () => {
                 </div>
             </template>
         </Card>
-        <Card style="color: white; --tw-bg-opacity: 1; background-color: rgb(38 38 38 / var(--tw-bg-opacity, 1))">
+        <Card style="color: white; --tw-bg-opacity: 1; background-color: #0b2838">
             <template #title>
                 <div class="flex w-full justify-between py-2">
                     <span class="font-bold text-3xl text-white">INL SIMULATION CALCULATOR FOR RECOMMENDED SELLING PRICE (SICAL RSP)</span>
-                    <i style="font-size: 1.4vw" class="pi pi-question-circle text-yellow-500"></i>
+                    <!-- <i style="font-size: 1.4vw" class="pi pi-question-circle text-yellow-500"></i> -->
                 </div>
             </template>
             <template #content>
@@ -362,7 +362,7 @@ const loadSimulasi = async () => {
 
                             <ColumnGroup type="header">
                                 <Row>
-                                    <Column :rowspan="3" headerStyle="background-color:#262626">
+                                    <Column :rowspan="3" headerStyle="background-color:#0b2838">
                                         <template #header>
                                             <div class="text-center w-full flex justify-center font-bold text-white">
                                                 <span>Utilisasi</span>
@@ -371,14 +371,14 @@ const loadSimulasi = async () => {
                                     </Column>
 
                                     <!-- Looping Produk -->
-                                    <Column v-for="product in listMasterCost" :key="product.id" :colspan="2" headerStyle="background-color:#b45309">
+                                    <Column v-for="product in listMasterCost" :key="product.id" :colspan="2" headerStyle="background-color:#6E0B0C">
                                         <template #header>
                                             <div class="text-center w-full flex justify-center font-bold text-white">
                                                 <span>{{ product.name }}</span>
                                             </div>
                                         </template>
                                     </Column>
-                                    <Column :colspan="2" headerStyle="background-color:#b45309">
+                                    <Column :colspan="2" headerStyle="background-color:#6E0B0C">
                                         <template #header>
                                             <div class="text-center w-full flex justify-center font-bold text-white">
                                                 <span>Expected Margin</span>
@@ -387,14 +387,14 @@ const loadSimulasi = async () => {
                                     </Column>
                                 </Row>
                                 <Row>
-                                    <Column :colspan="listMasterCost.length * 2" headerStyle="background-color:#134e4a">
+                                    <Column :colspan="listMasterCost.length * 2" headerStyle="background-color:#0B666A">
                                         <template #header>
                                             <div class="text-center w-full flex justify-center font-bold text-white">
                                                 <span>COST OF GOOD SOLD / HPP</span>
                                             </div>
                                         </template>
                                     </Column>
-                                    <Column :colspan="2">
+                                    <Column :colspan="2" headerStyle="background-color:#ecee81">
                                         <template #header>
                                             <div class="text-center w-full flex justify-center font-bold text-black">
                                                 <span>{{ formData.margin }} %</span>
@@ -405,14 +405,14 @@ const loadSimulasi = async () => {
                                 <Row>
                                     <!-- Looping Produk -->
                                     <template v-for="product in listMasterCost" :key="product.id">
-                                        <Column headerStyle="background-color:#b45309; color:white">
+                                        <Column headerStyle="background-color:#2E5077; color:white">
                                             <template #header>
                                                 <div class="text-center w-full flex justify-center font-bold">
                                                     <span>IDR</span>
                                                 </div>
                                             </template>
                                         </Column>
-                                        <Column headerStyle="background-color:#134e4a; color:white">
+                                        <Column headerStyle="background-color:#0b2838; color:white">
                                             <template #header>
                                                 <div class="text-center w-full flex justify-center font-bold">
                                                     <span>USD</span>
@@ -420,14 +420,14 @@ const loadSimulasi = async () => {
                                             </template>
                                         </Column>
                                     </template>
-                                    <Column headerStyle="background-color:#b45309; color:white">
+                                    <Column headerStyle="background-color:#2E5077; color:white">
                                         <template #header>
                                             <div class="text-center w-full flex justify-center font-bold">
                                                 <span>IDR</span>
                                             </div>
                                         </template>
                                     </Column>
-                                    <Column headerStyle="background-color:#134e4a; color:white">
+                                    <Column headerStyle="background-color:#0b2838; color:white">
                                         <template #header>
                                             <div class="text-center w-full flex justify-center font-bold text-white">
                                                 <span>%</span>
@@ -444,6 +444,7 @@ const loadSimulasi = async () => {
                                 </template>
                             </Column>
                             <template v-for="product in listMasterCost" :key="product.id">
+                                <!-- <Column style="background-color: #A1E3F9"> -->
                                 <Column>
                                     <template #body="{ data }">
                                         <div class="flex flex-col justify-center text-center">
@@ -486,7 +487,7 @@ const loadSimulasi = async () => {
 
                             <ColumnGroup type="header">
                                 <Row>
-                                    <Column :rowspan="3" headerStyle="background-color:#262626">
+                                    <Column :rowspan="3" headerStyle="background-color:#0b2838">
                                         <template #header>
                                             <div class="text-center w-full flex justify-center font-bold text-white">
                                                 <span>Utilisasi</span>
@@ -495,7 +496,7 @@ const loadSimulasi = async () => {
                                     </Column>
 
                                     <!-- Looping Produk -->
-                                    <Column :colspan="4" headerStyle="background-color:#b45309; color:white">
+                                    <Column :colspan="4" headerStyle="background-color:#6E0B0C; color:white">
                                         <template #header>
                                             <div class="w-full flex flex-col items-center justify-center font-bold">
                                                 <span>REKOMENDASI Harga Jual TANPA DMO</span>
@@ -503,7 +504,7 @@ const loadSimulasi = async () => {
                                             </div>
                                         </template>
                                     </Column>
-                                    <Column :colspan="2" :rowspan="2" headerStyle="background-color:#b45309; color:white">
+                                    <Column :colspan="2" :rowspan="2" headerStyle="background-color:#6E0B0C; color:white">
                                         <template #header>
                                             <div class="w-full flex flex-col items-center justify-center font-bold text-white">
                                                 <span>BIAYA DMO</span>
@@ -511,7 +512,7 @@ const loadSimulasi = async () => {
                                             </div>
                                         </template>
                                     </Column>
-                                    <Column :colspan="2 * listPengali.length" headerStyle="background-color:#b45309; color:white">
+                                    <Column :colspan="2 * listPengali.length" headerStyle="background-color:#6E0B0C; color:white">
                                         <template #header>
                                             <div class="w-full flex flex-col items-center justify-center font-bold text-white">
                                                 <span>BIAYA DMO</span>
@@ -521,14 +522,14 @@ const loadSimulasi = async () => {
                                     </Column>
                                 </Row>
                                 <Row>
-                                    <Column :colspan="3" headerStyle="background-color:#134e4a;">
+                                    <Column :colspan="3" headerStyle="background-color:#0B666A;">
                                         <template #header>
                                             <div class="text-center w-full flex justify-center font-bold text-white">
                                                 <span> FOB Kuala Tanjung</span>
                                             </div>
                                         </template>
                                     </Column>
-                                    <Column headerStyle="background-color:#134e4a;">
+                                    <Column headerStyle="background-color:#0B666A;">
                                         <template #header>
                                             <div class="text-center w-full flex justify-center font-bold text-white">
                                                 <span>LOCO INL</span>
@@ -536,7 +537,7 @@ const loadSimulasi = async () => {
                                         </template>
                                     </Column>
                                     <template v-for="pengali in listPengali" :key="pengali.id">
-                                        <Column :colspan="2" headerStyle="background-color:#134e4a;">
+                                        <Column :colspan="2" headerStyle="background-color:#0B666A;">
                                             <template #header>
                                                 <div class="text-center w-full flex justify-center font-bold text-white">
                                                     <span>{{ pengali.value }}</span>
@@ -546,42 +547,42 @@ const loadSimulasi = async () => {
                                     </template>
                                 </Row>
                                 <Row>
-                                    <Column headerStyle="background-color:#b45309; color:white">
+                                    <Column headerStyle="background-color:#2E5077; color:white">
                                         <template #header>
                                             <div class="text-center w-full flex justify-center font-bold">
                                                 <span>IDR</span>
                                             </div>
                                         </template>
                                     </Column>
-                                    <Column headerStyle="background-color:#134e4a; color:white">
+                                    <Column headerStyle="background-color:#0b2838; color:white">
                                         <template #header>
                                             <div class="text-center w-full flex justify-center font-bold">
                                                 <span>USD</span>
                                             </div>
                                         </template>
                                     </Column>
-                                    <Column>
+                                    <Column headerStyle="background-color:#ecee81">
                                         <template #header>
                                             <div class="text-center w-full flex justify-center font-bold text-black">
                                                 <span>CPO+</span>
                                             </div>
                                         </template>
                                     </Column>
-                                    <Column>
+                                    <Column headerStyle="background-color:#ecee81">
                                         <template #header>
                                             <div class="text-center w-full flex justify-center font-bold text-black">
                                                 <span>CPO+</span>
                                             </div>
                                         </template>
                                     </Column>
-                                    <Column headerStyle="background-color:#b45309; color:white">
+                                    <Column headerStyle="background-color:#2E5077; color:white">
                                         <template #header>
                                             <div class="text-center w-full flex justify-center font-bold">
                                                 <span>IDR</span>
                                             </div>
                                         </template>
                                     </Column>
-                                    <Column headerStyle="background-color:#134e4a; color:white">
+                                    <Column headerStyle="background-color:#0b2838; color:white">
                                         <template #header>
                                             <div class="text-center w-full flex justify-center font-bold">
                                                 <span>USD</span>
@@ -589,14 +590,14 @@ const loadSimulasi = async () => {
                                         </template>
                                     </Column>
                                     <template v-for="pengali in listPengali" :key="pengali.id">
-                                        <Column headerStyle="background-color:#b45309; color:white">
+                                        <Column headerStyle="background-color:#2E5077; color:white">
                                             <template #header>
                                                 <div class="text-center w-full flex justify-center font-bold">
                                                     <span>IDR</span>
                                                 </div>
                                             </template>
                                         </Column>
-                                        <Column headerStyle="background-color:#134e4a; color:white">
+                                        <Column headerStyle="background-color:#0b2838; color:white">
                                             <template #header>
                                                 <div class="text-center w-full flex justify-center font-bold">
                                                     <span>USD</span>
@@ -684,7 +685,7 @@ const loadSimulasi = async () => {
 
                             <ColumnGroup type="header">
                                 <Row>
-                                    <Column :rowspan="3" headerStyle="background-color:#262626">
+                                    <Column :rowspan="3" headerStyle="background-color:#0b2838">
                                         <template #header>
                                             <div class="text-center w-full flex justify-center font-bold text-white">
                                                 <span>Utilisasi</span>
@@ -693,7 +694,7 @@ const loadSimulasi = async () => {
                                     </Column>
 
                                     <!-- Looping Produk -->
-                                    <Column :colspan="listPengali.length * 2 * 2" headerStyle="background-color:#b45309; color:white">
+                                    <Column :colspan="listPengali.length * 2 * 2" headerStyle="background-color:#6E0B0C; color:white">
                                         <template #header>
                                             <div class="w-full flex flex-col items-center justify-center font-bold">
                                                 <span>REKOMENDASI Harga Jual DENGAN DMO DITANGGUNG INL</span>
@@ -703,14 +704,14 @@ const loadSimulasi = async () => {
                                 </Row>
                                 <Row>
                                     <template v-for="pengali in listPengali" :key="pengali.id">
-                                        <Column :colspan="2" headerStyle="background-color:#134e4a;">
+                                        <Column :colspan="2" headerStyle="background-color:#0B666A;">
                                             <template #header>
                                                 <div class="text-center w-full flex justify-center font-bold text-white">
                                                     <span>{{ pengali.name }}</span>
                                                 </div>
                                             </template>
                                         </Column>
-                                        <Column :colspan="2">
+                                        <Column :colspan="2" headerStyle="background-color:#ecee81">
                                             <template #header>
                                                 <div class="text-center w-full flex justify-center font-bold text-black">
                                                     <span>CPO +</span>
@@ -721,28 +722,28 @@ const loadSimulasi = async () => {
                                 </Row>
                                 <Row>
                                     <template v-for="pengali in listPengali" :key="pengali.id">
-                                        <Column headerStyle="background-color:#b45309; color:white">
+                                        <Column headerStyle="background-color:#2E5077; color:white">
                                             <template #header>
                                                 <div class="text-center w-full flex justify-center font-bold">
                                                     <span>IDR</span>
                                                 </div>
                                             </template>
                                         </Column>
-                                        <Column headerStyle="background-color:#134e4a; color:white">
+                                        <Column headerStyle="background-color:#0b2838; color:white">
                                             <template #header>
                                                 <div class="text-center w-full flex justify-center font-bold">
                                                     <span>USD</span>
                                                 </div>
                                             </template>
                                         </Column>
-                                        <Column headerStyle="background-color:#b45309; color:white">
+                                        <Column headerStyle="background-color:#2E5077; color:white">
                                             <template #header>
                                                 <div class="text-center w-full flex justify-center font-bold">
                                                     <span>IDR</span>
                                                 </div>
                                             </template>
                                         </Column>
-                                        <Column headerStyle="background-color:#134e4a; color:white">
+                                        <Column headerStyle="background-color:#0b2838; color:white">
                                             <template #header>
                                                 <div class="text-center w-full flex justify-center font-bold">
                                                     <span>USD</span>
@@ -802,21 +803,21 @@ const loadSimulasi = async () => {
 
                             <ColumnGroup type="header">
                                 <Row>
-                                    <Column :colspan="2" :rowspan="2" headerStyle="background-color:#262626">
+                                    <Column :colspan="2" :rowspan="2" headerStyle="background-color:#0b2838">
                                         <template #header>
                                             <div class="w-full flex flex-col items-center justify-center font-bold text-white">
                                                 <span>ANALISA POTENSI LABA (RUGI)</span>
                                             </div>
                                         </template>
                                     </Column>
-                                    <Column :colspan="1" :rowspan="2" headerStyle="background-color:#b45309">
+                                    <Column :colspan="1" :rowspan="2" headerStyle="background-color:#6E0B0C">
                                         <template #header>
                                             <div class="w-full flex flex-col items-center justify-center font-bold text-white">
                                                 <span>TANPA DMO ($)</span>
                                             </div>
                                         </template>
                                     </Column>
-                                    <Column :colspan="2 * listPengali.length" headerStyle="background-color:#b45309">
+                                    <Column :colspan="2 * listPengali.length" headerStyle="background-color:#6E0B0C">
                                         <template #header>
                                             <div class="w-full flex flex-col items-center justify-center font-bold text-white">
                                                 <span>DENGAN DMO ($)</span>
@@ -826,7 +827,7 @@ const loadSimulasi = async () => {
                                 </Row>
                                 <Row>
                                     <template v-for="pengali in listPengali" :key="pengali.id">
-                                        <Column :colspan="1" headerStyle="background-color:#134e4a">
+                                        <Column :colspan="1" headerStyle="background-color:#0b2838">
                                             <template #header>
                                                 <div class="text-center w-full flex justify-center font-bold text-white">
                                                     <span>{{ pengali.name }}</span>
@@ -836,7 +837,7 @@ const loadSimulasi = async () => {
                                     </template>
                                 </Row>
                             </ColumnGroup>
-                            <Column field="name" style="min-width: 13rem">
+                            <Column field="name" style="background-color: #ecee81; min-width: 13rem">
                                 <template #body="{ data }">
                                     <div class="flex justify-between items-center gap-2">
                                         <strong class="text-base">{{ data.analisa }}</strong>
@@ -870,7 +871,7 @@ const loadSimulasi = async () => {
                         </DataTable>
                         <!-- <ColumnGroup type="header">
                             <Row>
-                                <Column :rowspan="2" :colspan="2" headerStyle="background-color:#262626">
+                                <Column :rowspan="2" :colspan="2" headerStyle="background-color:#0b2838">
                                     <template #header>
                                         <div class="text-center w-full flex justify-center font-bold text-white">
                                             <span>ANALISA POTENSI LABA (RUGI)</span>
@@ -878,7 +879,7 @@ const loadSimulasi = async () => {
                                     </template>
                                 </Column>
 
-                                <Column :rowspan="2" headerStyle="background-color:#262626">
+                                <Column :rowspan="2" headerStyle="background-color:#0b2838">
                                     <template #header>
                                         <div class="text-center w-full flex flex-col justify-center font-bold text-white">
                                             <span>Tanpa DMO</span>
@@ -886,7 +887,7 @@ const loadSimulasi = async () => {
                                         </div>
                                     </template>
                                 </Column>
-                                <Column :colspan="listPengali.length" headerStyle="background-color:#262626">
+                                <Column :colspan="listPengali.length" headerStyle="background-color:#0b2838">
                                     <template #header>
                                         <div class="text-center w-full flex gap-2 justify-center font-bold text-white">
                                             <span>Dengan DMO</span>
