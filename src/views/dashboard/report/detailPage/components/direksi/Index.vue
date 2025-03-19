@@ -235,8 +235,10 @@ const loadSimulasi = async () => {
                 <div class="flex w-full items-center justify-center">
                     <span class="font-bold w-full text-3xl">ASUMSI DASAR PERHITUNGAN - SICAL RSP</span>
                     <div class="flex justify-end w-full gap-2">
-                        <Button label="Calculate" icon="pi pi-calculator" @click="loadSimulasi" :style="{ backgroundColor: '#347928', color: 'white', borderColor: '#6E0B0C' }" />
-                        <Button label="Reset" icon="pi pi-refresh" @click="reset" :style="{ backgroundColor: '#FF9D23', color: 'white', borderColor: '#0b2838' }" />
+                        <Button label="Calculate" icon="pi pi-calculator" @click="loadSimulasi" :style="{ backgroundColor: '#205781', color: 'white', borderColor: '#6E0B0C' }" />
+                        <Button label="Reset" icon="pi pi-refresh" @click="reset" :style="{ backgroundColor: '#A31D1D', color: 'white', borderColor: '#0b2838' }" />
+                        <Button label="Save" icon="pi pi-save" :style="{ backgroundColor: '#3A7D44', color: 'white', borderColor: '#0b2838' }" />
+                        <Button label="Records" icon="pi pi-history" :style="{ backgroundColor: '#D98324', color: 'white', borderColor: '#0b2838' }" />
                     </div>
                 </div>
             </template>
