@@ -792,7 +792,7 @@ const loadSimulasi = async () => {
                             </template>
                         </DataTable>
 
-                        <DataTable :value="listSimulasi4" :sortOrder="1" showGridlines rowGroupMode="subheader" groupRowsBy="analisa" sortField="analisa" sortMode="single" dataKey="analisa">
+                        <DataTable :value="listSimulasi4" :sortOrder="-1" showGridlines rowGroupMode="subheader" groupRowsBy="analisa" sortField="analisa" sortMode="single" dataKey="analisa">
                             <template #empty>
                                 <div class="flex w-full items-center justify-center">
                                     <span>-- Data tidak tersedia --</span>
