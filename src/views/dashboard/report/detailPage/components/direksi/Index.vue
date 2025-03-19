@@ -36,8 +36,8 @@ const formData = ref({
     dmo: 0,
     id_dmo: 0,
     margin: 0,
-    offer_buyer: 973,
-    volume: 12000,
+    offer_buyer: 0,
+    volume: 0,
     internal_cost: []
 });
 
@@ -151,8 +151,9 @@ const loadInputData = async () => {
                     id: util[j].id,
                     name: util[j].name,
                     value: util[j].value,
-                    nilai: nilai,
-                    nilai_asing: nilai == 0 ? 0 : ((nilai / formData.value.kurs) * 1000).toFixed(2)
+                    // nilai: nilai,
+                    nilai: 0,
+                    nilai_asing: nilai == 0 ? 0 : ((nilai / formData.value.kurs) * 1000).toFixed(0)
                 });
             }
             list.push({
@@ -194,8 +195,8 @@ const reset = async () => {
     formData.value.kurs_id = 1;
     formData.value.dmo = nilaiDMO.value;
     formData.value.margin = 0;
-    formData.value.offer_buyer = 973;
-    formData.value.volume = 12000;
+    formData.value.offer_buyer = 0;
+    formData.value.volume = 0;
     formData.value.internal_cost = [];
     const listMU = listMataUang.value.find((item) => item.id == formData.value.kurs_id);
     labelMataUang.value = listMU.name;
@@ -210,7 +211,6 @@ const loadSimulasi = async () => {
 
         // Hasil Kalkulasi
         const response = await simulasiSicalRspController.simulationCalc2(formData.value, formInternal.value);
-        console.log(response);
         listSimulasi1.value = response.sim1;
         listSimulasi2.value = response.sim2;
         listSimulasi3.value = response.sim3;
@@ -235,8 +235,8 @@ const loadSimulasi = async () => {
                 <div class="flex w-full items-center justify-center">
                     <span class="font-bold w-full text-3xl">ASUMSI DASAR PERHITUNGAN - SICAL RSP</span>
                     <div class="flex justify-end w-full gap-2">
-                        <Button label="Calculate" icon="pi pi-calculator" severity="danger" @click="loadSimulasi" />
-                        <Button label="Reset" icon="pi pi-refresh" severity="info" @click="reset" />
+                        <Button label="Calculate" icon="pi pi-calculator" @click="loadSimulasi" :style="{ backgroundColor: '#b45309', color: 'white', borderColor: '#b45309' }" />
+                        <Button label="Reset" icon="pi pi-refresh" @click="reset" :style="{ backgroundColor: '#134e4a', color: 'white', borderColor: '#134e4a' }" />
                     </div>
                 </div>
             </template>
@@ -248,7 +248,7 @@ const loadSimulasi = async () => {
                     <div class="flex w-full flex-col gap-2">
                         <span class="font-bold text-xl text-neutral-300">INTERNAL COST (HPP) </span>
                         <div class="grid grid-cols-2 gap-7 w-full">
-                            <div v-for="(internal, index) in formInternal" :key="index" class="flex flex-col col-span-1 gap-1 w-full p-4 rounded-xl bg-yellow-600">
+                            <div v-for="(internal, index) in formInternal" :key="index" class="flex flex-col col-span-1 gap-1 w-full p-4 rounded-xl bg-amber-700">
                                 <label class="text-lg font-bold" :for="internal.name">{{ internal.name }}</label>
                                 <div class="flex flex-col w-full" v-for="(util, indexs) in internal.util" :key="indexs">
                                     <span class="w-full">{{ util.name }}</span>
@@ -257,10 +257,6 @@ const loadSimulasi = async () => {
                                             <InputGroupAddon class="font-bold">IDR</InputGroupAddon>
                                             <InputNumber v-model="util.nilai" placeholder="" class="w-full" />
                                         </InputGroup>
-                                        <!-- <InputGroup>
-                                            <InputGroupAddon class="font-bold">{{ labelMataUang }}</InputGroupAddon>
-                                            <InputNumber v-model="util.nilai_asing" placeholder="" class="w-full" disabled />
-                                        </InputGroup> -->
                                     </div>
                                 </div>
                             </div>
@@ -270,15 +266,15 @@ const loadSimulasi = async () => {
                         <div class="flex flex-col gap-2">
                             <span class="font-bold text-xl text-neutral-300">EXTERNAL COST (DMO) </span>
                             <div class="flex gap-7 w-full">
-                                <div class="flex flex-col gap-1 w-full p-4 rounded-xl bg-neutral-700">
+                                <div class="flex flex-col gap-1 w-full p-4 rounded-xl bg-amber-700">
                                     <div class="flex w-full justify-between items-center">
                                         <label class="text-lg font-bold" for="dmo">DMO</label>
                                         <small class="text-neutral-300 font-bold">IDR/Kg incl PPN</small>
                                     </div>
                                     <InputNumber v-model="formData.dmo" placeholder="DMO" class="w-full" disabled />
-                                    <small class="text-cyan-400 font-semibold">* {{ remarkDMO }}</small>
+                                    <small class="text-white font-semibold">* {{ remarkDMO }}</small>
                                 </div>
-                                <div class="flex flex-col gap-1 w-full p-4 rounded-xl bg-neutral-700">
+                                <div class="flex flex-col gap-1 w-full p-4 rounded-xl bg-amber-700">
                                     <div class="flex w-full justify-between items-center">
                                         <div class="flex gap-3 items-center">
                                             <label class="text-lg font-bold" for="dmo">Kurs</label>
@@ -287,7 +283,7 @@ const loadSimulasi = async () => {
                                         <small class="text-neutral-300 font-bold">IDR / {{ labelMataUang }}</small>
                                     </div>
                                     <InputNumber v-model="formData.kurs" placeholder="DMO" class="w-full" />
-                                    <small class="text-cyan-400 font-semibold">* Diupdate rate kurs yang sesuai</small>
+                                    <small class="text-white font-semibold">* Diupdate rate kurs yang sesuai</small>
                                 </div>
                             </div>
                         </div>
@@ -295,13 +291,13 @@ const loadSimulasi = async () => {
                         <div class="flex flex-col gap-1 w-full">
                             <span class="font-bold text-xl uppercase text-neutral-300">OFFER </span>
                             <div class="flex gap-7 w-full">
-                                <div class="flex flex-col gap-1 w-full p-4 rounded-xl bg-emerald-700">
+                                <div class="flex flex-col gap-1 w-full p-4 rounded-xl bg-amber-700">
                                     <div class="flex w-full justify-between items-center">
                                         <label class="text-lg font-bold" for="dmo">Offer dari Buyer</label>
                                     </div>
                                     <InputNumber v-model="formData.offer_buyer" placeholder="Offer dari Buyer" class="w-full" />
                                 </div>
-                                <div class="flex flex-col gap-1 w-full p-4 rounded-xl bg-emerald-700">
+                                <div class="flex flex-col gap-1 w-full p-4 rounded-xl bg-amber-700">
                                     <div class="flex w-full justify-between items-center">
                                         <label class="text-lg font-bold" for="dmo">Volume</label>
                                     </div>
@@ -314,7 +310,7 @@ const loadSimulasi = async () => {
                             <div class="flex flex-col gap-1 w-full">
                                 <span class="font-bold text-xl uppercase text-neutral-300">Expected Margin </span>
                                 <div class="flex gap-7 w-full">
-                                    <div class="flex flex-col gap-1 w-full p-4 rounded-xl bg-pink-700">
+                                    <div class="flex flex-col gap-1 w-full p-4 rounded-xl bg-amber-700">
                                         <div class="flex w-full justify-between items-center">
                                             <label class="text-lg font-bold" for="dmo">Margin</label>
                                             <small class="text-neutral-300 font-bold">%</small>
@@ -329,7 +325,7 @@ const loadSimulasi = async () => {
                             <div class="flex flex-col gap-1 w-full">
                                 <span class="font-bold text-xl uppercase text-neutral-300">Mata Uang </span>
                                 <div class="flex gap-7 w-full">
-                                    <div class="flex flex-col gap-1 w-full p-4 rounded-xl bg-cyan-700">
+                                    <div class="flex flex-col gap-1 w-full p-4 rounded-xl bg-amber-700">
                                         <div class="flex w-full justify-between items-center">
                                             <label class="text-lg font-bold" for="dmo">Set Mata Uang</label>
                                             <small class="text-neutral-300 font-bold">%</small>
@@ -346,7 +342,7 @@ const loadSimulasi = async () => {
         <Card style="color: white; --tw-bg-opacity: 1; background-color: rgb(38 38 38 / var(--tw-bg-opacity, 1))">
             <template #title>
                 <div class="flex w-full justify-between py-2">
-                    <span class="font-bold text-3xl text-pink-500">INL SIMULATION CALCULATOR FOR RECOMMENDED SELLING PRICE (SICAL RSP)</span>
+                    <span class="font-bold text-3xl text-white">INL SIMULATION CALCULATOR FOR RECOMMENDED SELLING PRICE (SICAL RSP)</span>
                     <i style="font-size: 1.4vw" class="pi pi-question-circle text-yellow-500"></i>
                 </div>
             </template>
@@ -375,32 +371,32 @@ const loadSimulasi = async () => {
                                     </Column>
 
                                     <!-- Looping Produk -->
-                                    <Column v-for="product in listMasterCost" :key="product.id" :colspan="2">
+                                    <Column v-for="product in listMasterCost" :key="product.id" :colspan="2" headerStyle="background-color:#b45309">
                                         <template #header>
-                                            <div class="text-center w-full flex justify-center font-bold text-black">
+                                            <div class="text-center w-full flex justify-center font-bold text-white">
                                                 <span>{{ product.name }}</span>
                                             </div>
                                         </template>
                                     </Column>
-                                    <Column :colspan="2">
+                                    <Column :colspan="2" headerStyle="background-color:#b45309">
                                         <template #header>
-                                            <div class="text-center w-full flex justify-center font-bold text-black">
+                                            <div class="text-center w-full flex justify-center font-bold text-white">
                                                 <span>Expected Margin</span>
                                             </div>
                                         </template>
                                     </Column>
                                 </Row>
                                 <Row>
-                                    <Column :colspan="listMasterCost.length * 2" headerStyle="background-color:#eab308;">
+                                    <Column :colspan="listMasterCost.length * 2" headerStyle="background-color:#134e4a">
                                         <template #header>
-                                            <div class="text-center w-full flex justify-center font-bold text-black">
+                                            <div class="text-center w-full flex justify-center font-bold text-white">
                                                 <span>COST OF GOOD SOLD / HPP</span>
                                             </div>
                                         </template>
                                     </Column>
-                                    <Column :colspan="2" headerStyle="background-color:#93c5fd;">
+                                    <Column :colspan="2">
                                         <template #header>
-                                            <div class="text-center w-full flex justify-center font-bold text-black bg-blue-300">
+                                            <div class="text-center w-full flex justify-center font-bold text-black">
                                                 <span>{{ formData.margin }} %</span>
                                             </div>
                                         </template>
@@ -409,7 +405,7 @@ const loadSimulasi = async () => {
                                 <Row>
                                     <!-- Looping Produk -->
                                     <template v-for="product in listMasterCost" :key="product.id">
-                                        <Column headerStyle="background-color:#dc2626; color:white">
+                                        <Column headerStyle="background-color:#b45309; color:white">
                                             <template #header>
                                                 <div class="text-center w-full flex justify-center font-bold">
                                                     <span>IDR</span>
@@ -424,16 +420,16 @@ const loadSimulasi = async () => {
                                             </template>
                                         </Column>
                                     </template>
-                                    <Column headerStyle="background-color:#dc2626; color:white">
+                                    <Column headerStyle="background-color:#b45309; color:white">
                                         <template #header>
                                             <div class="text-center w-full flex justify-center font-bold">
                                                 <span>IDR</span>
                                             </div>
                                         </template>
                                     </Column>
-                                    <Column>
+                                    <Column headerStyle="background-color:#134e4a; color:white">
                                         <template #header>
-                                            <div class="text-center w-full flex justify-center font-bold text-black">
+                                            <div class="text-center w-full flex justify-center font-bold text-white">
                                                 <span>%</span>
                                             </div>
                                         </template>
@@ -450,15 +446,16 @@ const loadSimulasi = async () => {
                             <template v-for="product in listMasterCost" :key="product.id">
                                 <Column>
                                     <template #body="{ data }">
-                                        <div class="flex justify-center">
-                                            <small>{{ data.product?.[product.id].value }}</small>
+                                        <div class="flex flex-col justify-center text-center">
+                                            <small class="font-bold">{{ data.product?.[product.id]?.value }}</small>
+                                            <small v-if="data.product?.[product.id]?.proportion != 0" class="text-gray-500"> ({{ data.product?.[product.id]?.proportion }}%) </small>
                                         </div>
                                     </template>
                                 </Column>
                                 <Column>
                                     <template #body="{ data }">
                                         <div class="flex justify-center">
-                                            <small>{{ data.product?.[product.id].usd }}</small>
+                                            <small class="font-bold">{{ data.product?.[product.id].usd }}</small>
                                         </div>
                                     </template>
                                 </Column>
@@ -498,7 +495,7 @@ const loadSimulasi = async () => {
                                     </Column>
 
                                     <!-- Looping Produk -->
-                                    <Column :colspan="4" headerStyle="background-color:#dc2626; color:white">
+                                    <Column :colspan="4" headerStyle="background-color:#b45309; color:white">
                                         <template #header>
                                             <div class="w-full flex flex-col items-center justify-center font-bold">
                                                 <span>REKOMENDASI Harga Jual TANPA DMO</span>
@@ -506,17 +503,17 @@ const loadSimulasi = async () => {
                                             </div>
                                         </template>
                                     </Column>
-                                    <Column :colspan="2" :rowspan="2">
+                                    <Column :colspan="2" :rowspan="2" headerStyle="background-color:#b45309; color:white">
                                         <template #header>
-                                            <div class="w-full flex flex-col items-center justify-center font-bold text-black">
+                                            <div class="w-full flex flex-col items-center justify-center font-bold text-white">
                                                 <span>BIAYA DMO</span>
                                                 <p class="text-center">Kerugian per kg (IDR) atau per Ton (USD) Minyakita</p>
                                             </div>
                                         </template>
                                     </Column>
-                                    <Column :colspan="2 * listPengali.length">
+                                    <Column :colspan="2 * listPengali.length" headerStyle="background-color:#b45309; color:white">
                                         <template #header>
-                                            <div class="w-full flex flex-col items-center justify-center font-bold text-black">
+                                            <div class="w-full flex flex-col items-center justify-center font-bold text-white">
                                                 <span>BIAYA DMO</span>
                                                 <p class="text-center">(Per KG (IDR) atau per MT (USD) Olein Export ) Dengan Variasi FAKTOR Pengali</p>
                                             </div>
@@ -524,24 +521,24 @@ const loadSimulasi = async () => {
                                     </Column>
                                 </Row>
                                 <Row>
-                                    <Column :colspan="3">
+                                    <Column :colspan="3" headerStyle="background-color:#134e4a;">
                                         <template #header>
-                                            <div class="text-center w-full flex justify-center font-bold text-black">
+                                            <div class="text-center w-full flex justify-center font-bold text-white">
                                                 <span> FOB Kuala Tanjung</span>
                                             </div>
                                         </template>
                                     </Column>
-                                    <Column>
+                                    <Column headerStyle="background-color:#134e4a;">
                                         <template #header>
-                                            <div class="text-center w-full flex justify-center font-bold text-black">
+                                            <div class="text-center w-full flex justify-center font-bold text-white">
                                                 <span>LOCO INL</span>
                                             </div>
                                         </template>
                                     </Column>
                                     <template v-for="pengali in listPengali" :key="pengali.id">
-                                        <Column :colspan="2">
+                                        <Column :colspan="2" headerStyle="background-color:#134e4a;">
                                             <template #header>
-                                                <div class="text-center w-full flex justify-center font-bold text-black">
+                                                <div class="text-center w-full flex justify-center font-bold text-white">
                                                     <span>{{ pengali.value }}</span>
                                                 </div>
                                             </template>
@@ -549,7 +546,7 @@ const loadSimulasi = async () => {
                                     </template>
                                 </Row>
                                 <Row>
-                                    <Column headerStyle="background-color:#dc2626; color:white">
+                                    <Column headerStyle="background-color:#b45309; color:white">
                                         <template #header>
                                             <div class="text-center w-full flex justify-center font-bold">
                                                 <span>IDR</span>
@@ -577,7 +574,7 @@ const loadSimulasi = async () => {
                                             </div>
                                         </template>
                                     </Column>
-                                    <Column headerStyle="background-color:#dc2626; color:white">
+                                    <Column headerStyle="background-color:#b45309; color:white">
                                         <template #header>
                                             <div class="text-center w-full flex justify-center font-bold">
                                                 <span>IDR</span>
@@ -592,7 +589,7 @@ const loadSimulasi = async () => {
                                         </template>
                                     </Column>
                                     <template v-for="pengali in listPengali" :key="pengali.id">
-                                        <Column headerStyle="background-color:#dc2626; color:white">
+                                        <Column headerStyle="background-color:#b45309; color:white">
                                             <template #header>
                                                 <div class="text-center w-full flex justify-center font-bold">
                                                     <span>IDR</span>
@@ -646,8 +643,9 @@ const loadSimulasi = async () => {
                             </Column>
                             <Column field="name">
                                 <template #body="{ data }">
-                                    <div class="flex justify-center items-center gap-2">
+                                    <div class="flex flex-col justify-center items-center gap-2">
                                         <strong class="text-sm">{{ data.kerugianIdr }}</strong>
+                                        <small v-if="data.kerugianProportion && data.kerugianProportion != 0" class="text-gray-500"> ({{ data.kerugianProportion }}%) </small>
                                     </div>
                                 </template>
                             </Column>
@@ -695,7 +693,7 @@ const loadSimulasi = async () => {
                                     </Column>
 
                                     <!-- Looping Produk -->
-                                    <Column :colspan="listPengali.length * 2 * 2" headerStyle="background-color:#dc2626; color:white">
+                                    <Column :colspan="listPengali.length * 2 * 2" headerStyle="background-color:#b45309; color:white">
                                         <template #header>
                                             <div class="w-full flex flex-col items-center justify-center font-bold">
                                                 <span>REKOMENDASI Harga Jual DENGAN DMO DITANGGUNG INL</span>
@@ -705,9 +703,9 @@ const loadSimulasi = async () => {
                                 </Row>
                                 <Row>
                                     <template v-for="pengali in listPengali" :key="pengali.id">
-                                        <Column :colspan="2">
+                                        <Column :colspan="2" headerStyle="background-color:#134e4a;">
                                             <template #header>
-                                                <div class="text-center w-full flex justify-center font-bold text-black">
+                                                <div class="text-center w-full flex justify-center font-bold text-white">
                                                     <span>{{ pengali.name }}</span>
                                                 </div>
                                             </template>
@@ -723,7 +721,7 @@ const loadSimulasi = async () => {
                                 </Row>
                                 <Row>
                                     <template v-for="pengali in listPengali" :key="pengali.id">
-                                        <Column headerStyle="background-color:#dc2626; color:white">
+                                        <Column headerStyle="background-color:#b45309; color:white">
                                             <template #header>
                                                 <div class="text-center w-full flex justify-center font-bold">
                                                     <span>IDR</span>
@@ -737,7 +735,7 @@ const loadSimulasi = async () => {
                                                 </div>
                                             </template>
                                         </Column>
-                                        <Column headerStyle="background-color:#dc2626; color:white">
+                                        <Column headerStyle="background-color:#b45309; color:white">
                                             <template #header>
                                                 <div class="text-center w-full flex justify-center font-bold">
                                                     <span>IDR</span>
@@ -802,61 +800,61 @@ const loadSimulasi = async () => {
                             </template>
                             <template #loading> Loading customers data. Please wait. </template>
 
-                            <!-- <ColumnGroup type="header">
+                            <ColumnGroup type="header">
                                 <Row>
-                                    <Column :rowspan="2" :colspan="2" headerStyle="background-color:#262626">
+                                    <Column :colspan="2" :rowspan="2" headerStyle="background-color:#262626">
                                         <template #header>
-                                            <div class="text-center w-full flex justify-center font-bold text-white">
+                                            <div class="w-full flex flex-col items-center justify-center font-bold text-white">
                                                 <span>ANALISA POTENSI LABA (RUGI)</span>
                                             </div>
                                         </template>
                                     </Column>
-
-                                    <Column :rowspan="2" headerStyle="background-color:#262626">
+                                    <Column :colspan="1" :rowspan="2" headerStyle="background-color:#b45309">
                                         <template #header>
-                                            <div class="text-center w-full flex flex-col justify-center font-bold text-white">
-                                                <span>Tanpa DMO</span>
-                                                <span>({{ labelMataUang }})</span>
+                                            <div class="w-full flex flex-col items-center justify-center font-bold text-white">
+                                                <span>TANPA DMO ($)</span>
                                             </div>
                                         </template>
                                     </Column>
-                                    <Column :colspan="listPengali.length" headerStyle="background-color:#262626">
+                                    <Column :colspan="2 * listPengali.length" headerStyle="background-color:#b45309">
                                         <template #header>
-                                            <div class="text-center w-full flex gap-2 justify-center font-bold text-white">
-                                                <span>Dengan DMO</span>
-                                                <span>({{ labelMataUang }})</span>
+                                            <div class="w-full flex flex-col items-center justify-center font-bold text-white">
+                                                <span>DENGAN DMO ($)</span>
                                             </div>
                                         </template>
                                     </Column>
                                 </Row>
                                 <Row>
                                     <template v-for="pengali in listPengali" :key="pengali.id">
-                                        <Column>
+                                        <Column :colspan="1" headerStyle="background-color:#134e4a">
                                             <template #header>
-                                                <div class="text-center w-full flex justify-center font-bold text-black">
+                                                <div class="text-center w-full flex justify-center font-bold text-white">
                                                     <span>{{ pengali.name }}</span>
                                                 </div>
                                             </template>
                                         </Column>
                                     </template>
                                 </Row>
-                            </ColumnGroup> -->
-                            <Column field="analisa" header="Analisa" :sortable="true">
-                                <template #groupheader="{ data }">
-                                    <div class="p-2 font-bold bg-gray-700 text-white">{{ data.analisa }}</div>
-                                </template>
-                            </Column>
-                            <Column field="name" header="Name" style="min-width: 13rem">
+                            </ColumnGroup>
+                            <Column field="name" style="min-width: 13rem">
                                 <template #body="{ data }">
                                     <div class="flex justify-between items-center gap-2">
-                                        <strong class="text-sm w-full">{{ data.name }}</strong>
+                                        <strong class="text-sm">{{ data.analisa }}</strong>
                                     </div>
                                 </template>
                             </Column>
-                            <!-- <Column field="tanpaDOM">
+                            <Column field="name" style="min-width: 13rem">
+                                <template #body="{ data }">
+                                    <div class="flex justify-between items-center gap-2">
+                                        <strong class="text-sm">{{ data.name }}</strong>
+                                    </div>
+                                </template>
+                            </Column>
+
+                            <Column field="name">
                                 <template #body="{ data }">
                                     <div class="flex justify-center items-center gap-2">
-                                        <strong class="text-sm">{{ data.tanpaDOM }}</strong>
+                                        <strong class="text-sm">{{ data.tanpaDMO }}</strong>
                                     </div>
                                 </template>
                             </Column>
@@ -868,8 +866,63 @@ const loadSimulasi = async () => {
                                         </div>
                                     </template>
                                 </Column>
-                            </template> -->
+                            </template>
                         </DataTable>
+                        <!-- <ColumnGroup type="header">
+                            <Row>
+                                <Column :rowspan="2" :colspan="2" headerStyle="background-color:#262626">
+                                    <template #header>
+                                        <div class="text-center w-full flex justify-center font-bold text-white">
+                                            <span>ANALISA POTENSI LABA (RUGI)</span>
+                                        </div>
+                                    </template>
+                                </Column>
+
+                                <Column :rowspan="2" headerStyle="background-color:#262626">
+                                    <template #header>
+                                        <div class="text-center w-full flex flex-col justify-center font-bold text-white">
+                                            <span>Tanpa DMO</span>
+                                            <span>({{ labelMataUang }})</span>
+                                        </div>
+                                    </template>
+                                </Column>
+                                <Column :colspan="listPengali.length" headerStyle="background-color:#262626">
+                                    <template #header>
+                                        <div class="text-center w-full flex gap-2 justify-center font-bold text-white">
+                                            <span>Dengan DMO</span>
+                                            <span>({{ labelMataUang }})</span>
+                                        </div>
+                                    </template>
+                                </Column>
+                            </Row>
+                            <Row>
+                                <template v-for="pengali in listPengali" :key="pengali.id">
+                                    <Column>
+                                        <template #header>
+                                            <div class="text-center w-full flex justify-center font-bold text-black">
+                                                <span>{{ pengali.name }}</span>
+                                            </div>
+                                        </template>
+                                    </Column>
+                                </template>
+                            </Row>
+                        </ColumnGroup> -->
+                        <!-- <Column field="tanpaDOM">
+                            <template #body="{ data }">
+                                <div class="flex justify-center items-center gap-2">
+                                    <strong class="text-sm">{{ data.tanpaDOM }}</strong>
+                                </div>
+                            </template>
+                        </Column>
+                        <template v-for="pengali in listPengali" :key="pengali.id">
+                            <Column field="name">
+                                <template #body="{ data }">
+                                    <div class="flex justify-center items-center gap-2">
+                                        <strong class="text-sm">{{ data.product?.[pengali.id].value }}</strong>
+                                    </div>
+                                </template>
+                            </Column>
+                        </template> -->
                     </div>
                 </div>
             </template>
