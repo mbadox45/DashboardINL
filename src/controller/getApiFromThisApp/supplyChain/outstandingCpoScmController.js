@@ -62,6 +62,7 @@ export default new (class outstandingCpoScmController {
             const response = await outstandingCpoScmAPI.getByPeriod();
             const load = response.data;
             const data = load;
+            console.log(data);
             return data;
         } catch (error) {
             return null;
@@ -79,14 +80,14 @@ export default new (class outstandingCpoScmController {
                     totalValue += Number(response[i].value);
                 }
                 list = {
-                    data: response,
+                    data: response.sort((a, b) => b.id - a.id),
                     totalQty: totalQty,
                     totalValue: totalValue
                 };
             } else {
                 const response = await this.getByPeriod();
                 list = {
-                    data: response.data,
+                    data: response.data.sort((a, b) => b.id - a.id),
                     totalQty: response.totalQty,
                     totalValue: response.totalValue
                 };

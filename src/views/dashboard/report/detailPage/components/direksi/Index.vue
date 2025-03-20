@@ -15,6 +15,7 @@ const listUtilisasi = ref([]);
 const listKurs = ref([]);
 const listMataUang = ref([]);
 const listPengali = ref([]);
+const listCatatan = ref([]);
 const nilaiDMO = ref(0);
 const remarkDMO = ref('');
 const nilaiKurs = ref(0);
@@ -23,6 +24,9 @@ const labelMataUang = ref('USD');
 const showTable = ref(false);
 const loadingCard1 = ref(false);
 const loadingCard2 = ref(false);
+const visible = ref(false);
+const visibleSave = ref(false);
+const getToken = ref(localStorage.getItem('usertoken'));
 
 // Table
 const listSimulasi1 = ref([]);
@@ -39,6 +43,12 @@ const formData = ref({
     offer_buyer: 0,
     volume: 0,
     internal_cost: []
+});
+
+const formDataSave = ref({
+    name: '',
+    buyer_name: '',
+    catatan: [{ judul: '', detailCatatan: [{ teks: '' }] }]
 });
 
 const formInternal = ref([]);
@@ -135,9 +145,30 @@ const loadInputData = async () => {
     try {
         const response = await simulasiSicalRspController.getAll();
         let data = [];
+        const catatan = [];
         if (response != null) {
             const dataSical = response.sort((a, b) => b.id - a.id);
             data = dataSical[0].cost;
+
+            const note = dataSical[0].catatan;
+            for (let i = 0; i < note.length; i++) {
+                const detail = note[i].detail_catatan;
+                const list = [];
+                for (let j = 0; j < detail.length; j++) {
+                    list.push({
+                        id: detail[j].id,
+                        id_catatan: detail[j].id_catatan,
+                        teks: detail[j].teks
+                    });
+                }
+                catatan.push({
+                    id: note[i].id,
+                    id_simulation: note[i].id_simulation,
+                    judul: note[i].judul,
+                    catatan: list
+                });
+            }
+            console.log(catatan);
         }
         const master = listMasterCost.value;
         const list = [];
@@ -162,6 +193,7 @@ const loadInputData = async () => {
                 util: listUtil
             });
         }
+        listCatatan.value = catatan;
         formInternal.value = list;
         loadingCard1.value = false;
     } catch (error) {
@@ -185,6 +217,7 @@ const loadInputData = async () => {
                 util: listUtil
             });
         }
+        listCatatan.value = [];
         formInternal.value = list;
         loadingCard1.value = false;
     }
@@ -226,6 +259,8 @@ const loadSimulasi = async () => {
         loadingCard2.value = false;
     }
 };
+
+const postData = async () => {};
 </script>
 
 <template>
@@ -235,9 +270,9 @@ const loadSimulasi = async () => {
                 <div class="flex w-full items-center justify-center">
                     <span class="font-bold w-full text-3xl">ASUMSI DASAR PERHITUNGAN - SICAL RSP</span>
                     <div class="flex justify-end w-full gap-2">
-                        <Button label="Calculate" icon="pi pi-calculator" @click="loadSimulasi" :style="{ backgroundColor: '#205781', color: 'white', borderColor: '#6E0B0C' }" />
+                        <Button label="Calculate" icon="pi pi-calculator" @click="loadSimulasi" :style="{ backgroundColor: '#205781', color: 'white', borderColor: '#205781' }" />
                         <Button label="Reset" icon="pi pi-refresh" @click="reset" :style="{ backgroundColor: '#A31D1D', color: 'white', borderColor: '#0b2838' }" />
-                        <Button label="Save" icon="pi pi-save" :style="{ backgroundColor: '#3A7D44', color: 'white', borderColor: '#0b2838' }" />
+                        <Button v-if="getToken != null" label="Save" @click="visibleSave = true" icon="pi pi-save" :style="{ backgroundColor: '#3A7D44', color: 'white', borderColor: '#0b2838' }" />
                         <Button label="Records" icon="pi pi-history" :style="{ backgroundColor: '#D98324', color: 'white', borderColor: '#0b2838' }" />
                     </div>
                 </div>
@@ -341,11 +376,34 @@ const loadSimulasi = async () => {
                 </div>
             </template>
         </Card>
+        <Dialog v-model:visible="visible" modal :style="{ width: '75rem', backgroundColor: '#0a0a0a', color: 'white' }">
+            <template #header>
+                <div class="inline-flex items-center justify-center gap-2">
+                    <span class="font-bold whitespace-nowrap text-2xl uppercase">RECOMMENDED SELLING STRATEGY on OLEIN BULK PROFITABILITY</span>
+                </div>
+            </template>
+            <div class="flex flex-col gap-2">
+                <span class="text-surface-300 block capitalize">Update your information</span>
+                <div class="flex flex-col gap-8">
+                    <div class="flex items-center gap-6" v-for="(catatan, index) in listCatatan" :key="index">
+                        <i class="text-cyan-500 pi pi-star-fill" style="font-size: 2rem"></i>
+                        <div class="flex-col flex gap-1 w-full">
+                            <span class="text-xl font-bold">{{ catatan.judul }}</span>
+                            <div class="flex flex-col">
+                                <small v-for="(note, indexs) in catatan.catatan" :key="indexs" class="font-medium text-cyan-200">
+                                    {{ note.teks }}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </Dialog>
         <Card style="color: white; --tw-bg-opacity: 1; background-color: #0b2838">
             <template #title>
                 <div class="flex w-full justify-between py-2">
                     <span class="font-bold text-3xl text-white">INL SIMULATION CALCULATOR FOR RECOMMENDED SELLING PRICE (SICAL RSP)</span>
-                    <!-- <i style="font-size: 1.4vw" class="pi pi-question-circle text-yellow-500"></i> -->
+                    <i @click="visible = true" style="font-size: 1.4vw" class="pi pi-question-circle text-yellow-500 hover:text-yellow-300 transition-all duration-300 cursor-pointer"></i>
                 </div>
             </template>
             <template #content>
@@ -871,61 +929,6 @@ const loadSimulasi = async () => {
                                 </Column>
                             </template>
                         </DataTable>
-                        <!-- <ColumnGroup type="header">
-                            <Row>
-                                <Column :rowspan="2" :colspan="2" headerStyle="background-color:#0b2838">
-                                    <template #header>
-                                        <div class="text-center w-full flex justify-center font-bold text-white">
-                                            <span>ANALISA POTENSI LABA (RUGI)</span>
-                                        </div>
-                                    </template>
-                                </Column>
-
-                                <Column :rowspan="2" headerStyle="background-color:#0b2838">
-                                    <template #header>
-                                        <div class="text-center w-full flex flex-col justify-center font-bold text-white">
-                                            <span>Tanpa DMO</span>
-                                            <span>({{ labelMataUang }})</span>
-                                        </div>
-                                    </template>
-                                </Column>
-                                <Column :colspan="listPengali.length" headerStyle="background-color:#0b2838">
-                                    <template #header>
-                                        <div class="text-center w-full flex gap-2 justify-center font-bold text-white">
-                                            <span>Dengan DMO</span>
-                                            <span>({{ labelMataUang }})</span>
-                                        </div>
-                                    </template>
-                                </Column>
-                            </Row>
-                            <Row>
-                                <template v-for="pengali in listPengali" :key="pengali.id">
-                                    <Column>
-                                        <template #header>
-                                            <div class="text-center w-full flex justify-center font-bold text-black">
-                                                <span>{{ pengali.name }}</span>
-                                            </div>
-                                        </template>
-                                    </Column>
-                                </template>
-                            </Row>
-                        </ColumnGroup> -->
-                        <!-- <Column field="tanpaDOM">
-                            <template #body="{ data }">
-                                <div class="flex justify-center items-center gap-2">
-                                    <strong class="text-base">{{ data.tanpaDOM }}</strong>
-                                </div>
-                            </template>
-                        </Column>
-                        <template v-for="pengali in listPengali" :key="pengali.id">
-                            <Column field="name">
-                                <template #body="{ data }">
-                                    <div class="flex justify-center items-center gap-2">
-                                        <strong class="text-base">{{ data.product?.[pengali.id].value }}</strong>
-                                    </div>
-                                </template>
-                            </Column>
-                        </template> -->
                     </div>
                 </div>
             </template>

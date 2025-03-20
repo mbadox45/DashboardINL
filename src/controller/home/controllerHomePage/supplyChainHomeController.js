@@ -69,7 +69,7 @@ export default new (class supplyChainHomeController {
             };
             if (response != null) {
                 result.total = formatCurrency(Number(response.totalValue).toFixed(2));
-                const data = response.data;
+                const data = response.data.sort((a, b) => b.id - a.id);
                 const supplier = [];
                 for (let i = 0; i < 2; i++) {
                     supplier.push({
