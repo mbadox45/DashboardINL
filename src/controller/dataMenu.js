@@ -11,7 +11,19 @@ export default new (class dataMenu {
     direksi = () => {
         return {
             label: 'Direksi',
-            items: [{ label: 'Simulation Calculator', icon: 'pi pi-fw pi-calculator', to: '/director/simulation-calculator' }]
+            items: [
+                { label: 'Simulation Calculator', icon: 'pi pi-fw pi-calculator', to: '/director/simulation-calculator' },
+                {
+                    label: 'Master',
+                    icon: 'pi pi-fw pi-table',
+                    items: [
+                        { label: 'Cost', to: '/director/master/cost' },
+                        { label: 'Pengali', to: '/director/master/pengali' },
+                        { label: 'Utilisasi', to: '/director/master/utilisasi' },
+                        { label: 'DMO', to: '/director/master/dmo' }
+                    ]
+                }
+            ]
         };
     };
     finance = () => {

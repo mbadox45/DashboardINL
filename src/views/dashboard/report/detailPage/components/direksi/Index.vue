@@ -141,6 +141,29 @@ const loadUtilisasi = async () => {
     }
 };
 
+const addCatatan = () => {
+    formDataSave.value.catatan.push({
+        judul: '',
+        detailCatatan: [{ teks: '' }]
+    });
+};
+
+const addDetailCatatan = (index) => {
+    formDataSave.value.catatan[index].detailCatatan.push({ teks: '' });
+};
+
+const removeCatatan = (index) => {
+    if (formDataSave.value.catatan.length > 1) {
+        formDataSave.value.catatan.splice(index, 1);
+    }
+};
+
+const removeDetailCatatan = (index, detailIndex) => {
+    if (formDataSave.value.catatan[index].detailCatatan.length > 1) {
+        formDataSave.value.catatan[index].detailCatatan.splice(detailIndex, 1);
+    }
+};
+
 const loadInputData = async () => {
     try {
         const response = await simulasiSicalRspController.getAll();
@@ -168,7 +191,6 @@ const loadInputData = async () => {
                     catatan: list
                 });
             }
-            console.log(catatan);
         }
         const master = listMasterCost.value;
         const list = [];
@@ -260,7 +282,10 @@ const loadSimulasi = async () => {
     }
 };
 
-const postData = async () => {};
+const postData = async () => {
+    const response = await simulasiSicalRspController.postData(formData.value, formInternal.value, formDataSave.value);
+    console.log(response);
+};
 </script>
 
 <template>
@@ -398,6 +423,61 @@ const postData = async () => {};
                     </div>
                 </div>
             </div>
+        </Dialog>
+        <Dialog v-model:visible="visibleSave" modal :style="{ width: '45rem', backgroundColor: '#0a0a0a', color: 'white' }">
+            <template #header>
+                <div class="inline-flex items-center justify-center gap-2">
+                    <span class="font-bold whitespace-nowrap text-2xl uppercase text-pink-300">Apakah Anda ingin simpan data RSP ?</span>
+                </div>
+            </template>
+            <div class="flex flex-col gap-2 font-mono">
+                <small class="block font-bold mb-2"><span class="text-red-500 text-lg">*</span> Harap dilengkapi.</small>
+                <div class="flex flex-col gap-3">
+                    <div class="flex flex-col gap-1 w-full">
+                        <label class="text-sm font-light" for="name">Nama Simulasi</label>
+                        <InputText v-model="formDataSave.name" placeholder="Simulation Test" class="w-full" />
+                    </div>
+                    <div class="flex flex-col gap-1 w-full">
+                        <label class="text-sm font-light" for="name">Nama Buyer</label>
+                        <InputText v-model="formDataSave.buyer_name" placeholder="Contoh : PT INL" class="w-full" />
+                    </div>
+                    <div class="flex gap-3 items-center mt-4">
+                        <span class="">Catatan</span>
+                        <Divider />
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <div class="flex flex-col gap-1 w-full p-5 rounded-lg border" v-for="(catatan, index) in formDataSave.catatan" :key="index">
+                            <div class="flex justify-between items-center gap-5">
+                                <label class="text-sm font-light" for="name">{{ index + 1 }}. Judul</label>
+                                <div class="flex justify-end items-center gap-2">
+                                    <button @click="addCatatan" class="px-3 py-3 flex items-center justify-center rounded-full bg-cyan-600"><i class="pi pi-plus font-bold" style="font-size: 0.7rem"></i></button>
+                                    <button @click="removeCatatan(index)" class="px-3 py-3 flex items-center justify-center rounded-full bg-red-600"><i class="pi pi-minus font-bold" style="font-size: 0.7rem"></i></button>
+                                </div>
+                            </div>
+                            <InputText v-model="catatan.judul" placeholder="Judul untuk catatan" class="w-full" />
+                            <div class="flex gap-3 items-center w-full mt-4">
+                                <small class="w-[10rem]">Detail Catatan</small>
+                                <Divider />
+                            </div>
+                            <div class="flex flex-col gap-1 w-full pl-10" v-for="(detail, indexs) in catatan.detailCatatan" :key="indexs">
+                                <div class="flex justify-between items-center gap-5">
+                                    <label class="text-sm font-light" for="name">{{ index + 1 }}.{{ indexs + 1 }}. Detail</label>
+                                    <div class="flex justify-end items-center gap-2">
+                                        <button @click="addDetailCatatan(index)" class="px-3 py-3 flex items-center justify-center rounded-full text-cyan-600"><i class="pi pi-plus font-bold" style="font-size: 0.7rem"></i></button>
+                                        <button @click="removeDetailCatatan(index, indexs)" class="px-3 py-3 flex items-center justify-center rounded-full text-red-600"><i class="pi pi-minus font-bold" style="font-size: 0.7rem"></i></button>
+                                    </div>
+                                </div>
+                                <InputText v-model="detail.teks" placeholder="Detail Catatan" class="w-full" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <template #footer>
+                <div class="flex items-center justify-end w-full gap-2">
+                    <button @click="postData" class="py-2 px-4 rounded-lg bg-emerald-600 text-white font-medium items-center"><i class="pi pi-save"></i> Save</button>
+                </div>
+            </template>
         </Dialog>
         <Card style="color: white; --tw-bg-opacity: 1; background-color: #0b2838">
             <template #title>

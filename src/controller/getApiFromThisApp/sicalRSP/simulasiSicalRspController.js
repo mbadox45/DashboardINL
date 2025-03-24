@@ -285,4 +285,38 @@ export default new (class simulasiSicalRspController {
             };
         }
     };
+
+    postData = async (form1, form2, form3) => {
+        try {
+            const cost = [];
+            for (let i = 0; i < form2.length; i++) {
+                const util = form2[i].util;
+                for (let j = 0; j < util.length; j++) {
+                    cost.push({
+                        id_master_cost: form2[i].id,
+                        value: util[j].nilai,
+                        id_utilisasi: util[j].id
+                    });
+                }
+            }
+            const form = {
+                product_id: 4,
+                name: form3.name,
+                kurs: form1.kurs,
+                expected_margin: form1.margin,
+                id_dmo: form1.id_dmo,
+                offer: {
+                    buyer_name: form3.buyer_name,
+                    price: form1.offer_buyer,
+                    volume: form1.volume
+                },
+                cost: cost,
+                catatan: form3.catatan
+            };
+
+            return form;
+        } catch (error) {
+            return null;
+        }
+    };
 })();

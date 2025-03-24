@@ -64,11 +64,42 @@ const router = createRouter({
                     meta: {
                         requiresAuth: true,
                         allUser: true
-                        // finance: true
-                        // operation: true
-                        // sales: true,
-                        // scm: true,
-                        // sdm: true
+                    }
+                },
+                {
+                    path: '/director/master/cost',
+                    name: 'director-master-cost',
+                    component: () => import('@/views/dashboardManagement/direksi/master/cost/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true
+                    }
+                },
+                {
+                    path: '/director/master/pengali',
+                    name: 'director-master-pengali',
+                    component: () => import('@/views/dashboardManagement/direksi/master/pengali/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true
+                    }
+                },
+                {
+                    path: '/director/master/utilisasi',
+                    name: 'director-master-utilisasi',
+                    component: () => import('@/views/dashboardManagement/direksi/master/utilisasi/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true
+                    }
+                },
+                {
+                    path: '/director/master/dmo',
+                    name: 'director-master-dmo',
+                    component: () => import('@/views/dashboardManagement/direksi/master/dmo/Index.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        allUser: true
                     }
                 },
                 // Finance
@@ -80,10 +111,6 @@ const router = createRouter({
                         requiresAuth: true,
                         allUser: true,
                         finance: true
-                        // operation: true
-                        // sales: true,
-                        // scm: true,
-                        // sdm: true
                     }
                 },
                 {
@@ -94,10 +121,6 @@ const router = createRouter({
                         requiresAuth: true,
                         allUser: true,
                         finance: true
-                        // operation: true
-                        // sales: true,
-                        // scm: true,
-                        // sdm: true
                     }
                 },
                 {
@@ -107,11 +130,7 @@ const router = createRouter({
                     meta: {
                         requiresAuth: true,
                         allUser: true,
-                        // finance: true
-                        // operation: true
                         sales: true
-                        // scm: true,
-                        // sdm: true
                     }
                 },
                 {
@@ -122,10 +141,6 @@ const router = createRouter({
                         requiresAuth: true,
                         allUser: true,
                         finance: true
-                        // operation: true
-                        // sales: true,
-                        // scm: true,
-                        // sdm: true
                     }
                 },
                 {

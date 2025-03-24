@@ -1,10 +1,6 @@
 <script setup>
 import { formatCurrency } from '@/controller/dummyController';
-import mataUangKursController from '@/controller/getApiFromThisApp/kurs/mataUangKursController';
-import productMasterController from '@/controller/getApiFromThisApp/master/productMasterController';
-import masterCostSicalRspController from '@/controller/getApiFromThisApp/sicalRSP/masterCostSicalRspController';
-import simulasiSicalRspController from '@/controller/getApiFromThisApp/sicalRSP/simulasiSicalRspController';
-import utilisasiSicalRspController from '@/controller/getApiFromThisApp/sicalRSP/utilisasiSicalRspController';
+import dmoSicalRspController from '@/controller/getApiFromThisApp/sicalRSP/dmoSicalRspController';
 import { FilterMatchMode } from '@primevue/core/api';
 import moment from 'moment';
 import { onMounted, ref } from 'vue';
@@ -12,16 +8,11 @@ import { onMounted, ref } from 'vue';
 const listTable = ref([]);
 const search = ref('');
 const drawerCond = ref(false);
-const detailCond = ref(false);
 const messages = ref([]);
 const statusForm = ref('add');
 const timeResponse = ref(3000);
 const loadingSave = ref(false);
 const logFile = ref([]);
-const listMasterCost = ref([]);
-const listProduk = ref([]);
-const listUtilisasi = ref([]);
-const listKurs = ref([]);
 
 let today = new Date();
 let month = today.getMonth();
@@ -33,21 +24,9 @@ let count = ref(0);
 
 const formData = ref({
     id: null,
-    product_id: null,
     date: null,
-    name: null,
-    kurs: null,
-    kurs_id: null,
-    expected_margin: null,
-    id_dmo: null,
-    dmo: null,
-    offer: {
-        buyer_name: null,
-        price: null,
-        volume: null
-    },
-    costs: [],
-    catatan: []
+    value: null,
+    remark: null
 });
 
 const initFilters = () => {
@@ -67,24 +46,15 @@ onMounted(() => {
 const loadData = async () => {
     try {
         const list = [];
-        const data = await simulasiSicalRspController.getAll();
+        const data = await dmoSicalRspController.getAll();
         for (let i = 0; i < data.length; i++) {
             list.push({
                 id: data[i].id,
                 date: moment(data[i].date).format('DD MMM YYYY'),
-                product_id: data[i].product_id,
-                name: data[i].name,
-                kurs: data[i].kurs,
-                expected_margin: data[i].expected_margin,
-                id_dmo: data[i].id_dmo,
-                product: data[i].product,
-                dmo: data[i].dmo,
-                offer: data[i].offer,
-                catatan: data[i].catatan,
-                cost: data[i].cost
+                value: data[i].id,
+                remark: data[i].remark
             });
         }
-        console.log(list);
         listTable.value = list;
     } catch (error) {
         listTable.value = [];
@@ -96,7 +66,7 @@ const showDrawer = async (data) => {
         drawerCond.value = true;
         messages.value = [];
         if (data != null) {
-            const response = await simulasiSicalRspController.getByID(data.id);
+            const response = await dmoSicalRspController.getByID(data.id);
             console.log(response);
             const history = response.history;
             const list = [];
@@ -143,79 +113,6 @@ const showDrawer = async (data) => {
     }
 };
 
-const loadKurs = async () => {
-    try {
-        const response = await mataUangKursController.getAll();
-        const list = [];
-        for (let i = 0; i < response.length; i++) {
-            list.push({
-                id: response[i].id,
-                name: `${response[i].symbol}_${response[i].name} - ${response[i].remark}`
-            });
-        }
-        listKurs.value = list;
-    } catch (error) {
-        listKurs.value = [];
-    }
-};
-
-const loadProduk = async () => {
-    const produk = await productMasterController.getAll();
-    const jenis = produk.filter((item) => item.jenis.toLowerCase().includes('bulk'));
-    listProduk.value = jenis;
-};
-
-const loadMasterCost = async () => {
-    listMasterCost.value = await masterCostSicalRspController.getAll();
-};
-
-const loadUtilisasi = async () => {
-    listUtilisasi.value = await utilisasiSicalRspController.getAll();
-};
-
-const detailShow = async (data) => {
-    detailCond.value = true;
-    await loadKurs();
-    await loadProduk();
-    await loadMasterCost();
-    await loadUtilisasi();
-    formData.value.id = data.id;
-    formData.value.name = data.name;
-    formData.value.date = data.date;
-    formData.value.kurs = data.kurs;
-    formData.value.kurs_id = 1;
-    formData.value.expected_margin = data.expected_margin;
-    formData.value.id_dmo = data.id_dmo;
-    formData.value.dmo = Number(data.dmo.value);
-    formData.value.product_id = data.product_id;
-    formData.value.offer.buyer_name = data.offer.buyer_name;
-    formData.value.offer.volume = data.offer.volume;
-    formData.value.offer.price = data.offer.price;
-
-    const cost = data.cost;
-    const listCost = listMasterCost.value;
-    const util = listUtilisasi.value;
-    formData.value.costs = [];
-    for (let i = 0; i < listCost.length; i++) {
-        const utils = [];
-        for (let j = 0; j < util.length; j++) {
-            const loadUtil = cost.find((item) => item.id_master_cost == listCost[i].id && item.id_utilisasi == util[j].id);
-            // console.log(loadUtil);
-            utils.push({
-                id: util[j].id,
-                name: util[j].name,
-                value: util[j].value,
-                nilai: loadUtil == null ? 0 : Number(loadUtil.value)
-            });
-        }
-        formData.value.costs.push({
-            id: listCost[i].id,
-            name: listCost[i].name,
-            utils: utils
-        });
-    }
-};
-
 const refreshForm = () => {
     formData.value.date = null;
     formData.value.value = null;
@@ -231,7 +128,7 @@ const submitData = async () => {
             remark: formData.value.remark
         };
         if (statusForm.value == 'add') {
-            const response = await simulasiSicalRspController.addPost(form);
+            const response = await dmoSicalRspController.addPost(form);
             if (response.status == true) {
                 messages.value = [{ severity: 'success', content: 'Data berhasil di tambahkan', id: count.value++, icon: 'pi-check-circle' }];
                 loadingSave.value = true;
@@ -244,7 +141,7 @@ const submitData = async () => {
                 messages.value = [{ severity: 'error', content: 'Proses gagal, silahkan hubungi tim IT', id: count.value++, icon: 'pi-times-circle' }];
             }
         } else {
-            const response = await simulasiSicalRspController.updatePost(formData.value.id, form);
+            const response = await dmoSicalRspController.updatePost(formData.value.id, form);
             if (response.status == true) {
                 messages.value = [{ severity: 'success', content: 'Data berhasil di simpan', id: count.value++, icon: 'pi-check-circle' }];
                 loadingSave.value = true;
@@ -266,11 +163,11 @@ const submitData = async () => {
 <template>
     <div class="flex flex-col w-full gap-8">
         <div class="flex gap-2 items-center justify-between w-full font-bold">
-            <span class="text-3xl">History Data Hasil Simulasi</span>
-            <!-- <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-emerald-500 hover:bg-emerald-700 text-white rounded-full flex gap-2">
+            <span class="text-3xl">Master DMO</span>
+            <button @click="showDrawer(null)" class="px-4 py-2 font-bold items-center shadow-lg hover:shadow-none transition-all duration-300 bg-emerald-500 hover:bg-emerald-700 text-white rounded-full flex gap-2">
                 <i class="pi pi-plus"></i>
                 <span>Add Component</span>
-            </button> -->
+            </button>
         </div>
         <Drawer v-model:visible="drawerCond" position="right" class="!w-full md:!w-[30rem]">
             <template #header>
@@ -337,112 +234,10 @@ const submitData = async () => {
                 </ScrollPanel>
             </div>
         </Drawer>
-        <Drawer v-model:visible="detailCond" position="full">
-            <template #header>
-                <span class="text-3xl font-bold">Detail - SICAL RSP</span>
-            </template>
-            <div class="flex flex-col gap-3 w-full">
-                <div class="p-4 bg-slate-200 font-bold rounded-lg flex gap-3">
-                    <div class="flex flex-col w-full gap-1">
-                        <label for="">Tanggal</label>
-                        <DatePicker v-model="formData.date" dateFormat="yy-mm-dd" disabled :maxDate="maxDate" showIcon placeholder="Please input tanggal" />
-                    </div>
-                    <div class="flex flex-col w-full gap-1">
-                        <label for="">Produk</label>
-                        <Select v-model="formData.product_id" :options="listProduk" optionLabel="name" optionValue="id" disabled placeholder="Pilih Produk" class="w-full" />
-                    </div>
-                    <div class="flex flex-col w-full gap-1">
-                        <label for="">Nama Simulasi</label>
-                        <InputText v-model="formData.name" placeholder="Please input Name" />
-                    </div>
-                    <div class="flex flex-col w-full gap-1">
-                        <label for="">Nama Buyer</label>
-                        <InputText v-model="formData.offer.buyer_name" placeholder="Please input Buyer Name" />
-                    </div>
-                </div>
-                <div class="flex flex-col gap-1">
-                    <span class="text-xl font-bold">INTERNAL COST (HPP)</span>
-                    <div class="grid gap-3 w-full" :class="formData.costs.length > 4 ? 'grid-cols-4' : `grid-cols-${formData.costs.length}`">
-                        <div class="p-4 col-span-1 bg-slate-200 font-bold rounded-lg flex flex-col gap-3" v-for="(costs, index) in formData.costs" :key="index">
-                            <span>{{ costs.name }}</span>
-                            <div class="flex flex-col gap-2">
-                                <div class="flex flex-col" v-for="(utils, itils) in costs.utils" :key="itils">
-                                    <small>{{ utils.name }}</small>
-                                    <InputNumber v-model="utils.nilai" :placeholder="`Please input ${utils.name}`" locale="en-US" :minFractionDigits="2" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="grid grid-cols-3 gap-2">
-                    <div class="flex flex-col gap-1">
-                        <span class="text-xl font-bold">EXTERNAL COST (DMO)</span>
-                        <div class="grid grid-cols-2 gap-3 w-full p-4 bg-slate-200 rounded-lg">
-                            <div class="col-span-1 font-bold flex flex-col gap-3">
-                                <span>DMO</span>
-                                <InputNumber v-model="formData.dmo" :placeholder="`Please input DMO`" locale="en-US" :minFractionDigits="2" />
-                            </div>
-                            <div class="col-span-1 font-bold flex flex-col gap-3">
-                                <span>Kurs</span>
-                                <InputNumber v-model="formData.kurs" :placeholder="`Please input Kurs`" locale="en-US" :minFractionDigits="2" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex flex-col gap-1">
-                        <span class="text-xl font-bold">OFFER</span>
-                        <div class="grid grid-cols-2 gap-3 w-full p-4 bg-slate-200 rounded-lg">
-                            <div class="col-span-1 font-bold flex flex-col gap-3">
-                                <span>Offer dari Buyer</span>
-                                <InputNumber v-model="formData.offer.price" :placeholder="`Please input Offer Price`" locale="en-US" :minFractionDigits="2" />
-                            </div>
-                            <div class="col-span-1 font-bold flex flex-col gap-3">
-                                <span>Volume</span>
-                                <InputNumber v-model="formData.offer.volume" :placeholder="`Please input Volume`" locale="en-US" :minFractionDigits="2" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex w-full gap-2">
-                        <div class="flex flex-col gap-1 w-full">
-                            <span class="text-xl font-bold uppercase">Expected Margin</span>
-                            <div class="grid grid-cols-1 gap-3 w-full">
-                                <div class="p-4 col-span-1 bg-slate-200 font-bold rounded-lg flex flex-col gap-3">
-                                    <span>Margin</span>
-                                    <InputNumber v-model="formData.expected_margin" :placeholder="`Please input Expected Margin`" locale="en-US" :minFractionDigits="2" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex flex-col gap-1 w-full">
-                            <span class="text-xl font-bold uppercase">Mata Uang</span>
-                            <div class="grid grid-cols-1 gap-3 w-full">
-                                <div class="p-4 col-span-1 bg-slate-200 font-bold rounded-lg flex flex-col gap-3">
-                                    <span>Mata Uang</span>
-                                    <Select disabled v-model="formData.kurs_id" :options="listKurs" optionLabel="name" optionValue="id" filter placeholder="Pilih Mata Uang" class="w-full" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="p-8 flex flex-col gap-3 bg-slate-200 rounded-lg mt-5">
-                <span class="text-2xl font-bold">INL SIMULATION CALCULATOR FOR RECOMMENDED SELLING PRICE (SICAL RSP)</span>
-            </div>
-            <template #footer>
-                <div class="flex justify-end items-center gap-3">
-                    <button class="px-4 py-2 bg-emerald-600 text-white rounded-lg shadow-md hover:bg-emerald-700 flex gap-2 items-center justify-center">
-                        <i class="pi pi-save"></i>
-                        <span>Save</span>
-                    </button>
-                    <button class="px-4 py-2 bg-sky-700 text-white rounded-lg shadow-md hover:bg-sky-800 flex gap-2 items-center justify-center">
-                        <i class="pi pi-calculator"></i>
-                        <span>Calculate</span>
-                    </button>
-                </div>
-            </template>
-        </Drawer>
         <Card>
             <template #title>
                 <div class="flex gap-2 items-center mb-5">
-                    <span class="text-xl font-bold w-full">List Data</span>
+                    <span class="text-xl font-bold w-full">List Component</span>
                     <InputGroup>
                         <InputText placeholder="Search Components" v-model="search['global'].value" />
                         <InputGroupAddon>
@@ -452,7 +247,7 @@ const submitData = async () => {
                 </div>
             </template>
             <template #content>
-                <DataTable v-model:filters="search" :value="listTable" showGridlines paginator :rows="10" dataKey="period" :globalFilterFields="['date', 'name', 'kurs', 'product.name']">
+                <DataTable v-model:filters="search" :value="listTable" showGridlines paginator :rows="10" dataKey="period" :globalFilterFields="['date', 'value', 'remark']">
                     <Column field="name" sortable style="width: 25%; font-size: 0.7vw">
                         <template #header>
                             <div class="text-center w-full flex justify-center font-bold">
@@ -468,46 +263,31 @@ const submitData = async () => {
                     <Column field="name" sortable style="width: 25%; font-size: 0.7vw">
                         <template #header>
                             <div class="text-center w-full flex justify-center font-bold">
-                                <span>Nama Simulasi</span>
+                                <span>Nilai DMO</span>
                             </div>
                         </template>
                         <template #body="{ data }">
                             <div class="flex w-full justify-center">
-                                <span>{{ data.name }}</span>
+                                <span>{{ formatCurrency(Number(data.value).toFixed(2)) }}</span>
                             </div>
                         </template>
                     </Column>
                     <Column field="name" sortable style="width: 25%; font-size: 0.7vw">
                         <template #header>
                             <div class="text-center w-full flex justify-center font-bold">
-                                <span>Produk</span>
-                            </div>
-                        </template>
-                        <template #body="{ data }">
-                            <div class="flex w-full justify-center">
-                                <span>{{ data.product.name }}</span>
-                            </div>
-                        </template>
-                    </Column>
-                    <Column field="name" sortable style="width: 25%; font-size: 0.7vw">
-                        <template #header>
-                            <div class="text-center w-full flex justify-center font-bold">
-                                <span>Kurs</span>
+                                <span>Remarks</span>
                             </div>
                         </template>
                         <template #body="{ data }">
                             <div class="flex w-full justify-center text-center">
-                                <span>{{ formatCurrency(Number(data.kurs).toFixed(2)) }}</span>
+                                <span>{{ data.remark }}</span>
                             </div>
                         </template>
                     </Column>
 
                     <Column field="id" style="width: 5%; font-size: 0.7vw">
                         <template #body="{ data }">
-                            <div class="flex justify-center items center gap-2">
-                                <button @click="detailShow(data)" class="p-3 border rounded-full flex bg-gray-200 justify-center items-center hover:bg-pink-300 shadow-md transition-all duration-300">
-                                    <i class="pi pi-eye" style="font-size: 0.6vw"></i>
-                                </button>
+                            <div class="flex justify-center items center">
                                 <button @click="showDrawer(data)" class="p-3 border rounded-full flex bg-gray-200 justify-center items-center hover:bg-amber-300 shadow-md transition-all duration-300">
                                     <i class="pi pi-pencil" style="font-size: 0.6vw"></i>
                                 </button>
