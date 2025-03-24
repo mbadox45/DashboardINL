@@ -20,6 +20,7 @@ import CardHomeMaterial from '@/views/dashboard/report/operation/CardHomeMateria
 import CardHomeOperation from '@/views/dashboard/report/operation/CardHomeOperation.vue';
 import MarketReuters from '@/views/dashboard/report/others/MarketReuters.vue';
 import SdmView from '@/views/dashboard/report/others/SdmView.vue';
+import SicalRsp from '@/views/dashboard/report/others/SicalRsp.vue';
 import CardHomePackaging from '@/views/dashboard/report/packaging/CardHomePackaging.vue';
 import CardHomeSales from '@/views/dashboard/report/sales/CardHomeSales.vue';
 import CardHomeSupplyChain from '@/views/dashboard/report/scm/CardHomeSupplyChain.vue';
@@ -261,7 +262,10 @@ const loadDataSCM = async () => {
                             <market-reuters :formPush="formData" :datas="dataMarketReuters" />
                             <sdm-view class="col-span-2" :datas="dataSDM" />
                         </div>
-                        <card-home-material :formPush="formData" :laporanmaterial="dataLaporanMaterial" />
+                        <div class="grid grid-cols-3 gap-2">
+                            <card-home-material class="col-span-2" :formPush="formData" :laporanmaterial="dataLaporanMaterial" />
+                            <sical-rsp />
+                        </div>
                     </div>
                 </div>
                 <div class="flex gap-2 justify-center">
