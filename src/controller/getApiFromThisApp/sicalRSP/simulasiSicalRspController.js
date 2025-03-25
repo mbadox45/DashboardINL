@@ -535,8 +535,11 @@ export default new (class simulasiSicalRspController {
                             buyer_name: formData.offer.buyer_name,
                             price: formData.offer.price,
                             volume: formData.offer.volume
-                        }
+                        },
+                        costs: listCost,
+                        catatan: formData.catatan
                     };
+                    await this.addPost(form);
                     msg = {
                         severity: 'success',
                         content: 'Data berhasil ',

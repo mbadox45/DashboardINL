@@ -14,6 +14,7 @@ declare module 'vue' {
     Column: typeof import('primevue/column')['default']
     ColumnGroup: typeof import('primevue/columngroup')['default']
     DataTable: typeof import('primevue/datatable')['default']
+    DataView: typeof import('primevue/dataview')['default']
     DatePicker: typeof import('primevue/datepicker')['default']
     Dialog: typeof import('primevue/dialog')['default']
     Divider: typeof import('primevue/divider')['default']
@@ -41,6 +42,7 @@ declare module 'vue' {
     ScrollPanel: typeof import('primevue/scrollpanel')['default']
     Select: typeof import('primevue/select')['default']
     StatsWidget: typeof import('./src/components/dashboard/StatsWidget.vue')['default']
+    Toast: typeof import('primevue/toast')['default']
     TopbarWidget: typeof import('./src/components/landing/TopbarWidget.vue')['default']
   }
   export interface ComponentCustomProperties {
