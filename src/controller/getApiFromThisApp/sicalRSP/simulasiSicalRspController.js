@@ -477,13 +477,71 @@ export default new (class simulasiSicalRspController {
                 content: 'Data berhasil disimpan',
                 info: 'Success'
             };
-            if (formData.product_id != null && formData.date != null && formData.name != null && formData.kurs != null && formData.kurs_id != null && formData.expected_margin != null && formData.id_dmo != null && formData.dmo != null && formData.offer.buyer_name != null && formData.offer.price != null && formData.offer.volume != null) {
-                const catatan = formData.catatan
+            if (
+                formData.product_id != null &&
+                formData.date != null &&
+                formData.name != null &&
+                formData.kurs != null &&
+                formData.kurs_id != null &&
+                formData.expected_margin != null &&
+                formData.id_dmo != null &&
+                formData.dmo != null &&
+                formData.offer.buyer_name != null &&
+                formData.offer.price != null &&
+                formData.offer.volume != null
+            ) {
+                let kondisi;
+                const catatan = formData.catatan;
                 for (let i = 0; i < catatan.length; i++) {
-                    if (catatan[i].judul == ) {
-                        const element = array[i];
-
+                    if (catatan[i].judul != null) {
+                        if (i < catatan.length - 1) {
+                            continue;
+                        }
+                        kondisi = true;
+                    } else {
+                        msg = {
+                            severity: 'warn',
+                            content: 'Mohon data diisi dengan lengkap',
+                            info: 'Perhatian !'
+                        };
+                        kondisi = false;
+                        break;
                     }
+                }
+
+                if (kondisi == true) {
+                    const listCost = [];
+                    const costs = formData.costs;
+                    for (let i = 0; i < costs.length; i++) {
+                        const utils = costs[i].utils;
+                        for (let j = 0; j < utils.length; j++) {
+                            listCost.push({
+                                id_master_cost: costs[i].id,
+                                id_utilisasi: utils[j].id,
+                                value: utils[j].nilai
+                            });
+                        }
+                    }
+                    const form = {
+                        product_id: formData.product_id,
+                        date: formData.date,
+                        name: formData.name,
+                        kurs: formData.kurs,
+                        kurs_id: formData.kurs_id,
+                        expected_margin: formData.expected_margin,
+                        id_dmo: formData.id_dmo,
+                        dmo: formData.dmo,
+                        offer: {
+                            buyer_name: formData.offer.buyer_name,
+                            price: formData.offer.price,
+                            volume: formData.offer.volume
+                        }
+                    };
+                    msg = {
+                        severity: 'success',
+                        content: 'Data berhasil ',
+                        info: 'Success'
+                    };
                 }
             } else {
                 msg = {
