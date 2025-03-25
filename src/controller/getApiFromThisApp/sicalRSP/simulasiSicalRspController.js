@@ -286,6 +286,156 @@ export default new (class simulasiSicalRspController {
         }
     };
 
+    simulationCalc3 = async (formData) => {
+        try {
+            console.log(formData);
+            const costs = [];
+            const costForm = formData.costs;
+            for (let i = 0; i < costForm.length; i++) {
+                const util = costForm[i].utils;
+                for (let j = 0; j < util.length; j++) {
+                    costs.push({
+                        id_master_cost: costForm[i].id,
+                        id_utilisasi: util[j].id,
+                        value: util[j].nilai
+                    });
+                }
+            }
+
+            const form = {
+                product_id: formData.product_id,
+                kurs: formData.kurs,
+                expected_margin: formData.expected_margin,
+                id_dmo: formData.id_dmo,
+                offer: {
+                    price: formData.offer.price,
+                    volume: formData.offer.volume
+                },
+                costs: costs
+            };
+            const response = await simulasiRspAPI.getCalculate(form);
+            const load = response.data;
+            const data = load.data;
+            const utilisasi = data.utilisasi;
+            // console.log(utilisasi);
+            const table1 = [];
+            const table2 = [];
+            const table3 = [];
+            const table4 = [];
+
+            for (let i = 0; i < utilisasi.length; i++) {
+                // Table Simulasi 1
+                const cost = utilisasi[i].cost;
+                const product1 = {};
+                for (let j = 0; j < cost.length; j++) {
+                    product1[j + 1] = {
+                        name: cost[j].name,
+                        value: formatCurrency(Number(cost[j].value).toFixed(0)),
+                        usd: formatCurrency(Number(cost[j].usd).toFixed(0)),
+                        proportion: Number(cost[j].proportion).toFixed(0)
+                    };
+                }
+                table1.push({
+                    name: utilisasi[i].name,
+                    margin: utilisasi[i].marginValue,
+                    marginPercent: utilisasi[i].marginPercent,
+                    product: product1
+                });
+
+                // Table Simulasi 2
+                const tanpaDmo = utilisasi[i].tanpaDmo;
+                const fob = tanpaDmo.find((item) => item.name.toLowerCase().includes('fob'));
+                const loco = tanpaDmo.find((item) => item.name.toLowerCase().includes('loco'));
+                const denganPengaliDMO = utilisasi[i].biayaDmoDenganPengali;
+                const pengaliProduct = {};
+                for (let j = 0; j < denganPengaliDMO.length; j++) {
+                    pengaliProduct[j + 1] = {
+                        name: denganPengaliDMO[j].name,
+                        idr: formatCurrency(Number(denganPengaliDMO[j].idr).toFixed(0)),
+                        usd: formatCurrency(Number(denganPengaliDMO[j].usd).toFixed(0))
+                    };
+                }
+                table2.push({
+                    name: utilisasi[i].name,
+                    kerugianIdr: formatCurrency(Number(utilisasi[i].biayaDmoKerugian.idr).toFixed(0)),
+                    kerugianUsd: formatCurrency(Number(utilisasi[i].biayaDmoKerugian.usd).toFixed(0)),
+                    kerugianProportion: formatCurrency(Number(utilisasi[i].biayaDmoKerugian.proportion).toFixed(0)),
+                    fobIdr: formatCurrency(fob.idr),
+                    fobUsd: formatCurrency(Number(fob.usd).toFixed(0)),
+                    fobCpo: formatCurrency(Number(fob.cpoPlus).toFixed(0)),
+                    locoCpo: formatCurrency(Number(loco.cpoPlus).toFixed(0)),
+                    product: pengaliProduct
+                });
+
+                // Table Simulasi 3
+                const denganDmo = utilisasi[i].denganDmo;
+                const dmoProduct = {};
+                for (let j = 0; j < denganDmo.length; j++) {
+                    dmoProduct[j + 1] = {
+                        name: denganDmo[j].name,
+                        idr: formatCurrency(Number(denganDmo[j].idr).toFixed(0)),
+                        usd: formatCurrency(Number(denganDmo[j].usd).toFixed(0)),
+                        idrCpoPlus: formatCurrency(Number(denganDmo[j].idrCpoPlus).toFixed(0)),
+                        usdCpoPlus: formatCurrency(Number(denganDmo[j].usdCpoPlus).toFixed(0))
+                    };
+                }
+                table3.push({
+                    name: utilisasi[i].name,
+                    product: dmoProduct
+                });
+
+                // Table Simulasi 4
+                const rekom = utilisasi[i].rekomHargaJualDenganDmo;
+                const rekomProduct = {};
+                for (let j = 0; j < rekom.length; j++) {
+                    rekomProduct[j + 1] = {
+                        name: rekom[j].name,
+                        value: formatCurrency(Number(rekom[j].value).toFixed(0))
+                    };
+                }
+                const potensi = utilisasi[i].potensiLabaRugiDenganDmo;
+                const potensiProduct = {};
+                for (let j = 0; j < potensi.length; j++) {
+                    potensiProduct[j + 1] = {
+                        name: potensi[j].name,
+                        value: formatCurrency(Number(potensi[j].value).toFixed(0))
+                    };
+                }
+                table4.push(
+                    {
+                        name: utilisasi[i].name,
+                        analisa: 'Rekom Harga Jual',
+                        tanpaDMO: formatCurrency(Number(utilisasi[i].rekomHargaJualTanpaDmo).toFixed(0)),
+                        product: rekomProduct
+                    },
+                    {
+                        name: utilisasi[i].name,
+                        analisa: 'Potensi Laba (Rugi)',
+                        tanpaDMO: formatCurrency(Number(utilisasi[i].potensiLabaRugiTanpaDmo).toFixed(0)),
+                        product: potensiProduct
+                    }
+                );
+            }
+            return {
+                sim1: table1,
+                sim2: table2,
+                sim3: table3,
+                sim4: table4
+            };
+        } catch (error) {
+            const table1 = [];
+            const table2 = [];
+            const table3 = [];
+            const table4 = [];
+            return {
+                sim1: table1,
+                sim2: table2,
+                sim3: table3,
+                sim4: table4
+            };
+        }
+    };
+
     postData = async (form1, form2, form3) => {
         try {
             const cost = [];
@@ -317,6 +467,39 @@ export default new (class simulasiSicalRspController {
             return form;
         } catch (error) {
             return null;
+        }
+    };
+
+    postData2 = async (formData) => {
+        try {
+            let msg = {
+                severity: 'success',
+                content: 'Data berhasil disimpan',
+                info: 'Success'
+            };
+            if (formData.product_id != null && formData.date != null && formData.name != null && formData.kurs != null && formData.kurs_id != null && formData.expected_margin != null && formData.id_dmo != null && formData.dmo != null && formData.offer.buyer_name != null && formData.offer.price != null && formData.offer.volume != null) {
+                const catatan = formData.catatan
+                for (let i = 0; i < catatan.length; i++) {
+                    if (catatan[i].judul == ) {
+                        const element = array[i];
+
+                    }
+                }
+            } else {
+                msg = {
+                    severity: 'warn',
+                    content: 'Mohon data diisi dengan lengkap',
+                    info: 'Perhatian !'
+                };
+            }
+            return msg;
+        } catch (error) {
+            const msg = {
+                severity: 'error',
+                content: 'Proses gagal, silahkan hubungi tim IT',
+                info: 'Error'
+            };
+            return msg;
         }
     };
 })();
