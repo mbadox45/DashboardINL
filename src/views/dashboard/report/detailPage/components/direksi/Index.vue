@@ -90,7 +90,8 @@ const loadData = async () => {
     try {
         visibleLoadHistory.value = true;
         const list = [];
-        const data = await simulasiSicalRspController.getAll();
+        const response = await simulasiSicalRspController.getAll();
+        const data = response.sort((a, b) => b.id - a.id);
         for (let i = 0; i < data.length; i++) {
             list.push({
                 id: data[i].id,
