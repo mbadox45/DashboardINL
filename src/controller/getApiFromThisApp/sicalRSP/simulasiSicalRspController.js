@@ -288,7 +288,6 @@ export default new (class simulasiSicalRspController {
 
     simulationCalc3 = async (formData) => {
         try {
-            console.log(formData);
             const costs = [];
             const costForm = formData.costs;
             for (let i = 0; i < costForm.length; i++) {
@@ -436,46 +435,12 @@ export default new (class simulasiSicalRspController {
         }
     };
 
-    postData = async (form1, form2, form3) => {
-        try {
-            const cost = [];
-            for (let i = 0; i < form2.length; i++) {
-                const util = form2[i].util;
-                for (let j = 0; j < util.length; j++) {
-                    cost.push({
-                        id_master_cost: form2[i].id,
-                        value: util[j].nilai,
-                        id_utilisasi: util[j].id
-                    });
-                }
-            }
-            const form = {
-                product_id: 4,
-                name: form3.name,
-                kurs: form1.kurs,
-                expected_margin: form1.margin,
-                id_dmo: form1.id_dmo,
-                offer: {
-                    buyer_name: form3.buyer_name,
-                    price: form1.offer_buyer,
-                    volume: form1.volume
-                },
-                cost: cost,
-                catatan: form3.catatan
-            };
-
-            return form;
-        } catch (error) {
-            return null;
-        }
-    };
-
-    postData2 = async (formData) => {
+    postData = async (formData) => {
         try {
             let msg = {
-                severity: 'success',
-                content: 'Data berhasil disimpan',
-                info: 'Success'
+                severity: '',
+                content: '',
+                info: ''
             };
             if (
                 formData.product_id != null &&
@@ -494,10 +459,23 @@ export default new (class simulasiSicalRspController {
                 const catatan = formData.catatan;
                 for (let i = 0; i < catatan.length; i++) {
                     if (catatan[i].judul != null) {
-                        if (i < catatan.length - 1) {
-                            continue;
+                        const detail = catatan[i].detailCatatan;
+                        for (let j = 0; j < detail.length; j++) {
+                            if (detail[j].teks != null) {
+                                if (j < detail.length - 1) {
+                                    continue;
+                                }
+                                kondisi = true;
+                            } else {
+                                msg = {
+                                    severity: 'warn',
+                                    content: 'Mohon data diisi dengan lengkap',
+                                    info: 'Perhatian !'
+                                };
+                                kondisi = false;
+                                break;
+                            }
                         }
-                        kondisi = true;
                     } else {
                         msg = {
                             severity: 'warn',
@@ -539,12 +517,16 @@ export default new (class simulasiSicalRspController {
                         costs: listCost,
                         catatan: formData.catatan
                     };
-                    await this.addPost(form);
-                    msg = {
-                        severity: 'success',
-                        content: 'Data berhasil ',
-                        info: 'Success'
-                    };
+
+                    let response;
+                    if (formData.id == null) {
+                        response = await this.addPost(form);
+                    } else {
+                        response = await this.updatePost(formData.id, form);
+                    }
+                    msg.severity = response.status == true ? 'success' : 'error';
+                    msg.info = response.status == true ? 'Success' : 'Error';
+                    msg.content = response.msg;
                 }
             } else {
                 msg = {

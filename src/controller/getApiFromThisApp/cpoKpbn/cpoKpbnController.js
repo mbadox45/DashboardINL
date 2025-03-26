@@ -47,6 +47,16 @@ export default new (class cpoKpbnController {
             return null;
         }
     };
+    getLatest = async () => {
+        try {
+            const response = await cpoKpbnAPI.getLatest();
+            const load = response.data;
+            const data = load.data;
+            return data;
+        } catch (error) {
+            return null;
+        }
+    };
     getByID = async (id) => {
         try {
             const response = await cpoKpbnAPI.getByID(id);

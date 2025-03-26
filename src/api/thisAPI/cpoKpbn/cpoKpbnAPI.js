@@ -12,6 +12,9 @@ export default new (class cpoKpbnAPI {
     getAll() {
         return httpCommonThisAPI.get('cpo-kpbn');
     }
+    getLatest() {
+        return httpCommonThisAPI.get('cpo-kpbn/latest');
+    }
     getByPeriod(date) {
         return httpCommonThisAPI.post('cpo-kpbn/period', date);
     }

@@ -1,5 +1,6 @@
 <script setup>
 import { formatCurrency } from '@/controller/dummyController';
+import cpoKpbnController from '@/controller/getApiFromThisApp/cpoKpbn/cpoKpbnController';
 import kursController from '@/controller/getApiFromThisApp/kurs/kursController';
 import mataUangKursController from '@/controller/getApiFromThisApp/kurs/mataUangKursController';
 import productMasterController from '@/controller/getApiFromThisApp/master/productMasterController';
@@ -7,11 +8,13 @@ import dmoSicalRspController from '@/controller/getApiFromThisApp/sicalRSP/dmoSi
 import masterCostSicalRspController from '@/controller/getApiFromThisApp/sicalRSP/masterCostSicalRspController';
 import simulasiSicalRspController from '@/controller/getApiFromThisApp/sicalRSP/simulasiSicalRspController';
 import utilisasiSicalRspController from '@/controller/getApiFromThisApp/sicalRSP/utilisasiSicalRspController';
-import SimulationCalc from '@/views/dashboardManagement/direksi/components/SimulationCalc.vue';
 import { FilterMatchMode } from '@primevue/core/api';
 import moment from 'moment';
 import { useToast } from 'primevue/usetoast';
 import { onMounted, ref } from 'vue';
+
+// Components
+import SimulationCalc from '@/views/dashboardManagement/direksi/components/SimulationCalc.vue';
 
 const toast = useToast();
 
@@ -31,7 +34,11 @@ const kursData = ref({
     nilai: null,
     remark: null
 });
-const timeResponse = ref(3000);
+const cpoKpbn = ref({
+    nilai: null,
+    remark: null
+});
+const loadingCard1 = ref(false);
 const loadingSave = ref(false);
 const logFile = ref([]);
 const listMasterCost = ref([]);
@@ -46,7 +53,11 @@ let year = today.getFullYear();
 let day = today.getDate();
 const maxDate = ref(new Date());
 
+const setTime = ref(3000);
 let count = ref(0);
+
+const opRawMaterial = ref();
+const opKurs = ref();
 
 const formData = ref({
     id: null,
@@ -107,55 +118,12 @@ const loadData = async () => {
     }
 };
 
-const showDrawer = async (data) => {
-    try {
-        drawerCond.value = true;
-        messages.value = [];
-        if (data != null) {
-            const response = await simulasiSicalRspController.getByID(data.id);
-            const history = response.history;
-            const list = [];
-            for (let i = 0; i < history.length; i++) {
-                let from,
-                    to = null;
-                // if (history[i].changes.length == 0) {
-                //     from = null;
-                //     to = null;
-                // } else {
-                //     from = history[i].changes.name.old;
-                //     to = history[i].changes.name.new;
-                // }
-                list.push({
-                    action: history[i].action,
-                    user_name: history[i].user_name,
-                    date: moment(history[i].created_at).format('DD MMM YYYY - HH:mm:ss'),
-                    changes: from == null && to == null ? [] : []
-                });
-            }
-            logFile.value = list;
-            formData.value.id = data.id;
-            formData.value.date = moment(data.date, 'DD MMM YYYY').toDate();
-            formData.value.value = Number(data.value);
-            formData.value.remark = data.remark;
-            statusForm.value = 'edit';
-        } else {
-            logFile.value = [];
-            formData.value.id = null;
-            formData.value.date = null;
-            formData.value.value = null;
-            formData.value.remark = null;
-            statusForm.value = 'add';
-        }
-    } catch (error) {
-        messages.value = [];
-        drawerCond.value = true;
-        logFile.value = [];
-        formData.value.id = null;
-        formData.value.date = null;
-        formData.value.value = null;
-        formData.value.remark = null;
-        statusForm.value = 'add';
-    }
+const toggle = (event) => {
+    opRawMaterial.value.toggle(event);
+};
+
+const toggleKurs = (event) => {
+    opKurs.value.toggle(event);
 };
 
 const loadKurs = async () => {
@@ -178,7 +146,7 @@ const loadKursLatest = async () => {
     try {
         const response = await kursController.getByLatest({ idMataUang: formData.value.kurs_id });
         kursData.value.nilai = Number(response.value);
-        kursData.value.remark = `Jisdor Bank Indonesia Tanggal ${moment(response.tanggal).format('DD MMMM YYYY')}`;
+        kursData.value.remark = `Jisdor Bank Indonesia Tanggal ${moment(response.tanggal).format('DD MMMM YYYY')} - Rp. ${formatCurrency(kursData.value.nilai)}`;
         formData.value.kurs = kursData.value.nilai;
     } catch (error) {
         formData.value.kurs = 0;
@@ -194,6 +162,12 @@ const loadProduk = async () => {
 
 const loadMasterCost = async () => {
     listMasterCost.value = await masterCostSicalRspController.getAll();
+};
+
+const loadCPOKpbnLatest = async () => {
+    const response = await cpoKpbnController.getLatest();
+    cpoKpbn.value.nilai = response == null ? 0 : Number(response.Penetapan_Harga).toFixed(2);
+    cpoKpbn.value.remark = response == null ? '' : `Nilai di ambil dari Harga CPO KPBN per-tanggal ${moment(response.Tanggal).format('DD MMMM YYYY')} - Rp. ${formatCurrency(cpoKpbn.value.nilai)}`;
 };
 
 const loadUtilisasi = async () => {
@@ -215,12 +189,14 @@ const loadDMO = async () => {
 
 const detailShow = async (data) => {
     detailCond.value = true;
+    loadingCard1.value = true;
     await loadMasterCost();
     await loadUtilisasi();
     await loadProduk();
     await loadDMO();
     await loadKurs();
     await loadKursLatest();
+    await loadCPOKpbnLatest();
     if (data != null) {
         titleDetail.value = 'Update History';
         formData.value.id = data.id;
@@ -258,7 +234,27 @@ const detailShow = async (data) => {
                 utils: utils
             });
         }
-        formData.value.catatan = data.catatan;
+
+        formData.value.catatan = [];
+        const catatan = data.catatan;
+        for (let i = 0; i < catatan.length; i++) {
+            const detail = catatan[i].detail_catatan;
+            const detailCatatan = [];
+            for (let j = 0; j < detail.length; j++) {
+                detailCatatan.push({
+                    id: detail[j].id,
+                    id_catatan: detail[j].id_catatan,
+                    teks: detail[j].teks
+                });
+            }
+            formData.value.catatan.push({
+                id: catatan[i].id,
+                id_simulation: catatan[i].id_simulation,
+                judul: catatan[i].judul,
+                detailCatatan: detailCatatan
+            });
+        }
+        loadingCard1.value = false;
     } else {
         titleDetail.value = 'Create History';
         formData.value.name = `Simulation Calc ${moment().format('YYYYMMDD-HHmmss')}`;
@@ -275,12 +271,16 @@ const detailShow = async (data) => {
         formData.value.costs = [];
         for (let i = 0; i < listCost.length; i++) {
             const utils = [];
+            let nilai = 0;
+            if (listCost[i].name.toLowerCase().includes('raw material cost')) {
+                nilai = cpoKpbn.value.nilai;
+            }
             for (let j = 0; j < util.length; j++) {
                 utils.push({
                     id: util[j].id,
                     name: util[j].name,
                     value: util[j].value,
-                    nilai: 0
+                    nilai: nilai
                 });
             }
             formData.value.costs.push({
@@ -290,6 +290,7 @@ const detailShow = async (data) => {
             });
         }
         formData.value.catatan = [{ judul: '', detailCatatan: [{ teks: '' }] }];
+        loadingCard1.value = false;
     }
 };
 
@@ -322,9 +323,15 @@ const submitCalculate = async () => {
 };
 
 const submitData = async () => {
-    console.log(formData.value);
-    const response = await simulasiSicalRspController.postData2(formData.value);
+    const response = await simulasiSicalRspController.postData(formData.value);
     toast.add({ severity: response.severity, summary: response.info, detail: response.content, life: 3000 });
+    if (response.severity == 'success') {
+        setTimeout(function () {
+            visible.value = false;
+            detailCond.value = false;
+            loadData();
+        }, setTime.value);
+    }
     // messages.value = [{ severity: response.severity, content: response.content, id: count.value++, icon: response.icon }];
 };
 </script>
@@ -373,78 +380,34 @@ const submitData = async () => {
                 </div>
             </template>
         </Dialog>
-        <Drawer v-model:visible="drawerCond" position="right" class="!w-full md:!w-[30rem]">
-            <template #header>
-                <span class="text-[1vw] font-bold">Form Component</span>
-            </template>
-            <template #footer>
-                <div class="flex w-full justify-end pt-3 border-t">
-                    <span class="text-[0.7vw]"><span class="text-red-500 font-bold text-[1vw]">*</span> Wajib di Isi</span>
+        <Popover ref="opRawMaterial">
+            <div class="flex flex-col gap-4 w-[26rem]">
+                <div class="flex items-center gap-2">
+                    <i class="pi pi-question-circle text-yellow-600"></i>
+                    <span class="font-bold uppercase">Perhatian</span>
                 </div>
-            </template>
-            <div class="flex flex-col gap-4">
-                <transition-group name="p-message" tag="div" class="flex flex-col">
-                    <Message v-for="msg of messages" :key="msg.id" :severity="msg.severity" class="mt-4"><i :class="`pi ${msg.icon}`"></i> {{ msg.content }}</Message>
-                </transition-group>
-                <div class="flex flex-col gap-1">
-                    <label for="name">Tanggal <small class="text-red-500 font-bold">*</small></label>
-                    <DatePicker v-model="formData.date" dateFormat="yy-mm-dd" :maxDate="maxDate" showIcon placeholder="Please input tanggal" />
-                </div>
-                <div class="flex flex-col gap-1">
-                    <label for="name">Nilai DMO <small class="text-red-500 font-bold">*</small></label>
-                    <InputText v-model="formData.value" placeholder="Please input Value" disabled />
-                </div>
-                <div class="flex flex-col gap-1">
-                    <label for="name">Remarks <small class="text-red-500 font-bold">*</small></label>
-                    <InputText v-model="formData.remark" placeholder="Please input Remarks" />
-                </div>
-                <div class="flex flex-row-reverse w-full gap-3 mt-5">
-                    <button @click="refreshForm" class="px-3 py-2 w-full border rounded-lg hover:shadow-md hover:shadow-black transition-all duration-300 shadow-sm shadow-black flex items-center gap-2 justify-center">
-                        <i class="pi pi-refresh"></i><span>Reset</span>
-                    </button>
-                    <button
-                        @click="submitData"
-                        :disabled="loadingSave == true ? true : false"
-                        :class="loadingSave == true ? 'opacity-50' : 'opacity-100'"
-                        class="px-3 py-2 w-full border rounded-lg border-transparent hover:shadow-md hover:shadow-black hover:bg-emerald-800 transition-all duration-300 shadow-sm text-white shadow-black flex items-center gap-2 justify-center bg-emerald-700"
-                    >
-                        <i class="pi pi-save"></i><span>{{ loadingSave == true ? 'Saving..' : 'Save' }}</span>
-                    </button>
-                </div>
-                <span class="mt-3 px-3" v-if="statusForm == 'edit'">Log Activity</span>
-                <ScrollPanel v-if="statusForm == 'edit'" style="width: 100%; height: 22rem">
-                    <div class="flex flex-col gap-2 w-full p-3">
-                        <div class="flex flex-col pb-2 px-2" v-for="(item, index) in logFile" :key="index" :class="index < logFile.length ? 'border-b' : 'border-none'">
-                            <div class="flex items-center w-full gap-5">
-                                <i class="pi pi-user p-3 bg-pink-500 text-white rounded-full" style="font-size: 0.8vw"></i>
-                                <div class="flex flex-col gap-1 w-full">
-                                    <span class="text-[0.8vw] font-bold">{{ item.user_name }}</span>
-                                    <div class="flex items-center gap-3">
-                                        <i class="pi pi-clock" style="font-size: 0.5vw"></i>
-                                        <span class="text-[0.5vw]">{{ item.date }}</span>
-                                    </div>
-                                </div>
-                                <div class="w-full flex flex-col items-end gap-1">
-                                    <small class="uppercase text-[0.6vw] font-bold p-2 rounded-full bg-slate-200">{{ item.action }}</small>
-                                    <div class="flex flex-col items-end">
-                                        <span class="text-[0.6vw] flex flex-row-reverse gap-2 items-center justify-end" v-for="(change, indexes) in item.changes" :key="indexes"
-                                            ><i :class="change.icon" style="font-size: 0.5vw"></i><span class="font-bold">{{ change.name }}</span></span
-                                        >
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </ScrollPanel>
+                <span class="font-medium text-center">{{ cpoKpbn.remark }}</span>
             </div>
-        </Drawer>
+        </Popover>
+        <Popover ref="opKurs">
+            <div class="flex flex-col gap-4 w-[26rem]">
+                <div class="flex items-center gap-2">
+                    <i class="pi pi-question-circle text-yellow-600"></i>
+                    <span class="font-bold uppercase">Perhatian</span>
+                </div>
+                <span class="font-medium">{{ kursData.remark }}</span>
+            </div>
+        </Popover>
         <Drawer v-model:visible="detailCond" position="full">
             <template #header>
                 <span class="text-3xl font-bold flex items-center gap-3"
                     ><span>Detail - SICAL RSP</span> <small class="text-xs">{{ titleDetail }}</small></span
                 >
             </template>
-            <div class="flex flex-col gap-3 w-full">
+            <div v-if="loadingCard1 == true" class="flex w-full gap-10 items-center justify-center min-h-[10rem]">
+                <span>-- Loading Data --</span>
+            </div>
+            <div v-else class="flex flex-col gap-3 w-full">
                 <div class="p-4 bg-slate-200 font-bold rounded-lg flex gap-3">
                     <div class="flex flex-col w-full gap-1">
                         <label for="">Tanggal</label>
@@ -467,7 +430,10 @@ const submitData = async () => {
                     <span class="text-xl font-bold">INTERNAL COST (HPP)</span>
                     <div class="grid gap-3 w-full" :class="formData.costs.length > 4 ? 'grid-cols-4' : `grid-cols-${formData.costs.length}`">
                         <div class="p-4 col-span-1 bg-slate-200 font-bold rounded-lg flex flex-col gap-3" v-for="(costs, index) in formData.costs" :key="index">
-                            <span>{{ costs.name }}</span>
+                            <div class="flex w-full justify-between items-center">
+                                <span>{{ costs.name }}</span>
+                                <i v-show="costs.name.toLowerCase().includes('raw material')" style="font-size: 0.8vw" class="pi pi-question-circle text-yellow-500" @click="toggle"></i>
+                            </div>
                             <div class="flex flex-col gap-2">
                                 <div class="flex flex-col" v-for="(utils, itils) in costs.utils" :key="itils">
                                     <small>{{ utils.name }}</small>
@@ -486,7 +452,10 @@ const submitData = async () => {
                                 <InputNumber v-model="formData.dmo" :placeholder="`Please input DMO`" locale="en-US" :minFractionDigits="2" disabled />
                             </div>
                             <div class="col-span-1 font-bold flex flex-col gap-3">
-                                <span>Kurs</span>
+                                <div class="flex w-full justify-between items-center">
+                                    <span>Kurs</span>
+                                    <i style="font-size: 0.8vw" class="pi pi-question-circle text-yellow-500" @click="toggleKurs"></i>
+                                </div>
                                 <InputNumber v-model="formData.kurs" :placeholder="`Please input Kurs`" locale="en-US" :minFractionDigits="2" />
                             </div>
                         </div>
@@ -529,7 +498,7 @@ const submitData = async () => {
                     </div>
                 </div>
             </div>
-            <div class="p-8 flex w-full flex-col gap-3 bg-slate-200 rounded-lg mt-5">
+            <div v-if="loadingCard1 == false" class="p-8 flex w-full flex-col gap-3 bg-slate-200 rounded-lg mt-5">
                 <span class="text-2xl font-bold">INL SIMULATION CALCULATOR FOR RECOMMENDED SELLING PRICE (SICAL RSP)</span>
                 <div class="flex w-full">
                     <simulation-calc v-if="calcResult != null" :datas="calcResult" />
