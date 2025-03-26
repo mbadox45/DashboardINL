@@ -243,6 +243,7 @@ const removeDetailCatatan = (index, detailIndex) => {
 
 const loadInputData = async () => {
     try {
+        formData.value.id = null;
         formData.value.name = `Simulation Calc ${moment().format('YYYYMMDD-HHmmss')}`;
         formData.value.date = moment().toDate();
         formData.value.kurs_id = 1;
@@ -305,6 +306,7 @@ const loadInputData = async () => {
         listCatatan.value = catatan;
         loadingCard1.value = false;
     } catch (error) {
+        formData.value.id = null;
         formData.value.name = `Simulation Calc ${moment().format('YYYYMMDD-HHmmss')}`;
         formData.value.date = moment().toDate();
         formData.value.kurs_id = 1;
