@@ -390,6 +390,7 @@ const detailShow = async (data) => {
     }
 
     formData.value.catatan = [];
+    listCatatan.value = [];
     const catatan = data.catatan;
     for (let i = 0; i < catatan.length; i++) {
         const detail = catatan[i].detail_catatan;
@@ -402,6 +403,12 @@ const detailShow = async (data) => {
             });
         }
         formData.value.catatan.push({
+            id: catatan[i].id,
+            id_simulation: catatan[i].id_simulation,
+            judul: catatan[i].judul,
+            detailCatatan: detailCatatan
+        });
+        listCatatan.value.push({
             id: catatan[i].id,
             id_simulation: catatan[i].id_simulation,
             judul: catatan[i].judul,
