@@ -278,6 +278,7 @@ const loadInputData = async () => {
             }
         }
         formData.value.catatan = [{ judul: '', detailCatatan: [{ teks: '' }] }];
+        listCatatan.value = [];
 
         const master = listMasterCost.value;
         const util = listUtilisasi.value;
@@ -303,7 +304,6 @@ const loadInputData = async () => {
             });
         }
         formData.value.costs = list;
-        listCatatan.value = catatan;
         loadingCard1.value = false;
     } catch (error) {
         formData.value.id = null;
