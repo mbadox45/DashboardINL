@@ -277,7 +277,7 @@ const loadInputData = async () => {
                 });
             }
         }
-        formData.value.catatan = catatan;
+        formData.value.catatan = [{ judul: '', detailCatatan: [{ teks: '' }] }];
 
         const master = listMasterCost.value;
         const util = listUtilisasi.value;
