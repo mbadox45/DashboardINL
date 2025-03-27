@@ -1,4 +1,5 @@
 <script setup>
+import { formatCurrency } from '@/controller/dummyController';
 import masterCostSicalRspController from '@/controller/getApiFromThisApp/sicalRSP/masterCostSicalRspController';
 import pengaliSicalRspController from '@/controller/getApiFromThisApp/sicalRSP/pengaliSicalRspController';
 import { defineProps, onMounted, ref, watch } from 'vue';
@@ -160,7 +161,9 @@ watch(() => props.datas, loadData, { immediate: true });
                     <Column>
                         <template #body="{ data }">
                             <div class="flex flex-col justify-center text-center">
-                                <small class="font-bold text-base">{{ data.product?.[product.id]?.value }}</small>
+                                <strong class="text-base" :class="data.product?.[product.id].value < 0 ? 'text-red-500' : ''">{{
+                                    data.product?.[product.id].value < 0 ? `(${formatCurrency(data.product?.[product.id].value * -1)})` : formatCurrency(data.product?.[product.id].value)
+                                }}</strong>
                                 <small v-if="data.product?.[product.id]?.proportion != 0" class="text-gray-500"> ({{ data.product?.[product.id]?.proportion }}%) </small>
                             </div>
                         </template>
@@ -168,7 +171,9 @@ watch(() => props.datas, loadData, { immediate: true });
                     <Column>
                         <template #body="{ data }">
                             <div class="flex justify-center">
-                                <small class="font-bold text-base">{{ data.product?.[product.id].usd }}</small>
+                                <strong class="text-base" :class="data.product?.[product.id].usd < 0 ? 'text-red-500' : ''">{{
+                                    data.product?.[product.id].usd < 0 ? `(${formatCurrency(data.product?.[product.id].usd * -1)})` : formatCurrency(data.product?.[product.id].usd)
+                                }}</strong>
                             </div>
                         </template>
                     </Column>
@@ -176,7 +181,7 @@ watch(() => props.datas, loadData, { immediate: true });
                 <Column field="name">
                     <template #body="{ data }">
                         <div class="flex justify-center items-center w-full gap-2">
-                            <strong class="text-base">{{ data.margin }}</strong>
+                            <strong class="text-base">{{ formatCurrency(Number(data.margin).toFixed(0)) }}</strong>
                         </div>
                     </template>
                 </Column>
@@ -330,35 +335,35 @@ watch(() => props.datas, loadData, { immediate: true });
                 <Column field="fobIdr">
                     <template #body="{ data }">
                         <div class="flex justify-center items-center gap-2">
-                            <strong class="text-base">{{ data.fobIdr }}</strong>
+                            <strong class="text-base" :class="data.fobIdr < 0 ? 'text-red-500' : ''">{{ data.fobIdr < 0 ? `(${formatCurrency(data.fobIdr * -1)})` : formatCurrency(data.fobIdr) }}</strong>
                         </div>
                     </template>
                 </Column>
                 <Column field="name">
                     <template #body="{ data }">
                         <div class="flex justify-center items-center gap-2">
-                            <strong class="text-base">{{ data.fobUsd }}</strong>
+                            <strong class="text-base" :class="data.fobUsd < 0 ? 'text-red-500' : ''">{{ data.fobUsd < 0 ? `(${formatCurrency(data.fobUsd * -1)})` : formatCurrency(data.fobUsd) }}</strong>
                         </div>
                     </template>
                 </Column>
                 <Column field="name">
                     <template #body="{ data }">
                         <div class="flex justify-center items-center gap-2">
-                            <strong class="text-base">{{ data.fobCpo }}</strong>
+                            <strong class="text-base" :class="data.fobCpo < 0 ? 'text-red-500' : ''">{{ data.fobCpo < 0 ? `(${formatCurrency(data.fobCpo * -1)})` : formatCurrency(data.fobCpo) }}</strong>
                         </div>
                     </template>
                 </Column>
                 <Column field="name">
                     <template #body="{ data }">
                         <div class="flex justify-center items-center gap-2">
-                            <strong class="text-base">{{ data.locoCpo }}</strong>
+                            <strong class="text-base" :class="data.locoCpo < 0 ? 'text-red-500' : ''">{{ data.locoCpo < 0 ? `(${formatCurrency(data.locoCpo * -1)})` : formatCurrency(data.locoCpo) }}</strong>
                         </div>
                     </template>
                 </Column>
                 <Column field="name">
                     <template #body="{ data }">
                         <div class="flex flex-col justify-center items-center gap-2">
-                            <strong class="text-base">{{ data.kerugianIdr }}</strong>
+                            <strong class="text-base" :class="data.kerugianIdr < 0 ? 'text-red-500' : ''">{{ data.kerugianIdr < 0 ? `(${formatCurrency(data.kerugianIdr * -1)})` : formatCurrency(data.kerugianIdr) }}</strong>
                             <small v-if="data.kerugianProportion && data.kerugianProportion != 0" class="text-gray-500"> ({{ data.kerugianProportion }}%) </small>
                         </div>
                     </template>
@@ -366,7 +371,7 @@ watch(() => props.datas, loadData, { immediate: true });
                 <Column field="name">
                     <template #body="{ data }">
                         <div class="flex justify-center items-center gap-2">
-                            <strong class="text-base">{{ data.kerugianUsd }}</strong>
+                            <strong class="text-base" :class="data.kerugianUsd < 0 ? 'text-red-500' : ''">{{ data.kerugianUsd < 0 ? `(${formatCurrency(data.kerugianUsd * -1)})` : formatCurrency(data.kerugianUsd) }}</strong>
                         </div>
                     </template>
                 </Column>
@@ -374,7 +379,9 @@ watch(() => props.datas, loadData, { immediate: true });
                     <Column field="name">
                         <template #body="{ data }">
                             <div class="flex justify-center items-center gap-2">
-                                <strong class="text-base">{{ data.product?.[pengali.id].idr }}</strong>
+                                <strong class="text-base" :class="data.product?.[pengali.id].idr < 0 ? 'text-red-500' : ''">{{
+                                    data.product?.[pengali.id].idr < 0 ? `(${formatCurrency(data.product?.[pengali.id].idr * -1)})` : formatCurrency(data.product?.[pengali.id].idr)
+                                }}</strong>
                             </div>
                         </template>
                     </Column>
@@ -480,12 +487,18 @@ watch(() => props.datas, loadData, { immediate: true });
                         <template #body="{ data }">
                             <div class="flex justify-center items-center gap-2">
                                 <strong class="text-base">{{ data.product?.[pengali.id].idr }}</strong>
+                                <strong class="text-base" :class="data.product?.[pengali.id].idr < 0 ? 'text-red-500' : ''">{{
+                                    data.product?.[pengali.id].idr < 0 ? `(${formatCurrency(data.product?.[pengali.id].idr * -1)})` : formatCurrency(data.product?.[pengali.id].idr)
+                                }}</strong>
                             </div>
                         </template>
                     </Column>
                     <Column field="name">
                         <template #body="{ data }">
                             <div class="flex justify-center items-center gap-2">
+                                <strong class="text-base" :class="data.product?.[pengali.id].usd < 0 ? 'text-red-500' : ''">{{
+                                    data.product?.[pengali.id].usd < 0 ? `(${formatCurrency(data.product?.[pengali.id].usd * -1)})` : formatCurrency(data.product?.[pengali.id].usd)
+                                }}</strong>
                                 <strong class="text-base">{{ data.product?.[pengali.id].usd }}</strong>
                             </div>
                         </template>
@@ -493,14 +506,18 @@ watch(() => props.datas, loadData, { immediate: true });
                     <Column field="name">
                         <template #body="{ data }">
                             <div class="flex justify-center items-center gap-2">
-                                <strong class="text-base">{{ data.product?.[pengali.id].idrCpoPlus }}</strong>
+                                <strong class="text-base" :class="data.product?.[pengali.id].idrCpoPlus < 0 ? 'text-red-500' : ''">{{
+                                    data.product?.[pengali.id].idrCpoPlus < 0 ? `(${formatCurrency(data.product?.[pengali.id].idrCpoPlus * -1)})` : formatCurrency(data.product?.[pengali.id].idrCpoPlus)
+                                }}</strong>
                             </div>
                         </template>
                     </Column>
                     <Column field="name">
                         <template #body="{ data }">
                             <div class="flex justify-center items-center gap-2">
-                                <strong class="text-base">{{ data.product?.[pengali.id].usdCpoPlus }}</strong>
+                                <strong class="text-base" :class="data.product?.[pengali.id].usdCpoPlus < 0 ? 'text-red-500' : ''">{{
+                                    data.product?.[pengali.id].usdCpoPlus < 0 ? `(${formatCurrency(data.product?.[pengali.id].usdCpoPlus * -1)})` : formatCurrency(data.product?.[pengali.id].usdCpoPlus)
+                                }}</strong>
                             </div>
                         </template>
                     </Column>
@@ -570,7 +587,7 @@ watch(() => props.datas, loadData, { immediate: true });
                 <Column field="name">
                     <template #body="{ data }">
                         <div class="flex justify-center items-center gap-2">
-                            <strong class="text-base">{{ data.tanpaDMO }}</strong>
+                            <strong class="text-base" :class="data.tanpaDMO < 0 ? 'text-red-500' : ''">{{ data.tanpaDMO < 0 ? `(${formatCurrency(data.tanpaDMO * -1)})` : formatCurrency(data.tanpaDMO) }}</strong>
                         </div>
                     </template>
                 </Column>
@@ -578,7 +595,9 @@ watch(() => props.datas, loadData, { immediate: true });
                     <Column field="name">
                         <template #body="{ data }">
                             <div class="flex justify-center items-center gap-2">
-                                <strong class="text-base">{{ data.product?.[pengali.id].value }}</strong>
+                                <strong class="text-base" :class="data.product?.[pengali.id].value < 0 ? 'text-red-500' : ''">{{
+                                    data.product?.[pengali.id].value < 0 ? `(${formatCurrency(data.product?.[pengali.id].value * -1)})` : formatCurrency(data.product?.[pengali.id].value)
+                                }}</strong>
                             </div>
                         </template>
                     </Column>

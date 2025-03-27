@@ -359,7 +359,7 @@ export default new (class simulasiSicalRspController {
                     kerugianIdr: formatCurrency(Number(utilisasi[i].biayaDmoKerugian.idr).toFixed(0)),
                     kerugianUsd: formatCurrency(Number(utilisasi[i].biayaDmoKerugian.usd).toFixed(0)),
                     kerugianProportion: formatCurrency(Number(utilisasi[i].biayaDmoKerugian.proportion).toFixed(0)),
-                    fobIdr: formatCurrency(fob.idr),
+                    fobIdr: formatCurrency(Number(fob.idr).toFixed(0)),
                     fobUsd: formatCurrency(Number(fob.usd).toFixed(0)),
                     fobCpo: formatCurrency(Number(fob.cpoPlus).toFixed(0)),
                     locoCpo: formatCurrency(Number(loco.cpoPlus).toFixed(0)),
@@ -389,7 +389,7 @@ export default new (class simulasiSicalRspController {
                 for (let j = 0; j < rekom.length; j++) {
                     rekomProduct[j + 1] = {
                         name: rekom[j].name,
-                        value: formatCurrency(Number(rekom[j].value).toFixed(0))
+                        value: Number(rekom[j].value).toFixed(0)
                     };
                 }
                 const potensi = utilisasi[i].potensiLabaRugiDenganDmo;
@@ -397,20 +397,20 @@ export default new (class simulasiSicalRspController {
                 for (let j = 0; j < potensi.length; j++) {
                     potensiProduct[j + 1] = {
                         name: potensi[j].name,
-                        value: formatCurrency(Number(potensi[j].value).toFixed(0))
+                        value: Number(potensi[j].value).toFixed(0)
                     };
                 }
                 table4.push(
                     {
                         name: utilisasi[i].name,
                         analisa: 'Rekom Harga Jual',
-                        tanpaDMO: formatCurrency(Number(utilisasi[i].rekomHargaJualTanpaDmo).toFixed(0)),
+                        tanpaDMO: Number(utilisasi[i].rekomHargaJualTanpaDmo).toFixed(0),
                         product: rekomProduct
                     },
                     {
                         name: utilisasi[i].name,
                         analisa: 'Potensi Laba (Rugi)',
-                        tanpaDMO: formatCurrency(Number(utilisasi[i].potensiLabaRugiTanpaDmo).toFixed(0)),
+                        tanpaDMO: Number(utilisasi[i].potensiLabaRugiTanpaDmo).toFixed(0),
                         product: potensiProduct
                     }
                 );
