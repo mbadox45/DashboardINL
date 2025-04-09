@@ -9,17 +9,18 @@ import masterCostSicalRspController from '@/controller/getApiFromThisApp/sicalRS
 import pengaliSicalRspController from '@/controller/getApiFromThisApp/sicalRSP/pengaliSicalRspController';
 import simulasiSicalRspController from '@/controller/getApiFromThisApp/sicalRSP/simulasiSicalRspController';
 import utilisasiSicalRspController from '@/controller/getApiFromThisApp/sicalRSP/utilisasiSicalRspController';
-import TopBar from '@/views/dashboard/layout/components/TopBar.vue';
 import moment from 'moment';
 import { useConfirm } from 'primevue/useconfirm';
 import { useToast } from 'primevue/usetoast';
 import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 // Components
 import SimulationCalc from '@/views/dashboardManagement/direksi/components/SimulationCalc.vue';
 
 const toast = useToast();
 const confirm = useConfirm();
+const router = useRouter();
 
 const listTable = ref([]);
 const listMasterCost = ref([]);
@@ -444,17 +445,24 @@ const postData = async () => {
         }, setTime.value);
     }
 };
+
+const goBack = async () => {
+    router.push({ path: '/' });
+};
 </script>
 
 <template>
     <div class="flex bg-neutral-950 min-h-screen font-mono text-white app-dark w-full py-8 px-6 flex-col gap-5">
         <Toast />
         <ConfirmPopup group="customDialog"></ConfirmPopup>
-        <TopBar :onDateChange="handleDateChange" />
+        <!-- <TopBar :onDateChange="handleDateChange" /> -->
         <Card style="color: white; --tw-bg-opacity: 1; background-color: #0b2838">
             <template #title>
-                <div class="flex w-full items-center justify-center">
-                    <span class="font-bold w-full text-3xl text-center">ASUMSI DASAR PERHITUNGAN - SICAL RSP</span>
+                <div class="flex w-full items-center justify-center gap-5">
+                    <button @click="goBack" class="p-3 flex rounded-full items-center justify-center border-2 hover:bg-[#0B666A] hover:border-[#0B666A] duration-300 transition-all">
+                        <i class="pi pi-arrow-left font-bold"></i>
+                    </button>
+                    <span class="font-bold w-full text-3xl">ASUMSI DASAR PERHITUNGAN - SICAL RSP</span>
                     <div class="flex justify-end w-full gap-2">
                         <Button label="Calculate" icon="pi pi-calculator" @click="loadSimulasi" :style="{ backgroundColor: '#205781', color: 'white', borderColor: '#205781' }" />
                         <Button label="Reset" icon="pi pi-refresh" @click="reset" :style="{ backgroundColor: '#A31D1D', color: 'white', borderColor: '#0b2838' }" />
