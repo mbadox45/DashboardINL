@@ -238,32 +238,42 @@ export default new (class scmDetailController {
             const list = [];
             const series = [];
             const label = [];
+            let totalQty = 0;
+            let totalValue = 0;
             const response = await outstandingCpoScmController.getByPeriod();
             if (response != null) {
                 const value = [];
                 const data = response.data;
-                const top5 = data.sort((a, b) => b.value - a.value).slice(0, 5); // Ambil 5 nilai teratas
+                totalQty = response.totalQty;
+                totalValue = response.totalValue;
+
+                const top5 = [...data].sort((a, b) => a.value - b.value).slice(0, 15);
                 for (let i = 0; i < top5.length; i++) {
-                    value.push(top5[i].value);
+                    value.push(top5[i].qty);
                     label.push([top5[i].kontrak, top5[i].supplier.name]);
-                    list.push({
-                        supplier: top5[i].supplier.name,
-                        kontrak: top5[i].kontrak,
-                        qty: formatCurrency(Number(top5[i].qty).toFixed(2)),
-                        harga: formatCurrency(Number(top5[i].harga).toFixed(2)),
-                        value: formatCurrency(Number(top5[i].value).toFixed(2))
-                    });
                 }
+
                 series.push({
-                    name: 'Total Harga',
+                    name: 'Qty (Kg)',
                     data: value
                 });
+
+                for (let i = 0; i < data.length; i++) {
+                    list.push({
+                        supplier: data[i].supplier.name,
+                        kontrak: data[i].kontrak,
+                        qty: formatCurrency(Number(data[i].qty).toFixed(2)),
+                        harga: formatCurrency(Number(data[i].harga).toFixed(2)),
+                        value: formatCurrency(Number(data[i].value).toFixed(2))
+                    });
+                }
             }
-            return { table: list, series: series, chart: barHorizontalChartApex(label) };
+            return { table: list, series: series, chart: barHorizontalChartApex(label), totalQty, totalValue };
         } catch (error) {
             return null;
         }
     };
+
     actualIncomingCpo = async (form) => {
         try {
             const list = [];

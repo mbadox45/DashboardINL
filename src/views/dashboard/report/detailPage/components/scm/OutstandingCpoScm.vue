@@ -1,5 +1,4 @@
 <script setup>
-// import { bulkySalesChart, cashFlowData } from '@/controller/report/OperationReport';
 import { defineProps, onMounted, ref, watch } from 'vue';
 import VueApexCharts from 'vue3-apexcharts';
 
@@ -17,13 +16,10 @@ const listdata = ref({
     name: null
 });
 
-const listChart = ref(null);
 const listTable = ref(null);
-const bebanProduksi = ref(0);
-const rpKgTotal = ref(0);
-
+const totalQty = ref(0);
+const totalValue = ref(0);
 const isLoading = ref(true);
-// const dataCashFlow = ref([]);
 
 onMounted(() => {
     loadData();
@@ -37,13 +33,13 @@ const loadData = async () => {
         };
         if (response != null) {
             listTable.value = response;
+            totalQty.value = response.totalQty;
+            totalValue.value = response.totalValue;
         }
-
-        // dataCashFlow.value = cashFlowData();
     } catch (error) {
         console.error('Error loading data:', error);
     } finally {
-        isLoading.value = false; // Turn off the loading state after the data has loaded
+        isLoading.value = false;
     }
 };
 
@@ -51,20 +47,25 @@ watch(() => props.datas, loadData, { immediate: true });
 </script>
 
 <template>
-    <div class="flex flex-col w-full items-center gap-5 pb-10">
-        <!-- Chart Title -->
-        <span class="text-[1.5vw] font-bold uppercase">
-            <!-- {{ listdata.name || 'Loading...' }} -->
-            Outstanding CPO
-        </span>
-        <!-- Loading Indicator -->
+    <div class="flex flex-col w-full items-center gap-3 pb-10">
+        <span class="text-[1vw] font-bold uppercase"> Top 15 Outstanding CPO </span>
         <div v-if="isLoading" class="flex justify-center items-center w-full h-[380px]">
             <span>Loading chart...</span>
         </div>
 
         <div v-else class="w-full flex flex-col gap-4">
-            <VueApexCharts v-if="listTable != null" :series="listTable.series" :options="listTable.chart" height="380vw" class="w-auto mt-5" style="z-index: 1 !important" />
+            <VueApexCharts v-if="listTable != null" :series="listTable.series" :options="listTable.chart" height="760vw" class="w-auto mt-5" style="z-index: 1 !important" />
             <Divider />
+            <div class="flex flex-row justify-end px-3 text-sm text-white font-semibold gap-x-8">
+                <div class="flex items-center gap-1">
+                    <span class="text-[0.7vw]">Total Quantity (Kg):</span>
+                    <span class="text-[1vw] text-amber-400">{{ totalQty }}</span>
+                </div>
+                <div class="flex items-center gap-1">
+                    <span class="text-[0.7vw]">Total Value (Rp):</span>
+                    <span class="text-[1vw] text-amber-400">{{ totalValue }}</span>
+                </div>
+            </div>
             <DataTable v-if="listTable != null" :value="listTable.table" showGridlines removableSort class="w-full rounded-xl" tableStyle="background-color:#00000;">
                 <Column field="kontrak" sortable headerStyle="background-color: #196f3d;" style="background-color: black; color: white">
                     <template #header>
@@ -88,7 +89,7 @@ watch(() => props.datas, loadData, { immediate: true });
                 </Column>
                 <Column field="harga" sortable headerStyle="background-color: #196f3d;" style="background-color: black; color: white">
                     <template #header>
-                        <span class="flex justify-center items-center w-full text-center text-[0.8vw]">Harga (Rp)</span>
+                        <span class="flex justify-center items-center w-full text-center text-[0.8vw]">Harga (Rp/Kg)</span>
                     </template>
                     <template #body="{ data }">
                         <div class="w-full flex justify-end items-center">
@@ -108,7 +109,7 @@ watch(() => props.datas, loadData, { immediate: true });
                 </Column>
                 <Column field="value" sortable headerStyle="background-color: #196f3d;" style="background-color: black; color: white">
                     <template #header>
-                        <span class="flex justify-center items-center w-full text-center text-[0.8vw]">Total Harga (Rp)</span>
+                        <span class="flex justify-center items-center w-full text-center text-[0.8vw]">Nilai (Rp)</span>
                     </template>
                     <template #body="{ data }">
                         <div class="w-full flex justify-end items-center">

@@ -65,16 +65,19 @@ export default new (class supplyChainHomeController {
             const response = await outstandingCpoScmController.getByPeriod();
             let result = {
                 total: 0,
+                qty: 0,
                 supplier: []
             };
             if (response != null) {
                 result.total = formatCurrency(Number(response.totalValue).toFixed(2));
+                result.qty = formatCurrency(Number(response.totalQty).toFixed(2));
                 const data = response.data.sort((a, b) => b.id - a.id);
                 const supplier = [];
                 for (let i = 0; i < 2; i++) {
                     supplier.push({
                         supplier: data[i].supplier.name,
-                        value: formatCurrency(Number(data[i].value).toFixed(2))
+                        value: formatCurrency(Number(data[i].value).toFixed(2)),
+                        qty: formatCurrency(Number(data[i].qty).toFixed(2))
                     });
                 }
                 result.supplier = supplier;
