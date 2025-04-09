@@ -9,6 +9,7 @@ import masterCostSicalRspController from '@/controller/getApiFromThisApp/sicalRS
 import pengaliSicalRspController from '@/controller/getApiFromThisApp/sicalRSP/pengaliSicalRspController';
 import simulasiSicalRspController from '@/controller/getApiFromThisApp/sicalRSP/simulasiSicalRspController';
 import utilisasiSicalRspController from '@/controller/getApiFromThisApp/sicalRSP/utilisasiSicalRspController';
+import TopBar from '@/views/dashboard/layout/components/TopBar.vue';
 import moment from 'moment';
 import { useConfirm } from 'primevue/useconfirm';
 import { useToast } from 'primevue/usetoast';
@@ -449,10 +450,11 @@ const postData = async () => {
     <div class="flex bg-neutral-950 min-h-screen font-mono text-white app-dark w-full py-8 px-6 flex-col gap-5">
         <Toast />
         <ConfirmPopup group="customDialog"></ConfirmPopup>
+        <TopBar :onDateChange="handleDateChange" />
         <Card style="color: white; --tw-bg-opacity: 1; background-color: #0b2838">
             <template #title>
                 <div class="flex w-full items-center justify-center">
-                    <span class="font-bold w-full text-3xl">ASUMSI DASAR PERHITUNGAN - SICAL RSP</span>
+                    <span class="font-bold w-full text-3xl text-center">ASUMSI DASAR PERHITUNGAN - SICAL RSP</span>
                     <div class="flex justify-end w-full gap-2">
                         <Button label="Calculate" icon="pi pi-calculator" @click="loadSimulasi" :style="{ backgroundColor: '#205781', color: 'white', borderColor: '#205781' }" />
                         <Button label="Reset" icon="pi pi-refresh" @click="reset" :style="{ backgroundColor: '#A31D1D', color: 'white', borderColor: '#0b2838' }" />
@@ -487,7 +489,7 @@ const postData = async () => {
                         </div>
                     </div>
                     <div class="flex w-full flex-col gap-2">
-                        <span class="font-bold text-xl text-neutral-300">INTERNAL COST (HPP) </span>
+                        <span class="font-bold text-xl text-neutral-300 mt-4">INTERNAL COST (HPP) </span>
                         <div class="grid grid-cols-4 gap-7 w-full">
                             <div v-for="(internal, index) in formData.costs" :key="index" class="flex flex-col col-span-1 gap-1 w-full p-4 rounded-xl text-white" :style="{ backgroundColor: '#0B666A' }">
                                 <div class="flex w-full justify-between items-center">
