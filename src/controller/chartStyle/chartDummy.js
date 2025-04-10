@@ -601,6 +601,23 @@ export const barChartOptionsApex = (labels, color, strokeColor, dataLabelStat, t
                 colors: ['#fff']
             },
             offsetY: 10,
+            background: {
+                enabled: true,
+                foreColor: '#04144d',
+                padding: 4,
+                borderRadius: 2,
+                borderWidth: 1,
+                borderColor: '#04144d',
+                opacity: 1,
+                dropShadow: {
+                    enabled: true,
+                    top: 1,
+                    left: 1,
+                    blur: 1,
+                    color: '#000',
+                    opacity: 0.45
+                }
+            },
             formatter: function (value) {
                 if (value === 0) {
                     return '';

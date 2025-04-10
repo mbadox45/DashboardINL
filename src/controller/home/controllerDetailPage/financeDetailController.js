@@ -37,7 +37,7 @@ export default new (class financeDetailController {
             // CFF
             const mataUang = response[0].mata_uang;
             const label = 'Mata Uang (' + mataUang + ')';
-            const type = 'bar';
+            const type = 'line';
             const color = ['rgba(204, 4, 4, 0.6)'];
             const strokeColor = ['rgba(204, 4, 4, 1'];
             const dataLabelStat = true;
