@@ -26,17 +26,19 @@ const load = ref([]);
 const loading = ref('');
 
 const loadData = async () => {
-    const data = props.datas;
     loading.value = props.loading;
     const list = [];
-    for (let i = 0; i < data.length; i++) {
-        list.push({
-            title: data[i].produk,
-            spotRp: data[i].spotRp,
-            spotUsd: data[i].spotUsd,
-            invRp: data[i].invRp,
-            invUsd: data[i].invUsd
-        });
+    const data = props.datas;
+    if (loading.value != 'loading' && loading.value != 'error') {
+        for (let i = 0; i < data.length; i++) {
+            list.push({
+                title: data[i].produk,
+                spotRp: data[i].spotRp,
+                spotUsd: data[i].spotUsd,
+                invRp: data[i].invRp,
+                invUsd: data[i].invUsd
+            });
+        }
     }
     load.value = list;
 };
@@ -108,51 +110,56 @@ watch(() => props.loading, loadData, { immediate: true });
             <div v-if="loading == 'loading'" class="absolute flex items-center justify-center gap-2 left-0 top-0 rounded-xl w-full h-full bg-[rgba(255,255,255,0.9)]">
                 <ProgressSpinner style="width: 50px; height: 50px" strokeWidth="8" fill="transparent" animationDuration=".5s" />
             </div>
-            <div class="flex items-center gap-3">
-                <span class="font-bold w-full text-[0.8vw]">Harga Spot & Inventory Retail (Harian)</span>
-                <button
-                    @click="routerLink('harga-spot-inventory-retail')"
-                    class="animate-pulse hover:animate-none p-4 w-[1.5vw] h-[1.5vw] cursor-pointer bg-transparent text-emerald-500 rotate-180 hover:rotate-[-180] hover:bg-black hover:text-amber-500 rounded-full flex items-center justify-center transition-all duration-500"
-                >
-                    <i class="pi pi-external-link" style="font-weight: 600; font-size: 0.9vw"></i>
-                </button>
+            <div v-else-if="loading == 'error'" class="absolute flex items-center justify-center gap-2 left-0 top-0 rounded-xl w-full h-full bg-red-600">
+                <span class="font-bold text-white">Please try again</span>
             </div>
-            <div class="flex items-center gap-4 h-full relative overflow-hidden">
-                <div :class="animationClass" class="flex gap-2 transition-all duration-500 w-full">
-                    <div v-for="(card, index) in displayedCards" :key="index" class="flex flex-col gap-1 p-2 bg-black rounded-xl w-full">
-                        <span class="font-bold text-[0.8vw]">{{ card.title }}</span>
-                        <div class="flex gap-1 w-full">
-                            <div class="flex flex-col gap-1 w-full">
-                                <div class="flex flex-col text-amber-600 justify-between items-end w-full">
-                                    <span class="text-[0.8vw] font-bold">{{ card.spotRp }}</span>
-                                    <span class="text-[0.7vw] text-cyan-500">Spot (Rp/Box)</span>
+            <div v-else class="flex flex-col h-full w-full">
+                <div class="flex items-center gap-3">
+                    <span class="font-bold w-full text-[0.8vw]">Harga Spot & Inventory Retail (Harian)</span>
+                    <button
+                        @click="routerLink('harga-spot-inventory-retail')"
+                        class="animate-pulse hover:animate-none p-4 w-[1.5vw] h-[1.5vw] cursor-pointer bg-transparent text-emerald-500 rotate-180 hover:rotate-[-180] hover:bg-black hover:text-amber-500 rounded-full flex items-center justify-center transition-all duration-500"
+                    >
+                        <i class="pi pi-external-link" style="font-weight: 600; font-size: 0.9vw"></i>
+                    </button>
+                </div>
+                <div class="flex items-center gap-4 h-full relative overflow-hidden">
+                    <div :class="animationClass" class="flex gap-2 transition-all duration-500 w-full">
+                        <div v-for="(card, index) in displayedCards" :key="index" class="flex flex-col gap-1 p-2 bg-black rounded-xl w-full">
+                            <span class="font-bold text-[0.8vw]">{{ card.title }}</span>
+                            <div class="flex gap-1 w-full">
+                                <div class="flex flex-col gap-1 w-full">
+                                    <div class="flex flex-col text-amber-600 justify-between items-end w-full">
+                                        <span class="text-[0.8vw] font-bold">{{ card.spotRp }}</span>
+                                        <span class="text-[0.7vw] text-cyan-500">Spot (Rp/Box)</span>
+                                    </div>
+                                    <div class="flex flex-col text-amber-600 justify-between items-end w-full">
+                                        <span class="text-[0.8vw] font-bold">{{ card.spotUsd }}</span>
+                                        <span class="text-[0.7vw] text-cyan-500">Spot (USD/Box)</span>
+                                    </div>
                                 </div>
-                                <div class="flex flex-col text-amber-600 justify-between items-end w-full">
-                                    <span class="text-[0.8vw] font-bold">{{ card.spotUsd }}</span>
-                                    <span class="text-[0.7vw] text-cyan-500">Spot (USD/Box)</span>
-                                </div>
-                            </div>
-                            <div class="flex flex-col gap-1 w-full">
-                                <div class="flex flex-col text-green-600 justify-between items-end w-full">
-                                    <span class="text-[0.8vw] font-bold">{{ card.invRp }}</span>
-                                    <span class="text-[0.7vw] text-cyan-500">Inv. (Rp/Box)</span>
-                                </div>
-                                <div class="flex flex-col text-green-600 justify-between items-end w-full">
-                                    <span class="text-[0.8vw] font-bold">{{ card.invUsd }}</span>
-                                    <span class="text-[0.7vw] text-cyan-500">Inv. (USD/Box)</span>
+                                <div class="flex flex-col gap-1 w-full">
+                                    <div class="flex flex-col text-green-600 justify-between items-end w-full">
+                                        <span class="text-[0.8vw] font-bold">{{ card.invRp }}</span>
+                                        <span class="text-[0.7vw] text-cyan-500">Inv. (Rp/Box)</span>
+                                    </div>
+                                    <div class="flex flex-col text-green-600 justify-between items-end w-full">
+                                        <span class="text-[0.8vw] font-bold">{{ card.invUsd }}</span>
+                                        <span class="text-[0.7vw] text-cyan-500">Inv. (USD/Box)</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div v-if="load.length > 2" class="flex justify-between mt-2">
-                <button @click="prevIndex" class="p-1 bg-gray-700 text-white rounded hover:bg-gray-600 transition flex items-center text-[0.6vw] w-[1vw] h-[1vw] justify-center">
-                    <i class="pi pi-chevron-left mr-1" style="font-size: 0.5vw"></i>
-                </button>
-                <button @click="nextIndex" class="p-1 bg-gray-700 text-white rounded hover:bg-gray-600 transition flex items-center text-[0.6vw] w-[1vw] h-[1vw] justify-center">
-                    <i class="pi pi-chevron-right ml-1" style="font-size: 0.5vw"></i>
-                </button>
+                <div v-if="load.length > 2" class="flex justify-between mt-2">
+                    <button @click="prevIndex" class="p-1 bg-gray-700 text-white rounded hover:bg-gray-600 transition flex items-center text-[0.6vw] w-[1vw] h-[1vw] justify-center">
+                        <i class="pi pi-chevron-left mr-1" style="font-size: 0.5vw"></i>
+                    </button>
+                    <button @click="nextIndex" class="p-1 bg-gray-700 text-white rounded hover:bg-gray-600 transition flex items-center text-[0.6vw] w-[1vw] h-[1vw] justify-center">
+                        <i class="pi pi-chevron-right ml-1" style="font-size: 0.5vw"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
