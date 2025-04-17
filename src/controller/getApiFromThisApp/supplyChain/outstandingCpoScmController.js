@@ -62,7 +62,6 @@ export default new (class outstandingCpoScmController {
             const response = await outstandingCpoScmAPI.getByPeriod();
             const load = response.data;
             const data = load;
-            console.log(data);
             return data;
         } catch (error) {
             return null;
