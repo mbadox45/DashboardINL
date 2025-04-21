@@ -141,31 +141,31 @@ const loadAllData = async () => {
     }
 
     // Loading Data
-    loadingRevenue.value = 'loading';
-    loadingCbDanCfm.value = 'loading';
-    loadingPaySchedule.value = 'loading';
-    loadingCpoKpbn.value = 'loading';
-    loadingKurs.value = 'loading';
-    loadingHargaSpotInvBulk.value = 'loading';
-    loadingHargaSpotInvRitel.value = 'loading';
+    // loadingRevenue.value = 'loading';
+    // loadingCbDanCfm.value = 'loading';
+    // loadingPaySchedule.value = 'loading';
+    // loadingCpoKpbn.value = 'loading';
+    // loadingKurs.value = 'loading';
+    // loadingHargaSpotInvBulk.value = 'loading';
+    // loadingHargaSpotInvRitel.value = 'loading';
 
-    loadingCpoOlah.value = 'loading';
-    loadingLaporanProduksi.value = 'loading';
-    loadingLaporanMaterial.value = 'loading';
-    loadingLaporanPackaging.value = 'loading';
+    // loadingCpoOlah.value = 'loading';
+    // loadingLaporanProduksi.value = 'loading';
+    // loadingLaporanMaterial.value = 'loading';
+    // loadingLaporanPackaging.value = 'loading';
 
-    loadingPenjualanBulk.value = 'loading';
-    loadingPenjualanRitel.value = 'loading';
-    loadingSDM.value = 'loading';
+    // loadingPenjualanBulk.value = 'loading';
+    // loadingPenjualanRitel.value = 'loading';
+    // loadingSDM.value = 'loading';
 
-    loadingSaldoPe.value = 'loading';
-    loadingStockBulk.value = 'loading';
-    loadingStockRetail.value = 'loading';
-    loadingOutstanding.value = 'loading';
-    loadingActualIncoming.value = 'loading';
-    loadingStockCpo.value = 'loading';
-    loadingMarketReuters.value = 'loading';
-    loadingButton.value = 'loading';
+    // loadingSaldoPe.value = 'loading';
+    // loadingStockBulk.value = 'loading';
+    // loadingStockRetail.value = 'loading';
+    // loadingOutstanding.value = 'loading';
+    // loadingActualIncoming.value = 'loading';
+    // loadingStockCpo.value = 'loading';
+    // loadingMarketReuters.value = 'loading';
+    // loadingButton.value = 'loading';
 
     await loadDataControllerFinance(formData.value);
     await loadDataControllerSales(formData.value);
@@ -212,7 +212,7 @@ const loadDataControllerSCM = async (form) => {
 
 // Finance Function
 const loadProfitability = async (form) => {
-    loadingRevenue.value = 'loading';
+    // loadingRevenue.value = 'loading';
     try {
         const revenue = await financeHomeController.revenue(form);
         dataRevenue.value = revenue;
@@ -222,7 +222,7 @@ const loadProfitability = async (form) => {
     }
 };
 const loadCashBalance = async (form) => {
-    loadingCbDanCfm.value = 'loading';
+    // loadingCbDanCfm.value = 'loading';
     try {
         const cashBalance = await financeHomeController.cashBalance(form);
         dataCbDanCfm.value = cashBalance;
@@ -232,7 +232,7 @@ const loadCashBalance = async (form) => {
     }
 };
 const loadPaySchedule = async (form) => {
-    loadingPaySchedule.value = 'loading';
+    // loadingPaySchedule.value = 'loading';
     try {
         const paySchedule = await financeHomeController.paySchedule(form);
         dataPaySchedule.value = paySchedule;
@@ -242,7 +242,7 @@ const loadPaySchedule = async (form) => {
     }
 };
 const loadCpoKpbn = async (form) => {
-    loadingCpoKpbn.value = 'loading';
+    // loadingCpoKpbn.value = 'loading';
     try {
         const cpoKpbn = await financeHomeController.cpoKpbn(form);
         dataCpoKpbn.value = cpoKpbn;
@@ -252,7 +252,7 @@ const loadCpoKpbn = async (form) => {
     }
 };
 const loadKursMataUang = async (form) => {
-    loadingKurs.value = 'loading';
+    // loadingKurs.value = 'loading';
     try {
         const kursMataUang = await financeHomeController.kursMataUang(form);
         dataKurs.value = kursMataUang;
@@ -262,7 +262,7 @@ const loadKursMataUang = async (form) => {
     }
 };
 const loadHargaSpotIvnBulk = async (form) => {
-    loadingHargaSpotInvBulk.value = 'loading';
+    // loadingHargaSpotInvBulk.value = 'loading';
     try {
         const hargaSpotInvBulk = await financeHomeController.hargaSpotInvBulk(form);
         dataHargaSpotInvBulk.value = hargaSpotInvBulk;
@@ -272,7 +272,7 @@ const loadHargaSpotIvnBulk = async (form) => {
     }
 };
 const loadHargaSpotIvnRitel = async (form) => {
-    loadingHargaSpotInvRitel.value = 'loading';
+    // loadingHargaSpotInvRitel.value = 'loading';
     try {
         const hargaSpotInvRitel = await financeHomeController.hargaSpotInvRitel(form);
         dataHargaSpotInvRitel.value = hargaSpotInvRitel;
@@ -284,7 +284,7 @@ const loadHargaSpotIvnRitel = async (form) => {
 
 // Operation Function
 const loadCpoOlah = async (form) => {
-    loadingCpoOlah.value = 'loading';
+    // loadingCpoOlah.value = 'loading';
     try {
         const cpoOlah = await operationHomeController.cpoOlah(form);
         dataCpoOlah.value = cpoOlah;
@@ -294,7 +294,7 @@ const loadCpoOlah = async (form) => {
     }
 };
 const loadLaporanProduksi = async (form) => {
-    loadingLaporanProduksi.value = 'loading';
+    // loadingLaporanProduksi.value = 'loading';
     try {
         const laporanProduksi = await operationHomeController.laporanProduksi(form);
         dataLaporanProduksi.value = laporanProduksi;
@@ -304,7 +304,7 @@ const loadLaporanProduksi = async (form) => {
     }
 };
 const loadLaporanMaterial = async (form) => {
-    loadingLaporanProduksi.value = 'loading';
+    // loadingLaporanProduksi.value = 'loading';
     try {
         const laporanMaterial = await operationHomeController.laporanMaterial(form);
         dataLaporanMaterial.value = laporanMaterial;
@@ -314,7 +314,7 @@ const loadLaporanMaterial = async (form) => {
     }
 };
 const loadLaporanPackaging = async (form) => {
-    loadingLaporanPackaging.value = 'loading';
+    // loadingLaporanPackaging.value = 'loading';
     try {
         const laporanPackaging = await operationHomeController.laporanPackaging(form);
         dataLaporanPackaging.value = laporanPackaging;
@@ -326,7 +326,7 @@ const loadLaporanPackaging = async (form) => {
 
 // Sales Function
 const loadPenjualanSalesRitel = async (form) => {
-    loadingPenjualanRitel.value = 'loading';
+    // loadingPenjualanRitel.value = 'loading';
     try {
         const penjualanSalesRitel = await salesHomeController.laporanPenjualanRitel(form);
         dataPenjualanRitel.value = penjualanSalesRitel;
@@ -336,7 +336,7 @@ const loadPenjualanSalesRitel = async (form) => {
     }
 };
 const loadPenjualanSalesBulk = async (form) => {
-    loadingPenjualanBulk.value = 'loading';
+    // loadingPenjualanBulk.value = 'loading';
     try {
         const penjualanSalesBulk = await salesHomeController.laporanPenjualanBulk(form);
         dataPenjualanBulk.value = penjualanSalesBulk;
@@ -348,7 +348,7 @@ const loadPenjualanSalesBulk = async (form) => {
 
 // SDM Function
 const loadSDM = async (form) => {
-    loadingSDM.value = 'loading';
+    // loadingSDM.value = 'loading';
     try {
         const sdm = await sdmHomeController.sdm(form);
         dataSDM.value = sdm;
@@ -360,7 +360,7 @@ const loadSDM = async (form) => {
 
 // SCM Function
 const loadStokBulky = async (form) => {
-    loadingStockBulk.value = 'loading';
+    // loadingStockBulk.value = 'loading';
     try {
         const stokBulky = await supplyChainHomeController.stokBulky(form);
         dataStockBulk.value = stokBulky;
@@ -370,7 +370,7 @@ const loadStokBulky = async (form) => {
     }
 };
 const loadSaldoPe = async (form) => {
-    loadingSaldoPe.value = 'loading';
+    // loadingSaldoPe.value = 'loading';
     try {
         const saldoPe = await supplyChainHomeController.saldoPe(form);
         dataSaldoPe.value = saldoPe;
@@ -380,7 +380,7 @@ const loadSaldoPe = async (form) => {
     }
 };
 const loadStokRitel = async (form) => {
-    loadingStockRetail.value = 'loading';
+    // loadingStockRetail.value = 'loading';
     try {
         const stokRitel = await supplyChainHomeController.stokRitel(form);
         dataStockRetail.value = stokRitel;
@@ -390,7 +390,7 @@ const loadStokRitel = async (form) => {
     }
 };
 const loadStokCpo = async (form) => {
-    loadingStockCpo.value = 'loading';
+    // loadingStockCpo.value = 'loading';
     try {
         const stokCpo = await supplyChainHomeController.stokCpo(form);
         dataStockCpo.value = stokCpo;
@@ -400,7 +400,7 @@ const loadStokCpo = async (form) => {
     }
 };
 const loadActualIncoming = async (form) => {
-    loadingActualIncoming.value = 'loading';
+    // loadingActualIncoming.value = 'loading';
     try {
         const actualIncoming = await supplyChainHomeController.actualIncomingCpo(form);
         dataActualIncoming.value = actualIncoming;
@@ -410,7 +410,7 @@ const loadActualIncoming = async (form) => {
     }
 };
 const loadOutstanding = async (form) => {
-    loadingOutstanding.value = 'loading';
+    // loadingOutstanding.value = 'loading';
     try {
         const outstanding = await supplyChainHomeController.outstandingCpo();
         dataOutstanding.value = outstanding;
@@ -420,7 +420,7 @@ const loadOutstanding = async (form) => {
     }
 };
 const loadMarketReuters = async (form) => {
-    loadingMarketReuters.value = 'loading';
+    // loadingMarketReuters.value = 'loading';
     try {
         const levyDutyMarketReuter = await supplyChainHomeController.marketReutersLevyDuty(form);
         dataMarketReuters.value = levyDutyMarketReuter;
@@ -525,7 +525,11 @@ const loadData = async () => {};
                         </div>
                     </div>
                 </div>
-                <div v-if="loadingButton != 'loading'" class="flex gap-2 justify-center">
+                <!-- <div v-if="loadingButton != 'loading'" class="flex gap-2 justify-center">
+                    <button class="py-2 px-3 rounded-full border-2 hover:bg-white hover:text-black transition-all" :class="activePage == 0 ? 'bg-white text-black' : 'bg-transparent'" @click="activePage = 0">Page 1</button>
+                    <button class="py-2 px-3 rounded-full border-2 hover:bg-white hover:text-black transition-all" :class="activePage == 1 ? 'bg-white text-black' : 'bg-transparent'" @click="activePage = 1">Page 2</button>
+                </div> -->
+                <div class="flex gap-2 justify-center">
                     <button class="py-2 px-3 rounded-full border-2 hover:bg-white hover:text-black transition-all" :class="activePage == 0 ? 'bg-white text-black' : 'bg-transparent'" @click="activePage = 0">Page 1</button>
                     <button class="py-2 px-3 rounded-full border-2 hover:bg-white hover:text-black transition-all" :class="activePage == 1 ? 'bg-white text-black' : 'bg-transparent'" @click="activePage = 1">Page 2</button>
                 </div>
