@@ -157,7 +157,7 @@ const goToLogin = () => {
         // window.location.replace(`${URL_WEB}dashboard`);
         router.push('/dashboard');
     } else {
-        window.open('http://36.92.181.10:8585/', '_blank');
+        window.open('http://103.176.66.42:8585/', '_blank');
     }
 };
 
