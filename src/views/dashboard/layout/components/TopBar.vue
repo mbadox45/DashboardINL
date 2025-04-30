@@ -209,7 +209,7 @@ const parseJwt = (token) => {
 
 <template>
     <div class="relative text-white">
-        <div class="justify-start px-4 fixed w-1/2 z-20">
+        <div class="justify-start px-4 fixed w-auto z-20">
             <button class="bg-gray-300 px-3 py-4 rounded-b-xl hover:bg-gray-400 transition-all duration-300" @click="test">
                 <div class="p-1 rounded-lg animate-pulse">
                     <img src="/images/icon-dashboard.png" alt="PT INL" width="50px" class="" />

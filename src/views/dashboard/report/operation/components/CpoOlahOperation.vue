@@ -14,6 +14,10 @@ const props = defineProps({
     formPush: {
         type: Object,
         default: () => ({})
+    },
+    loading: {
+        type: String,
+        default: ''
     }
 });
 
@@ -26,9 +30,11 @@ const load = ref({
     totalCost: 0,
     totalHargaSatuan: 0
 });
+const loading = ref('');
 
 const loadData = async () => {
     const data = props.datas;
+    loading.value = props.loading;
     load.value = {
         rkapPercentage: parseFloat(data.rkapPercentage) || 0,
         kapasitasUtilityPercentage: parseFloat(data.kapasitasUtilityPercentage) || 0,
@@ -51,11 +57,15 @@ const routerLink = (path) => {
 
 watch(() => props.datas, loadData, { immediate: true });
 watch(() => props.formPush, loadData, { immediate: true });
+watch(() => props.loading, loadData, { immediate: true });
 </script>
 
 <template>
-    <div class="bg-gray-800 p-2 rounded-xl shadow-xl flex h-full gap-3 items-start">
-        <div class="flex flex-col h-full w-full">
+    <div class="bg-gray-800 rounded-xl shadow-xl min-h-[120px] flex h-full gap-3 items-start">
+        <div class="flex flex-col relative h-full w-full p-2">
+            <div v-if="loading == 'loading'" class="absolute flex items-center justify-center gap-2 left-0 top-0 rounded-xl w-full h-full bg-[rgba(255,255,255,0.9)]">
+                <ProgressSpinner style="width: 50px; height: 50px" strokeWidth="8" fill="transparent" animationDuration=".5s" />
+            </div>
             <!-- Header Section -->
             <div class="flex items-center gap-3">
                 <span class="font-bold w-full text-[0.8vw]">CPO Olah vs RKAP vs Utility (Kg) Bulanan</span>

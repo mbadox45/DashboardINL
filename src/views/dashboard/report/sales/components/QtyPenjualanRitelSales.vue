@@ -16,14 +16,20 @@ const props = defineProps({
     formPush: {
         type: Object,
         default: () => ({})
+    },
+    loading: {
+        type: String,
+        default: ''
     }
 });
 
 const load = ref({ tanggal: '', real: 0, rkap: 0, persen: 0, dataChart: [] });
+const loading = ref('');
 
 const loadData = async () => {
     try {
         const data = props.datas;
+        loading.value = props.loading;
         if (data != null) {
             load.value.tanggal = data.tanggal;
             load.value.real = formatCurrency(Number(data.real).toFixed(2)) || 0;
@@ -32,6 +38,7 @@ const loadData = async () => {
             load.value.dataChart = data.listChart || [];
         }
     } catch (error) {
+        loading.value = props.loading;
         load.value = { tanggal: '', real: 0, rkap: 0, persen: 0, dataChart: [] };
     }
 };
@@ -47,11 +54,15 @@ const routerLink = (path) => {
 
 watch(() => props.datas, loadData, { immediate: true });
 watch(() => props.formPush, loadData, { immediate: true });
+watch(() => props.loading, loadData, { immediate: true });
 </script>
 
 <template>
-    <div class="bg-gray-800 p-3 rounded-xl shadow-xl flex w-full gap-3 items-start h-full">
-        <div class="flex flex-col w-full h-full">
+    <div class="bg-gray-800 rounded-xl shadow-xl min-h-[120px] flex h-full gap-3 items-start">
+        <div class="flex flex-col relative h-full w-full p-2">
+            <div v-if="loading == 'loading'" class="absolute flex items-center justify-center gap-2 left-0 top-0 rounded-xl w-full h-full bg-[rgba(255,255,255,0.9)]">
+                <ProgressSpinner style="width: 50px; height: 50px" strokeWidth="8" fill="transparent" animationDuration=".5s" />
+            </div>
             <div class="flex items-center gap-6 h-full">
                 <span class="text-[0.8vw] font-bold w-full">Qty Penjualan Retail (Box) Akumulasi Harian</span>
                 <button
@@ -61,7 +72,7 @@ watch(() => props.formPush, loadData, { immediate: true });
                     <i class="pi pi-external-link" style="font-weight: 600; font-size: 0.9vw"></i>
                 </button>
             </div>
-            <div class="grid grid-cols-3 gap-4 w-full h-full">
+            <div class="grid grid-cols-1 xl:grid-cols-3 gap-4 w-full h-full">
                 <div class="col-span-2 w-full flex flex-col justify-between min-h-[3vw] gap-1 h-full">
                     <div class="flex w-full gap-2 h-full items-center py-1 px-1">
                         <div class="flex flex-col gap-2 w-full bg-black h-full py-2 px-3 rounded-lg">
@@ -87,7 +98,7 @@ watch(() => props.formPush, loadData, { immediate: true });
                     :series="item.series"
                     :options="item.options"
                     height="135vw"
-                    class="w-auto"
+                    class="w-auto flex justify-center col-span-1"
                     style="z-index: 1 !important"
                 />
                 <!-- <VueApexCharts v-if="load.dataChart.length > 0" v-for="(item, index) in load.dataChart" :key="index" :series="item.series" :options="item.options" class="w-full" height="200vw" style="z-index: 1 !important" /> -->
