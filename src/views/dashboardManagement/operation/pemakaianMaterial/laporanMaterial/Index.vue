@@ -47,7 +47,7 @@ const formData = ref({
     item_material_id: null,
     pmg_id: null,
     tanggal: moment().format('YYYY-MM-DD'),
-    value: null
+    qty: null
 });
 
 onMounted(() => {
@@ -284,9 +284,8 @@ const refreshForm = () => {
 };
 
 const submitData = async () => {
+    formData.value.tanggal = moment(formData.value.tanggal).format('YYYY-MM-DD');
     if (formData.value.pmg_id != null && formData.value.tanggal != null && formData.value.item_material_id != null && formData.value.qty != null) {
-        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
-    } else {
         formData.value.tanggal = moment(formData.value.tanggal).format('YYYY-MM-DD');
         if (statusForm.value == 'add') {
             const response = await laporanMaterialController.addPost(formData.value);
@@ -316,6 +315,8 @@ const submitData = async () => {
                 messages.value = [{ severity: 'error', content: response.msg, id: count.value++, icon: 'pi-times-circle' }];
             }
         }
+    } else {
+        messages.value = [{ severity: 'warn', content: 'Harap di data lengkapi !', id: count.value++, icon: 'pi-exclamation-triangle' }];
     }
 };
 </script>
